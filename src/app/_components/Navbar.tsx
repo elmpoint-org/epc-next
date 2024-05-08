@@ -12,6 +12,7 @@ import NavAccount from './nav/NavAccount';
 import Link from 'next/link';
 import NavLink from './nav/NavLink';
 import NavBody from './nav/NavLinks';
+import Logo from './nav/Logo';
 
 const Navbar = ({
   navState,
@@ -31,9 +32,10 @@ const Navbar = ({
           >
             <IconX />
           </button>
-          <div className="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center gap-2">
-            <IconTrees size={36} stroke={1} />
-            <h1 className="text-xl">Elm Point</h1>
+          <div className="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center gap-4">
+            {/* <IconTrees size={36} stroke={1} />
+            <h1 className="text-xl">Elm Point</h1> */}
+            <Logo className="fill-dwhite h-5" />
           </div>
         </AppShell.Section>
         <NavBody navState={navState} />

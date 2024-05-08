@@ -8,14 +8,9 @@ export const metadata: Metadata = {
 const CalendarNewPage = () => {
   return (
     <>
-      <div className="flex flex-1 flex-col space-y-2">
-        <div className="m-6 flex flex-col items-center justify-center text-4xl">
-          Calendar
-        </div>
-
-        <div className="flex-1 rounded-lg ">
-          <NewEventForm />
-        </div>
+      <div className="flex-1 rounded-lg bg-slate-100">
+        <h2 className="text-center p-6 text-xl">Add your stay</h2>
+        <NewEventForm />
       </div>
     </>
   );

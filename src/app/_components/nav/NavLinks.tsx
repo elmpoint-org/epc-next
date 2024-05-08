@@ -11,7 +11,7 @@ const NavBody = ({
   return (
     <>
       <AppShell.Section grow component={ScrollArea}>
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2 p-2">
           <NavLink href="/" onClick={close}>
             Home
           </NavLink>
@@ -19,10 +19,10 @@ const NavBody = ({
             Test
           </NavLink>
           <NavLink href="/calendar/new" onClick={close}>
-            Calendar New Event
+            Calendar - Add stay
           </NavLink>
 
-          {Array(16)
+          {Array(5)
             .fill(0)
             .map((_, i) => (
               <div

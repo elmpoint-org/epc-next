@@ -1,101 +1,85 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 
-import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { ActionIcon, Button, Collapse, TextInput } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { Button, NumberInput, TextInput, Textarea } from '@mantine/core';
 
-import { IconCalendarMonth } from '@tabler/icons-react';
+import Calendar from './Calendar';
+import RoomSelects from './RoomSelects';
+
+const COST_MEMBERS = 15.0;
+const COST_GUESTS = 20.0;
+const MAX_ROOMS = 20;
 
 const NewEventForm = () => {
-  const [isCalOpen, { toggle: toggleCal }] = useDisclosure();
-
   const [dates, setDates] = useState<[Date | null, Date | null]>([null, null]);
-  const [tdates, setTdates] = useState(['', '']);
 
-  const form = useForm({
-    mode: 'uncontrolled',
-    initialValues: {
-      startDate: '',
-      endDate: '',
-    },
-  });
+  const [numRooms, setNumRooms] = useState(1);
 
-  const parseDate = (d: Date | null) =>
-    (d && dayjs(d).format('MMM D, YYYY')) ?? '';
+  const diff = useMemo(() => {
+    const d = dayjs(dates[1]).diff(dayjs(dates[0]), 'days') + 1;
+    return Number.isFinite(d) ? d : 0;
+  }, [dates]);
 
-  const handleDatePick = (nv: typeof dates) => {
-    setDates(nv);
-    setTdates(nv.map((it) => parseDate(it)));
+  const updateNumRooms = (nv: number | string) => {
+    const nr = parseInt('' + nv);
+    if (!Number.isFinite(nr)) return;
+    if (nr <= 0 || nr > MAX_ROOMS) return;
+    if (
+      numRooms - nr > 3 &&
+      !confirm(
+        'Are you sure you want to reduce the number of rooms? Any information in the removed rows will be lost.',
+      )
+    )
+      return;
+
+    setNumRooms(nr);
   };
-
-  const updateTdate =
-    (id: 0 | 1) =>
-    ({ currentTarget: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-      setTdates((o) => ({ ...o, [id]: value }));
-      const nd = dayjs(value);
-      if (nd.isValid()) {
-        const dd = [...dates];
-        dd[id] = nd.toDate();
-        setDates(dd as any);
-      } else {
-        console.log('invalid', value);
-      }
-    };
-  const prettify = (id: 0 | 1) => () =>
-    setTdates((o) => ({ ...o, [id]: parseDate(dates[id]) }));
 
   return (
     <>
-      <div className="m-6 mx-auto w-full max-w-3xl">
-        <form
-          onSubmit={form.onSubmit((v) => console.log(v))}
-          className="space-y-2"
-        >
-          <div className="flex flex-row items-center gap-2">
-            <ActionIcon
-              onClick={toggleCal}
-              aria-label="toggle calendar"
-              className="mt-6"
-            >
-              <IconCalendarMonth />
-            </ActionIcon>
+      <div className="m-6 mx-auto max-w-3xl p-4 md:p-6">
+        <form action="#" className="space-y-4">
+          {/* DATE ENTRY */}
+          <Calendar {...{ dates, setDates }} />
 
-            <TextInput
-              label="Start Date"
-              placeholder="Start Date"
-              value={tdates[0]}
-              onChange={updateTdate(0)}
-              onBlur={prettify(0)}
-              className="flex-1"
-            />
-            <TextInput
-              label="End Date"
-              placeholder="End Date"
-              value={tdates[1]}
-              onChange={updateTdate(1)}
-              onBlur={prettify(1)}
-              className="flex-1"
-            />
-          </div>
-          <Collapse in={isCalOpen}>
-            <DatePicker
-              type="range"
-              value={dates}
-              onChange={handleDatePick}
-              firstDayOfWeek={0}
-              allowSingleDateInRange={true}
+          {/* ROOMS / PRICE */}
+          <div className="flex flex-row items-center justify-between pb-4 pt-8">
+            <NumberInput
+              label="Rooms"
+              value={numRooms}
+              onChange={updateNumRooms}
+              min={1}
+              max={MAX_ROOMS}
+              size="sm"
               classNames={{
-                levelsGroup: 'p-4',
-                day: 'data-[weekend]:[&:not([data-selected])]:text-emerald-800/80 data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:bg-sky-600/10',
+                root: 'w-16 -mt-6',
+                input: 'text-right pr-8',
               }}
             />
-          </Collapse>
 
-          <Button type="submit">Submit</Button>
+            <p className="text-sm text-slate-600">
+              {diff} day{diff !== 1 && 's'} - ${diff * COST_MEMBERS}/member - $
+              {diff * COST_GUESTS}/guest
+            </p>
+          </div>
+
+          {/* ROOM SELECTION */}
+          <RoomSelects numRooms={numRooms} />
+
+          {/* EVENT DETAILS */}
+          <TextInput label="Event Name" />
+          <Textarea label="Event Description" />
+
+          {/* SUBMIT */}
+          <div className="flex flex-row">
+            <div className="flex-1"></div>
+            <Button type="submit" variant="light">
+              Submit
+            </Button>
+          </div>
         </form>
       </div>
     </>

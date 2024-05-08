@@ -1,7 +1,7 @@
 import { AppShell, Collapse } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
-  IconCircleChevronDown,
+  IconCircleChevronLeft,
   IconCircleChevronUp,
   IconUser,
 } from '@tabler/icons-react';
@@ -28,7 +28,7 @@ const NavAccount = () => {
           <IconUser size={20} />
           <div className="flex-1 text-left">Michael Foster</div>
 
-          {isOpen ? <IconCircleChevronDown /> : <IconCircleChevronUp />}
+          {isOpen ? <IconCircleChevronUp /> : <IconCircleChevronLeft />}
         </button>
       </AppShell.Section>
     </>

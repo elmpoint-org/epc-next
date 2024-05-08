@@ -25,7 +25,7 @@ const Shell = ({ children }: { children: React.ReactNode }) => {
       >
         <Navbar navState={navState} />
 
-        <AppShell.Main className="ml-0 flex flex-col p-4 pt-12 md:ml-[300px]">
+        <AppShell.Main className="ml-0 flex flex-col p-4 pt-12 md:ml-[300px] bg-slate-200">
           <div className="container mx-auto flex flex-1 flex-col">
             {children}
           </div>
