@@ -82,7 +82,7 @@ const Calendar = ({ dates, setDates }: CalendarProps) => {
           allowSingleDateInRange={true}
           classNames={{
             levelsGroup: 'p-4 justify-center border-x-8 border-slate-200/80',
-            day: 'data-[weekend]:[&:not([data-selected])]:text-emerald-800/80 data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:bg-sky-600/10',
+            day: 'data-[weekend]:[&:not([data-selected])]:text-emerald-800/80 data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border-slate-800/50 border-solid',
           }}
         />
       </Collapse>

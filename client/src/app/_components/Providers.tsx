@@ -14,7 +14,8 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const HeadProviders = () => {
+// inserts into html head
+export const ProvidersHead = () => {
   return (
     <>
       <ColorSchemeScript defaultColorScheme="light" />

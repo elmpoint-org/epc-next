@@ -11,21 +11,21 @@ const Shell = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <button className="fixed left-4 top-4" onClick={open}>
+      <button className="fixed left-0 top-0 z-50 p-4" onClick={open}>
         <IconMenu />
       </button>
 
       <AppShell
         navbar={{
           width: 300,
-          breakpoint: 'sm',
+          breakpoint: 'md',
           collapsed: { mobile: !isOpen },
         }}
         padding="md"
       >
         <Navbar navState={navState} />
 
-        <AppShell.Main className="ml-0 flex flex-col p-4 pt-12 md:ml-[300px] bg-slate-200">
+        <AppShell.Main className="ml-0 flex flex-col bg-slate-200 p-4 pt-12 lg:ml-[300px]">
           <div className="container mx-auto flex flex-1 flex-col">
             {children}
           </div>

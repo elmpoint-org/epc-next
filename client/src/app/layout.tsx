@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Atkinson_Hyperlegible, IBM_Plex_Sans } from 'next/font/google';
 
-import Providers, { HeadProviders } from './_components/Providers';
+import Providers, { ProvidersHead } from './_components/Providers';
 import Shell from './_components/Shell';
 
 import './globals.css';
@@ -37,7 +37,7 @@ export default function RootLayout({
     <>
       <html lang="en">
         <head>
-          <HeadProviders />
+          <ProvidersHead />
         </head>
         <body className={`${defaultFont.variable} bg-dwhite font-sans`}>
           <Providers>

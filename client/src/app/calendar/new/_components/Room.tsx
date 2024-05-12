@@ -69,37 +69,40 @@ export function Room() {
   ));
 
   return (
-    <Combobox
-      className="-mt-6 flex-1"
-      label="Room"
-      store={combobox}
-      withinPortal={false}
-      onOptionSubmit={(val) => {
-        setValue(val);
-        combobox.closeDropdown();
-      }}
-    >
-      <Combobox.Target>
-        <InputBase
-          component="button"
-          type="button"
-          pointer
-          rightSection={<Combobox.Chevron />}
-          onClick={() => combobox.toggleDropdown()}
-          rightSectionPointerEvents="none"
-          multiline
+    <>
+      <div className="-mt-6 flex-1">
+        <Combobox
+          label="Room"
+          store={combobox}
+          withinPortal={false}
+          onOptionSubmit={(val) => {
+            setValue(val);
+            combobox.closeDropdown();
+          }}
         >
-          {selectedOption ? (
-            <SelectOption {...selectedOption} />
-          ) : (
-            <Input.Placeholder>Pick value</Input.Placeholder>
-          )}
-        </InputBase>
-      </Combobox.Target>
+          <Combobox.Target>
+            <InputBase
+              component="button"
+              type="button"
+              pointer
+              rightSection={<Combobox.Chevron />}
+              onClick={() => combobox.toggleDropdown()}
+              rightSectionPointerEvents="none"
+              multiline
+            >
+              {selectedOption ? (
+                <SelectOption {...selectedOption} />
+              ) : (
+                <Input.Placeholder>Pick value</Input.Placeholder>
+              )}
+            </InputBase>
+          </Combobox.Target>
 
-      <Combobox.Dropdown>
-        <Combobox.Options>{options}</Combobox.Options>
-      </Combobox.Dropdown>
-    </Combobox>
+          <Combobox.Dropdown>
+            <Combobox.Options>{options}</Combobox.Options>
+          </Combobox.Dropdown>
+        </Combobox>
+      </div>
+    </>
   );
 }
