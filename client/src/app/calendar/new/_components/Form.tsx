@@ -15,8 +15,7 @@ import { IconRestore } from '@tabler/icons-react';
 
 import FormCalendar from './FormCalendar';
 import FormGuestRows from './FormGuestRows';
-import { guestInitial, useFormCtx, type GuestEntry } from '../state/formCtx';
-import { title } from 'process';
+import { guestInitial, useFormCtx } from '../state/formCtx';
 
 const COST_MEMBERS = 15.0;
 const COST_GUESTS = 20.0;
