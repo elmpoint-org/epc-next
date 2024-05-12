@@ -93,7 +93,7 @@ export const rooms: Room[] = [
     cabin: { id: '1' },
     name: 'Corner Bedroom',
     beds: 2,
-    availableBeds: 0,
+    availableBeds: 1,
     forCouples: false,
     aliases: [],
   },

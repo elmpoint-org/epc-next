@@ -13,7 +13,7 @@ import {
 import { IconRestore } from '@tabler/icons-react';
 
 import Calendar from './Calendar';
-import RoomSelects from './RoomSelects';
+import GuestRow from './GuestRow';
 
 const COST_MEMBERS = 15.0;
 const COST_GUESTS = 20.0;
@@ -122,7 +122,7 @@ const NewEventForm = () => {
           </div>
 
           {/* ROOM SELECTION */}
-          <RoomSelects {...{ rooms, updateRoom }} />
+          <GuestRow {...{ rooms, updateRoom }} />
 
           {/* EVENT DETAILS */}
           <div className="flex flex-row gap-2">

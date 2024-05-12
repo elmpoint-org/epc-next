@@ -5,8 +5,9 @@ import { IconArrowBarToUp, IconTrash } from '@tabler/icons-react';
 
 import { MAX_ROOMS, type Room, type RoomUpdateFn } from './Form';
 import ActionButton from './ActionButton';
+import RoomSelector from './RoomSelector';
 
-const RoomSelects = ({
+const GuestRow = ({
   rooms,
   updateRoom,
 }: {
@@ -68,7 +69,10 @@ const RoomSelects = ({
             <TextInput
               id={`guest-name-${i}`}
               label={`Name of ${!i ? 'Primary ' : ''}Guest(s)`}
-              className="-mt-6 flex-1"
+              className="-mt-5 flex-1"
+              classNames={{
+                input:'h-10'
+              }}
               value={room.guest}
               onChange={({ currentTarget: { value } }) =>
                 updateRoom(i, 'UPDATE', { guest: value })
@@ -76,16 +80,11 @@ const RoomSelects = ({
             />
 
             {/* room select */}
-            <TextInput
-              label="Room"
-              className="-mt-6 flex-1"
-              value={room.roomId}
-              onChange={({ currentTarget: { value } }) =>
-                updateRoom(i, 'UPDATE', { roomId: value })
-              }
-            />
+            <div className="flex-1">
+              <RoomSelector className="-mt-5" />
+            </div>
             {/* action buttons */}
-            <div className="-mt-3 mr-3 flex flex-row justify-end gap-2 sm:justify-normal">
+            <div className="mr-3 flex flex-row justify-end gap-2 sm:justify-normal">
               {/* make primary */}
               <Tooltip label="Make this the primary guest">
                 <ActionButton
@@ -125,4 +124,4 @@ const RoomSelects = ({
   );
 };
 
-export default RoomSelects;
+export default GuestRow;

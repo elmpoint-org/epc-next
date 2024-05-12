@@ -1,7 +1,7 @@
 import { Combobox, Tooltip } from '@mantine/core';
 import { IconCheck, IconFriends } from '@tabler/icons-react';
 
-import type { Cabin, Room } from '../sample-data';
+import type { Cabin, Room } from '../../../../sampleRoomData';
 
 const RoomOption = ({
   item,
