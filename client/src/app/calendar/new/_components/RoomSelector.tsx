@@ -174,7 +174,7 @@ const RoomSelector = ({
                   size="md"
                   className="p-0 first:pl-1"
                   classNames={{
-                    label: '-mx-2.5 px-2.5 -mr-5 pr-5 rounded-md bg-slate-200',
+                    label: '-mx-2.5 -mr-5 rounded-md bg-slate-200 px-2.5 pr-5',
                   }}
                 >
                   <div className="">{selectedCabin.name}</div>
@@ -189,7 +189,7 @@ const RoomSelector = ({
                   className="group -mr-2 p-0 first:pl-1 data-[custom]:italic"
                   classNames={{
                     label:
-                      'group-data-[custom]:mr-2 bg-slate-200 -mx-2.5 px-2.5 rounded-md',
+                      '-mx-2.5 rounded-md bg-slate-200 px-2.5 group-data-[custom]:mr-2',
                   }}
                   data-custom={selectedRoom.id === CUSTOM_ROOM_ID ? true : null}
                 >
