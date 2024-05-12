@@ -1,19 +1,9 @@
-export interface Cabin {
-  id: string;
-  name: string;
-  rooms?: Room[];
-  aliases: string[];
-}
-export interface Room {
-  id: string;
-  cabin: Partial<Cabin> | null;
-  name: string;
-  aliases: string[];
-  beds: number;
-  availableBeds: number;
-  forCouples?: boolean;
-  noCount?: boolean; // don't count bedrooms
-}
+import type { Cabin, Room } from '@/app/calendar/new/state/formCtx';
+
+type A = Cabin;
+
+// TODO this should probably be a uuid namespace instead
+export const CUSTOM_ROOM_ID = '00000000-0000-0000-0000-000000000000';
 
 export const cabins: Cabin[] = [
   {
@@ -34,7 +24,7 @@ export const cabins: Cabin[] = [
   {
     id: '3',
     name: 'Kendrew Cabin',
-    aliases: [],
+    aliases: ['Chalet K'],
   },
   {
     id: '4',
@@ -50,7 +40,7 @@ export const rooms: Room[] = [
     beds: 1,
     availableBeds: 0,
     forCouples: true,
-    aliases: [],
+    aliases: [`Guil's Room`],
   },
   {
     id: '0b',
@@ -59,7 +49,7 @@ export const rooms: Room[] = [
     beds: 1,
     availableBeds: 0,
     forCouples: true,
-    aliases: [],
+    aliases: ['Middle Room'],
   },
   {
     id: '0c',
@@ -68,7 +58,7 @@ export const rooms: Room[] = [
     beds: 1,
     availableBeds: 0,
     forCouples: true,
-    aliases: [],
+    aliases: [`Ed and Sandy's Room`],
   },
   {
     id: '0d',
@@ -86,7 +76,7 @@ export const rooms: Room[] = [
     beds: 1,
     availableBeds: 0,
     forCouples: true,
-    aliases: [],
+    aliases: [`Grammy's Room`],
   },
   {
     id: '1b',
@@ -95,7 +85,7 @@ export const rooms: Room[] = [
     beds: 2,
     availableBeds: 1,
     forCouples: false,
-    aliases: [],
+    aliases: [`Ann's Room`],
   },
   {
     id: '1c',
@@ -104,7 +94,7 @@ export const rooms: Room[] = [
     beds: 2,
     availableBeds: 0,
     forCouples: false,
-    aliases: [],
+    aliases: ['Bedroom off Living Room'],
   },
   {
     id: '2a',

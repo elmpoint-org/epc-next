@@ -3,17 +3,42 @@ import { useEffect, useRef } from 'react';
 import { Button, TextInput, Tooltip } from '@mantine/core';
 import { IconArrowBarToUp, IconTrash } from '@tabler/icons-react';
 
-import { MAX_ROOMS, type Room, type RoomUpdateFn } from './Form';
 import ActionButton from './ActionButton';
 import RoomSelector from './RoomSelector';
+import { GuestEntry, guestInitial, useFormCtx } from '../state/formCtx';
 
-const GuestRow = ({
-  rooms,
-  updateRoom,
-}: {
-  rooms: Room[];
-  updateRoom: RoomUpdateFn;
-}) => {
+import { MAX_ROOMS } from './Form';
+
+const FormGuestRows = () => {
+  const { guests, setGuests } = useFormCtx();
+
+  const updateRoom = (
+    i: number,
+    action: 'CREATE' | 'UPDATE' | 'MAKE_PRIMARY' | 'DELETE',
+    updates?: Partial<GuestEntry> | null,
+  ) => {
+    const nr = [...guests];
+
+    switch (action) {
+      case 'CREATE':
+        nr[i] = { ...guestInitial() };
+        break;
+      case 'UPDATE':
+        nr[i] = { ...nr[i], ...updates };
+        break;
+      case 'MAKE_PRIMARY':
+        const [el] = nr.splice(i, 1);
+        nr.unshift(el);
+        break;
+      case 'DELETE':
+        nr.splice(i, 1);
+        break;
+    }
+    if (!nr.length) nr.push(guestInitial());
+
+    setGuests(nr);
+  };
+
   // handle keyboard shortcuts
   const domRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -33,11 +58,11 @@ const GuestRow = ({
             break;
           case 'ArrowDown':
             e.preventDefault();
-            if (i === rooms.length - 1) updateRoom(rooms.length, 'CREATE');
+            if (i === guests.length - 1) updateRoom(guests.length, 'CREATE');
             focusInput(i + 1);
             break;
           case 'Backspace':
-            if (!rooms[i].guest.length) {
+            if (!guests[i].name.length) {
               e.preventDefault();
               updateRoom(i, 'DELETE');
               focusInput(i - 1);
@@ -56,7 +81,7 @@ const GuestRow = ({
     <>
       <div ref={domRef} className="space-y-2">
         {/* room entry */}
-        {rooms.map((room, i) => (
+        {guests.map((room, i) => (
           <div
             key={i}
             className="relative flex flex-col items-stretch gap-7 rounded-xl border border-slate-300 p-4 pt-10 sm:flex-row sm:items-center sm:gap-3 sm:border-0 sm:px-0 sm:py-4"
@@ -69,19 +94,20 @@ const GuestRow = ({
             <TextInput
               id={`guest-name-${i}`}
               label={`Name of ${!i ? 'Primary ' : ''}Guest(s)`}
+              placeholder="Enter a name"
               className="-mt-5 flex-1"
               classNames={{
-                input:'h-10'
+                input: 'h-10',
               }}
-              value={room.guest}
+              value={room.name}
               onChange={({ currentTarget: { value } }) =>
-                updateRoom(i, 'UPDATE', { guest: value })
+                updateRoom(i, 'UPDATE', { name: value })
               }
             />
 
             {/* room select */}
-            <div className="flex-1">
-              <RoomSelector className="-mt-5" />
+            <div className="relative flex-1">
+              <RoomSelector rowIndex={i} className="-mt-5" />
             </div>
             {/* action buttons */}
             <div className="mr-3 flex flex-row justify-end gap-2 sm:justify-normal">
@@ -112,8 +138,8 @@ const GuestRow = ({
             <Button
               variant="subtle"
               size="compact-sm"
-              onClick={() => updateRoom(rooms.length, 'CREATE')}
-              disabled={rooms.length >= MAX_ROOMS}
+              onClick={() => updateRoom(guests.length, 'CREATE')}
+              disabled={guests.length >= MAX_ROOMS}
             >
               Add room
             </Button>
@@ -124,4 +150,4 @@ const GuestRow = ({
   );
 };
 
-export default GuestRow;
+export default FormGuestRows;

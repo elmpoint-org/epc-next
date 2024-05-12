@@ -1,7 +1,7 @@
 import { Combobox, Tooltip } from '@mantine/core';
-import { IconCheck, IconFriends } from '@tabler/icons-react';
+import { IconAlt, IconCheck, IconFriends } from '@tabler/icons-react';
 
-import type { Cabin, Room } from '../../../../sampleRoomData';
+import type { Cabin, Room } from '../state/formCtx';
 
 const RoomOption = ({
   item,
@@ -10,12 +10,27 @@ const RoomOption = ({
   item: Room | Cabin;
   active: boolean;
 }) => {
+  const aliasTag = item.useAlias && (
+    <div className="">
+      <Tooltip label={`Alternate name for "${item.name}"`}>
+        <IconAlt
+          size={20}
+          stroke={1.75}
+          className="text-sky-700 group-data-[combobox-selected]:text-inherit"
+        />
+      </Tooltip>
+    </div>
+  );
+
   return (
     <>
       <Combobox.Option value={item.id} className="group">
         {!('beds' in item) ? (
           // cabin entry
-          <div className="t">{item.name} ...</div>
+          <div className="flex flex-row items-center gap-2">
+            <div className="">{item.useAlias || item.name} ...</div>
+            {aliasTag}
+          </div>
         ) : (
           // room entry
           <div
@@ -25,10 +40,11 @@ const RoomOption = ({
           >
             <div className="flex flex-1 flex-row items-center gap-2">
               {/* room name */}
-              <div className="t">{item.name}</div>
+              <div className="t">{item.useAlias || item.name}</div>
+              {aliasTag}
               {/* room occupancy */}
               <div
-                className="text-slate-600 data-[hide]:hidden group-data-[combobox-selected]:text-dwhite"
+                className="text-nowrap text-slate-600 data-[hide]:hidden group-data-[combobox-selected]:text-dwhite"
                 data-hide={item.noCount}
               >
                 (

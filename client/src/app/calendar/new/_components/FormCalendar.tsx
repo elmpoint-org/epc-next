@@ -4,18 +4,16 @@ import dayjs from 'dayjs';
 import { DatePicker } from '@mantine/dates';
 import { ActionIcon, Collapse, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-
 import {
   IconCircleChevronDown,
   IconCircleChevronRight,
 } from '@tabler/icons-react';
 
-type CalendarProps = {
-  dates: [Date | null, Date | null];
-  setDates: React.Dispatch<React.SetStateAction<[Date | null, Date | null]>>;
-};
+import { useFormCtx } from '../state/formCtx';
 
-const Calendar = ({ dates, setDates }: CalendarProps) => {
+const FormCalendar = () => {
+  const { dates, setDates } = useFormCtx();
+
   const [isCalOpen, { toggle: toggleCal }] = useDisclosure(true);
 
   const [tdates, setTdates] = useState(['', '']);
@@ -89,4 +87,4 @@ const Calendar = ({ dates, setDates }: CalendarProps) => {
     </>
   );
 };
-export default Calendar;
+export default FormCalendar;
