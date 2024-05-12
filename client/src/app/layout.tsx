@@ -33,7 +33,7 @@ export default function RootLayout({
         <head>
           <ProvidersHead />
         </head>
-        <body className={`${defaultFont.variable} bg-dwhite font-sans`}>
+        <body className={`${defaultFont.variable} bg-slate-200 font-sans`}>
           <Providers>
             <Shell>
               {/*  */}

@@ -16,7 +16,7 @@ import RoomOption from './RoomOption';
 import { cabins, rooms, CUSTOM_ROOM_ID } from '@/sampleRoomData';
 import { Cabin, Room, useFormCtxRoomState } from '../state/formCtx';
 
-const SEPARATOR = `–`;
+const SEPARATOR = `/`;
 
 const initialOptions = [...cabins, ...rooms.filter((it) => it.cabin === null)];
 
@@ -170,8 +170,14 @@ const RoomSelector = ({
             {/* selected option */}
             {selectedCabin && (
               <>
-                <Pill size="md" className="p-0">
-                  <div>{selectedCabin.name}</div>
+                <Pill
+                  size="md"
+                  className="p-0 first:pl-1"
+                  classNames={{
+                    label: '-mx-2.5 px-2.5 -mr-5 pr-5 rounded-md bg-slate-200',
+                  }}
+                >
+                  <div className="">{selectedCabin.name}</div>
                 </Pill>
                 <span className="opacity-50">{SEPARATOR}</span>
               </>
@@ -180,13 +186,14 @@ const RoomSelector = ({
               <>
                 <Pill
                   size="md"
-                  className="group -mr-2  p-0 data-[custom]:italic"
+                  className="group -mr-2 p-0 first:pl-1 data-[custom]:italic"
                   classNames={{
-                    label: 'group-data-[custom]:pr-2',
+                    label:
+                      'group-data-[custom]:mr-2 bg-slate-200 -mx-2.5 px-2.5 rounded-md',
                   }}
                   data-custom={selectedRoom.id === CUSTOM_ROOM_ID ? true : null}
                 >
-                  <div>{selectedRoom.name}</div>
+                  <div className="">{selectedRoom.name}</div>
                 </Pill>
               </>
             )}
@@ -200,10 +207,11 @@ const RoomSelector = ({
                 onFocus={() => combobox.openDropdown()}
                 onBlur={() => combobox.closeDropdown()}
                 value={!selectedRoom ? search : ''}
-                onChange={(e) => {
+                onChange={({ currentTarget: { value } }) => {
                   if (selectedRoom) return;
                   combobox.updateSelectedOptionIndex();
-                  setSearch(e.currentTarget.value);
+                  setSearch(value);
+                  if (value.length) combobox.openDropdown();
                 }}
                 onKeyDown={(e) => {
                   if (e.key === 'Backspace' && search.length === 0) {

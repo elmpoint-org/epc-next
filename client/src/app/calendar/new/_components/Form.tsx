@@ -84,14 +84,13 @@ const NewEventForm = () => {
           <FormCalendar />
           <div className="flex flex-row justify-end pb-4">
             <p className="text-sm text-slate-600">
-              {diff} day{diff !== 1 && 's'} - ${diff * COST_MEMBERS}/member - $
-              {diff * COST_GUESTS}/guest
+              {`${diff} day${diff !== 1 && 's'} - \$${diff * COST_MEMBERS}/member - \$${diff * COST_GUESTS}/guest`}
             </p>
           </div>
 
           <hr className="t" />
 
-          {/* ROOMS / PRICE */}
+          {/* # of ROOMS */}
           <div className="flex flex-row items-center justify-between pb-4 pt-8">
             <NumberInput
               label="Rooms"
