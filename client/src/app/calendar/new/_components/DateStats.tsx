@@ -16,7 +16,7 @@ const DateStats = () => {
     <>
       <div className="flex flex-row justify-end pb-4">
         <p className="text-sm text-slate-600">
-          {`${diff} day${diff !== 1 && 's'} - \$${diff * COST_MEMBERS}/member - \$${diff * COST_GUESTS}/guest`}
+          {`${diff} day${diff !== 1 ? 's':''} - \$${diff * COST_MEMBERS}/member - \$${diff * COST_GUESTS}/guest`}
         </p>
       </div>
     </>
