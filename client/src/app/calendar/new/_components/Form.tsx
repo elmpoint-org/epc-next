@@ -48,7 +48,9 @@ const NewEventForm = () => {
     } else {
       setGuests((o) => [
         ...o,
-        ...Array(nr - guests.length).fill(guestInitial()),
+        ...Array(nr - guests.length)
+          .fill(0)
+          .map(guestInitial),
       ]);
     }
   };
