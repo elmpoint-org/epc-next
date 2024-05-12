@@ -37,17 +37,27 @@ export const guestInitial = (): GuestEntry => ({
 
 export type DatesRange = [Date | null, Date | null];
 
+export type EventText = { title: string; description: string };
+export const eventTextInitial = (): EventText => ({
+  title: '',
+  description: '',
+});
+
 export type FormCtx = {
   dates: DatesRange;
   setDates: React.Dispatch<React.SetStateAction<DatesRange>>;
   guests: GuestEntry[];
   setGuests: React.Dispatch<React.SetStateAction<GuestEntry[]>>;
+  eventText: EventText;
+  setEventText: React.Dispatch<React.SetStateAction<EventText>>;
 };
 export const FormCtx = createContext<FormCtx>({
   dates: [null, null],
   setDates: () => {},
   guests: [],
   setGuests: () => {},
+  eventText: eventTextInitial(),
+  setEventText: () => {},
 });
 
 export const FormCtxProvider = ({
@@ -57,6 +67,7 @@ export const FormCtxProvider = ({
 }) => {
   const [dates, setDates] = useState<DatesRange>([null, null]);
   const [guests, setGuests] = useState([guestInitial()]);
+  const [eventText, setEventText] = useState(eventTextInitial());
 
   return (
     <>
@@ -66,6 +77,8 @@ export const FormCtxProvider = ({
           setDates,
           guests,
           setGuests,
+          eventText,
+          setEventText,
         }}
       >
         {/*  */}

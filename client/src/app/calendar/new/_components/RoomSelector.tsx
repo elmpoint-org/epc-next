@@ -94,7 +94,10 @@ const RoomSelector = ({
         candidate.toLowerCase().includes(term) ? count + 1 : count,
       0,
     );
-
+  const isIncomplete = useMemo(
+    () => search.length || (selectedCabin && !selectedRoom),
+    [search, selectedCabin, selectedRoom],
+  );
   const searchResults = useMemo(() => {
     let terms = search.toLowerCase().match(/\S+/g);
     if (!terms) return [];
@@ -150,6 +153,7 @@ const RoomSelector = ({
             classNames={{
               input: 'space-x-2 flex flex-row items-center h-10',
             }}
+            data-incomplete={isIncomplete ? true : null}
             rightSection={
               (search || selectedCabin || selectedRoom) && (
                 <CloseButton
@@ -176,7 +180,10 @@ const RoomSelector = ({
               <>
                 <Pill
                   size="md"
-                  className="p-0 data-[custom]:font-medium"
+                  className="group -mr-2  p-0 data-[custom]:italic"
+                  classNames={{
+                    label: 'group-data-[custom]:pr-2',
+                  }}
                   data-custom={selectedRoom.id === CUSTOM_ROOM_ID ? true : null}
                 >
                   <div>{selectedRoom.name}</div>
@@ -201,7 +208,11 @@ const RoomSelector = ({
                 onKeyDown={(e) => {
                   if (e.key === 'Backspace' && search.length === 0) {
                     e.preventDefault();
-                    if (selectedRoom) return setSelectedRoom(null);
+                    if (selectedRoom) {
+                      if (selectedRoom.id === CUSTOM_ROOM_ID)
+                        setSearch(selectedRoom.name);
+                      return setSelectedRoom(null);
+                    }
                     setSelectedCabin(null);
                   }
                 }}
@@ -210,7 +221,7 @@ const RoomSelector = ({
           </PillsInput>
         </Combobox.DropdownTarget>
         {/* unfinished warning */}
-        {(search.length || (selectedCabin && !selectedRoom)) && (
+        {isIncomplete && (
           <Tooltip
             label="Finish selecting a room option or changes may be lost."
             withArrow
