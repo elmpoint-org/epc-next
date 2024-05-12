@@ -62,7 +62,7 @@ const FormGuestRows = () => {
             focusInput(i + 1);
             break;
           case 'Backspace':
-            if (!guests[i].name.length) {
+            if (!guests[i].name.length && !guests[i].room.room) {
               e.preventDefault();
               updateRoom(i, 'DELETE');
               focusInput(i - 1);
