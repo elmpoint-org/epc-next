@@ -1,5 +1,6 @@
-import type { Metadata } from 'next';
+import Script from 'next/script';
 import { IBM_Plex_Sans } from 'next/font/google';
+import type { Metadata } from 'next';
 
 import Providers, { ProvidersHead } from './_components/Providers';
 import Shell from './_components/Shell';
@@ -40,6 +41,11 @@ export default function RootLayout({
               {children}
             </Shell>
           </Providers>
+          <Script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "a1798abad46f44ee8aa247fc966e78a7"}'
+          />
         </body>
       </html>
     </>
