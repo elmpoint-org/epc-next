@@ -1,3 +1,5 @@
+export const ALLOW_UNAUTH_USERS = true;
+
 export const DEFAULT_KEY_LENGTH = 32;
 
 // prettier-ignore

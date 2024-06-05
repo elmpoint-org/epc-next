@@ -23,6 +23,7 @@ provider:
             - '*'
   environment:
     # VARIABLE: ${ssm:/project--variable}
+    USER_AUTH_SECRET: ${ssm:/epc--user-auth-secret}
 
 functions:
   api:

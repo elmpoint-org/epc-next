@@ -40,7 +40,7 @@ export const createExecutors = <
   auth: (
     ctx: YogaInitialContext,
     context: ContextFnType<CtxType>
-  ) => ResolverContextType<any, any> | any[];
+  ) => Promise<ResolverContextType<any, any> | any[]>;
 }) => {
   const modulesApp = createApplication({ modules: p.modules });
   const context = (scope: CtxType['scope'], userId?: string) =>

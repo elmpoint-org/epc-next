@@ -44,31 +44,36 @@ export default gql`
 
   type Query {
     """
-    SCOPE: ADMIN.
+    **SCOPE: ADMIN**
+
     get all users
     """
     users: [User!]
 
     """
-    SCOPE: ADMIN | userId==id.
+    **SCOPE: ADMIN | userId==id**
+
     get single user by ID. can bypass scope if user is getting info for their own user.
     """
     user(id: ID!): User
 
     """
-    SCOPE: ADMIN.
+    **SCOPE: ADMIN**
+
     find a user by their email.
     """
     userFromEmail(email: String!): User
 
     """
-    SCOPE: userId.
+    **SCOPE: userId==id**
+
     get user from currently logged in account.
     """
     userFromAuth: User
 
     """
-    SCOPE: internal only.
+    **SCOPE: internal only**
+
     this obtains a user object with its authentication information—it is only accessible from internal server functions.
     """
     userSECURE(id: ID!): UserSECURE
@@ -76,13 +81,15 @@ export default gql`
 
   type Mutation {
     """
-    SCOPE: *.
-    create a new user. this is a public endpoint, but users cannot set their own scope without permissions.
+    **SCOPE: ADMIN | internal**
+
+    create a new user. users are created through the HTTP API only on the basis of referrals.
     """
     userCreate(name: String, email: String!, scope: [UserScopeProp!]): User
 
     """
-    SCOPE: userId==id | ADMIN.
+    **SCOPE: userId==id | ADMIN**
+
     update user info. can bypass scope if editing your own user.
     """
     userUpdate(
@@ -93,12 +100,14 @@ export default gql`
     ): User
 
     """
-    SCOPE: userId==id | ADMIN.
+    **SCOPE: userId==id | ADMIN**
+
     delete a user. can bypass scope if editing your own user.
     """
     userDelete(id: ID!): User
     """
-    SCOPE: userId==id | ADMIN.
+    **SCOPE: userId==id | ADMIN**
+
     reset user secret. this will be invalidate all current authorization tokens.
     """
     userResetSecret(id: ID!): User

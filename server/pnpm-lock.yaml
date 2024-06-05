@@ -47,9 +47,15 @@ importers:
       graphql-yoga:
         specifier: ^5.3.1
         version: 5.3.1(graphql@16.8.1)
+      jose:
+        specifier: ^5.4.0
+        version: 5.4.0
       serverless-http:
         specifier: ^3.2.0
         version: 3.2.0
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@0no-co/graphqlsp':
         specifier: ^1.12.5
@@ -4434,6 +4440,9 @@ packages:
   zip-stream@4.1.1:
     resolution: {integrity: sha512-9qv4rlDiopXg4E69k+vMHjNN63YFMe9sZMrdlvKnCjlCRWeCBswPPMPUfx+ipsAWq1LXHe70RcbaHdJJpS6hyQ==}
     engines: {node: '>= 10'}
+
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
 snapshots:
 
@@ -10492,3 +10501,5 @@ snapshots:
       archiver-utils: 3.0.4
       compress-commons: 4.1.2
       readable-stream: 3.6.2
+
+  zod@3.23.8: {}
