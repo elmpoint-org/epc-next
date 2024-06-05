@@ -1,22 +1,24 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import type { Children } from '@/util/childrenType';
+import { clx } from '@/util/classConcat';
 
-const NavLink = ({
-  href,
-  children,
-  className,
-  ...props
-}: {
+type NavLinkProps = {
   href: string;
-  children: React.ReactNode;
   className?: string;
-} & Partial<Parameters<typeof Link>[0]>) => {
+} & Partial<Parameters<typeof Link>[0]> &
+  Children;
+
+const NavLink = ({ href, children, className, ...props }: NavLinkProps) => {
   const path = usePathname();
 
   return (
     <Link
       href={href}
-      className={`rounded-full bg-emerald-900/80 px-6 py-2 hover:bg-emerald-900 data-[here]:bg-emerald-950/80 ${className}`}
+      className={clx(
+        'rounded-full bg-emerald-900/80 px-6 py-2 hover:bg-emerald-900 data-[here]:bg-emerald-950/80',
+        className || '',
+      )}
       data-here={path === href || null}
       {...props}
     >

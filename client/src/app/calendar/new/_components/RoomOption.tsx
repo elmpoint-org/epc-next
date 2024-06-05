@@ -12,7 +12,7 @@ const RoomOption = ({
 }) => {
   const aliasTag = item.useAlias && (
     <div className="">
-      <Tooltip withArrow label={`Alternate name for "${item.name}"`}>
+      <Tooltip withArrow label={`Alternate name for “${item.name}”`}>
         <IconAlt
           size={20}
           stroke={1.75}

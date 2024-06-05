@@ -88,12 +88,7 @@ const RoomSelector = ({
 
   // handle search
   const [search, setSearch] = useState('');
-  const runTermSearch = (terms: string[], candidate: string) =>
-    terms.reduce(
-      (count, term) =>
-        candidate.toLowerCase().includes(term) ? count + 1 : count,
-      0,
-    );
+
   const isIncomplete = useMemo(
     () => search.length || (selectedCabin && !selectedRoom),
     [search, selectedCabin, selectedRoom],
@@ -151,7 +146,7 @@ const RoomSelector = ({
             label="Room"
             className={`peer ${className}`}
             classNames={{
-              input: 'space-x-2 flex flex-row items-center h-10',
+              input: 'flex h-10 flex-row items-center space-x-2',
             }}
             data-incomplete={isIncomplete ? true : null}
             rightSection={

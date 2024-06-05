@@ -1,11 +1,14 @@
 'use client';
 
-import { AppShell, Burger } from '@mantine/core';
+import type { Children } from '@/util/childrenType';
+
+import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import Navbar from './Navbar';
 import { IconMenu } from '@tabler/icons-react';
 
-const Shell = ({ children }: { children: React.ReactNode }) => {
+import Navbar from './Navbar';
+
+const Shell = ({ children }: Children) => {
   const navState = useDisclosure();
   const [isOpen, { open }] = navState;
 

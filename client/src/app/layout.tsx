@@ -8,6 +8,7 @@ import Shell from './_components/Shell';
 import './globals.css';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import { Children } from '@/util/childrenType';
 
 const defaultFont = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -23,11 +24,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Children) {
   return (
     <>
       <html lang="en">

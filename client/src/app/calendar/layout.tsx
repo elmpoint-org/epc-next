@@ -1,8 +1,6 @@
-export default function CalendarLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import { Children } from '@/util/childrenType';
+
+export default function CalendarLayout({ children }: Children) {
   return (
     <>
       <div className="flex flex-1 flex-col space-y-2">
