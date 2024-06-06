@@ -14,7 +14,10 @@ const Shell = ({ children }: Children) => {
 
   return (
     <>
-      <button className="fixed left-0 top-0 z-50 p-4" onClick={open}>
+      <button
+        className="fixed left-0 top-0 z-50 rounded-br-2xl bg-dwhite/30 p-4 transition-all hover:bg-dwhite/60"
+        onClick={open}
+      >
         <IconMenu />
       </button>
 

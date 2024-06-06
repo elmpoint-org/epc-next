@@ -24,6 +24,7 @@ provider:
   environment:
     # VARIABLE: ${ssm:/project--variable}
     USER_AUTH_SECRET: ${ssm:/epc--user-auth-secret}
+    PASSWORDLESS_SECRET: ${ssm:/epc--passwordless-secret}
 
 functions:
   api:

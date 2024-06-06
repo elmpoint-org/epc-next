@@ -1,24 +1,64 @@
+import Link from 'next/link';
+
 import { AppShell, Collapse } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
   IconCircleChevronLeft,
   IconCircleChevronUp,
   IconUser,
+  IconLogin2,
 } from '@tabler/icons-react';
+import { IconType } from '@/util/iconType';
 
-const NavAccount = () => {
-  const [isOpen, { toggle }] = useDisclosure();
+const Links: {
+  href: string;
+  text: React.ReactNode;
+  icon?: IconType;
+}[] = [
+  {
+    href: '/auth/login',
+    text: 'Log in',
+    icon: IconLogin2,
+  },
+  { href: '#', text: '' },
+  { href: '#', text: '' },
+  { href: '#', text: '' },
+  { href: '#', text: '' },
+];
+
+const NavAccount = ({
+  navState: [, { close: closeNavbar }],
+}: {
+  navState: ReturnType<typeof useDisclosure>;
+}) => {
+  const [isOpen, { toggle, close }] = useDisclosure();
 
   return (
     <>
       <AppShell.Section className="rounded-lg bg-emerald-900">
         <Collapse in={isOpen}>
-          <div className="space-y-2 p-4">
-            {Array(4)
+          <div className="flex flex-col gap-2 p-4">
+            {Links.map(({ href, text, icon: Icon }, i) => (
+              <Link
+                key={i}
+                href={href}
+                onClick={() => {
+                  close();
+                  closeNavbar();
+                }}
+                className="flex flex-row items-center gap-5 rounded-full bg-dgreen px-4 py-2.5 hover:bg-emerald-700/50"
+              >
+                <div className="size-5">
+                  {Icon && <Icon className="h-full" />}
+                </div>
+                <div className="flex-1 leading-none">{text}</div>
+              </Link>
+            ))}
+            {/* {Array(4)
               .fill(0)
               .map((_, i) => (
-                <div key={i} className="bg-dgreen h-10 rounded-full"></div>
-              ))}
+                <div key={i} className="h-10 rounded-full bg-dgreen"></div>
+              ))} */}
           </div>
         </Collapse>
         <button

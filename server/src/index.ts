@@ -3,6 +3,7 @@ import cors from 'cors';
 import { expressErr } from '@/util/err';
 
 import { graphHTTP } from './db/graph';
+import api from './api/api';
 
 if (process.env.IS_OFFLINE) {
   import('dotenv/config');
@@ -21,5 +22,7 @@ app.use(expressErr);
 app.get('/', async (_, res) => res.json({ data: 'hello world' }));
 
 app.use('/gql', graphHTTP);
+
+app.use('/api', api);
 
 app.use((_, res) => res.err(404, 'NOT_FOUND'));

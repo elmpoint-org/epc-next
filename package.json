@@ -1,11 +1,13 @@
 {
   "scripts": {
     "dev": "concurrently \"npm:dev-*\"",
-    "dev-types": "cd server && pnpm gql:gen --watch",
+    "dev:server": "concurrently \"npm:dev-server*\"",
     "dev-client": "cd client && pnpm dev",
+    "dev-server-types": "cd server && pnpm gql:gen --watch",
     "dev-server": "cd server && pnpm dev"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "concurrently": "^8.2.2"
   }
 }

@@ -8,6 +8,7 @@ import Shell from './_components/Shell';
 import './globals.css';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
 import { Children } from '@/util/childrenType';
 
 const defaultFont = IBM_Plex_Sans({
@@ -19,8 +20,8 @@ const defaultFont = IBM_Plex_Sans({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - elm point',
-    default: 'elm point',
+    template: '%s - Elm Point',
+    default: 'Elm Point',
   },
 };
 

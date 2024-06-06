@@ -3,20 +3,15 @@ import * as jose from 'jose';
 import { z } from 'zod';
 
 import { validate } from '@/util/validate';
-import { graph } from '@/db/graph';
-import { graphql } from '@/db/lib/utilities';
+import { getUserSecret, reject } from './utilities';
 
 const { USER_AUTH_SECRET } = process.env;
 
-function reject() {
-  return 'UNAUTHORIZED';
-}
-
-type ScopeUser = {
-  id: string;
-  scope: string[];
-};
-
+/**
+ * verifies authorization header requests. will either return user info or throw an error.
+ * @param header full authorization header string
+ * @returns ScopeUser type (id + generic scope)
+ */
 export async function verifyAuth(header: string) {
   // extract token
   const m = header.match(/^\s*Bearer (.+)\s*$/);
@@ -34,7 +29,7 @@ export async function verifyAuth(header: string) {
   return user;
 }
 
-export function extractUserId(jwt: string) {
+function extractUserId(jwt: string) {
   let p: unknown;
   try {
     p = jose.decodeJwt(jwt);
@@ -52,36 +47,13 @@ export function extractUserId(jwt: string) {
   return data.data.id;
 }
 
-export async function getUserSecret(userId: string) {
-  const { data, errors } = await graph(
-    graphql(`
-      query User($userId: ID!) {
-        userSECURE(id: $userId) {
-          user {
-            id
-            scope
-          }
-          secret
-        }
-      }
-    `),
-    { userId }
-  );
-  if (errors || !data?.userSECURE) throw reject();
-
-  const user = data.userSECURE as { secret: string; user: ScopeUser };
-
-  user.user.scope = user.user.scope ?? [];
-
-  return user;
-}
-
-export async function verifyToken(token: string, userSecret: string) {
+async function verifyToken(token: string, userSecret: string) {
   try {
-    await jose.jwtVerify(
-      token,
-      new TextEncoder().encode(userSecret + USER_AUTH_SECRET)
-    );
+    await jose
+      .jwtVerify(token, new TextEncoder().encode(userSecret + USER_AUTH_SECRET))
+      .catch(() => {
+        throw reject();
+      });
   } catch (_) {
     throw reject();
   }
