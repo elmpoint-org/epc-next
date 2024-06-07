@@ -14,6 +14,7 @@ export default gql`
     # __ AUTH DATA __
     "scope defines a user's permissions."
     scope: [UserScopeProp!]
+    credentials: [UserCredential!]
 
     "create/update history for this entry"
     timestamp: TS!
@@ -40,6 +41,17 @@ export default gql`
     PHOTO_MANAGE
   }
 
+  "a passkey registered to the user"
+  type UserCredential {
+    id: ID!
+    userId: String
+    createdAt: String
+    lastUsedAt: String
+    country: String
+    device: String
+    nickname: String
+  }
+
   # ---------------------------
 
   type Query {
@@ -51,7 +63,7 @@ export default gql`
     users: [User!]
 
     """
-    **SCOPE: ADMIN | userId==id**
+    **SCOPE: authorized**
 
     get single user by ID. can bypass scope if user is getting info for their own user.
     """

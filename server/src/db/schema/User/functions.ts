@@ -8,10 +8,12 @@ import {
 import type {
   MutationResolvers,
   QueryResolvers,
+  UserResolvers,
 } from '@/db/__types/graphql-types';
 import type { ResolverContext } from '@/db/graph';
 import { generateKey } from '@/util/generate';
 import { DBUser } from './source';
+import { passwordless } from '@/auth/passkeys';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -23,8 +25,7 @@ export const getUsers = h<QueryResolvers['users']>(
 );
 
 export const getUser = h<QueryResolvers['user']>(
-  ({ sources, scope, userId, args: { id } }) => {
-    if (!(scopeDiff(scope, 'ADMIN') || userId === id)) throw scopeError();
+  ({ sources, args: { id } }) => {
     return sources.user.get(id);
   }
 );
@@ -111,5 +112,18 @@ export const userResetSecret = h<MutationResolvers['userResetSecret']>(
     return sources.user.update(id, {
       secret: await generateKey(),
     });
+  }
+);
+
+export const getUserCredentials = h<UserResolvers['credentials']>(
+  async ({ parent: { id }, scope, userId }) => {
+    if (!scopeDiff(scope, 'ADMIN') && userId !== id) throw scopeError();
+
+    return (await passwordless.listCredentials(id)).map((c) => ({
+      ...c,
+      id: c.descriptor.id,
+      createdAt: c.createdAt?.toString(),
+      lastUsedAt: c.lastUsedAt?.toString(),
+    }));
   }
 );

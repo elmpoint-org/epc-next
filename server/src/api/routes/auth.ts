@@ -7,6 +7,7 @@ import {
   PASSWORDLESS_API,
   PASSWORDLESS_SECRET,
   passwordless,
+  passwordlessSendMagicLink,
 } from '@/auth/passkeys';
 import { RegisterOptions } from '@passwordlessdev/passwordless-nodejs';
 import { signToken } from '@/auth/sign';
@@ -95,19 +96,7 @@ export const sendMagicLink = t.procedure
 
     // send magic link
     const userId = data.userFromEmail.id;
-
-    await axios
-      .post(
-        PASSWORDLESS_API + '/magic-links/send',
-        {
-          emailAddress: email,
-          userId: userId,
-          urlTemplate: siteDomain + '/auth/email?token=$TOKEN',
-          timeToLive: EMAIL_LOGIN_EXPIRE,
-        },
-        { headers: { ApiSecret: PASSWORDLESS_SECRET } }
-      )
-      .catch((e) => {
-        throw err('BAD_REQUEST', 'MAGIC_LINK_FAILED', e);
-      });
+    await passwordlessSendMagicLink({ email, userId }).catch((e) => {
+      throw err('BAD_REQUEST', 'MAGIC_LINK_FAILED', e);
+    });
   });

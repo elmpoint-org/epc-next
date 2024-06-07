@@ -29,6 +29,7 @@ import LineLabel from '@/app/_components/_base/LineLabel';
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 import { useRouter } from 'next/navigation';
 import { TRPCClientError } from '@trpc/client';
+import { useLogin } from '@/app/_ctx/userState';
 
 const REDIRECT_DELAY = 200;
 
@@ -36,6 +37,8 @@ const REDIRECT_DELAY = 200;
 export default function LoginForm() {
   const [isLoading, loading] = useTransition();
   const router = useRouter();
+
+  const login = useLogin();
 
   const [showPasskey, setShowPasskey] = useState(true);
   const pkey = useRef<Client | null>(null);
@@ -129,8 +132,8 @@ export default function LoginForm() {
       });
       if (!data) return;
 
-      // store auth token
-      cookies.set('USER_AUTH', data.token);
+      // set login state
+      login(data.token);
       notifications.show({
         title: 'Welcome back!',
         message: 'Successfully logged in.',

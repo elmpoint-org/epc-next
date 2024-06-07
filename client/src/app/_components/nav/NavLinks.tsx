@@ -3,24 +3,14 @@ import { useDisclosure } from '@mantine/hooks';
 
 import NavLink from './NavLink';
 
-const NavBody = ({
-  navState: [, { close }],
-}: {
-  navState: ReturnType<typeof useDisclosure>;
-}) => {
+const NavLinks = () => {
   return (
     <>
       <AppShell.Section grow component={ScrollArea}>
         <div className="flex flex-col space-y-2 p-2">
-          <NavLink href="/" onClick={close}>
-            Home
-          </NavLink>
-          <NavLink href="/test" onClick={close}>
-            Test
-          </NavLink>
-          <NavLink href="/calendar/new" onClick={close}>
-            Calendar - Add stay
-          </NavLink>
+          <NavLink href="/">Home</NavLink>
+          <NavLink href="/test">Test</NavLink>
+          <NavLink href="/calendar/new">Calendar - Add stay</NavLink>
 
           {Array(5)
             .fill(0)
@@ -35,4 +25,4 @@ const NavBody = ({
     </>
   );
 };
-export default NavBody;
+export default NavLinks;

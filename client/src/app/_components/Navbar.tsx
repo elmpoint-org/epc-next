@@ -1,10 +1,13 @@
+import { usePathname } from 'next/navigation';
+
 import { AppShell } from '@mantine/core';
 import type { useDisclosure } from '@mantine/hooks';
 
 import { IconX } from '@tabler/icons-react';
 import NavAccount from './nav/NavAccount';
-import NavBody from './nav/NavLinks';
+import NavLinks from './nav/NavLinks';
 import Logo from './nav/Logo';
+import { useEffect, useRef, useState } from 'react';
 
 const Navbar = ({
   navState,
@@ -12,6 +15,17 @@ const Navbar = ({
   navState: ReturnType<typeof useDisclosure>;
 }) => {
   const [opened, { close }] = navState;
+
+  // close navbar on path change
+  const path = usePathname();
+  const [lastPath, setLastPath] = useState(path);
+  useEffect(() => {
+    if (path !== lastPath) {
+      close();
+      setLastPath(path);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path]);
 
   return (
     <>
@@ -30,8 +44,8 @@ const Navbar = ({
             <Logo className="h-5 fill-dwhite" />
           </div>
         </AppShell.Section>
-        <NavBody navState={navState} />
-        <NavAccount navState={navState} />
+        <NavLinks />
+        <NavAccount />
       </AppShell.Navbar>
     </>
   );

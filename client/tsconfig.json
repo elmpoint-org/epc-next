@@ -15,6 +15,12 @@
     "plugins": [
       {
         "name": "next"
+      },
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "http://localhost:3000/gql",
+        "tadaOutputLocation": "./src/query/__types/graphql-client.ts",
+        "trackFieldUsage": false
       }
     ],
     "paths": {
