@@ -1,13 +1,13 @@
 import { ExecutionResult, GraphQLError } from 'graphql';
 
 import type { DBType } from './Model';
-import type { Resolver, ResolverFn } from '@/db/__types/graphql-types';
+import type { Resolver, ResolverFn } from '@@/db/__types/graphql-types';
 import type { Maybe } from 'graphql/jsutils/Maybe';
 import type { ResolverContextType } from './executors';
 import { PromiseOrValue } from 'graphql/jsutils/PromiseOrValue';
 
 import { initGraphQLTada } from 'gql.tada';
-import type { introspection } from '@/db/__types/graphql-client';
+import type { introspection } from '@@/../graphql-schema';
 
 export type GraphResponseType<T> = PromiseOrValue<
   ExecutionResult<T, { code?: string }>
@@ -123,5 +123,5 @@ export const timestamp = ({
   } as { created: number; updated: number });
 
 export const graphql = initGraphQLTada<{
-  introspection: typeof introspection;
+  introspection: introspection;
 }>();

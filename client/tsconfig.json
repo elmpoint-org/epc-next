@@ -19,12 +19,14 @@
       {
         "name": "@0no-co/graphqlsp",
         "schema": "http://localhost:3000/gql",
-        "tadaOutputLocation": "./src/query/__types/graphql-client.ts",
+        "tadaOutputLocation": "./graphql-schema.d.ts",
         "trackFieldUsage": false
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@@/*": ["../server/src/*"],
+      "graphql-modules": ["./node_modules/graphql-modules/index.d.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

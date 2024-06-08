@@ -1,14 +1,7 @@
-import { UserResolvers } from '@/db/__types/graphql-types';
 import type { UserModule } from './__types/module-types';
 import * as f from './functions';
 
-import {
-  getTypedScopeFunctions,
-  handle as h,
-  scoped,
-  timestamp,
-} from '@/db/lib/utilities';
-import { ResolverContext } from '@/db/graph';
+import { timestamp } from '@@/db/lib/utilities';
 
 const resolvers: UserModule.Resolvers = {
   Query: {

@@ -3,17 +3,17 @@ import {
   getTypedScopeFunctions,
   handle as h,
   scopeError,
-} from '@/db/lib/utilities';
+} from '@@/db/lib/utilities';
 
 import type {
   MutationResolvers,
   QueryResolvers,
   UserResolvers,
-} from '@/db/__types/graphql-types';
-import type { ResolverContext } from '@/db/graph';
-import { generateKey } from '@/util/generate';
+} from '@@/db/__types/graphql-types';
+import type { ResolverContext } from '@@/db/graph';
+import { generateKey } from '@@/util/generate';
 import { DBUser } from './source';
-import { passwordless } from '@/auth/passkeys';
+import { passwordless } from '@@/auth/passkeys';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 

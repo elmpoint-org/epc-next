@@ -1,6 +1,6 @@
 import * as jose from 'jose';
 
-import { JWT_ALGORITHM, LOGIN_EXPIRE } from '@/CONSTANTS';
+import { JWT_ALGORITHM, LOGIN_EXPIRE } from '@@/CONSTANTS';
 import { getUserSecret } from './utilities';
 
 const { USER_AUTH_SECRET } = process.env;

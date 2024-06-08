@@ -9,14 +9,14 @@
     "moduleResolution": "Bundler",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"],
+      "@@/*": ["./src/*"],
       "graphql-modules": ["./node_modules/graphql-modules/index.d.ts"]
     },
     "plugins": [
       {
         "name": "@0no-co/graphqlsp",
         "schema": "http://localhost:3000/gql",
-        "tadaOutputLocation": "./src/db/__types/graphql-client.ts"
+        "tadaOutputLocation": "./graphql-schema.d.ts"
       }
     ]
   },

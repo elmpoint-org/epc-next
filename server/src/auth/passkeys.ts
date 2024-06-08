@@ -1,5 +1,5 @@
-import { EMAIL_LOGIN_EXPIRE } from '@/CONSTANTS';
-import { siteDomain } from '@/util/dev';
+import { EMAIL_LOGIN_EXPIRE } from '@@/CONSTANTS';
+import { siteDomain } from '@@/util/dev';
 import { PasswordlessClient } from '@passwordlessdev/passwordless-nodejs';
 import axios from 'axios';
 

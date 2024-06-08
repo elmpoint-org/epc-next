@@ -3,7 +3,7 @@ import { type ResolverContextType, createExecutors } from './lib/executors';
 import type { UserScopeProp } from './__types/graphql-types';
 
 import { modules, sources } from './schema/modules';
-import { graphqlAuth } from '@/auth/graphql';
+import { graphqlAuth } from '@@/auth/graphql';
 
 // context type
 export type ResolverContext = ResolverContextType<

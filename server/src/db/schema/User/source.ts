@@ -1,6 +1,6 @@
-import Model from '@/db/lib/Model';
+import Model from '@@/db/lib/Model';
 
-import type { User } from '@/db/__types/graphql-types';
+import type { User } from '@@/db/__types/graphql-types';
 
 export type DBUser = User & {
   secret: string;

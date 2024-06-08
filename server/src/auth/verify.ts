@@ -2,7 +2,7 @@ import { TextEncoder } from 'node:util';
 import * as jose from 'jose';
 import { z } from 'zod';
 
-import { validate } from '@/util/validate';
+import { validate } from '@@/util/validate';
 import { getUserSecret, reject } from './utilities';
 
 const { USER_AUTH_SECRET } = process.env;

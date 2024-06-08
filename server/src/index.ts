@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { expressErr } from '@/util/err';
+import { expressErr } from '@@/util/err';
 
 import { graphHTTP } from './db/graph';
 import api from './api/api';

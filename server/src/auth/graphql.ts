@@ -1,11 +1,11 @@
 import type { YogaInitialContext } from 'graphql-yoga';
-import type { ResolverContext } from '@/db/graph';
-import type { ContextFnType } from '@/db/lib/executors';
+import type { ResolverContext } from '@@/db/graph';
+import type { ContextFnType } from '@@/db/lib/executors';
 
 import { verifyAuth } from './verify';
 import { getScopeObject } from './scope';
-import { err } from '@/db/lib/utilities';
-import { ALLOW_UNAUTH_USERS } from '@/CONSTANTS';
+import { err } from '@@/db/lib/utilities';
+import { ALLOW_UNAUTH_USERS } from '@@/CONSTANTS';
 
 export async function graphqlAuth(
   ctx: YogaInitialContext,
