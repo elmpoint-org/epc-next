@@ -2,7 +2,7 @@
 
 import { createTRPCReact, httpBatchLink } from '@trpc/react-query';
 
-import type { AppRouter } from '@/../../server/src/api/router';
+import type { AppRouter } from '@@/api/router';
 import { Children } from '@/util/childrenType';
 
 import { api } from '@/util/dev';

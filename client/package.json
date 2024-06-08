@@ -5,7 +5,8 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "cd ../server && pnpm install"
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.5",
     "@tailwindcss/typography": "^0.5.13",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

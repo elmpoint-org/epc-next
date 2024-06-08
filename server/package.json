@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "nodemon --exec \"sls offline start\"",
     "push": "sls deploy",
-    "gql:gen": "graphql-codegen -c ./src/db/codegen.ts"
+    "gql:gen": "graphql-codegen -c ./src/db/codegen.ts",
+    "postinstall": "pnpm run gql:gen"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.5",

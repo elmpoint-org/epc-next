@@ -7,7 +7,6 @@
     "dev-server": "cd server && pnpm dev"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.6",
     "concurrently": "^8.2.2"
   }
 }
