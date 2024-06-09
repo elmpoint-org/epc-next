@@ -8,7 +8,6 @@ import { atom, useRecoilState, useRecoilValue } from 'recoil';
 import cookies from '@/util/cookies';
 import { UseQueryResult } from '@tanstack/react-query';
 import { GLOBAL_RETRIES } from '@/CONSTANTS';
-import { Portal } from '@mantine/core';
 
 // USER AUTH STATE
 

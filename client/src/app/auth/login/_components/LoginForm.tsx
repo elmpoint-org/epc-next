@@ -65,6 +65,7 @@ export default function LoginForm() {
           title: 'Login link sent',
           message: 'Check your email!',
         });
+        setEmail('');
       } catch (e) {
         notifications.show({
           color: 'red',
