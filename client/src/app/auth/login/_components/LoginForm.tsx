@@ -27,7 +27,6 @@ import LineLabel from '@/app/_components/_base/LineLabel';
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 import { useRouter } from 'next/navigation';
 import { TRPCClientError } from '@trpc/client';
-import { useLogin } from '@/app/_ctx/userState';
 import { login } from '@/app/_ctx/user/actions';
 
 const REDIRECT_DELAY = 200;

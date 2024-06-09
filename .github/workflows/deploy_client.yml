@@ -20,7 +20,6 @@ jobs:
       - uses: actions/setup-node@v4.0.2
         with:
           cache: 'pnpm'
-      - run: pnpm install
       - name: install sst
         run: curl -fsSL https://ion.sst.dev/install | bash
 
@@ -31,4 +30,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DOMAIN_ARN: ${{ secrets.DOMAIN_ARN }}
         run: |
+          cd client
+          pnpm install
           pnpm push --stage=${{ inputs.stage }}
