@@ -4,7 +4,6 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs20.x
-  profile: elmpoint-aws
   iam:
     role:
       statements:
