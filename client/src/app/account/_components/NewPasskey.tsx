@@ -76,7 +76,7 @@ export default function NewPasskey() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-row items-end gap-2 rounded-md p-2">
+          <div className="flex flex-col sm:flex-row items-end gap-2 rounded-md p-2">
             <TextInput
               label="Nickname"
               description="This is how you'll recognize what device this passkey is stored on. You won't be able to change it without deleting it and starting over."
