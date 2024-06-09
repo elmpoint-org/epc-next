@@ -1,4 +1,4 @@
-import type { Children } from '@/util/childrenType';
+import type { Children } from '@/util/propTypes';
 
 import Logo from '../_components/nav/Logo';
 import Backdrop from './_components/Backdrop';

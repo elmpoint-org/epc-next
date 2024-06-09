@@ -14,6 +14,7 @@ import type { ResolverContext } from '@@/db/graph';
 import { generateKey } from '@@/util/generate';
 import { DBUser } from './source';
 import { passwordless } from '@@/auth/passkeys';
+import { RegisterOptions } from '@passwordlessdev/passwordless-nodejs';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -114,6 +115,23 @@ export const userResetSecret = h<MutationResolvers['userResetSecret']>(
     });
   }
 );
+
+export const userCreateCredential = h<
+  MutationResolvers['userCreateCredential']
+>(async ({ sources, userId }) => {
+  if (!userId) throw scopeError();
+
+  const user = await sources.user.get(userId);
+
+  const opts = new RegisterOptions();
+  opts.userId = user.id;
+  opts.username = user.email;
+  const { token } = await passwordless.createRegisterToken(opts).catch((e) => {
+    throw err('SERVER_ERROR', undefined, e);
+  });
+
+  return token;
+});
 
 export const getUserCredentials = h<UserResolvers['credentials']>(
   async ({ parent: { id }, scope, userId }) => {

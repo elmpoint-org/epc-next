@@ -4,12 +4,22 @@ import {
   PromiseResult,
   TokenResponse,
 } from '@passwordlessdev/passwordless-client/dist/types';
+import { useEffect, useRef } from 'react';
 
 export const initPasswordless = () =>
   new Client({
     apiKey: 'elmpointorg:public:9020008d8b6b49a2919e44e39d59b2c3',
     apiUrl: 'https://v4.passwordless.dev',
   });
+
+export const usePkey = () => {
+  const pkey = useRef<Client | null>(null);
+  useEffect(() => {
+    pkey.current = initPasswordless();
+  }, []);
+
+  return pkey;
+};
 
 export type TokenResponseType = Awaited<PromiseResult<TokenResponse>>;
 

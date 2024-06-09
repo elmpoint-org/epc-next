@@ -1,4 +1,4 @@
-import type { Children } from '@/util/childrenType';
+import type { Children } from '@/util/propTypes';
 import { clx } from '@/util/classConcat';
 
 const LineLabel = ({

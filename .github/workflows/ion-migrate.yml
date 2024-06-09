@@ -1,0 +1,11 @@
+name: deploy ion-migrate
+on:
+  push:
+    branches:
+      - ion-migrate
+jobs:
+  deploy:
+    uses: './.github/workflows/deploy_client.yml'
+    secrets: inherit
+    with:
+      stage: production

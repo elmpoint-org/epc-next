@@ -2,11 +2,12 @@
   "name": "epc-next__client",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
+    "postinstall": "cd ../server && pnpm install",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "cd ../server && pnpm install"
+    "dev": "sst dev 'next dev -p 3001' --stage=development",
+    "push": "sst deploy --stage=production"
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
@@ -18,23 +19,28 @@
     "@mantine/notifications": "^7.10.1",
     "@passwordlessdev/passwordless-client": "^1.1.2",
     "@tabler/icons-react": "^3.3.0",
-    "@tanstack/react-query": "4",
-    "@trpc/client": "^10.45.2",
-    "@trpc/react-query": "^10.45.2",
+    "@tanstack/react-query": "^5.40.1",
+    "@trpc/client": "11.0.0-rc.396",
+    "@trpc/react-query": "11.0.0-rc.396",
+    "@trpc/server": "11.0.0-rc.396",
     "dayjs": "^1.11.11",
     "gql.tada": "^1.7.5",
+    "graphql": "^16.8.1",
     "graphql-request": "^7.0.1",
     "js-cookie": "^3.0.5",
     "next": "14.2.3",
+    "qs": "^6.12.1",
     "react": "^18",
     "react-dom": "^18",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "sst": "ion"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.5",
     "@tailwindcss/typography": "^0.5.13",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
+    "@types/qs": "^6.9.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",

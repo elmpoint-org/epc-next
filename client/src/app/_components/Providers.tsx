@@ -3,12 +3,11 @@
 import { RecoilRoot } from 'recoil';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/query/query';
-import { TrpcProvider } from '@/query/trpc';
 
 import { theme } from '@/util/theme';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { UserProvider } from '../_ctx/userState';
+import { TrpcProvider } from '@/query/trpcProvider';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -16,12 +15,10 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       <RecoilRoot>
         <TrpcProvider>
           <QueryClientProvider client={queryClient}>
-            <UserProvider>
-              <MantineProvider theme={theme} defaultColorScheme="light">
-                <Notifications position="top-right" />
-                {children}
-              </MantineProvider>
-            </UserProvider>
+            <MantineProvider theme={theme} defaultColorScheme="light">
+              <Notifications position="top-right" />
+              {children}
+            </MantineProvider>
           </QueryClientProvider>
         </TrpcProvider>
       </RecoilRoot>

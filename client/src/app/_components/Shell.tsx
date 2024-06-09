@@ -1,6 +1,6 @@
 'use client';
 
-import type { Children } from '@/util/childrenType';
+import type { Children } from '@/util/propTypes';
 
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';

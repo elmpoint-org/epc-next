@@ -7,6 +7,27 @@
     "gql:gen": "graphql-codegen -c ./src/db/codegen.ts",
     "postinstall": "pnpm run gql:gen"
   },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.590.0",
+    "@aws-sdk/lib-dynamodb": "^3.590.0",
+    "@envelop/graphql-modules": "^6.0.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
+    "@passwordlessdev/passwordless-nodejs": "^0.2.0",
+    "@trpc/server": "11.0.0-rc.396",
+    "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "dataloader": "^2.2.2",
+    "express": "^4.19.2",
+    "gql.tada": "^1.7.5",
+    "graphql": "^16.8.1",
+    "graphql-http": "^1.22.1",
+    "graphql-modules": "^2.3.0",
+    "graphql-tag": "^2.12.6",
+    "graphql-yoga": "^5.3.1",
+    "jose": "^5.4.0",
+    "serverless-http": "^3.2.0",
+    "zod": "^3.23.8"
+  },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.5",
     "@graphql-codegen/add": "^5.0.2",
@@ -24,26 +45,5 @@
     "serverless-ignore": "^0.2.1",
     "serverless-offline": "^13.6.0",
     "typescript": "^5.4.5"
-  },
-  "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.590.0",
-    "@aws-sdk/lib-dynamodb": "^3.590.0",
-    "@envelop/graphql-modules": "^6.0.0",
-    "@graphql-typed-document-node/core": "^3.2.0",
-    "@passwordlessdev/passwordless-nodejs": "^0.2.0",
-    "@trpc/server": "^10.45.2",
-    "axios": "^1.7.2",
-    "cors": "^2.8.5",
-    "dataloader": "^2.2.2",
-    "express": "^4.19.2",
-    "gql.tada": "^1.7.5",
-    "graphql": "^16.8.1",
-    "graphql-http": "^1.22.1",
-    "graphql-modules": "^2.3.0",
-    "graphql-tag": "^2.12.6",
-    "graphql-yoga": "^5.3.1",
-    "jose": "^5.4.0",
-    "serverless-http": "^3.2.0",
-    "zod": "^3.23.8"
   }
 }

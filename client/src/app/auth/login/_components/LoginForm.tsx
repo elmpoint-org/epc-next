@@ -2,7 +2,6 @@
 
 import {
   ChangeEvent,
-  FormEvent,
   FormEventHandler,
   MouseEventHandler,
   useEffect,
@@ -18,7 +17,6 @@ import {
 } from '../../passwordless';
 
 import { trpc } from '@/query/trpc';
-import cookies from '@/util/cookies';
 import { authErrorMap } from '../../_util/authErrors';
 
 import { Button, Fieldset, TextInput } from '@mantine/core';
@@ -30,6 +28,7 @@ import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 import { useRouter } from 'next/navigation';
 import { TRPCClientError } from '@trpc/client';
 import { useLogin } from '@/app/_ctx/userState';
+import { login } from '@/app/_ctx/user/actions';
 
 const REDIRECT_DELAY = 200;
 
@@ -37,8 +36,6 @@ const REDIRECT_DELAY = 200;
 export default function LoginForm() {
   const [isLoading, loading] = useTransition();
   const router = useRouter();
-
-  const login = useLogin();
 
   const [showPasskey, setShowPasskey] = useState(true);
   const pkey = useRef<Client | null>(null);
@@ -134,7 +131,7 @@ export default function LoginForm() {
       if (!data) return;
 
       // set login state
-      login(data.token);
+      await login(data.token);
       notifications.show({
         title: 'Welcome back!',
         message: 'Successfully logged in.',

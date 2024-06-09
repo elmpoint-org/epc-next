@@ -6,17 +6,14 @@ import { Button, Fieldset, Loader, TextInput } from '@mantine/core';
 
 import { trpc } from '@/query/trpc';
 import type { Client } from '@passwordlessdev/passwordless-client';
-import { initPasswordless } from '../../passwordless';
+import { initPasswordless, usePkey } from '../../passwordless';
 import { notifications } from '@mantine/notifications';
 import { authErrorMap } from '../../_util/authErrors';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
 
-  const pkey = useRef<Client | null>(null);
-  useEffect(() => {
-    pkey.current = initPasswordless();
-  }, []);
+  const pkey = usePkey();
 
   const registerFn = trpc.auth.register.useMutation();
 
@@ -70,9 +67,9 @@ const SignupForm = () => {
           <Button
             type="submit"
             className="w-full"
-            disabled={registerFn.isLoading}
+            disabled={registerFn.isPending}
           >
-            {registerFn.isLoading ? (
+            {registerFn.isPending ? (
               <>
                 <Loader size="sm" />
               </>

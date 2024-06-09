@@ -117,11 +117,19 @@ export default gql`
     delete a user. can bypass scope if editing your own user.
     """
     userDelete(id: ID!): User
+
     """
     **SCOPE: userId==id | ADMIN**
 
     reset user secret. this will be invalidate all current authorization tokens.
     """
     userResetSecret(id: ID!): User
+
+    """
+    **SCOPE: userId==id**
+
+    get a token to create a new passkey credential for your own user. all users may only do this for themselves.
+    """
+    userCreateCredential: String!
   }
 `;

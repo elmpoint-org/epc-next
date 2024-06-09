@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { Children } from '@/util/childrenType';
+import type { Children } from '@/util/propTypes';
 import { clx } from '@/util/classConcat';
 
 type NavLinkProps = {

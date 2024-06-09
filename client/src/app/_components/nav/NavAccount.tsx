@@ -11,7 +11,7 @@ import {
   IconTableOptions,
 } from '@tabler/icons-react';
 import { IconType } from '@/util/iconType';
-import { useUser } from '@/app/_ctx/userState';
+import { useUser } from '@/app/_ctx/user/context';
 
 const Links: {
   href: string;
@@ -36,7 +36,7 @@ const Links: {
 const NavAccount = () => {
   const [isOpen, { toggle, close }] = useDisclosure();
 
-  const { user } = useUser();
+  const user = useUser();
 
   return (
     <>
@@ -81,44 +81,41 @@ function NavAccountButton({
   isOpen,
   ...props
 }: { isOpen?: boolean } & JSX.IntrinsicElements['button']) {
-  const {
-    user,
-    query: { isInitialLoading: isLoading },
-  } = useUser();
+  const user = useUser();
 
   return (
     <button
       className="relative flex w-full flex-row items-center gap-2 overflow-hidden rounded-lg bg-emerald-700/80 px-4 py-3 hover:bg-emerald-700 data-[nu]:px-6"
-      disabled={isLoading}
-      data-nu={(!isLoading && !user) || null}
+      // disabled={isLoading}
+      data-nu={/* !isLoading && */ !user || null}
       {...props}
     >
-      {!isLoading ? (
-        <>
-          {/* button content with/without a user */}
-          {user ? (
-            <>
-              <IconUser size={20} />
-              <div className="flex-1 text-left">{user.name}</div>
+      {/* {!isLoading ? ( */}
+      <>
+        {/* button content with/without a user */}
+        {user ? (
+          <>
+            <IconUser size={20} />
+            <div className="flex-1 text-left">{user.name}</div>
 
-              {isOpen ? <IconCircleChevronUp /> : <IconCircleChevronLeft />}
-            </>
-          ) : (
-            <>
-              <div className="flex-1 text-left">Log in</div>
-              <IconLogin2 size={20} />
-            </>
-          )}
-        </>
-      ) : (
+            {isOpen ? <IconCircleChevronUp /> : <IconCircleChevronLeft />}
+          </>
+        ) : (
+          <>
+            <div className="flex-1 text-left">Log in</div>
+            <IconLogin2 size={20} />
+          </>
+        )}
+      </>
+      {/* ) : (
+        // skeleton
         <>
-          {/* skeleton */}
           <div className="size-4 animate-pulse rounded-full bg-emerald-600/50"></div>
           <div className="h-4 w-2/3 flex-shrink animate-pulse rounded-full bg-emerald-600/50"></div>
           <div className="flex-1"></div>
           <div className="size-6 animate-pulse rounded-full bg-emerald-600/50"></div>
         </>
-      )}
+      )} */}
     </button>
   );
 }
