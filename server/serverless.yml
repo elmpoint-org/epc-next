@@ -1,5 +1,6 @@
 service: epc-next
 frameworkVersion: '3'
+useDotenv: true
 
 provider:
   name: aws
