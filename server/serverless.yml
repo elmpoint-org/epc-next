@@ -1,0 +1,42 @@
+service: epc-next
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:BatchGetItem
+            - dynamodb:BatchWriteItem
+            - s3:*
+          Resource:
+            - '*'
+  environment:
+    # VARIABLE: ${ssm:/project--variable}
+    USER_AUTH_SECRET: ${ssm:/epc--user-auth-secret}
+    PASSWORDLESS_SECRET: ${ssm:/epc--passwordless-secret}
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - httpApi: '*'
+
+custom:
+  esbuild:
+    # plugins: esPlugins.js
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+  - serverless-ignore

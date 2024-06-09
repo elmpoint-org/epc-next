@@ -1,4 +1,4 @@
-import { Children } from '@/util/childrenType';
+import { Children } from '@/util/propTypes';
 
 export default function CalendarLayout({ children }: Children) {
   return (

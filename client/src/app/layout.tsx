@@ -8,7 +8,9 @@ import Shell from './_components/Shell';
 import './globals.css';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
-import { Children } from '@/util/childrenType';
+import '@mantine/notifications/styles.css';
+import { Children } from '@/util/propTypes';
+import { UserProvider } from './_ctx/user/provider';
 
 const defaultFont = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -19,8 +21,8 @@ const defaultFont = IBM_Plex_Sans({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - elm point',
-    default: 'elm point',
+    template: '%s - Elm Point',
+    default: 'Elm Point',
   },
 };
 
@@ -32,12 +34,14 @@ export default function RootLayout({ children }: Children) {
           <ProvidersHead />
         </head>
         <body className={`${defaultFont.variable} bg-slate-200 font-sans`}>
-          <Providers>
-            <Shell>
-              {/*  */}
-              {children}
-            </Shell>
-          </Providers>
+          <UserProvider>
+            <Providers>
+              <Shell>
+                {/*  */}
+                {children}
+              </Shell>
+            </Providers>
+          </UserProvider>
           <Script
             defer
             src="https://static.cloudflareinsights.com/beacon.min.js"

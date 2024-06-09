@@ -1,0 +1,36 @@
+name: deploy client
+on:
+  workflow_call:
+    inputs:
+      stage:
+        type: string
+        required: true
+jobs:
+  deploy:
+    defaults:
+      run:
+        working-directory: ./client
+    runs-on: ubuntu-latest
+    steps:
+      # prepare codebase
+      - uses: actions/checkout@v4.1.6
+
+      # install libraries
+      - uses: pnpm/action-setup@v4.0.0
+        with:
+          version: latest
+      - uses: actions/setup-node@v4.0.2
+        with:
+          cache: 'pnpm'
+      - run: pnpm install
+      - name: install sst
+        run: curl -fsSL https://ion.sst.dev/install | bash
+
+        # deploy
+      - name: deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DOMAIN_ARN: ${{ secrets.DOMAIN_ARN }}
+        run: |
+          pnpm push --stage=${{ inputs.stage }}

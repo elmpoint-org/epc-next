@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "outDir": "./.dist",
+    "strict": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Bundler",
+    "incremental": true,
+    "paths": {
+      "@@/*": ["./src/*"],
+      "graphql-modules": ["./node_modules/graphql-modules/index.d.ts"]
+    },
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "http://localhost:3000/gql",
+        "tadaOutputLocation": "./graphql-schema.d.ts"
+      }
+    ]
+  },
+  "exclude": ["node_modules"]
+}

@@ -15,12 +15,20 @@
     "plugins": [
       {
         "name": "next"
+      },
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "http://localhost:3000/gql",
+        "tadaOutputLocation": "./graphql-schema.d.ts",
+        "trackFieldUsage": false
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@@/*": ["../server/src/*"],
+      "graphql-modules": ["./node_modules/graphql-modules/index.d.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "sst.config.ts"]
 }
