@@ -1,8 +1,9 @@
-name: deploy ion-migrate
+name: deploy project
 on:
-  push:
-    branches:
-      - ion-migrate
+  workflow_dispatch: # manual deploy
+  # push:
+  #   branches:
+  #     - ion-migrate
 jobs:
   deploy-client:
     uses: './.github/workflows/deploy_client.yml'

@@ -3,6 +3,9 @@ on:
   workflow_call:
 jobs:
   deploy:
+    defaults:
+      run:
+        working-directory: ./server
     runs-on: ubuntu-latest
     steps:
       # prepare codebase
@@ -15,6 +18,7 @@ jobs:
       - uses: actions/setup-node@v4.0.2
         with:
           cache: 'pnpm'
+      - run: pnpm install
 
         # deploy
       - name: deploy
@@ -22,6 +26,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          cd server
-          pnpm install
           pnpm push
