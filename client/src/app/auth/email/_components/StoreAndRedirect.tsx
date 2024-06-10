@@ -1,7 +1,6 @@
 'use client';
 
 import { login } from '@/app/_ctx/user/actions';
-import cookies from '@/util/cookies';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
