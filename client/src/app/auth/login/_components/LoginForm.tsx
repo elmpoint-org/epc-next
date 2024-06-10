@@ -14,6 +14,7 @@ import {
   type TokenResponseType,
   initPasswordless,
   pkeyErrorMap,
+  usePkey,
 } from '../../passwordless';
 
 import { trpc } from '@/query/trpc';
@@ -28,6 +29,7 @@ import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 import { useRouter } from 'next/navigation';
 import { TRPCClientError } from '@trpc/client';
 import { login } from '@/app/_ctx/user/actions';
+import Autofill from './Autofill';
 
 const REDIRECT_DELAY = 200;
 
@@ -37,7 +39,7 @@ export default function LoginForm() {
   const router = useRouter();
 
   const [showPasskey, setShowPasskey] = useState(true);
-  const pkey = useRef<Client | null>(null);
+  const pkey = usePkey();
   const verifyFn = trpc.auth.verifyPasskey.useMutation();
 
   const [email, setEmail] = useState('');
@@ -71,23 +73,16 @@ export default function LoginForm() {
     });
   };
 
-  // register autofill on mount
+  // init passkey flows on mount
+  const [cutAutofill, setCutAutofill] = useState(false);
   useEffect(() => {
     (async () => {
-      // init passwordless API
-      pkey.current = initPasswordless();
-
       // check for compatibility
       if (
-        !pkey.current.isBrowserSupported() &&
-        !(await pkey.current.isPlatformSupported())
-      ) {
+        !pkey.current?.isBrowserSupported() &&
+        !(await pkey.current?.isPlatformSupported())
+      )
         return setShowPasskey(false);
-      }
-
-      // // register passkey autofill
-      // const t = await pkey.current.signinWithAutofill();
-      // handlePasskeyLogin(t, true);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -95,10 +90,14 @@ export default function LoginForm() {
   // handle form submit with `use passkey` button
   const handlePasskey: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    if (!pkey.current) return;
+
+    setCutAutofill(true);
 
     // run passkey flow
     loading(async () => {
+      if (!pkey.current) return;
+
+      pkey.current!.abort();
       const t = await pkey.current!.signinWithDiscoverable();
       handlePasskeyLogin(t);
     });
@@ -108,6 +107,8 @@ export default function LoginForm() {
     { token, error }: TokenResponseType,
     noError?: boolean,
   ) {
+    console.log('cleared again');
+
     if (error || !token) {
       if (error && noError && error.errorCode === 'unknown') return;
       return notifications.show({
@@ -180,6 +181,8 @@ export default function LoginForm() {
         {/* loading state */}
         {isLoading && <LoadingBlurFrame />}
       </form>
+
+      {!cutAutofill && <Autofill onSubmit={handlePasskeyLogin} />}
     </>
   );
 }
