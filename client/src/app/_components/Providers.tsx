@@ -4,7 +4,7 @@ import { RecoilRoot } from 'recoil';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/query/query';
 
-import { theme } from '@/util/theme';
+import { theme } from '@/theme/theme';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { TrpcProvider } from '@/query/trpcProvider';
