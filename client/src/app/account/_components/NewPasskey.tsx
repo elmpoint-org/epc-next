@@ -1,6 +1,6 @@
 import { authErrorMap } from '@/app/auth/_util/authErrors';
 import { pkeyErrorMap, usePkey } from '@/app/auth/passwordless';
-import { graph, graphAuth, graphError, graphql } from '@/query/graphql';
+import { graphAuth, graphError, graphql } from '@/query/graphql';
 import { queryClient } from '@/query/query';
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -76,7 +76,7 @@ export default function NewPasskey() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col sm:flex-row items-end gap-2 rounded-md p-2">
+          <div className="flex flex-col items-end gap-2 rounded-md p-2 sm:flex-row">
             <TextInput
               label="Nickname"
               description="This is how you'll recognize what device this passkey is stored on. You won't be able to change it without deleting it and starting over."
