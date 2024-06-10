@@ -1,12 +1,21 @@
 import { AppShell, ScrollArea } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 
 import NavLink from './NavLink';
 
 const NavLinks = () => {
   return (
     <>
-      <AppShell.Section grow component={ScrollArea}>
+      <AppShell.Section
+        grow
+        renderRoot={(p) => (
+          <ScrollArea
+            {...p}
+            classNames={{
+              scrollbar: '!bg-transparent',
+            }}
+          />
+        )}
+      >
         <div className="flex flex-col space-y-2 p-2">
           <NavLink href="/">Home</NavLink>
           <NavLink href="/test">Test</NavLink>
