@@ -1,18 +1,21 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import qs from 'qs';
 
 import { IconLoader2 } from '@tabler/icons-react';
 
 export default function LoginBoundaryRedirect() {
+  const wl = window.location;
+
   const router = useRouter();
+  const path = usePathname();
   useEffect(() => {
     const tm = setTimeout(
       () =>
         router.push(
-          `/auth/login?${qs.stringify({ to: window.location.href })}`,
+          `/auth/login?${qs.stringify({ to: `${wl.pathname}${wl.search}${wl.hash}` })}`,
         ),
       1,
     );
