@@ -1,19 +1,21 @@
 'use client';
 
-import { login } from '@/app/_ctx/user/actions';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-const REDIRECT_DELAY = 500;
+import { login } from '@/app/_ctx/user/actions';
+import { useLoginRedirect } from '../../_util/loginRedirect';
 
-export default function StoreAndRedirect(p: { token: string }) {
-  const router = useRouter();
+export default function StoreAndRedirect(p: {
+  token: string;
+  redirectTo?: string;
+}) {
+  // on load, store auth token
   useEffect(() => {
     login(p.token);
-    const tm = setTimeout(() => router.push('/'), REDIRECT_DELAY);
-    return () => clearTimeout(tm);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useLoginRedirect(p.redirectTo);
 
   return <></>;
 }

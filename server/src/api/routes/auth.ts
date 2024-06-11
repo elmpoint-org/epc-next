@@ -70,8 +70,8 @@ export const register = t.procedure
   });
 
 export const sendMagicLink = t.procedure
-  .input(z.object({ email: z.string() }))
-  .mutation(async ({ input: { email } }) => {
+  .input(z.object({ email: z.string(), redirect: z.string().optional() }))
+  .mutation(async ({ input: { email, redirect } }) => {
     // find the user's id from email
     const { data, errors } = await graph(
       graphql(`
@@ -88,7 +88,7 @@ export const sendMagicLink = t.procedure
 
     // send magic link
     const userId = data.userFromEmail.id;
-    await passwordlessSendMagicLink({ email, userId }).catch((e) => {
+    await passwordlessSendMagicLink({ email, userId, redirect }).catch((e) => {
       throw err('BAD_REQUEST', 'MAGIC_LINK_FAILED', e);
     });
   });

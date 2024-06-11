@@ -28,6 +28,7 @@ import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { TRPCClientError } from '@trpc/client';
 import { login } from '@/app/_ctx/user/actions';
+import { useLoginRedirect } from '../../_util/loginRedirect';
 
 const REDIRECT_DELAY = 200;
 
@@ -35,7 +36,9 @@ const REDIRECT_DELAY = 200;
 export default function LoginForm() {
   const [isLoading, loading] = useTransition();
   const router = useRouter();
-  const search = useSearchParams();
+
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('to') ?? undefined;
 
   const [showPasskey, setShowPasskey] = useState(true);
   const pkey = useRef<Client | null>(null);
@@ -57,7 +60,7 @@ export default function LoginForm() {
 
     loading(async () => {
       try {
-        await magicLinkFn.mutateAsync({ email });
+        await magicLinkFn.mutateAsync({ email, redirect: redirectTo });
         notifications.show({
           title: 'Login link sent',
           message: 'Check your email!',
@@ -137,9 +140,10 @@ export default function LoginForm() {
         message: 'Successfully logged in.',
         icon: <IconCheck />,
       });
-      setTimeout(() => router.push(search.get('to') || '/'), REDIRECT_DELAY);
     });
   }
+
+  useLoginRedirect(redirectTo);
 
   // RENDER
   return (
@@ -162,7 +166,7 @@ export default function LoginForm() {
             value={email}
             onChange={handleChange}
             type="email"
-            autoComplete="webauthn"
+            // autoComplete="webauthn"
             classNames={{
               label: '-translate-y-1',
             }}

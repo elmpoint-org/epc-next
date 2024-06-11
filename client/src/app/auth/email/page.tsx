@@ -1,14 +1,13 @@
-import { cookies } from 'next/headers';
-
 import { IconCheck } from '@tabler/icons-react';
 
 import { type SearchParams } from '@/util/propTypes';
 import { tclient } from '@/query/trpc';
-import { CookieOpts } from '@/util/cookies';
+
 import StoreAndRedirect from './_components/StoreAndRedirect';
 
 export default async function EmailAuthPage({ searchParams }: SearchParams) {
   const token = await verifyAuth(searchParams.token);
+  const redirect = searchParams.to;
 
   return (
     <>
@@ -25,7 +24,10 @@ export default async function EmailAuthPage({ searchParams }: SearchParams) {
               </p>
             </div>
 
-            <StoreAndRedirect token={token} />
+            <StoreAndRedirect
+              token={token}
+              redirectTo={typeof redirect === 'string' ? redirect : undefined}
+            />
           </>
         ) : (
           // failure message

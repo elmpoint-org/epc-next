@@ -9,10 +9,12 @@ const ctx = createContext<AuthUser | null>(null);
 
 export const UserCtxProvider = ({
   user,
+  removeToken,
   children,
-}: { user: AuthUser | null } & Children) => {
+}: { user: AuthUser | null; removeToken?: boolean } & Children) => {
+  // remove invalid tokens
   useEffect(() => {
-    if (!user) removeStoredToken();
+    if (removeToken && !user) removeStoredToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
