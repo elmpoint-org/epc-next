@@ -15,3 +15,7 @@ export async function login(token: string) {
 export async function logout() {
   cookies().delete('USER_AUTH' as CookieOpts);
 }
+
+export async function removeStoredToken() {
+  logout();
+}
