@@ -24,13 +24,12 @@ export type AuthUser = NonNullable<
 
 export async function getUser() {
   // get stored auth token
-  const c = cookies();
-  const token = c.get('USER_AUTH' as CookieOpts);
+  const token = cookies().get('USER_AUTH' as CookieOpts);
   if (!token) return null;
 
   // verify token and get user info
   const data = await authorizeUser(token.value);
-  if (!data?.userFromAuth) return null;
+  if (!data?.userFromAuth) return false;
 
   return data.userFromAuth;
 }
@@ -42,11 +41,18 @@ export const authorizeUser = cache(async (token: string) =>
 );
 
 export async function UserProvider({ children }: Children) {
-  const user = await getUser();
+  let user = await getUser();
+
+  // request token removal if token was invalid (NOT if it just didn't exist)
+  let removeToken: boolean = false;
+  if (user === false) {
+    user = null;
+    removeToken = true;
+  }
 
   return (
     <>
-      <UserCtxProvider user={user}>
+      <UserCtxProvider user={user} removeToken={removeToken}>
         {/*  */}
         {children}
       </UserCtxProvider>

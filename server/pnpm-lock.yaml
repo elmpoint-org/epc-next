@@ -59,6 +59,9 @@ importers:
       jose:
         specifier: ^5.4.0
         version: 5.4.0
+      qs:
+        specifier: ^6.12.1
+        version: 6.12.1
       serverless-http:
         specifier: ^3.2.0
         version: 3.2.0
@@ -93,6 +96,9 @@ importers:
       '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
+      '@types/qs':
+        specifier: ^6.9.15
+        version: 6.9.15
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -7767,7 +7773,7 @@ snapshots:
   buffer@4.9.2:
     dependencies:
       base64-js: 1.5.1
-      ieee754: 1.1.13
+      ieee754: 1.2.1
       isarray: 1.0.0
 
   buffer@5.7.1:

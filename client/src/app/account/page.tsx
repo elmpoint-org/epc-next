@@ -1,5 +1,8 @@
-import LoginBoundary from '../_components/_base/LoginBoundary';
+import { Metadata } from 'next';
+import LoginBoundary from '../_components/_base/LoginBoundary/LoginBoundary';
 import AccountDetails from './_components/AccountDetails';
+
+export const metadata: Metadata = { title: 'Account Overview' };
 
 export default function AccountPage() {
   return (
