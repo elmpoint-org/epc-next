@@ -14,11 +14,13 @@ export default $config({
     // APP DEFINITION
     new sst.aws.Nextjs('EPCNext', {
       warm: isProd ? 1 : 0,
-      domain: {
-        name: `${isProd ? `one` : `one-dev`}.elmpoint.xyz`,
-        dns: false,
-        cert: process.env.DOMAIN_ARN,
-      },
+      domain: isProd
+        ? {
+            name: `one.elmpoint.xyz`,
+            dns: false,
+            cert: process.env.DOMAIN_ARN,
+          }
+        : undefined,
     });
   },
 });
