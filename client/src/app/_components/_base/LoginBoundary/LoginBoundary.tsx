@@ -8,12 +8,7 @@ export default async function LoginBoundary({ children }: Children) {
   const user = await getUser();
 
   // if no successful login, render redirect handler instead
-  if (!user)
-    return (
-      <>
-        <LoginBoundaryRedirect />
-      </>
-    );
+  if (!user) return <LoginBoundaryRedirect />;
 
   // otherwise return the page
   return <>{children}</>;
