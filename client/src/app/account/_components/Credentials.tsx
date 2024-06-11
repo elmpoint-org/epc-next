@@ -20,9 +20,16 @@ export default function Credentials() {
           </ActionIcon>
         </div>
 
-        <div className="">
-          <ScrollArea scrollbars="x">
-            <div className="flex flex-row gap-2">
+        <div className="-mb-2">
+          <ScrollArea
+            scrollbars="x"
+            scrollHideDelay={0}
+            offsetScrollbars="x"
+            classNames={{
+              scrollbar: '!bg-transparent',
+            }}
+          >
+            <div className="flex flex-row gap-2 p-2">
               {user ? (
                 user.credentials?.length ? (
                   <>
@@ -65,8 +72,9 @@ export function Credential(p: {
     <>
       <div
         className={clx(
-          'my-3 flex flex-shrink-0 flex-col rounded-lg bg-dwhite p-3 shadow-md first:ml-3 last:mr-3',
-          'data-[l]:h-24 data-[l]:w-44 data-[l]:animate-pulse data-[l]:shadow-sm',
+          'flex flex-shrink-0 flex-col rounded-lg bg-dwhite p-3 shadow-md',
+          // skeleton styles
+          'data-[l]:h-32 data-[l]:w-52 data-[l]:animate-pulse data-[l]:shadow-sm',
         )}
         data-l={skeleton || null}
         style={
