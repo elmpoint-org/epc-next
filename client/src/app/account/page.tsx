@@ -1,4 +1,4 @@
-import LoginBoundary from '../_components/_base/LoginBoundary';
+import LoginBoundary from '../_components/_base/LoginBoundary/LoginBoundary';
 import AccountDetails from './_components/AccountDetails';
 
 export default function AccountPage() {
