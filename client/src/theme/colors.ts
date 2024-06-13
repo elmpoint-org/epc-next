@@ -7,8 +7,8 @@ export const colors: MantineThemeOverride = {
     emerald: twColors(emerald),
 
     // status colors
-    error: twColors(red),
-    warning: twColors(amber),
+    red: twColors(red),
+    amber: twColors(amber),
   },
   primaryColor: 'emerald',
   white: slate[100],
