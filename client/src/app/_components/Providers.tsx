@@ -8,6 +8,7 @@ import { theme } from '@/theme/theme';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { TrpcProvider } from '@/query/trpcProvider';
+import { ModalProvider } from '@/theme/modals';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -16,8 +17,10 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         <TrpcProvider>
           <QueryClientProvider client={queryClient}>
             <MantineProvider theme={theme} defaultColorScheme="light">
-              <Notifications position="top-right" />
-              {children}
+              <ModalProvider>
+                <Notifications position="top-right" />
+                {children}
+              </ModalProvider>
             </MantineProvider>
           </QueryClientProvider>
         </TrpcProvider>

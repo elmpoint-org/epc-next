@@ -1,12 +1,10 @@
 import { authErrorMap } from '@/app/auth/_util/authErrors';
 import { pkeyErrorMap, usePkey } from '@/app/auth/passwordless';
 import { graphAuth, graphError, graphql } from '@/query/graphql';
-import { queryClient } from '@/query/query';
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { GraphQLError } from 'graphql';
 import { FormEvent, useState, useTransition } from 'react';
-import { USE_USER_DATA } from '../_ctx/userData';
+import { invalidateUserData } from '../_ctx/userData';
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 
 export default function NewPasskey() {
@@ -62,7 +60,7 @@ export default function NewPasskey() {
       }
 
       // refetch and show success
-      queryClient.invalidateQueries({ queryKey: USE_USER_DATA });
+      invalidateUserData();
       setText('');
       notifications.show({ message: 'Success!' });
     });

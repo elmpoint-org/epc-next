@@ -13,8 +13,12 @@ import type {
 import type { ResolverContext } from '@@/db/graph';
 import { generateKey } from '@@/util/generate';
 import { DBUser } from './source';
-import { passwordless } from '@@/auth/passkeys';
-import { RegisterOptions } from '@passwordlessdev/passwordless-nodejs';
+import { passwordless, passwordlessDeleteCredential } from '@@/auth/passkeys';
+import {
+  Credential,
+  RegisterOptions,
+} from '@passwordlessdev/passwordless-nodejs';
+import { AxiosError } from 'axios';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -133,15 +137,46 @@ export const userCreateCredential = h<
   return token;
 });
 
+export const userDeleteCredential = h<
+  MutationResolvers['userDeleteCredential']
+>(async ({ args: { id }, userId }) => {
+  if (!userId) throw scopeError();
+
+  // list user credentials
+  const cs = await passwordless.listCredentials(userId).catch(() => {});
+  if (!cs?.length) throw err('NO_CREDENTIALS_FOUND');
+
+  // attempt to find the requested credential
+  const c = cs.find((it) => it.descriptor.id === id);
+  if (!c) throw err('CREDENTIAL_NOT_FOUND');
+
+  // attempt deletion
+  await passwordlessDeleteCredential(id).catch((err) => {
+    throw err(
+      'FAILED_TO_DELETE',
+      undefined,
+      err instanceof AxiosError ? err.response?.data : err
+    );
+  });
+
+  // return deleted credential
+  return parseCredential(c);
+});
+
 export const getUserCredentials = h<UserResolvers['credentials']>(
   async ({ parent: { id }, scope, userId }) => {
     if (!scopeDiff(scope, 'ADMIN') && userId !== id) throw scopeError();
 
-    return (await passwordless.listCredentials(id)).map((c) => ({
-      ...c,
-      id: c.descriptor.id,
-      createdAt: c.createdAt?.toString(),
-      lastUsedAt: c.lastUsedAt?.toString(),
-    }));
+    return (await passwordless.listCredentials(id)).map(parseCredential);
   }
 );
+
+// util: parse passwordless credential
+function parseCredential(c: Credential) {
+  return {
+    ...c,
+    id: c.descriptor.id,
+    createdAt: c.createdAt?.toString(),
+    lastUsedAt: c.lastUsedAt?.toString(),
+  };
+}
