@@ -30,3 +30,10 @@ export const passwordlessSendMagicLink = (p: {
     },
     { headers: { ApiSecret: PASSWORDLESS_SECRET } }
   );
+
+export const passwordlessDeleteCredential = (credentialId: string) =>
+  axios.post(
+    PASSWORDLESS_API + '/credentials/delete',
+    { credentialId },
+    { headers: { ApiSecret: PASSWORDLESS_SECRET } }
+  );

@@ -131,5 +131,12 @@ export default gql`
     get a token to create a new passkey credential for your own user. all users may only do this for themselves.
     """
     userCreateCredential: String!
+
+    """
+    **SCOPE: userId==id**
+
+    delete a passkey credential from your own user. all users may only do this for themselves.
+    """
+    userDeleteCredential(id: ID!): UserCredential
   }
 `;
