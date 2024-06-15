@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.590.0",
+    "@aws-sdk/client-sesv2": "^3.598.0",
     "@aws-sdk/lib-dynamodb": "^3.590.0",
     "@envelop/graphql-modules": "^6.0.0",
     "@graphql-typed-document-node/core": "^3.2.0",

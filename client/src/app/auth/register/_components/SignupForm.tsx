@@ -1,60 +1,46 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
-import { Button, Fieldset, Loader, TextInput } from '@mantine/core';
-
+import { Button, Fieldset, TextInput } from '@mantine/core';
 import { trpc } from '@/query/trpc';
-import type { Client } from '@passwordlessdev/passwordless-client';
-import { initPasswordless, usePkey } from '../../passwordless';
 import { notifications } from '@mantine/notifications';
+import { TRPCClientError } from '@trpc/client';
 import { authErrorMap } from '../../_util/authErrors';
+import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('');
-
-  const pkey = usePkey();
-
-  const registerFn = trpc.auth.register.useMutation();
-
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setEmail(e.currentTarget.value);
   }
 
+  const verifyFn = trpc.register.checkReferral.useMutation();
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!pkey.current) return;
 
     if (!email.length)
       return notifications.show({
         color: 'red',
-        message: 'Please enter an email.',
+        message: 'Please enter a valid email.',
       });
 
-    const token = await registerFn.mutateAsync({ email }).catch(() => {
-      notifications.show({
-        color: 'red',
-        // title: 'Request failed',
-        message: authErrorMap(registerFn.error?.message),
+    verifyFn
+      .mutateAsync({ email })
+      .then(() => notifications.show({ message: 'Success! Check your email.' }))
+      .catch((err) => {
+        notifications.show({
+          color: 'red',
+          message: authErrorMap(err instanceof TRPCClientError && err.message),
+          autoClose: 8000,
+        });
       });
-    });
-    if (!token) return;
-
-    // register user
-    const { token: success, error } = await pkey.current.register(
-      token,
-      'new device!',
-    );
-    if (success) {
-      console.log('success');
-    } else {
-      console.log(error);
-    }
   }
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="relative">
         <Fieldset className="space-y-4 rounded-lg">
           <TextInput
             label="Email"
@@ -64,20 +50,11 @@ const SignupForm = () => {
             onChange={handleChange}
           />
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={registerFn.isPending}
-          >
-            {registerFn.isPending ? (
-              <>
-                <Loader size="sm" />
-              </>
-            ) : (
-              <>Activate account</>
-            )}
+          <Button type="submit" className="w-full">
+            Activate account
           </Button>
         </Fieldset>
+        {verifyFn.isPending && <LoadingBlurFrame />}
       </form>
     </>
   );
