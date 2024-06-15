@@ -7,7 +7,7 @@
     "start": "next start",
     "lint": "next lint",
     "dev": "sst dev 'next dev -p 3001' --stage=development",
-    "push": "sst deploy --stage=production"
+    "push": "sst deploy"
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
