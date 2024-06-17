@@ -37,9 +37,9 @@ export default gql`
 
   type Mutation {
     """
-    **SCOPE: admin**
+    **SCOPE: userId**
 
-    create a new pre-registered user
+    create a new pre-registered user. any user can invite another user.
     """
     preUserCreate(email: String!, name: String): PreUser!
 

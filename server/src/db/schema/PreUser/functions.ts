@@ -1,6 +1,11 @@
 import { MutationResolvers, QueryResolvers } from '@@/db/__types/graphql-types';
 import { ResolverContext } from '@@/db/graph';
-import { err, getTypedScopeFunctions, handle as h } from '@@/db/lib/utilities';
+import {
+  err,
+  getTypedScopeFunctions,
+  handle as h,
+  scopeError,
+} from '@@/db/lib/utilities';
 
 const { scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -27,9 +32,12 @@ export const getPreUserFromEmail = h<QueryResolvers['preUserFromEmail']>(
 );
 
 export const preUserCreate = h<MutationResolvers['preUserCreate']>(
-  scoped('ADMIN'),
-  async ({ sources, args: newPreUser }) => {
-    const u = await sources.preUser.findBy('email', newPreUser.email);
+  async ({ sources, args: newPreUser, userId }) => {
+    if (!userId) throw scopeError();
+
+    const pu = await sources.preUser.findBy('email', newPreUser.email);
+    if (pu.length) throw err('USER_ALREADY_INVITED');
+    const u = await sources.user.findBy('email', newPreUser.email);
     if (u.length) throw err('USER_ALREADY_EXISTS');
 
     return sources.preUser.create(newPreUser);

@@ -13,11 +13,12 @@ import { authErrorMap } from '../../_util/authErrors';
 import StoreLoginAndRedirect from '../../_components/StoreLoginAndRedirect';
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 
+// COMPONENT
 export default function CreateAccountForm({
   preUser,
   token,
 }: {
-  preUser: { email: string; name: string | null; id: string };
+  preUser: { email: string; name: string | null; [key: string]: unknown };
   token: string;
 }) {
   const [email, setEmail] = useState(preUser.email);

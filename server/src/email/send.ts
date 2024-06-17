@@ -4,7 +4,7 @@ import {
   TransactionalEmailsApi,
 } from '@getbrevo/brevo';
 import qs from 'qs';
-import { siteDomain } from '@@/util/dev';
+import { isDev, siteDomain } from '@@/util/dev';
 
 const { BREVO_API_KEY } = process.env;
 
@@ -24,6 +24,11 @@ export async function sendRegistrationEmail(token: string) {
   email.params = {
     URL: `${siteDomain}/auth/activate?${qs.stringify({ token })}`,
   };
+
+  if (isDev) {
+    console.log('REGISTRATION EMAIL\n', email.params);
+    return;
+  }
 
   await brevo.sendTransacEmail(email);
 }

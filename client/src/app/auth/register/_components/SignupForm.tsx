@@ -28,16 +28,16 @@ const SignupForm = () => {
 
     verifyFn
       .mutateAsync({ email })
+      .then(() => {
+        notifications.show({ message: 'Success! Check your email.' });
+        setEmail('');
+      })
       .catch((err) => {
         notifications.show({
           color: 'red',
           message: authErrorMap(err instanceof TRPCClientError && err.message),
           autoClose: 8000,
         });
-      })
-      .then(() => {
-        notifications.show({ message: 'Success! Check your email.' });
-        setEmail('');
       });
   }
 

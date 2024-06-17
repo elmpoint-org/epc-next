@@ -9,7 +9,8 @@ export const graphql = initGraphQLTada<{
   introspection: introspection;
 }>();
 
-export const graphError = (e: any) => e?.errors?.[0]?.extensions?.code;
+export const graphError = (e: any) =>
+  (e?.errors?.[0]?.extensions?.code as string) || null;
 
 export type Headers = NonNullable<Parameters<typeof request>[3]>;
 
