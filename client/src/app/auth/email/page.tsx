@@ -3,7 +3,7 @@ import { IconCheck } from '@tabler/icons-react';
 import { type SearchParams } from '@/util/propTypes';
 import { tclient } from '@/query/trpc';
 
-import StoreAndRedirect from './_components/StoreAndRedirect';
+import StoreLoginAndRedirect from '../_components/StoreLoginAndRedirect';
 
 export default async function EmailAuthPage({ searchParams }: SearchParams) {
   const token = await verifyAuth(searchParams.token);
@@ -24,7 +24,7 @@ export default async function EmailAuthPage({ searchParams }: SearchParams) {
               </p>
             </div>
 
-            <StoreAndRedirect
+            <StoreLoginAndRedirect
               token={token}
               redirectTo={typeof redirect === 'string' ? redirect : undefined}
             />
