@@ -41,20 +41,20 @@ export default gql`
 
     create a new pre-registered user
     """
-    createPreUser(email: String!, name: String): PreUser!
+    preUserCreate(email: String!, name: String): PreUser!
 
     """
     **SCOPE: admin**
 
     update a preuser
     """
-    updatePreUser(id: ID!, name: String): PreUser!
+    preUserUpdate(id: ID!, name: String): PreUser!
 
     """
     **SCOPE: admin**
 
     delete a preuser (usually because a full user has been created)
     """
-    deletePreUser(id: ID!): PreUser!
+    preUserDelete(id: ID!): PreUser!
   }
 `;

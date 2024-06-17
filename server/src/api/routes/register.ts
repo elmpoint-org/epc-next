@@ -3,7 +3,7 @@ import { err, t } from '../trpc';
 
 import { graph } from '@@/db/graph';
 import { graphql } from '@@/db/lib/utilities';
-import { signReferralToken } from '@@/auth/sign';
+import { signReferralToken, signToken } from '@@/auth/sign';
 import { sendRegistrationEmail } from '@@/email/send';
 import { verifyReferralToken } from '@@/auth/verify';
 
@@ -58,4 +58,76 @@ export const verifyToken = t.procedure
     if (errors || !data?.preUser) throw err('BAD_REQUEST', 'USER_NOT_FOUND');
 
     return data.preUser;
+  });
+
+/**
+ * create user from preuser
+ * @returns a new auth token for the user
+ */
+export const createUser = t.procedure
+  .input(
+    z.object({
+      user: z.object({
+        name: z.string(),
+        firstName: z.string(),
+        email: z.string(),
+      }),
+      token: z.string(),
+    })
+  )
+  .mutation(async ({ input: { user, token } }) => {
+    // authenticate
+    const preUserId = await verifyReferralToken(token);
+
+    // validate preuser
+    const { data: d0, errors: e0 } = await graph(
+      graphql(`
+        query GetPreUser($preUserId: ID!) {
+          preUser(id: $preUserId) {
+            id
+          }
+        }
+      `),
+      { preUserId }
+    );
+    if (e0 || !d0?.preUser) throw err('BAD_REQUEST', 'REFERRAL_NOT_FOUND');
+
+    // create full user
+    const { data: d1, errors: e1 } = await graph(
+      graphql(`
+        mutation UserCreate(
+          $email: String!
+          $name: String!
+          $firstName: String!
+        ) {
+          userCreate(email: $email, name: $name, firstName: $firstName) {
+            id
+          }
+        }
+      `),
+      { ...user }
+    );
+    if (e1 || !d1?.userCreate)
+      throw err(
+        'BAD_REQUEST',
+        (e1?.[0]?.extensions?.code as string) ?? 'FAILED_TO_CREATE_USER'
+      );
+    const userId = d1.userCreate.id;
+
+    // delete preuser
+    const { data: d2, errors: e2 } = await graph(
+      graphql(`
+        mutation DeletePreUser($preUserId: ID!) {
+          preUserDelete(id: $preUserId) {
+            id
+          }
+        }
+      `),
+      { preUserId }
+    );
+    if (e2 || !d2?.preUserDelete)
+      throw err('INTERNAL_SERVER_ERROR', 'FAILED_TO_DELETE', e2);
+
+    const authToken = await signToken(userId);
+    return authToken;
   });

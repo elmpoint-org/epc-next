@@ -6,10 +6,12 @@ export default gql`
     # __ USER DATA __
     "unique id (UUIDv4)"
     id: ID!
-    "the user's full name"
-    name: String
     "the user's email"
     email: String!
+    "the user's full name"
+    name: String
+    "the user's first name"
+    firstName: String
 
     # __ AUTH DATA __
     "scope defines a user's permissions."
@@ -97,7 +99,12 @@ export default gql`
 
     create a new user. users are created through the HTTP API only on the basis of referrals.
     """
-    userCreate(name: String, email: String!, scope: [UserScopeProp!]): User
+    userCreate(
+      name: String!
+      firstName: String!
+      email: String!
+      scope: [UserScopeProp!]
+    ): User
 
     """
     **SCOPE: userId==id | ADMIN**
@@ -107,6 +114,7 @@ export default gql`
     userUpdate(
       id: ID!
       name: String
+      firstName: String
       email: String
       scope: [UserScopeProp!]
     ): User

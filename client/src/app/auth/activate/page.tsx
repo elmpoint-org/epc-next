@@ -17,14 +17,17 @@ export default async function ActivationPage({ searchParams }: SearchParams) {
               Finish creating your account
             </h2>
 
-            <div className="flex flex-row items-center text-emerald-800 gap-2 self-center">
+            <div className="flex flex-row items-center gap-2 self-center text-emerald-800">
               <IconCheck />
               <span className="t">You’ve succesfully verified your email!</span>
             </div>
 
             <hr className="border-slate-300" />
 
-            <CreateAccountForm preUser={preUser} />
+            <CreateAccountForm
+              preUser={preUser}
+              token={searchParams.token as string}
+            />
           </div>
         </>
       ) : (

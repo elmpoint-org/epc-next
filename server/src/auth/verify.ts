@@ -70,5 +70,5 @@ export async function verifyReferralToken(token: string) {
   if (!data?.referral) throw reject();
   if (typeof data.id !== 'string') throw reject();
 
-  return data.id;
+  return data.id as string;
 }

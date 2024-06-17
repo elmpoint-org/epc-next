@@ -10,9 +10,9 @@ const resolvers: PreUserModule.Resolvers = {
     preUserFromEmail: f.getPreUserFromEmail,
   },
   Mutation: {
-    createPreUser: f.createPreUser,
-    updatePreUser: f.updatePreUser,
-    deletePreUser: f.deletePreUser,
+    preUserCreate: f.preUserCreate,
+    preUserUpdate: f.preUserUpdate,
+    preUserDelete: f.preUserDelete,
   },
   PreUser: {
     timestamp,

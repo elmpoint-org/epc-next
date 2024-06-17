@@ -26,14 +26,17 @@ export const getPreUserFromEmail = h<QueryResolvers['preUserFromEmail']>(
   }
 );
 
-export const createPreUser = h<MutationResolvers['createPreUser']>(
+export const preUserCreate = h<MutationResolvers['preUserCreate']>(
   scoped('ADMIN'),
-  ({ sources, args: newPreUser }) => {
+  async ({ sources, args: newPreUser }) => {
+    const u = await sources.preUser.findBy('email', newPreUser.email);
+    if (u.length) throw err('USER_ALREADY_EXISTS');
+
     return sources.preUser.create(newPreUser);
   }
 );
 
-export const updatePreUser = h<MutationResolvers['updatePreUser']>(
+export const preUserUpdate = h<MutationResolvers['preUserUpdate']>(
   scoped('ADMIN'),
   async ({ sources, args: { id, ...updates } }) => {
     // ensure item exists
@@ -44,12 +47,13 @@ export const updatePreUser = h<MutationResolvers['updatePreUser']>(
   }
 );
 
-export const deletePreUser = h<MutationResolvers['deletePreUser']>(
+export const preUserDelete = h<MutationResolvers['preUserDelete']>(
   scoped('ADMIN'),
   async ({ sources, args: { id } }) => {
     const u = await sources.preUser.get(id);
     if (!u) throw err('USER_NOT_FOUND');
 
-    return sources.preUser.delete(id);
+    await sources.preUser.delete(id);
+    return u;
   }
 );

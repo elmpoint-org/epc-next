@@ -1,18 +1,74 @@
 'use client';
 
-import { Button, Fieldset, TextInput } from '@mantine/core';
-import { FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react';
+
+import { Button, CloseButton, Fieldset, TextInput } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconRestore } from '@tabler/icons-react';
+
+import { trpc } from '@/query/trpc';
+import { TRPCClientError } from '@trpc/client';
+import { authErrorMap } from '../../_util/authErrors';
+
+import StoreLoginAndRedirect from '../../_components/StoreLoginAndRedirect';
+import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 
 export default function CreateAccountForm({
   preUser,
+  token,
 }: {
   preUser: { email: string; name: string | null; id: string };
+  token: string;
 }) {
   const [email, setEmail] = useState(preUser.email);
   const [name, setName] = useState(preUser.name ?? '');
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  const defaultFirstName = useMemo(
+    () => name.trim().split(' ')?.[0] ?? '',
+    [name],
+  );
+  const [isDefaultName, setIsDefaultName] = useState(true);
+  const [firstName, setFirstName] = useState(defaultFirstName);
+  useEffect(() => {
+    if (!isDefaultName) return;
+    setFirstName(defaultFirstName);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, isDefaultName]);
+  function changeFirstName(e: ChangeEvent<HTMLInputElement>) {
+    if (isDefaultName) setIsDefaultName(false);
+    setFirstName(e.currentTarget.value);
+  }
+
+  const userCreateFn = trpc.register.createUser.useMutation();
+  const [authToken, setAuthToken] = useState<string | null>(null);
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    // validate
+    if (!(email.length && name.length && firstName.length))
+      return notifications.show({
+        color: 'red',
+        message: 'Not all fields are filled out correctly.',
+      });
+
+    // create user
+    const at = await userCreateFn
+      .mutateAsync({
+        user: {
+          email,
+          name,
+          firstName,
+        },
+        token,
+      })
+      .catch((err) => {
+        notifications.show({
+          color: 'red',
+          message: authErrorMap(err instanceof TRPCClientError && err.message),
+        });
+      });
+    if (!at) return;
+    setAuthToken(at);
   }
 
   return (
@@ -20,19 +76,63 @@ export default function CreateAccountForm({
       <form onSubmit={handleSubmit} className="relative">
         <Fieldset className="space-y-4 rounded-lg">
           <div className="border-b border-slate-300 py-2 text-sm">
-            Make sure your account details are right before your account is
-            created.
+            Make sure the account details below are correct, and then we’ll
+            create your account.
           </div>
 
+          {/* name */}
           <TextInput
-            label="Name"
-            description="Make sure your full name is correct here."
+            label="Full Name"
             placeholder="Enter your name"
             required
-            type="text"
             value={name}
             onChange={({ currentTarget: { value: v } }) => setName(v)}
           />
+
+          {/* auto first name */}
+          <TextInput
+            label="First Name"
+            description={
+              <>
+                If the auto-generated name is wrong, click <b>customize</b> to
+                change it.
+              </>
+            }
+            required
+            value={firstName}
+            onChange={changeFirstName}
+            disabled={isDefaultName ?? null}
+            rightSectionPointerEvents="all"
+            rightSection={
+              isDefaultName ? (
+                <Button
+                  size="compact-xs"
+                  variant="light"
+                  classNames={{
+                    root: 'mx-2 rounded-full uppercase',
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsDefaultName(false);
+                  }}
+                >
+                  customize
+                </Button>
+              ) : (
+                <CloseButton
+                  icon={<IconRestore size={20} />}
+                  onClick={() => setIsDefaultName(true)}
+                />
+              )
+            }
+            classNames={{
+              wrapper: 'group',
+              input: 'data-[disabled]:text-dblack',
+              section: 'data-[position=right]:group-data-[disabled]:w-auto',
+            }}
+          />
+
+          {/* email */}
           <TextInput
             label="Email"
             description="You can use any email you’d like for your account, even if it’s not the one you were invited with."
@@ -43,13 +143,17 @@ export default function CreateAccountForm({
             onChange={({ currentTarget: { value: v } }) => setEmail(v)}
           />
 
+          {/* submit */}
           <Button type="submit" className="w-full">
             Create your account
           </Button>
         </Fieldset>
 
-        {/* {verifyFn.isPending && <LoadingBlurFrame />} */}
+        {userCreateFn.isPending && <LoadingBlurFrame />}
       </form>
+      {authToken && (
+        <StoreLoginAndRedirect token={authToken} redirectTo="/account" />
+      )}
     </>
   );
 }
