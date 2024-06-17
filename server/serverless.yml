@@ -25,6 +25,7 @@ provider:
     # VARIABLE: ${ssm:/project--variable}
     USER_AUTH_SECRET: ${ssm:/epc--user-auth-secret}
     PASSWORDLESS_SECRET: ${ssm:/epc--passwordless-secret}
+    BREVO_API_KEY: ${ssm:/epc--brevo-api-key}
 
 functions:
   api:

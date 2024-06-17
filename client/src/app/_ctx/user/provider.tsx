@@ -13,6 +13,7 @@ const GET_USER_FROM_AUTH = graphql(`
     userFromAuth {
       id
       name
+      firstName
       email
       scope
     }

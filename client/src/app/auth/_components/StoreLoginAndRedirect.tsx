@@ -3,9 +3,9 @@
 import { useEffect } from 'react';
 
 import { login } from '@/app/_ctx/user/actions';
-import { useLoginRedirect } from '../../_util/loginRedirect';
+import { useLoginRedirect } from '../_util/loginRedirect';
 
-export default function StoreAndRedirect(p: {
+export default function StoreLoginAndRedirect(p: {
   token: string;
   redirectTo?: string;
 }) {

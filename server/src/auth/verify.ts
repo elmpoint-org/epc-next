@@ -48,13 +48,27 @@ function extractUserId(jwt: string) {
 }
 
 async function verifyToken(token: string, userSecret: string) {
-  try {
-    await jose
-      .jwtVerify(token, new TextEncoder().encode(userSecret + USER_AUTH_SECRET))
-      .catch(() => {
-        throw reject();
-      });
-  } catch (_) {
-    throw reject();
-  }
+  await jose
+    .jwtVerify(token, new TextEncoder().encode(userSecret + USER_AUTH_SECRET))
+    .catch(() => {
+      throw reject();
+    });
+}
+
+/**
+ * check a token for an invited user's email
+ * @param token verification token
+ * @returns ID of the PreUser if succcessful
+ */
+export async function verifyReferralToken(token: string) {
+  const d = await jose
+    .jwtVerify(token, new TextEncoder().encode(USER_AUTH_SECRET))
+    .catch(() => {
+      throw reject();
+    });
+  const data = d.payload?.data as any;
+  if (!data?.referral) throw reject();
+  if (typeof data.id !== 'string') throw reject();
+
+  return data.id as string;
 }
