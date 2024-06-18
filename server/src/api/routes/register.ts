@@ -31,7 +31,7 @@ export const checkReferral = t.procedure
     });
 
     // send email
-    await sendRegistrationEmail(token).catch((e) => {
+    await sendRegistrationEmail(email, token).catch((e) => {
       throw err('INTERNAL_SERVER_ERROR', 'FAILED_TO_SEND_EMAIL', e);
     });
   });

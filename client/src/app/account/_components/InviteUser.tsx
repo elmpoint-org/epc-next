@@ -58,7 +58,7 @@ export default function InviteUser() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col items-end gap-2 rounded-md p-2 sm:flex-row">
+          <div className="flex flex-col gap-2 rounded-md p-2 sm:flex-row sm:items-end">
             <TextInput
               label="Email"
               placeholder="Enter their email"
@@ -77,7 +77,9 @@ export default function InviteUser() {
                 )
               }
             />
-            <Button type="submit">Invite user</Button>
+            <Button type="submit" className="self-end">
+              Invite user
+            </Button>
           </div>
         </form>
 

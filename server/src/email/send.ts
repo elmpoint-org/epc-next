@@ -16,10 +16,13 @@ const sender: SendSmtpEmailSender = {
   email: 'no-reply@elmpoint.xyz',
 };
 
-export async function sendRegistrationEmail(token: string) {
+export async function sendRegistrationEmail(
+  emailAddress: string,
+  token: string
+) {
   const email = new SendSmtpEmail();
   email.sender = sender;
-  email.to = [{ email: 'newuser@foster.audio' }];
+  email.to = [{ email: emailAddress }];
   email.templateId = 1;
   email.params = {
     URL: `${siteDomain}/auth/activate?${qs.stringify({ token })}`,
