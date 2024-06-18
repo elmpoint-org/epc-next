@@ -74,7 +74,7 @@ export default function NewPasskey() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="flex flex-col items-end gap-2 rounded-md p-2 sm:flex-row">
+          <div className="flex flex-col gap-2 rounded-md p-2 sm:flex-row sm:items-end">
             <TextInput
               label="Nickname"
               description="This is how you'll recognize what device this passkey is stored on. You won't be able to change it without deleting it and starting over."
@@ -92,7 +92,7 @@ export default function NewPasskey() {
                 )
               }
             />
-            <Button type="submit">Create passkey</Button>
+            <Button type="submit" className='self-end'>Create passkey</Button>
           </div>
         </form>
 
