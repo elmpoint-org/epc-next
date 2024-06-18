@@ -26,7 +26,7 @@ export const getPreUser = h<QueryResolvers['preUser']>(
 export const getPreUserFromEmail = h<QueryResolvers['preUserFromEmail']>(
   scoped('ADMIN'),
   async ({ sources, args: { email } }) => {
-    const u = await sources.preUser.findBy('email', email);
+    const u = await sources.preUser.findBy('email', email.toLowerCase());
     return u[0] ?? null;
   }
 );
@@ -34,6 +34,8 @@ export const getPreUserFromEmail = h<QueryResolvers['preUserFromEmail']>(
 export const preUserCreate = h<MutationResolvers['preUserCreate']>(
   async ({ sources, args: newPreUser, userId }) => {
     if (!userId) throw scopeError();
+
+    newPreUser.email = newPreUser.email.toLowerCase();
 
     const pu = await sources.preUser.findBy('email', newPreUser.email);
     if (pu.length) throw err('USER_ALREADY_INVITED');

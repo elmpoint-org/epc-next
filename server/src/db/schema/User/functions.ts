@@ -38,7 +38,7 @@ export const getUser = h<QueryResolvers['user']>(
 export const getUserFromEmail = h<QueryResolvers['userFromEmail']>(
   scoped('ADMIN'),
   async ({ sources, args: { email } }) => {
-    const resp = await sources.user.findBy('email', email);
+    const resp = await sources.user.findBy('email', email.toLowerCase());
     if (!resp.length) return null;
     return resp[0];
   }
@@ -68,6 +68,7 @@ export const getUserSECURE = h<QueryResolvers['userSECURE']>(
 export const userCreate = h<MutationResolvers['userCreate']>(
   async ({ sources, args: newUser, scope }) => {
     const nu = newUser as DBUser;
+    nu.email = nu.email.toLowerCase();
 
     const u = await sources.user.findBy('email', nu.email);
     if (u.length) throw err('USER_ALREADY_EXISTS');
@@ -94,6 +95,8 @@ export const userUpdate = h<MutationResolvers['userUpdate']>(
 
     // user shouldn't be able to update their own scope without permissions
     if (updates.scope?.length && !scopeDiff(scope, `ADMIN`)) throw scopeError();
+
+    if (args.email?.length) args.email = args.email.toLowerCase();
 
     return sources.user.update(id, updates);
   }
