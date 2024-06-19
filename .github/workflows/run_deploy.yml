@@ -2,8 +2,8 @@ name: deploy project
 on:
   workflow_dispatch: # manual deploy
   push:
-    branches:
-      - deploy
+    tags:
+      - '*'
 jobs:
   deploy-client:
     uses: './.github/workflows/deploy_client.yml'
