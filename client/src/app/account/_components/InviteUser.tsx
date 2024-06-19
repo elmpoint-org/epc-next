@@ -51,7 +51,7 @@ export default function InviteUser() {
     <>
       <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
         <div className="flex flex-row items-center justify-between">
-          <h3 className="text-lg">Invite a user</h3>
+          <h3 className="text-lg">Invite another user</h3>
         </div>
         <div className="p-2 pb-0 text-slate-600">
           <p>Enter someone’s email below to invite them to the EPC website.</p>

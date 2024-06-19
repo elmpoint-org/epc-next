@@ -1,5 +1,6 @@
 import { type QueryResult, useGraphQuery, queryClient } from '@/query/query';
 import { graphql } from '@/query/graphql';
+import { useUser } from '@/app/_ctx/user/context';
 
 export const USE_USER_DATA = [
   graphql(`
@@ -7,6 +8,7 @@ export const USE_USER_DATA = [
       userFromAuth {
         id
         name
+        firstName
         email
         credentials {
           id
@@ -27,8 +29,11 @@ export const USE_USER_DATA = [
   {},
 ] as const;
 
-export type UserDataType = QueryResult<typeof useUserData>['userFromAuth'];
+export type UserDataType = ReturnType<typeof useUserData> & {};
 
-export const useUserData = () => useGraphQuery(...USE_USER_DATA);
+export const useUserData = () => {
+  const { data } = useGraphQuery(...USE_USER_DATA);
+  return data?.userFromAuth ?? null;
+};
 export const invalidateUserData = () =>
   queryClient.invalidateQueries({ queryKey: USE_USER_DATA });

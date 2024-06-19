@@ -7,7 +7,7 @@ import { FormEvent, useState, useTransition } from 'react';
 import { invalidateUserData } from '../_ctx/userData';
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 
-export default function NewPasskey() {
+export default function NewPasskey({ onClose }: { onClose?: () => void }) {
   const [text, setText] = useState('');
   const [isLoading, loading] = useTransition();
 
@@ -71,6 +71,7 @@ export default function NewPasskey() {
       <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
         <div className="flex flex-row items-center justify-between">
           <h3 className="text-lg">Add a passkey</h3>
+          <CloseButton onClick={onClose} />
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -92,7 +93,9 @@ export default function NewPasskey() {
                 )
               }
             />
-            <Button type="submit" className='self-end'>Create passkey</Button>
+            <Button type="submit" className="self-end">
+              Create passkey
+            </Button>
           </div>
         </form>
 
