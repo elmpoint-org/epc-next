@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { err, t } from '../trpc';
-import { RegisterOptions } from '@passwordlessdev/passwordless-nodejs';
 
 import { graph } from '@@/db/graph';
 import { graphql } from '@@/db/lib/utilities';
