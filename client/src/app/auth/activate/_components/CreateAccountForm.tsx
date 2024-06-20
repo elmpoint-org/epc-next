@@ -42,6 +42,7 @@ export default function CreateAccountForm({
 
   const userCreateFn = trpc.register.createUser.useMutation();
   const [authToken, setAuthToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -51,6 +52,8 @@ export default function CreateAccountForm({
         color: 'red',
         message: 'Not all fields are filled out correctly.',
       });
+
+    setIsLoading(true);
 
     // create user
     const at = await userCreateFn
@@ -63,6 +66,7 @@ export default function CreateAccountForm({
         token,
       })
       .catch((err) => {
+        setIsLoading(false);
         notifications.show({
           color: 'red',
           message: authErrorMap(err instanceof TRPCClientError && err.message),
@@ -150,7 +154,7 @@ export default function CreateAccountForm({
           </Button>
         </Fieldset>
 
-        {userCreateFn.isPending && <LoadingBlurFrame />}
+        {isLoading && <LoadingBlurFrame />}
       </form>
       {authToken && (
         <StoreLoginAndRedirect token={authToken} redirectTo="/account" />

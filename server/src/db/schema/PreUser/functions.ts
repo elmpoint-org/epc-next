@@ -6,6 +6,7 @@ import {
   handle as h,
   scopeError,
 } from '@@/db/lib/utilities';
+import { prepEmail } from '@@/util/textTransform';
 
 const { scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -26,7 +27,7 @@ export const getPreUser = h<QueryResolvers['preUser']>(
 export const getPreUserFromEmail = h<QueryResolvers['preUserFromEmail']>(
   scoped('ADMIN'),
   async ({ sources, args: { email } }) => {
-    const u = await sources.preUser.findBy('email', email.toLowerCase());
+    const u = await sources.preUser.findBy('email', prepEmail(email));
     return u[0] ?? null;
   }
 );
@@ -35,7 +36,7 @@ export const preUserCreate = h<MutationResolvers['preUserCreate']>(
   async ({ sources, args: newPreUser, userId }) => {
     if (!userId) throw scopeError();
 
-    newPreUser.email = newPreUser.email.toLowerCase();
+    newPreUser.email = prepEmail(newPreUser.email);
 
     const pu = await sources.preUser.findBy('email', newPreUser.email);
     if (pu.length) throw err('USER_ALREADY_INVITED');
