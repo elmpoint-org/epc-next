@@ -1,10 +1,17 @@
-import type { SearchParams } from '@/util/propTypes';
+import { Metadata } from 'next';
+
+import { IconCheck } from '@tabler/icons-react';
+
 import { tclient } from '@/query/trpc';
+import type { SearchParams } from '@/util/propTypes';
 
 import CreateAccountForm from './_components/CreateAccountForm';
-import { IconCheck } from '@tabler/icons-react';
 import InitialLogout from './_components/InitialLogout';
 import ActivationBoundary from './_components/ActivationBoundary';
+
+export const metadata: Metadata = {
+  title: 'Create your account',
+};
 
 export default async function ActivationPage({ searchParams }: SearchParams) {
   const preUser = await verifyToken(searchParams.token);
