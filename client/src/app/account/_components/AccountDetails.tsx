@@ -22,9 +22,7 @@ const AccountDetails = () => {
     firstName: initialUser?.firstName ?? '',
     email: initialUser?.email ?? '',
   } satisfies Partial<typeof user>;
-  const formNames: Partial<Record<keyof typeof formInit, ReactNode>> = {
-    firstName: 'first name',
-  };
+
   const form = useForm({
     mode: 'controlled',
     initialValues: formInit,
@@ -39,6 +37,11 @@ const AccountDetails = () => {
         ),
       ),
     ),
+    transformValues: (v) => ({
+      name: v.name.trim(),
+      firstName: v.firstName.trim(),
+      email: v.email.trim(),
+    }),
   });
 
   // load dynamic user state and detect changes
@@ -130,7 +133,7 @@ const AccountDetails = () => {
 
           <div className=" flex flex-col gap-4 rounded-lg sm:flex-row sm:items-center">
             {/* avatar view */}
-            <div className="relative flex max-w-56 flex-col items-center rounded-xl p-4">
+            <div className="relative flex flex-col items-center rounded-xl p-4 sm:max-w-56">
               <a
                 href="https://gravatar.com/profile"
                 target="_blank"
@@ -145,30 +148,56 @@ const AccountDetails = () => {
               </a>
               <div className="flex max-w-full flex-col items-center p-2 text-sm">
                 <div className="max-w-full truncate font-bold">
-                  {user?.name ?? initialUser?.name}
+                  {initialUser?.name}
                 </div>
-                <div className="max-w-full truncate">
-                  {user?.email ?? initialUser?.email}
-                </div>
+                <div className="max-w-full truncate">{initialUser?.email}</div>
               </div>
             </div>
             {/* text fields */}
             <div className="flex flex-1 flex-col gap-2 p-2">
-              {Object.keys(formInit).map((it0) => {
-                const it = it0 as keyof typeof formInit;
-                return (
-                  <TextInput
-                    key={it}
-                    label={formNames[it] ?? it}
-                    type={it === 'email' ? 'email' : 'text'}
-                    placeholder={'Enter ' + (formNames[it] ?? it)}
+              <TextInput
+                label="name"
+                placeholder="Enter name"
+                classNames={{
+                  label: 'capitalize',
+                }}
+                {...form.getInputProps('name')}
+              />
+              <TextInput
+                label="first name"
+                placeholder="Enter first name"
+                rightSectionWidth={80}
+                rightSection={
+                  <Button
+                    size="compact-xs"
+                    variant="light"
                     classNames={{
-                      label: 'capitalize',
+                      root: 'mx-2 rounded-full uppercase',
                     }}
-                    {...form.getInputProps(it)}
-                  />
-                );
-              })}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const nv = form.getValues().name.trim().split(' ')?.[0];
+                      if (nv) form.setValues({ firstName: nv });
+                    }}
+                  >
+                    generate
+                  </Button>
+                }
+                classNames={{
+                  label: 'capitalize',
+                  section: 'data-[position=right]:w-auto',
+                }}
+                {...form.getInputProps('firstName')}
+              />
+              <TextInput
+                label="email"
+                placeholder="Enter email"
+                type="email"
+                classNames={{
+                  label: 'capitalize',
+                }}
+                {...form.getInputProps('email')}
+              />
             </div>
           </div>
         </div>
