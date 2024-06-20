@@ -41,20 +41,3 @@ const Shell = ({ children }: Children) => {
   );
 };
 export default Shell;
-
-// header={{ height: 60 }}
-// <AppShell.Header className="bg-dgreen border-emerald-900">
-//   <Group h="100%" px="md">
-
-//     <IconTrees size={30} className="text-dwhite" />
-//   </Group>
-// </AppShell.Header>
-
-// <Burger
-// opened={opened}
-// onClick={toggle}
-// hiddenFrom="sm"
-// size="sm"
-// color={opened ? 'white' : 'black'}
-// className="fixed left-3 top-3 z-[1000]"
-// />

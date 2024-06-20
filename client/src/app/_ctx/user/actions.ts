@@ -2,6 +2,7 @@
 
 import { AUTH_EXPIRES_AFTER_DAYS } from '@/CONSTANTS';
 import { CookieOpts } from '@/util/cookies';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
 const daysToSeconds = (a: number) => a * 60 * 60 * 24;
@@ -18,4 +19,8 @@ export async function logout() {
 
 export async function removeStoredToken() {
   logout();
+}
+
+export async function invalidateUser() {
+  await revalidatePath('/', 'layout');
 }

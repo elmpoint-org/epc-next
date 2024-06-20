@@ -96,7 +96,13 @@ export const userUpdate = h<MutationResolvers['userUpdate']>(
     // user shouldn't be able to update their own scope without permissions
     if (updates.scope?.length && !scopeDiff(scope, `ADMIN`)) throw scopeError();
 
-    if (args.email?.length) args.email = args.email.toLowerCase();
+    if (args.email?.length) {
+      args.email = args.email.toLowerCase();
+      if (args.email !== u.email) {
+        const ue = await sources.user.findBy('email', args.email);
+        if (ue.length) throw err('EMAIL_ALREADY_TAKEN');
+      }
+    }
 
     return sources.user.update(id, updates);
   }
