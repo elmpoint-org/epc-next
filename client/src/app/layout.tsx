@@ -33,7 +33,9 @@ export default function RootLayout({ children }: Children) {
         <head>
           <ProvidersHead />
         </head>
-        <body className={`${defaultFont.variable} bg-slate-200 font-sans`}>
+        <body
+          className={`${defaultFont.variable} bg-slate-200 font-sans text-dblack`}
+        >
           <UserProvider>
             <Providers>
               <Shell>
