@@ -1,6 +1,5 @@
-import { type QueryResult, useGraphQuery, queryClient } from '@/query/query';
+import { useGraphQuery, queryClient } from '@/query/query';
 import { graphql } from '@/query/graphql';
-import { useUser } from '@/app/_ctx/user/context';
 
 export const USE_USER_DATA = [
   graphql(`

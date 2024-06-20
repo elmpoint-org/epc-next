@@ -86,17 +86,15 @@ function NavAccountButton({
   return (
     <button
       className="relative flex w-full flex-row items-center gap-2 overflow-hidden rounded-lg bg-emerald-700/80 px-4 py-3 hover:bg-emerald-700 data-[nu]:px-6"
-      // disabled={isLoading}
-      data-nu={/* !isLoading && */ !user || null}
+      data-nu={!user || null}
       {...props}
     >
-      {/* {!isLoading ? ( */}
       <>
         {/* button content with/without a user */}
         {user ? (
           <>
             <IconUser size={20} />
-            <div className="flex-1 text-left">{user.name}</div>
+            <div className="flex-1 truncate text-left">{user.name}</div>
 
             {isOpen ? <IconCircleChevronUp /> : <IconCircleChevronLeft />}
           </>
@@ -107,15 +105,6 @@ function NavAccountButton({
           </>
         )}
       </>
-      {/* ) : (
-        // skeleton
-        <>
-          <div className="size-4 animate-pulse rounded-full bg-emerald-600/50"></div>
-          <div className="h-4 w-2/3 flex-shrink animate-pulse rounded-full bg-emerald-600/50"></div>
-          <div className="flex-1"></div>
-          <div className="size-6 animate-pulse rounded-full bg-emerald-600/50"></div>
-        </>
-      )} */}
     </button>
   );
 }

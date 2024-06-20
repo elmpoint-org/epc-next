@@ -1,9 +1,9 @@
 'use client';
 
-import { useUserData } from '../_ctx/userData';
+import { useUser } from '@/app/_ctx/user/context';
 
 export default function AccountTitle() {
-  const user = useUserData();
+  const user = useUser();
 
   return (
     <>
