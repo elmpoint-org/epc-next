@@ -16,6 +16,7 @@ export const checkReferral = t.procedure
         query PreUserFromEmail($email: String!) {
           preUserFromEmail(email: $email) {
             id
+            email
           }
         }
       `),
@@ -23,7 +24,7 @@ export const checkReferral = t.procedure
     );
     if (errors || !data?.preUserFromEmail)
       throw err('BAD_REQUEST', 'NEEDS_REFERRAL');
-    const { id } = data.preUserFromEmail;
+    const { id, email: parsedEmail } = data.preUserFromEmail;
 
     // sign referral token
     const token = await signReferralToken(id).catch(() => {
@@ -31,7 +32,7 @@ export const checkReferral = t.procedure
     });
 
     // send email
-    await sendRegistrationEmail(email, token).catch((e) => {
+    await sendRegistrationEmail(parsedEmail, token).catch((e) => {
       throw err('INTERNAL_SERVER_ERROR', 'FAILED_TO_SEND_EMAIL', e);
     });
   });

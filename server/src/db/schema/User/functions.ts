@@ -19,6 +19,7 @@ import {
   RegisterOptions,
 } from '@passwordlessdev/passwordless-nodejs';
 import { AxiosError } from 'axios';
+import { prepEmail } from '@@/util/textTransform';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -38,7 +39,7 @@ export const getUser = h<QueryResolvers['user']>(
 export const getUserFromEmail = h<QueryResolvers['userFromEmail']>(
   scoped('ADMIN'),
   async ({ sources, args: { email } }) => {
-    const resp = await sources.user.findBy('email', email.toLowerCase());
+    const resp = await sources.user.findBy('email', prepEmail(email));
     if (!resp.length) return null;
     return resp[0];
   }
@@ -68,7 +69,7 @@ export const getUserSECURE = h<QueryResolvers['userSECURE']>(
 export const userCreate = h<MutationResolvers['userCreate']>(
   async ({ sources, args: newUser, scope }) => {
     const nu = newUser as DBUser;
-    nu.email = nu.email.toLowerCase();
+    nu.email = prepEmail(nu.email);
 
     const u = await sources.user.findBy('email', nu.email);
     if (u.length) throw err('USER_ALREADY_EXISTS');
@@ -97,7 +98,7 @@ export const userUpdate = h<MutationResolvers['userUpdate']>(
     if (updates.scope?.length && !scopeDiff(scope, `ADMIN`)) throw scopeError();
 
     if (args.email?.length) {
-      args.email = args.email.toLowerCase();
+      args.email = prepEmail(args.email);
       if (args.email !== u.email) {
         const ue = await sources.user.findBy('email', args.email);
         if (ue.length) throw err('EMAIL_ALREADY_TAKEN');

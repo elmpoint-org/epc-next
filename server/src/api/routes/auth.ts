@@ -29,46 +29,6 @@ export const verifyPasskey = t.procedure
     return { token: jwt } as { token: string };
   });
 
-// REGISTER NEW USER
-export const register = t.procedure
-  .input(z.object({ email: z.string() }))
-  .mutation(async ({ input: { email } }): Promise<string> => {
-    // attempt to add user
-
-    const { data, errors } = await graph(
-      graphql(`
-        mutation UserCreate($email: String!) {
-          userCreate(email: $email) {
-            id
-            email
-          }
-        }
-      `),
-      { email }
-    );
-    if (errors || !data?.userCreate) {
-      let m;
-      if ((m = errors?.[0]?.extensions?.code))
-        throw err('BAD_REQUEST', m as string);
-      throw err('INTERNAL_SERVER_ERROR', 'DB_ERROR');
-    }
-    const user = data.userCreate;
-
-    // get auth token
-
-    const opts = new RegisterOptions();
-    opts.userId = user.id;
-    opts.username = user.email;
-
-    const { token } = await passwordless
-      .createRegisterToken(opts)
-      .catch((e) => {
-        throw err('INTERNAL_SERVER_ERROR', undefined, e);
-      });
-
-    return token;
-  });
-
 export const sendMagicLink = t.procedure
   .input(z.object({ email: z.string(), redirect: z.string().optional() }))
   .mutation(async ({ input: { email, redirect } }) => {
@@ -78,6 +38,7 @@ export const sendMagicLink = t.procedure
         query UserFromEmail($email: String!) {
           userFromEmail(email: $email) {
             id
+            email
           }
         }
       `),
@@ -87,8 +48,12 @@ export const sendMagicLink = t.procedure
       throw err('BAD_REQUEST', 'USER_NOT_FOUND');
 
     // send magic link
-    const userId = data.userFromEmail.id;
-    await passwordlessSendMagicLink({ email, userId, redirect }).catch((e) => {
+    const u = data.userFromEmail;
+    await passwordlessSendMagicLink({
+      userId: u.id,
+      email: u.email,
+      redirect,
+    }).catch((e) => {
       throw err('BAD_REQUEST', 'MAGIC_LINK_FAILED', e);
     });
   });
