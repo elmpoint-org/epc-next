@@ -143,7 +143,7 @@ export default function LoginForm() {
     });
   }
 
-  useLoginRedirect(redirectTo);
+  useLoginRedirect(redirectTo ?? '/account');
 
   // RENDER
   return (

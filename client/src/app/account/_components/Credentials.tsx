@@ -1,7 +1,10 @@
 'use client';
 
 import { ActionIcon, Collapse, ScrollArea } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+import {
+  IconChevronDown,
+  IconPlus,
+} from '@tabler/icons-react';
 
 import { useUserData } from '../_ctx/userData';
 
@@ -21,8 +24,8 @@ export default function Credentials() {
           <div className="flex flex-row items-center justify-between">
             <h3 className="text-lg">Your passkeys</h3>
 
-            <ActionIcon variant="white" onClick={toggle}>
-              <IconPlus />
+            <ActionIcon color="black" variant="subtle" onClick={toggle}>
+              {isOpen ? <IconChevronDown /> : <IconPlus />}
             </ActionIcon>
           </div>
 
