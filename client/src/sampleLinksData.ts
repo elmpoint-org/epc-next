@@ -66,7 +66,7 @@ export const homeLinks: HomeLink[] = [
   {
     id: 'ed535159-59a8-4d31-a6c4-7d12834c3676',
     order: 5,
-    url: 'https://www.google.com/maps/place/14+Elm+Point+Rd,+Mirror+Lake,+NH+03853/',
+    url: '/directions',
     name: 'Directions',
     description:
       'Click here to see Google Maps directions from your location to Elm Point.',
