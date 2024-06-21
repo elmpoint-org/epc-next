@@ -12,7 +12,7 @@ const A = ({
     <>
       <Link
         href={href}
-        className={clx('text-dgreen hover:underline', className)}
+        className={clx('text-emerald-700 font-bold hover:underline', className)}
         {...props}
       >
         {children}

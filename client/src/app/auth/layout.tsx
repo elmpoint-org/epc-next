@@ -1,6 +1,6 @@
 import type { Children } from '@/util/propTypes';
 
-import Logo from '../_components/nav/Logo';
+import LogoPanel from '@/app/_components/_base/LogoPanel';
 import Backdrop from './_components/Backdrop';
 
 export default function AuthLayout({ children }: Children) {
@@ -15,9 +15,7 @@ export default function AuthLayout({ children }: Children) {
           {/* modal box */}
           <div className="flex w-full max-w-sm flex-col gap-4 rounded-xl border border-dblack/30 bg-slate-200 p-6 shadow-2xl">
             {/* logo panel */}
-            <div className="rounded-lg bg-dgreen fill-dwhite px-12 py-4">
-              <Logo className="w-full" />
-            </div>
+            <LogoPanel />
 
             <hr className="border-slate-300" />
 
