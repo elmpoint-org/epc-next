@@ -23,7 +23,7 @@ export default function LinkBlock({
       data-h={flags.highlight || null}
       className={clx(
         'group flex h-full flex-col gap-2 rounded-lg border border-slate-300 p-5 hover:border-slate-800 hover:bg-black/5',
-        /* highlight */ 'from-emerald-700 to-emerald-800 data-[h]:border-0  data-[h]:bg-gradient-to-b hover:data-[h]:to-emerald-600',
+        /* highlight */ 'from-emerald-700 to-emerald-800 data-[h]:border-transparent data-[h]:bg-gradient-to-b hover:data-[h]:to-emerald-900',
       )}
     >
       {/* link name */}
@@ -61,7 +61,12 @@ export default function LinkBlock({
           )}
         </div>
         {/* link arrow */}
-        <div className="invisible group-hover:visible group-data-[h]:text-slate-100">
+        <div
+          className={clx(
+            'text-slate-500 group-hover:text-dblack',
+            /* highlight */ 'group-data-[h]:text-slate-300 group-hover:group-data-[h]:text-slate-100',
+          )}
+        >
           <IconChevronRight stroke={1} />
         </div>
       </div>
