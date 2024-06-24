@@ -1,5 +1,5 @@
 import { Children } from '@/util/propTypes';
-import { AuthUser, getUser } from '@/app/_ctx/user/provider';
+import { type AuthUser, getUser } from '@/app/_ctx/user/provider';
 import LoginBoundaryRedirect from './LoginBoundaryRedirect';
 import ScopeError from './ScopeError';
 
