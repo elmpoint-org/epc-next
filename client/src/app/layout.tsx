@@ -2,15 +2,16 @@ import Script from 'next/script';
 import { IBM_Plex_Sans } from 'next/font/google';
 import type { Metadata } from 'next';
 
+import type { Children } from '@/util/propTypes';
 import Providers, { ProvidersHead } from './_components/Providers';
 import Shell from './_components/Shell';
+import { UserProvider } from './_ctx/user/provider';
 
 import './globals.css';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
-import { Children } from '@/util/propTypes';
-import { UserProvider } from './_ctx/user/provider';
+import '@mantine/tiptap/styles.css';
 
 const defaultFont = IBM_Plex_Sans({
   subsets: ['latin'],
