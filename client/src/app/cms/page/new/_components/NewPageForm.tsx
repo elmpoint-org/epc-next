@@ -1,14 +1,23 @@
 'use client';
 
-import { CloseButton, Pill, PillsInput, TextInput } from '@mantine/core';
+import {
+  CloseButton,
+  Pill,
+  PillsInput,
+  Switch,
+  TextInput,
+} from '@mantine/core';
 
 import TextEditor from './TextEditor';
-import { useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { IconRestore } from '@tabler/icons-react';
 
 export default function NewPageForm() {
+  // form state
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
+  const [isSecure, setIsSecure] = useState(true);
+  const [shouldAddContributor, setShouldAddContributor] = useState(true);
 
   const [isAutoSlug, setIsAutoSlug] = useState(true);
   const autoSlug = useMemo(() => formatSlug(title, 'STRIP'), [title]);
@@ -32,10 +41,11 @@ export default function NewPageForm() {
         <TextInput
           label="Page title"
           placeholder="Enter a title"
-          rightSection={<CloseButton onClick={() => setTitle('')} />}
           value={title}
           onChange={({ currentTarget: { value: v } }) => setTitle(v)}
+          rightSection={<CloseButton onClick={() => setTitle('')} />}
         />
+
         <PillsInput
           label="Permalink"
           rightSection={
@@ -44,6 +54,7 @@ export default function NewPageForm() {
               onClick={() => setIsAutoSlug(true)}
               disabled={isAutoSlug}
               className="disabled:text-slate-500"
+              title="Revert to automatic permalink"
             />
           }
         >
@@ -52,7 +63,8 @@ export default function NewPageForm() {
               size="md"
               className="p-0 text-slate-500"
               classNames={{
-                label: '_bg-red-500/50 -mb-0.5 -mr-2',
+                root: 'bg-transparent',
+                label: '-mb-0.5 -mr-2',
               }}
             >
               <span className="hidden sm:inline">elmpoint.xyz</span>/content/
@@ -64,6 +76,34 @@ export default function NewPageForm() {
             />
           </Pill.Group>
         </PillsInput>
+
+        {/* checkbox options */}
+        <div className="flex flex-col gap-2 rounded-[4px] border border-slate-300 p-3 px-4 sm:flex-row sm:items-center sm:gap-7">
+          <p className="text-xs uppercase">options:</p>
+          {(
+            [
+              ['Page requires login', isSecure, setIsSecure],
+              [
+                'Show me as a contributor',
+                shouldAddContributor,
+                setShouldAddContributor,
+              ],
+            ] as [string, boolean, Dispatch<SetStateAction<unknown>>][]
+          ).map((it, i) => (
+            <Switch
+              key={i}
+              checked={it[1]}
+              onChange={() => it[2]((v: unknown) => !v)}
+              label={it[0]}
+              classNames={{
+                input: 'peer',
+                track:
+                  '[.peer:not(:checked)~&]:border-slate-300 [.peer:not(:checked)~&]:bg-slate-300',
+                thumb: 'border-0',
+              }}
+            />
+          ))}
+        </div>
 
         <TextEditor />
       </div>

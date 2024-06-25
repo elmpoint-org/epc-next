@@ -1,4 +1,10 @@
+import type { Metadata } from 'next';
+
 import NewPageForm from './_components/NewPageForm';
+
+export const metadata: Metadata = {
+  title: 'Create new page',
+};
 
 export default function NewPagePage() {
   return (

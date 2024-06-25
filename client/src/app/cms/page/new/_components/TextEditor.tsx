@@ -10,6 +10,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import Placeholder from '@tiptap/extension-placeholder';
+import { clx } from '@/util/classConcat';
 
 export default function TextEditor() {
   const editor = useEditor({
@@ -30,14 +31,21 @@ export default function TextEditor() {
       <div className="t">
         <RichTextEditor
           editor={editor}
+          withTypographyStyles={false}
+          withCodeHighlightStyles={false}
           classNames={{
             root: 'overflow-clip',
-            content: 'prose flex min-h-48 max-w-full flex-col [&>*]:flex-1',
-            toolbar:
-              'before:absolute before:inset-x-0 before:-top-40 before:h-40 before:backdrop-blur',
+            content: clx(
+              'flex min-h-48 flex-col [&>*]:flex-1',
+              /* prose */ 'prose prose-slate max-w-none first:prose-headings:mt-0 first:prose-p:mt-0',
+              /* []() */ 'prose-a:font-bold prose-a:text-emerald-700 hover:prose-a:bg-dgreen/5',
+              /* >  */ '*:prose-blockquote:not-italic before:*:prose-blockquote:content-none after:*:prose-blockquote:content-none',
+              /* ` ` */ 'prose-code:-m-0 prose-code:rounded-md prose-code:bg-slate-200 prose-code:p-0 before:prose-code:content-none after:prose-code:content-none',
+              /* ``` */ 'prose-pre:!bg-slate-200',
+            ),
           }}
         >
-          <RichTextEditor.Toolbar sticky stickyOffset={60}>
+          <RichTextEditor.Toolbar sticky>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Undo />
               <RichTextEditor.Redo />
