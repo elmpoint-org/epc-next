@@ -86,7 +86,7 @@ abstract class Model<Type> {
    * @returns array of items
    */
   async getMultiple(ids: string[]) {
-    return this.loader.loadMany(ids) as Promise<DBType<Type>>;
+    return this.loader.loadMany(ids) as Promise<DBType<Type>[]>;
   }
 
   /**
