@@ -2,6 +2,7 @@ import {
   QueryClient,
   UseQueryOptions,
   UseQueryResult,
+  UseSuspenseQueryOptions,
   useQuery,
   useSuspenseQuery,
 } from '@tanstack/react-query';
@@ -22,7 +23,8 @@ export type QueryOpts = {
   headers?: () => Headers;
   addToKey?: unknown;
   withSuspense?: boolean;
-} & Partial<UseQueryOptions>;
+} & Partial<UseQueryOptions> &
+  Partial<UseSuspenseQueryOptions>;
 
 export type QueryResult<T extends () => UseQueryResult> =
   ReturnType<T>['data'] & {};

@@ -8,7 +8,7 @@ import { UserDataType, invalidateUserData } from '../_ctx/userData';
 import type { Inside } from '@/util/inferTypes';
 import { clx } from '@/util/classConcat';
 import { modals } from '@mantine/modals';
-import { graphAuth, graphError, graphql } from '@/query/graphql';
+import { graphAuth, oldGraphError, graphql } from '@/query/graphql';
 import { pkeyErrorMap } from '@/app/auth/passwordless';
 
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
@@ -54,7 +54,7 @@ export function Credential(p: {
       notifications.show({
         color: 'red',
         title: 'Error',
-        message: pkeyErrorMap(graphError(err.response)),
+        message: pkeyErrorMap(oldGraphError(err.response)),
       });
       return;
     }

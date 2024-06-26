@@ -1,6 +1,6 @@
 import { authErrorMap } from '@/app/auth/_util/authErrors';
 import { pkeyErrorMap, usePkey } from '@/app/auth/passwordless';
-import { graphAuth, graphError, graphql } from '@/query/graphql';
+import { graphAuth, oldGraphError, graphql } from '@/query/graphql';
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { FormEvent, useState, useTransition } from 'react';
@@ -40,7 +40,7 @@ export default function NewPasskey({ onClose }: { onClose?: () => void }) {
         notifications.show({
           color: 'red',
           title: 'Error',
-          message: authErrorMap(graphError(e.response)),
+          message: authErrorMap(oldGraphError(e.response)),
         });
         return;
       }

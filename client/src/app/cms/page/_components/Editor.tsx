@@ -3,32 +3,50 @@
 import { Link, RichTextEditor } from '@mantine/tiptap';
 
 import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Highlight from '@tiptap/extension-highlight';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Superscript from '@tiptap/extension-superscript';
-import SubScript from '@tiptap/extension-subscript';
 import Placeholder from '@tiptap/extension-placeholder';
-import { clx } from '@/util/classConcat';
 
-export default function TextEditor() {
+import { clx } from '@/util/classConcat';
+import { useSkeleton } from '@/app/_ctx/skeleton/context';
+import { EditFormProps } from './PageEditForm';
+import { useEffect, useMemo } from 'react';
+import { STATIC_EXTENSIONS } from '../EXTENSIONS';
+
+// COMPONENT
+export default function TextEditor({
+  updateForm,
+  serverContent,
+}: { serverContent: string | null } & EditFormProps) {
+  const parsedContent = useMemo(() => {
+    try {
+      if (!serverContent) return null;
+      return JSON.parse(serverContent);
+    } catch (_) {
+      return null;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverContent]);
+
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      ...STATIC_EXTENSIONS,
       Link,
-      Highlight,
-      Underline,
-      Superscript,
-      SubScript,
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Placeholder.configure({ placeholder: 'Start writing...' }),
     ],
+
+    onUpdate({ editor }) {
+      updateForm({ content: JSON.stringify(editor.getJSON()) });
+    },
   });
+  useEffect(() => {
+    editor?.commands.setContent(parsedContent);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parsedContent]);
+
+  const isSkeleton = useSkeleton();
 
   return (
     <>
-      <div className="t">
+      <div className="relative">
         <RichTextEditor
           editor={editor}
           withTypographyStyles={false}
@@ -95,9 +113,16 @@ export default function TextEditor() {
 
           <RichTextEditor.Content />
         </RichTextEditor>
+
+        {isSkeleton && (
+          <div className="absolute inset-[-1px] z-50 bg-dwhite">
+            <div className="absolute inset-0 animate-pulse rounded-lg bg-slate-200"></div>
+          </div>
+        )}
       </div>
-      <div className="t">{editor?.getHTML()}</div>
-      <div className="t">{JSON.stringify(editor?.getJSON())}</div>
+
+      {/* <div className="t">{editor?.getHTML()}</div>
+      <div className="t">{JSON.stringify(editor?.getJSON())}</div> */}
     </>
   );
 }

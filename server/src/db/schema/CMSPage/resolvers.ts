@@ -16,6 +16,7 @@ const resolvers: CmsPageModule.Resolvers = {
   },
 
   CMSPage: {
+    content: f.getCmsPageContent,
     contributors: f.getCmsPageContributors,
 
     timestamp,

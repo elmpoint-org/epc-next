@@ -5,7 +5,7 @@ import { FormEvent, useState, useTransition } from 'react';
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
-import { graphAuth, graphError, graphql } from '@/query/graphql';
+import { graphAuth, oldGraphError, graphql } from '@/query/graphql';
 
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 
@@ -33,7 +33,7 @@ export default function InviteUser() {
       ).catch((err) => {
         notifications.show({
           color: 'red',
-          message: 'Error: ' + graphError((err as any).response) ?? '',
+          message: 'Error: ' + oldGraphError((err as any).response) ?? '',
         });
         // TODO what error map applies here
         return false;

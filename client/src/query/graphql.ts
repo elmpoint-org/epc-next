@@ -9,8 +9,11 @@ export const graphql = initGraphQLTada<{
   introspection: introspection;
 }>();
 
-export const graphError = (e: any) =>
+export const oldGraphError = (e: any) =>
   (e?.errors?.[0]?.extensions?.code as string) || null;
+
+export const graphError = (e: any) =>
+  (e?.[0]?.extensions?.code as string) || null;
 
 export type Headers = NonNullable<Parameters<typeof request>[3]>;
 
@@ -26,4 +29,6 @@ export type GQL<R, V, O> =
 export const graph = new GraphQLClient(api + '/gql');
 
 export const graphAuth = <R, V>(...[d, v]: GQL<R, V, {}>) =>
-  graph.request(d, v ?? undefined, { authorization: getAuthHeader() });
+  graph.request(d, v ?? undefined, {
+    authorization: getAuthHeader(),
+  });

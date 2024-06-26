@@ -12,6 +12,7 @@ import { ResolverContext } from '@@/db/graph';
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 
 export const getCmsPages = h<M.QueryResolvers['cmsPages']>(
+  scoped('ADMIN', 'EDIT'),
   async ({ sources, userId }) => {
     if (!userId) throw scopeError();
     return sources.cms.page.getAll();
@@ -19,8 +20,7 @@ export const getCmsPages = h<M.QueryResolvers['cmsPages']>(
 );
 
 export const getCmsPage = h<M.QueryResolvers['cmsPage']>(
-  async ({ sources, args: { id }, userId }) => {
-    if (!userId) throw scopeError();
+  async ({ sources, args: { id } }) => {
     return sources.cms.page.get(id);
   }
 );
@@ -28,7 +28,10 @@ export const getCmsPage = h<M.QueryResolvers['cmsPage']>(
 export const getCmsPageFromSlug = h<M.QueryResolvers['cmsPageFromSlug']>(
   async ({ sources, args: { slug } }) => {
     const q = await sources.cms.page.findBy('slug', slug);
-    return q?.[0] ?? null;
+    const p = q?.[0] ?? null;
+    if (p && !p.publish) return null;
+
+    return p;
   }
 );
 
@@ -38,8 +41,11 @@ export const cmsPageCreate = h<M.MutationResolvers['cmsPageCreate']>(
     const page = pageParams as DBCmsPage;
 
     // check for used slug
-    const s = await sources.cms.page.findBy('slug', page.slug);
-    if (s.length) throw err('SLUG_IN_USE');
+    if (page.slug) {
+      if (page.slug.length === 0) throw err('EMPTY_SLUG');
+      const s = await sources.cms.page.findBy('slug', page.slug);
+      if (s?.length) throw err('SLUG_IN_USE');
+    }
 
     // handle contributors
     if (contributorAdd) {
@@ -49,7 +55,6 @@ export const cmsPageCreate = h<M.MutationResolvers['cmsPageCreate']>(
     } else {
       page.contributorIds = [];
     }
-
     return sources.cms.page.create(page);
   }
 );
@@ -67,11 +72,10 @@ export const cmsPageUpdate = h<M.MutationResolvers['cmsPageUpdate']>(
     if (!p) throw err('PAGE_NOT_FOUND');
 
     // handle contributors
-    if (contributorAdd) {
+    if (contributorAdd && !p.contributorIds.includes(contributorAdd)) {
       const u = await sources.user.get(contributorAdd);
       if (!u) throw err('INVALID_CONTRIBUTOR');
-      if (!p.contributorIds.includes(contributorAdd))
-        updates.contributorIds = [...p.contributorIds, contributorAdd];
+      updates.contributorIds = [...p.contributorIds, contributorAdd];
     }
     if (contributorRemove) {
       updates.contributorIds = p.contributorIds.filter(
@@ -93,6 +97,13 @@ export const cmsPageDelete = h<M.MutationResolvers['cmsPageDelete']>(
       throw scopeError();
 
     return sources.cms.page.delete(id);
+  }
+);
+
+export const getCmsPageContent = h<M.CMSPageResolvers['content']>(
+  async ({ parent: { secure, content }, userId }) => {
+    if (secure && !userId) throw scopeError();
+    return content!;
   }
 );
 

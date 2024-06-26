@@ -6,10 +6,17 @@ export default gql`
   """
   type CMSPage {
     id: ID!
-    slug: String!
+    "permalink pathname to this page"
+    slug: String
+    "page title"
     title: String!
-    content: String!
+    "the page's content in prosemirror JSON format"
+    content: String
+    "does this page require users to login"
     secure: Boolean!
+    "can this page be seen by users"
+    publish: Boolean!
+    "list of users who contributed to this page"
     contributors: [User]!
 
     timestamp: TS!
@@ -17,7 +24,7 @@ export default gql`
 
   type Query {
     """
-    **SCOPE: userId**
+    **SCOPE: ADMIN | EDIT**
 
     get all pages.
     """
@@ -33,7 +40,7 @@ export default gql`
     """
     **SCOPE: ***
 
-    get a page by its slug, ie from a GET request.
+    get a page by its slug. If a page is secure, accessing its content requires authentication. pages without \`publish:true\` are not accessible with this method.
     """
     cmsPageFromSlug(slug: String!): CMSPage
   }
@@ -45,10 +52,11 @@ export default gql`
     create new page.
     """
     cmsPageCreate(
-      slug: String!
+      slug: String
       title: String!
-      content: String!
+      content: String
       secure: Boolean!
+      publish: Boolean!
       contributorAdd: String
     ): CMSPage!
 
@@ -63,6 +71,7 @@ export default gql`
       title: String
       content: String
       secure: Boolean
+      publish: Boolean
       contributorAdd: String
       contributorRemove: String
     ): CMSPage!
