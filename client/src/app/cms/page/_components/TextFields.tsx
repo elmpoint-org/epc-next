@@ -10,7 +10,7 @@ export default function TextFields({ form, updateForm }: EditFormProps) {
   const isSkeleton = useSkeleton();
 
   // auto slug generation
-  const [isAutoSlug, setIsAutoSlug] = useState(true);
+  const [isAutoSlug, setIsAutoSlug] = useState(false);
   useEffect(() => {
     if (isAutoSlug) updateForm({ slug: formatSlug(form.title, 'STRIP') });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -27,6 +27,12 @@ export default function TextFields({ form, updateForm }: EditFormProps) {
     if (strip) ns = ns.replace(/^-+|-+$/g, '');
     return ns;
   }
+
+  // turn on autoslug if new page
+  useEffect(() => {
+    if (!isSkeleton && !form.slug.length) setIsAutoSlug(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSkeleton]);
 
   return (
     <>

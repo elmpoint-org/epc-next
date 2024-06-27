@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import fdeq from 'fast-deep-equal';
 
-import { graphAuth, graphql } from '@/query/graphql';
+import { graphAuth, graphError, graphql } from '@/query/graphql';
 import { useGraphQuery } from '@/query/query';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 
@@ -16,6 +16,7 @@ import { useUser } from '@/app/_ctx/user/context';
 import { notifications } from '@mantine/notifications';
 import { getHotkeyHandler } from '@mantine/hooks';
 import { revalidatePage } from '../_actions/edit';
+import { cmsErrorMap } from '../../_util/cmsErrors';
 
 export const GET_CMS_PAGE = graphql(`
   query CmsPage($id: ID!) {
@@ -104,7 +105,10 @@ export default function PageEditForm({ id }: { id: string }) {
         },
       ).catch((err) => {
         console.log(err);
-        notifications.show({ color: 'red', message: 'save error' });
+        notifications.show({
+          color: 'red',
+          message: `Error: ${cmsErrorMap(graphError(err?.response?.errors))}`,
+        });
         return false;
       });
       if (!f) return;
