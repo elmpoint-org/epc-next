@@ -15,11 +15,10 @@ export const colors: MantineThemeOverride = {
   black: slate[950],
 };
 
-function twColors(c: Record<string, string>) {
-  const t = Object.keys(c)
-    .sort((a, b) => parseInt(a) - parseInt(b))
-    .slice(1)
-    .map((it) => c[it]);
+function twColors(c: Record<string, string>, swap?: 'SWAP') {
+  let t = Object.keys(c).sort((a, b) => parseInt(a) - parseInt(b));
+  t = swap ? t.slice(0, -1) : t.slice(1);
+  t = t.map((it) => c[it]);
 
   while (t.length < 10) t.push(t.at(-1)!);
   return t as MantineColors;
