@@ -1,15 +1,18 @@
 'use server';
 
-import { AUTH_EXPIRES_AFTER_DAYS } from '@/CONSTANTS';
-import { CookieOpts } from '@/util/cookies';
-import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
+import { revalidatePath } from 'next/cache';
 
-const daysToSeconds = (a: number) => a * 60 * 60 * 24;
+import { CookieOpts } from '@/util/cookies';
+import { getTokenExpirationSeconds } from '@/util/extractTokenData';
+
+import { AUTH_EXPIRES_AFTER_DAYS } from '@/CONSTANTS';
 
 export async function login(token: string) {
+  const { time } = getTokenExpirationSeconds(token);
+
   cookies().set('USER_AUTH' as CookieOpts, token, {
-    maxAge: daysToSeconds(AUTH_EXPIRES_AFTER_DAYS),
+    maxAge: time ?? AUTH_EXPIRES_AFTER_DAYS,
   });
 }
 
