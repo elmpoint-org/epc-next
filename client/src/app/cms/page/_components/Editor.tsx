@@ -3,29 +3,18 @@
 import { Link, RichTextEditor } from '@mantine/tiptap';
 
 import { useEditor } from '@tiptap/react';
+import { STATIC_EXTENSIONS } from '../EXTENSIONS';
 import Placeholder from '@tiptap/extension-placeholder';
 
 import { clx } from '@/util/classConcat';
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
 import { EditFormProps } from './PageEditForm';
 import { useEffect, useMemo } from 'react';
-import { STATIC_EXTENSIONS } from '../EXTENSIONS';
+import { proseStyles } from '../../_util/proseStyles';
 
 // COMPONENT
-export default function TextEditor({
-  updateForm,
-  serverContent,
-}: { serverContent: string | null } & EditFormProps) {
-  const parsedContent = useMemo(() => {
-    try {
-      if (!serverContent) return null;
-      return JSON.parse(serverContent);
-    } catch (_) {
-      return null;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [serverContent]);
-
+export default function TextEditor({ updateForm, serverPage }: EditFormProps) {
+  // init editor
   const editor = useEditor({
     extensions: [
       ...STATIC_EXTENSIONS,
@@ -37,6 +26,16 @@ export default function TextEditor({
       updateForm({ content: JSON.stringify(editor.getJSON()) });
     },
   });
+
+  // set content from server
+  const parsedContent = useMemo(() => {
+    try {
+      if (!serverPage?.content) return null;
+      return JSON.parse(serverPage.content);
+    } catch (_) {
+      return null;
+    }
+  }, [serverPage]);
   useEffect(() => {
     editor?.commands.setContent(parsedContent);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,14 +52,7 @@ export default function TextEditor({
           withCodeHighlightStyles={false}
           classNames={{
             root: 'overflow-clip',
-            content: clx(
-              'flex min-h-48 flex-col [&>*]:flex-1',
-              /* prose */ 'prose prose-slate max-w-none first:prose-headings:mt-0 first:prose-p:mt-0',
-              /* []() */ 'prose-a:font-bold prose-a:text-emerald-700 hover:prose-a:bg-dgreen/5',
-              /* >  */ '*:prose-blockquote:not-italic before:*:prose-blockquote:content-none after:*:prose-blockquote:content-none',
-              /* ` ` */ 'prose-code:-m-0 prose-code:rounded-md prose-code:bg-slate-200 prose-code:p-0 before:prose-code:content-none after:prose-code:content-none',
-              /* ``` */ 'prose-pre:!bg-slate-200',
-            ),
+            content: clx(proseStyles),
           }}
         >
           <RichTextEditor.Toolbar sticky>
@@ -120,9 +112,6 @@ export default function TextEditor({
           </div>
         )}
       </div>
-
-      {/* <div className="t">{editor?.getHTML()}</div>
-      <div className="t">{JSON.stringify(editor?.getJSON())}</div> */}
     </>
   );
 }

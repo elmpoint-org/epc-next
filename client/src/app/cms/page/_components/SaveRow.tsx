@@ -1,7 +1,9 @@
-import { useSkeleton } from '@/app/_ctx/skeleton/context';
+import { useMemo } from 'react';
+
 import { Button, Kbd } from '@mantine/core';
 import { useOs } from '@mantine/hooks';
-import { useMemo } from 'react';
+
+import { useSkeleton } from '@/app/_ctx/skeleton/context';
 
 export type SaveState = 'UNSAVED' | 'SAVED' | 'SAVING';
 
@@ -39,7 +41,7 @@ export default function SaveRow({
                     // show desktop shortcut
                     <>
                       <Kbd>{keys === 'MAC' ? `Cmd` : `Ctrl`}</Kbd> +{' '}
-                      <Kbd>Enter</Kbd> to save
+                      <Kbd>Shift</Kbd> +<Kbd>Enter</Kbd> to save
                     </>
                   )}
                 </>

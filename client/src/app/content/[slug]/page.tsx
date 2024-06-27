@@ -8,6 +8,10 @@ import { ResultOf } from '@graphql-typed-document-node/core';
 
 import PageRender from './_components/PageRender';
 import LoginBoundaryRedirect from '@/app/_components/_base/LoginBoundary/LoginBoundaryRedirect';
+import A from '@/app/_components/_base/A';
+import { IconPencil } from '@tabler/icons-react';
+import { getUser } from '@/app/_ctx/user/provider';
+import { scopeCheck } from '@/util/scopeCheck';
 
 const GET_PAGE_FROM_SLUG = graphql(`
   query CmsPageFromSlug($slug: String!) {
@@ -47,15 +51,20 @@ const getPage = cache(async (slug: string) => {
   return o;
 });
 
+// COMPONENT
 export default async function CmsPage({ params: { slug } }: PageParams) {
+  // attempt to find page
   const { data: page, error } = await getPage(slug);
-
   if (error === 'NEED_PERMISSION') return <LoginBoundaryRedirect />;
-
   if (!page) notFound();
+
+  // check scope for edit link
+  const user = (await getUser()) || null;
+  const canEdit = scopeCheck(user?.scope ?? null, 'ADMIN', 'EDIT');
 
   return (
     <>
+      {/* page */}
       <div className="flex flex-1 flex-col space-y-2">
         <h1 className="mb-6 flex flex-col items-center justify-center text-center text-4xl">
           {page.title}
@@ -63,6 +72,15 @@ export default async function CmsPage({ params: { slug } }: PageParams) {
 
         <PageRender page={page} />
       </div>
+
+      {/* edit link */}
+      {canEdit && (
+        <div className="absolute right-0 top-0 p-2">
+          <A href={`/cms/page/edit/${page.id}`}>
+            <IconPencil className="mb-1 inline size-5" /> Edit this page
+          </A>
+        </div>
+      )}
     </>
   );
 }

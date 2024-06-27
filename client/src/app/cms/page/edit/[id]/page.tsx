@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { PageParams } from '@/util/propTypes';
@@ -5,8 +6,6 @@ import { graphAuthServer } from '@/query/graphql.server';
 import { graphql } from '@/query/graphql';
 
 import PageEditForm from '../../_components/PageEditForm';
-import A from '@/app/_components/_base/A';
-import { Metadata } from 'next';
 
 export const revalidate = 0;
 export const metadata: Metadata = {
@@ -37,16 +36,6 @@ export default async function EditPagePage({ params: { id } }: PageParams) {
       <div className="container flex-1 rounded-lg bg-slate-100">
         <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
           <PageEditForm id={id} />
-        </div>
-
-        <div className="p-6">
-          <A
-            href={slug ? `/content/${data.cmsPage.slug}` : '#'}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            view page
-          </A>
         </div>
       </div>
     </>

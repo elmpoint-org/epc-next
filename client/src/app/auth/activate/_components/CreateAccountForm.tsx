@@ -106,7 +106,7 @@ export default function CreateAccountForm({
             required
             value={firstName}
             onChange={changeFirstName}
-            disabled={isDefaultName ?? null}
+            disabled={isDefaultName}
             rightSectionPointerEvents="all"
             rightSection={
               isDefaultName ? (

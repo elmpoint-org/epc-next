@@ -17,6 +17,7 @@ import { notifications } from '@mantine/notifications';
 import { getHotkeyHandler } from '@mantine/hooks';
 import { revalidatePage } from '../_actions/edit';
 import { cmsErrorMap } from '../../_util/cmsErrors';
+import ViewPageLink from './ViewPageLink';
 
 export const GET_CMS_PAGE = graphql(`
   query CmsPage($id: ID!) {
@@ -125,26 +126,28 @@ export default function PageEditForm({ id }: { id: string }) {
     return () => window.removeEventListener('beforeunload', cb);
   }, [saveState]);
 
+  const formProps: EditFormProps = { form, updateForm, serverPage };
   return (
     <>
       <SkeletonProvider ready={!pageQuery.isPending}>
         <div
           className="flex flex-col gap-4"
-          onKeyDown={getHotkeyHandler([['mod+Enter', save]])}
+          tabIndex={0}
+          onKeyDown={getHotkeyHandler([['mod+shift+Enter', save]])}
         >
           <SaveRow onClick={save} state={saveState} />
 
           {/* text fields */}
-          <TextFields {...{ form, updateForm }} />
+          <TextFields {...formProps} />
 
           {/* options */}
-          <PageOptions {...{ form, updateForm }} />
+          <PageOptions {...formProps} />
 
           {/* page content */}
-          <TextEditor
-            {...{ form, updateForm }}
-            serverContent={serverPage?.content ?? null}
-          />
+          <TextEditor {...formProps} />
+
+          {/* page link */}
+          <ViewPageLink {...formProps} />
 
           <SaveRow onClick={save} state={saveState} />
         </div>
@@ -170,4 +173,5 @@ export type EditForm = ReturnType<typeof initForm>;
 export type EditFormProps = {
   form: EditForm;
   updateForm: (d: Partial<EditForm>) => void;
+  serverPage: ResultOf<typeof GET_CMS_PAGE>['cmsPage'];
 };
