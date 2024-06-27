@@ -20,6 +20,7 @@ const NavLinks = () => {
           <NavLink href="/">Home</NavLink>
           <NavLink href="/test">Test</NavLink>
           <NavLink href="/calendar/new">Calendar - Add stay</NavLink>
+          <NavLink href="/cms/page/new">Page creator</NavLink>
 
           {Array(5)
             .fill(0)

@@ -37,6 +37,13 @@ export async function getUser() {
   return data.userFromAuth;
 }
 
+export function getServerAuth() {
+  const t = cookies().get('USER_AUTH' as CookieOpts);
+
+  if (!t) return '';
+  return `Bearer ${t.value}`;
+}
+
 export const authorizeUser = cache(async (token: string) =>
   graph
     .request(GET_USER_FROM_AUTH, {}, { authorization: `Bearer ${token}` })

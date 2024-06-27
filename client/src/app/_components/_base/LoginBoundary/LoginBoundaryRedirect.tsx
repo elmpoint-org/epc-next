@@ -7,7 +7,7 @@ import qs from 'qs';
 import { IconLoader2 } from '@tabler/icons-react';
 
 export default function LoginBoundaryRedirect() {
-  const wl = window.location;
+  const wl = window?.location;
 
   const router = useRouter();
   const path = usePathname();
