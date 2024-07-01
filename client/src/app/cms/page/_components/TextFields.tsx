@@ -128,7 +128,7 @@ export default function TextFields({
               }}
             >
               <span className="hidden sm:inline">elmpoint.xyz</span>
-              /content/
+              /pages/
             </Pill>
             {/* slug input */}
             <PillsInput.Field

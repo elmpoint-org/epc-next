@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 export default gql`
   """
-  a user-created page available on the website at /content/.
+  a user-created page available on the website at /pages/.
   """
   type CMSPage {
     id: ID!
