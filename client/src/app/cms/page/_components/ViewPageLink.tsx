@@ -13,7 +13,7 @@ export default function ViewPageLink({ serverPage }: EditFormProps) {
     <>
       <div className="group relative inline-block" data-s={isSkeleton || null}>
         <A
-          href={`/content/${slug ?? ''}`}
+          href={`/pages/${slug ?? ''}`}
           aria-disabled={!isValid}
           target={isValid ? '_blank' : ''}
           rel={isValid ? 'noopener noreferrer' : ''}

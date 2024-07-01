@@ -26,8 +26,6 @@ export default async function EditPagePage({ params: { id } }: PageParams) {
   ).catch(() => {});
   if (!data?.cmsPage) notFound();
 
-  const { slug } = data.cmsPage;
-
   return (
     <>
       <h1 className="mb-6 flex flex-col items-center justify-center text-center text-4xl">

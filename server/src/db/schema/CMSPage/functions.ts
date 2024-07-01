@@ -72,8 +72,8 @@ export const cmsPageUpdate = h<M.MutationResolvers['cmsPageUpdate']>(
     if (!p) throw err('PAGE_NOT_FOUND');
 
     // check for used slug
-    if (updates.slug !== null && updates.slug !== p.slug) {
-      if (updates.slug?.length === 0) throw err('EMPTY_SLUG');
+    if (typeof updates.slug === 'string' && updates.slug !== p.slug) {
+      if (updates.slug.length === 0) throw err('EMPTY_SLUG');
       const s = await sources.cms.page.findBy('slug', updates.slug);
       if (s?.length) throw err('SLUG_IN_USE');
     }
