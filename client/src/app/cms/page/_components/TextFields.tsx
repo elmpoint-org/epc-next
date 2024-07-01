@@ -124,7 +124,7 @@ export default function TextFields({
               className="p-0 text-slate-500"
               classNames={{
                 root: 'bg-transparent',
-                label: '-mb-0.5 -mr-2',
+                label: '-mb-px -mr-2',
               }}
             >
               <span className="hidden sm:inline">elmpoint.xyz</span>
