@@ -121,8 +121,11 @@ export default function PageEditForm({ id }: { id: string }) {
 
   // warn before closing
   useEffect(() => {
-    const cb = (e: Event) => e.preventDefault();
-    if (saveState !== 'SAVED') window.addEventListener('beforeunload', cb);
+    const cb = (e: BeforeUnloadEvent) => {
+      if (saveState === 'SAVED') return;
+      e.preventDefault();
+    };
+    window.addEventListener('beforeunload', cb);
     return () => window.removeEventListener('beforeunload', cb);
   }, [saveState]);
 

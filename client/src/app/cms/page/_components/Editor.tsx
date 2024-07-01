@@ -14,20 +14,7 @@ import { proseStyles } from '../../_util/proseStyles';
 
 // COMPONENT
 export default function TextEditor({ updateForm, serverPage }: EditFormProps) {
-  // init editor
-  const editor = useEditor({
-    extensions: [
-      ...STATIC_EXTENSIONS,
-      Link,
-      Placeholder.configure({ placeholder: 'Start writing...' }),
-    ],
-
-    onUpdate({ editor }) {
-      updateForm({ content: JSON.stringify(editor.getJSON()) });
-    },
-  });
-
-  // set content from server
+  // parse content from server
   const parsedContent = useMemo(() => {
     try {
       if (!serverPage?.content) return null;
@@ -36,6 +23,21 @@ export default function TextEditor({ updateForm, serverPage }: EditFormProps) {
       return null;
     }
   }, [serverPage]);
+
+  // init editor
+  const editor = useEditor({
+    extensions: [
+      ...STATIC_EXTENSIONS,
+      Link,
+      Placeholder.configure({ placeholder: 'Start writing...' }),
+    ],
+    content: parsedContent ?? undefined,
+
+    onUpdate({ editor }) {
+      updateForm({ content: JSON.stringify(editor.getJSON()) });
+    },
+  });
+
   useEffect(() => {
     editor?.commands.setContent(parsedContent);
     // eslint-disable-next-line react-hooks/exhaustive-deps
