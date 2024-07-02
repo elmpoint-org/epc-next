@@ -5,6 +5,7 @@ export const colors: MantineThemeOverride = {
   colors: {
     // generic colors
     emerald: twColors(emerald),
+    slate: twColors(slate),
 
     // status colors
     red: twColors(red),

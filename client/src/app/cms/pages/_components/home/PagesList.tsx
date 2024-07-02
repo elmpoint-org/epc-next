@@ -4,14 +4,14 @@ import Link from 'next/link';
 
 import { Table } from '@mantine/core';
 
-import type { PagesType } from './PagesQuery';
+import type { PagesType } from './PagesContainer';
 
 import A from '@/app/_components/_base/A';
 import BooleanStatus from '@/app/_components/_base/BooleanStatus';
 import { clx } from '@/util/classConcat';
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
 
-const STALE_PAGE_SECONDS = 2 * 3600;
+const STALE_PAGE_SECONDS = 0 * 3600;
 
 export default function PagesList({
   pages,

@@ -1,10 +1,12 @@
 'use client';
 
-import { useGraphQuery } from '@/query/query';
+import { queryClient, useGraphQuery } from '@/query/query';
 import { graphql } from '@/query/graphql';
 import type { ResultOf } from '@graphql-typed-document-node/core';
-import PagesList from './PagesList';
+
 import { SkeletonProvider } from '@/app/_ctx/skeleton/context';
+import PagesList from './PagesList';
+import NewPageButton from './NewPageButton';
 
 const GET_PAGES_QUERY = graphql(`
   query CmsPages {
@@ -25,11 +27,14 @@ const GET_PAGES_QUERY = graphql(`
   }
 `);
 export type PagesType = ResultOf<typeof GET_PAGES_QUERY>['cmsPages'];
+export const revalidatePagesList = () =>
+  queryClient.invalidateQueries({ queryKey: [GET_PAGES_QUERY, {}] });
 
 // COMPONENT
-export default function PagesQuery() {
-  const pagesQuery = useGraphQuery(GET_PAGES_QUERY);
+export default function PagesContainer() {
+  const pagesQuery = useGraphQuery(GET_PAGES_QUERY, {});
   const pages = pagesQuery.data?.cmsPages ?? null;
+
   return (
     <>
       <div className="mx-auto flex max-w-screen-xl flex-col gap-6 p-6">
@@ -40,7 +45,10 @@ export default function PagesQuery() {
           </div>
 
           <div className="t">
-            <h3 className="py-4 text-lg">Unused (empty) pages</h3>
+            <div className="flex flex-row items-center justify-between">
+              <h3 className="py-4 text-lg">Unused (empty) pages</h3>
+              <NewPageButton />
+            </div>
             <PagesList pages={pages} unused />
           </div>
         </SkeletonProvider>

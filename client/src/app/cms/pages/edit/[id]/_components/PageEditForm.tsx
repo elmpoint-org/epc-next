@@ -19,6 +19,7 @@ import PageOptions from './PageOptions';
 import TextEditor from '../../../_components/Editor';
 import ViewPageLink from '../../../_components/ViewPageLink';
 import SaveRow, { SaveState } from './SaveRow';
+import DeletePage from './DeletePage';
 
 export const GET_CMS_PAGE = graphql(`
   query CmsPage($id: ID!) {
@@ -153,6 +154,8 @@ export default function PageEditForm({ id }: { id: string }) {
 
           <SaveRow onClick={save} state={saveState} />
         </div>
+
+        <DeletePage pageId={id} />
       </SkeletonProvider>
     </>
   );
