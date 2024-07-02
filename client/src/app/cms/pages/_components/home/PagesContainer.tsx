@@ -27,12 +27,13 @@ const GET_PAGES_QUERY = graphql(`
   }
 `);
 export type PagesType = ResultOf<typeof GET_PAGES_QUERY>['cmsPages'];
+export const GET_PAGES_QUERY_KEY = [GET_PAGES_QUERY, {}] as const;
 export const revalidatePagesList = () =>
   queryClient.invalidateQueries({ queryKey: [GET_PAGES_QUERY, {}] });
 
 // COMPONENT
 export default function PagesContainer() {
-  const pagesQuery = useGraphQuery(GET_PAGES_QUERY, {});
+  const pagesQuery = useGraphQuery(...GET_PAGES_QUERY_KEY);
   const pages = pagesQuery.data?.cmsPages ?? null;
 
   return (
