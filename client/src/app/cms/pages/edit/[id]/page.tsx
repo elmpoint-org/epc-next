@@ -5,7 +5,7 @@ import { PageParams } from '@/util/propTypes';
 import { graphAuthServer } from '@/query/graphql.server';
 import { graphql } from '@/query/graphql';
 
-import PageEditForm from '../../_components/PageEditForm';
+import PageEditForm from './_components/PageEditForm';
 
 export const revalidate = 0;
 export const metadata: Metadata = {

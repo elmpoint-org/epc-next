@@ -7,7 +7,7 @@ import {
 } from '@mantine/core';
 import { IconRestore } from '@tabler/icons-react';
 
-import TextboxSkeleton from './TextboxSkeleton';
+import TextboxSkeleton from '../../../_components/TextboxSkeleton';
 import { type EditFormProps } from './PageEditForm';
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
 import { useEffect, useState } from 'react';

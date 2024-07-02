@@ -8,7 +8,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 
 import { clx } from '@/util/classConcat';
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
-import { EditFormProps } from './PageEditForm';
+import { EditFormProps } from '../edit/[id]/_components/PageEditForm';
 import { useEffect, useMemo } from 'react';
 import { proseStyles } from '../../_util/proseStyles';
 

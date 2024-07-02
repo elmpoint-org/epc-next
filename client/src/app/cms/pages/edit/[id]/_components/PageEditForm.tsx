@@ -2,22 +2,23 @@
 
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import fdeq from 'fast-deep-equal';
+import type { ResultOf } from '@graphql-typed-document-node/core';
+
+import { notifications } from '@mantine/notifications';
+import { getHotkeyHandler } from '@mantine/hooks';
 
 import { graphAuth, graphError, graphql } from '@/query/graphql';
 import { useGraphQuery } from '@/query/query';
-import type { ResultOf } from '@graphql-typed-document-node/core';
+import { useUser } from '@/app/_ctx/user/context';
+import { revalidatePage } from '../../../_actions/edit';
+import { cmsErrorMap } from '../../../../_util/cmsErrors';
 
 import { SkeletonProvider } from '@/app/_ctx/skeleton/context';
-import TextEditor from './Editor';
-import SaveRow, { SaveState } from './SaveRow';
 import TextFields from './TextFields';
 import PageOptions from './PageOptions';
-import { useUser } from '@/app/_ctx/user/context';
-import { notifications } from '@mantine/notifications';
-import { getHotkeyHandler } from '@mantine/hooks';
-import { revalidatePage } from '../_actions/edit';
-import { cmsErrorMap } from '../../_util/cmsErrors';
-import ViewPageLink from './ViewPageLink';
+import TextEditor from '../../../_components/Editor';
+import ViewPageLink from '../../../_components/ViewPageLink';
+import SaveRow, { SaveState } from './SaveRow';
 
 export const GET_CMS_PAGE = graphql(`
   query CmsPage($id: ID!) {
