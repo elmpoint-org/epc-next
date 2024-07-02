@@ -1,17 +1,19 @@
 import { cache } from 'react';
 import { notFound } from 'next/navigation';
 
+import { IconPencil } from '@tabler/icons-react';
+
 import { graphError, graphql } from '@/query/graphql';
 import { graphAuthServer } from '@/query/graphql.server';
 import { PageParams } from '@/util/propTypes';
-import { ResultOf } from '@graphql-typed-document-node/core';
-
-import PageRender from './_components/PageRender';
-import LoginBoundaryRedirect from '@/app/_components/_base/LoginBoundary/LoginBoundaryRedirect';
-import A from '@/app/_components/_base/A';
-import { IconPencil } from '@tabler/icons-react';
+import type { ResultOf } from '@graphql-typed-document-node/core';
 import { getUser } from '@/app/_ctx/user/provider';
 import { scopeCheck } from '@/util/scopeCheck';
+
+import A from '@/app/_components/_base/A';
+import LoginBoundaryRedirect from '@/app/_components/_base/LoginBoundary/LoginBoundaryRedirect';
+import PageRender from './_components/PageRender';
+import PageStats from './_components/PageStats';
 
 const GET_PAGE_FROM_SLUG = graphql(`
   query CmsPageFromSlug($slug: String!) {
@@ -66,9 +68,10 @@ export default async function CmsPage({ params: { slug } }: PageParams) {
     <>
       {/* page */}
       <div className="flex flex-1 flex-col space-y-2">
-        <h1 className="mb-6 flex flex-col items-center justify-center text-center text-4xl">
-          {page.title}
-        </h1>
+        <div className="mb-6 flex flex-col items-center justify-center text-center">
+          <h1 className="text-4xl">{page.title}</h1>
+          <PageStats page={page} />
+        </div>
 
         <PageRender page={page} />
       </div>
