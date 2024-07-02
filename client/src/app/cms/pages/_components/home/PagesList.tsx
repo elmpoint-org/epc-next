@@ -5,13 +5,13 @@ import Link from 'next/link';
 import { Table } from '@mantine/core';
 
 import type { PagesType } from './PagesContainer';
+import { useSkeleton } from '@/app/_ctx/skeleton/context';
+import { clx } from '@/util/classConcat';
 
 import A from '@/app/_components/_base/A';
 import BooleanStatus from '@/app/_components/_base/BooleanStatus';
-import { clx } from '@/util/classConcat';
-import { useSkeleton } from '@/app/_ctx/skeleton/context';
 
-const STALE_PAGE_SECONDS = 0 * 3600;
+const STALE_PAGE_SECONDS = 2 * 3600;
 
 export default function PagesList({
   pages,
@@ -26,6 +26,7 @@ export default function PagesList({
     <>
       <div className="overflow-x-auto">
         <Table withRowBorders={false}>
+          {/* table headers */}
           <Table.Thead className="border-b border-slate-200">
             <Table.Tr>
               <Table.Th>#</Table.Th>
@@ -36,6 +37,7 @@ export default function PagesList({
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
+            {/* table data */}
             {!isSkeleton &&
               pages?.length &&
               pages

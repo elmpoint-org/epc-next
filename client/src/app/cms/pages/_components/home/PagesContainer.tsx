@@ -41,14 +41,16 @@ export default function PagesContainer() {
       <div className="mx-auto flex max-w-screen-xl flex-col gap-6 p-6">
         <SkeletonProvider ready={!pagesQuery.isPending}>
           <div className="t">
-            <h3 className="py-4 text-lg">Pages</h3>
+            <div className="flex flex-row items-center justify-between">
+              <h3 className="py-4 text-lg">Pages</h3>
+              <NewPageButton />
+            </div>
             <PagesList pages={pages} />
           </div>
 
           <div className="t">
             <div className="flex flex-row items-center justify-between">
               <h3 className="py-4 text-lg">Unused (empty) pages</h3>
-              <NewPageButton />
             </div>
             <PagesList pages={pages} unused />
           </div>
