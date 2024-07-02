@@ -40,7 +40,7 @@ export default function PageStats({ page }: { page: PagePropType }) {
             !!dateUpdated.length && (
               <span>
                 <span>Last updated </span>
-                <em>{dateUpdated}</em>
+                <em className="text-nowrap">{dateUpdated}</em>
               </span>
             ),
           ] as React.ReactNode[]

@@ -8,7 +8,7 @@ const links: NavLinkType[] = [
   { href: '/pages/instructions', text: 'Camp How-tos' },
 
   { href: '/calendar/new', text: 'Calendar - Add Stay' },
-  { href: '/cms/page/new', text: 'Page Creator' },
+  { href: '/cms/pages', text: 'Pages' },
 
   { href: '#', text: <>&nbsp;</> },
   { href: '#', text: <>&nbsp;</> },
