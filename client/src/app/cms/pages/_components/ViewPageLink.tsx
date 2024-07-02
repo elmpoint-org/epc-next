@@ -1,7 +1,7 @@
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
 
 import A from '@/app/_components/_base/A';
-import { EditFormProps } from './PageEditForm';
+import { EditFormProps } from '../edit/[id]/_components/PageEditForm';
 
 export default function ViewPageLink({ serverPage }: EditFormProps) {
   const slug = serverPage?.slug ?? null;

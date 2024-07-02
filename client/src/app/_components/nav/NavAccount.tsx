@@ -10,14 +10,11 @@ import {
   IconLogout,
   IconTableOptions,
 } from '@tabler/icons-react';
-import { IconType } from '@/util/iconType';
-import { useUser } from '@/app/_ctx/user/context';
 
-const Links: {
-  href: string;
-  text: React.ReactNode;
-  icon?: IconType;
-}[] = [
+import { useUser } from '@/app/_ctx/user/context';
+import type { NavLinkType } from './_util/linksType';
+
+const links: NavLinkType[] = [
   {
     href: '/account',
     text: 'Account Overview',
@@ -45,7 +42,7 @@ const NavAccount = () => {
         {user && (
           <Collapse in={isOpen}>
             <div className="flex flex-col gap-2 p-4">
-              {Links.map(({ href, text, icon: Icon }, i) => (
+              {links.map(({ href, text, icon: Icon }, i) => (
                 <Link
                   key={i}
                   href={href}

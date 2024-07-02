@@ -1,5 +1,5 @@
 import { generateHTML } from '@tiptap/html';
-import { STATIC_EXTENSIONS } from '@/app/cms/page/EXTENSIONS';
+import { STATIC_EXTENSIONS } from '@/app/cms/pages/EXTENSIONS';
 import Link from '@tiptap/extension-link';
 
 import { clx } from '@/util/classConcat';

@@ -2,22 +2,24 @@
 
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import fdeq from 'fast-deep-equal';
+import type { ResultOf } from '@graphql-typed-document-node/core';
+
+import { notifications } from '@mantine/notifications';
+import { getHotkeyHandler } from '@mantine/hooks';
 
 import { graphAuth, graphError, graphql } from '@/query/graphql';
 import { useGraphQuery } from '@/query/query';
-import type { ResultOf } from '@graphql-typed-document-node/core';
+import { useUser } from '@/app/_ctx/user/context';
+import { revalidatePage } from '../../../_actions/edit';
+import { cmsErrorMap } from '../../../../_util/cmsErrors';
 
 import { SkeletonProvider } from '@/app/_ctx/skeleton/context';
-import TextEditor from './Editor';
-import SaveRow, { SaveState } from './SaveRow';
 import TextFields from './TextFields';
 import PageOptions from './PageOptions';
-import { useUser } from '@/app/_ctx/user/context';
-import { notifications } from '@mantine/notifications';
-import { getHotkeyHandler } from '@mantine/hooks';
-import { revalidatePage } from '../_actions/edit';
-import { cmsErrorMap } from '../../_util/cmsErrors';
-import ViewPageLink from './ViewPageLink';
+import TextEditor from '../../../_components/Editor';
+import ViewPageLink from '../../../_components/ViewPageLink';
+import SaveRow, { SaveState } from './SaveRow';
+import DeletePage from './DeletePage';
 
 export const GET_CMS_PAGE = graphql(`
   query CmsPage($id: ID!) {
@@ -35,6 +37,31 @@ export const GET_CMS_PAGE = graphql(`
         created
         updated
       }
+    }
+  }
+`);
+const UPDATE_CMS_PAGE = graphql(`
+  mutation CmsPageUpdate(
+    $id: ID!
+    $slug: String
+    $title: String
+    $content: String
+    $secure: Boolean
+    $publish: Boolean
+    $contributorAdd: String
+    $contributorRemove: String
+  ) {
+    cmsPageUpdate(
+      id: $id
+      slug: $slug
+      title: $title
+      content: $content
+      secure: $secure
+      publish: $publish
+      contributorAdd: $contributorAdd
+      contributorRemove: $contributorRemove
+    ) {
+      id
     }
   }
 `);
@@ -57,7 +84,7 @@ export default function PageEditForm({ id }: { id: string }) {
   }
   // update on load
   useEffect(() => {
-    if (serverPage) updateForm(initForm(serverPage, form.shouldAddContributor));
+    if (serverPage) updateForm(initForm(serverPage, user?.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverPage]);
 
@@ -65,46 +92,19 @@ export default function PageEditForm({ id }: { id: string }) {
   const [isSaving, saving] = useTransition();
   const saveState = useMemo<SaveState>(() => {
     if (isSaving) return 'SAVING';
-    if (fdeq(form, initForm(serverPage, form.shouldAddContributor)))
-      return 'SAVED';
+    if (fdeq(form, initForm(serverPage, user?.id))) return 'SAVED';
     return 'UNSAVED';
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSaving, form, serverPage]);
   function save() {
     saving(async () => {
       const cc = form.shouldAddContributor;
-      const f = await graphAuth(
-        graphql(`
-          mutation CmsPageUpdate(
-            $id: ID!
-            $slug: String
-            $title: String
-            $content: String
-            $secure: Boolean
-            $publish: Boolean
-            $contributorAdd: String
-            $contributorRemove: String
-          ) {
-            cmsPageUpdate(
-              id: $id
-              slug: $slug
-              title: $title
-              content: $content
-              secure: $secure
-              publish: $publish
-              contributorAdd: $contributorAdd
-              contributorRemove: $contributorRemove
-            ) {
-              id
-            }
-          }
-        `),
-        {
-          id,
-          ...form,
-          contributorAdd: (cc && user?.id) || null,
-          contributorRemove: (!cc && user?.id) || null,
-        },
-      ).catch((err) => {
+      const f = await graphAuth(UPDATE_CMS_PAGE, {
+        id,
+        ...form,
+        contributorAdd: (cc && user?.id) || null,
+        contributorRemove: (!cc && user?.id) || null,
+      }).catch((err) => {
         console.log(err);
         notifications.show({
           color: 'red',
@@ -154,6 +154,8 @@ export default function PageEditForm({ id }: { id: string }) {
 
           <SaveRow onClick={save} state={saveState} />
         </div>
+
+        <DeletePage pageId={id} />
       </SkeletonProvider>
     </>
   );
@@ -161,7 +163,7 @@ export default function PageEditForm({ id }: { id: string }) {
 
 function initForm(
   r: ResultOf<typeof GET_CMS_PAGE>['cmsPage'],
-  shouldAdd?: boolean,
+  userId?: string,
 ) {
   return {
     title: r?.title ?? '',
@@ -169,7 +171,8 @@ function initForm(
     content: r?.content ?? '',
     secure: r?.secure ?? true,
     publish: r?.publish ?? false,
-    shouldAddContributor: shouldAdd ?? true,
+    shouldAddContributor:
+      r && userId ? r.contributors.some((it) => it?.id === userId) : true,
   };
 }
 export type EditForm = ReturnType<typeof initForm>;
