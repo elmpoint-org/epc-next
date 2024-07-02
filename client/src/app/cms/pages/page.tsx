@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import PagesList from './_components/home/PagesList';
+import PagesQuery from './_components/home/PagesQuery';
 
 export const metadata: Metadata = { title: 'Pages' };
 
@@ -13,10 +13,8 @@ export default function CMSPagesPage() {
           Pages
         </h1>
         <div className="container flex-1 rounded-lg bg-slate-100">
-          <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
-            {/* content */}
-            <PagesList />
-          </div>
+          {/* content */}
+          <PagesQuery />
         </div>
       </div>
     </>
