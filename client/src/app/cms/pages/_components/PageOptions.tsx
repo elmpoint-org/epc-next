@@ -14,9 +14,9 @@ export default function PageOptions({ form, updateForm }: EditFormProps) {
         <p className="text-xs uppercase">options:</p>
         {(
           [
-            ['publish', 'Publish'],
+            ['publish', 'Publish page'],
             ['secure', 'Page requires login'],
-            ['shouldAddContributor', 'Show me as a contributor'],
+            ['shouldAddContributor', 'Show me as a writer'],
           ] as [keyof typeof form, string][]
         ).map((it, i) => (
           <Switch
