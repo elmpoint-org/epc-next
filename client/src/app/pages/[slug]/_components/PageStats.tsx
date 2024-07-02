@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 import type { PagePropType } from '../page';
 import { clx } from '@/util/classConcat';
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 
 export default function PageStats({ page }: { page: PagePropType }) {
   const dateUpdated = useMemo(
@@ -46,11 +46,11 @@ export default function PageStats({ page }: { page: PagePropType }) {
           ] as React.ReactNode[]
         )
           .filter((it) => it)
-          .map((it) => (
-            <>
+          .map((it, i) => (
+            <Fragment key={i}>
               {it}
               <span className="last:hidden">&bull;</span>
-            </>
+            </Fragment>
           ))}
       </div>
     </>
