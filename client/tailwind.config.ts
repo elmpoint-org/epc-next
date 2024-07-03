@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import plugin from 'tailwindcss/plugin';
 import typography from '@tailwindcss/typography';
 
 import defaults from 'tailwindcss/defaultTheme';
@@ -25,6 +26,12 @@ const config: Config = {
       },
     },
   },
-  plugins: [typography],
+  plugins: [
+    typography,
+
+    plugin(({ addVariant }) => {
+      addVariant('pm-selected', '&.ProseMirror-selectednode');
+    }),
+  ],
 };
 export default config;

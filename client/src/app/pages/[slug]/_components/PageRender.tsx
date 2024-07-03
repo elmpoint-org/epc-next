@@ -1,20 +1,23 @@
 import { generateHTML } from '@tiptap/html';
-import { STATIC_EXTENSIONS } from '@/app/cms/pages/EXTENSIONS';
+import { STATIC_EXTENSIONS } from '@/app/cms/_tiptap/staticExtensions';
 import Link from '@tiptap/extension-link';
 
 import { clx } from '@/util/classConcat';
-import { proseStyles } from '@/app/cms/_util/proseStyles';
+import { proseStyles } from '@/app/cms/_tiptap/proseStyles';
 import type { PagePropType } from '../page';
 
 export default function PageRender({ page }: { page: PagePropType }) {
-  let c;
+  let body;
   try {
-    c = JSON.parse(page.content!);
+    const c = JSON.parse(page.content!);
+    body = generateHTML(c, [...STATIC_EXTENSIONS, Link]);
   } catch (_) {
-    return null;
+    return (
+      <div className="text-center text-sm italic text-red-800">
+        An error occurred.
+      </div>
+    );
   }
-
-  const body = generateHTML(c, [...STATIC_EXTENSIONS, Link]);
 
   return (
     <>

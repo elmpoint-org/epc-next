@@ -88,15 +88,20 @@ export default function PageEditForm({ id }: { id: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverPage]);
 
-  // save flow
+  // save state
   const [isSaving, saving] = useTransition();
+  const [isTyping, setIsTyping] = useState(false);
   const saveState = useMemo<SaveState>(() => {
+    if (isTyping) return 'TYPING';
     if (isSaving) return 'SAVING';
     if (fdeq(form, initForm(serverPage, user?.id))) return 'SAVED';
     return 'UNSAVED';
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSaving, form, serverPage]);
+  }, [isTyping, isSaving, form, serverPage]);
+
+  // handle save
   function save() {
+    if (saveState === 'TYPING') return;
     saving(async () => {
       const cc = form.shouldAddContributor;
       const f = await graphAuth(UPDATE_CMS_PAGE, {
@@ -147,7 +152,7 @@ export default function PageEditForm({ id }: { id: string }) {
           <PageOptions {...formProps} />
 
           {/* page content */}
-          <TextEditor {...formProps} />
+          <TextEditor {...formProps} onTyping={setIsTyping} />
 
           {/* page link */}
           <ViewPageLink {...formProps} />

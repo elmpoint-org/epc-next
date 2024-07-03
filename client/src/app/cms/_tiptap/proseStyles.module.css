@@ -1,0 +1,19 @@
+.css {
+  /* PAGE PROSE STYLES */
+
+  & a {
+    @apply font-bold text-emerald-700 hover:bg-dgreen/5;
+  }
+
+  & blockquote {
+    @apply *:not-italic before:*:content-none after:*:content-none;
+  }
+
+  & code {
+    @apply -m-0 rounded-md bg-slate-200 p-0 before:content-none after:content-none;
+  }
+
+  & pre {
+    @apply !bg-slate-200;
+  }
+}

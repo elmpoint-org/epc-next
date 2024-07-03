@@ -5,7 +5,7 @@ import { useOs } from '@mantine/hooks';
 
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
 
-export type SaveState = 'UNSAVED' | 'SAVED' | 'SAVING';
+export type SaveState = 'UNSAVED' | 'SAVED' | 'SAVING' | 'TYPING';
 
 export default function SaveRow({
   state,
@@ -33,6 +33,7 @@ export default function SaveRow({
             <div className="text-sm text-slate-600">
               {state === 'SAVED' && <>Changes saved</>}
               {state === 'SAVING' && <>Saving...</>}
+              {state === 'TYPING' && <>Finish typing...</>}
               {state === 'UNSAVED' && (
                 <>
                   {keys === 'MOBILE' ? (
@@ -52,7 +53,7 @@ export default function SaveRow({
                 e.preventDefault();
                 onClick?.();
               }}
-              disabled={state === 'SAVED'}
+              disabled={state === 'SAVED' || state === 'TYPING'}
               loading={state === 'SAVING'}
               size="compact-md"
             >

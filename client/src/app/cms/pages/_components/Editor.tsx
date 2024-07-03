@@ -3,17 +3,27 @@
 import { Link, RichTextEditor } from '@mantine/tiptap';
 
 import { useEditor } from '@tiptap/react';
-import { STATIC_EXTENSIONS } from '../EXTENSIONS';
+import { STATIC_EXTENSIONS } from '../../_tiptap/staticExtensions';
+import { FileHandler } from '../../_tiptap/fileHandler';
 import Placeholder from '@tiptap/extension-placeholder';
 
 import { clx } from '@/util/classConcat';
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
-import { EditFormProps } from '../edit/[id]/_components/PageEditForm';
+import type { EditFormProps } from '../edit/[id]/_components/PageEditForm';
 import { useEffect, useMemo } from 'react';
-import { proseStyles } from '../../_util/proseStyles';
+import { proseStyles } from '../../_tiptap/proseStyles';
+import { useDebounceWithStatus } from '@/util/debounce';
+
+import ImageMenu from './editor/ImageMenu';
+
+const UPDATE_DEBOUNCE_MS = 450;
 
 // COMPONENT
-export default function TextEditor({ updateForm, serverPage }: EditFormProps) {
+export default function TextEditor({
+  updateForm,
+  serverPage,
+  onTyping,
+}: { onTyping?: (isTyping: boolean) => void } & EditFormProps) {
   // parse content from server
   const parsedContent = useMemo(() => {
     try {
@@ -24,17 +34,28 @@ export default function TextEditor({ updateForm, serverPage }: EditFormProps) {
     }
   }, [serverPage]);
 
+  // typing status
+  const { debounce, isPending } = useDebounceWithStatus(
+    (f: () => void) => f(),
+    UPDATE_DEBOUNCE_MS,
+  );
+  useEffect(() => {
+    onTyping?.(isPending);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPending]);
+
   // init editor
   const editor = useEditor({
     extensions: [
       ...STATIC_EXTENSIONS,
       Link,
+      FileHandler,
       Placeholder.configure({ placeholder: 'Start writing...' }),
     ],
     content: parsedContent ?? undefined,
 
     onUpdate({ editor }) {
-      updateForm({ content: JSON.stringify(editor.getJSON()) });
+      debounce(() => updateForm({ content: JSON.stringify(editor.getJSON()) }));
     },
   });
 
@@ -53,7 +74,7 @@ export default function TextEditor({ updateForm, serverPage }: EditFormProps) {
           withTypographyStyles={false}
           withCodeHighlightStyles={false}
           classNames={{
-            root: 'overflow-clip',
+            // root: 'overflow-clip',
             content: clx(proseStyles),
           }}
         >
@@ -105,6 +126,14 @@ export default function TextEditor({ updateForm, serverPage }: EditFormProps) {
             </RichTextEditor.ControlsGroup>
           </RichTextEditor.Toolbar>
 
+          {/* context menus */}
+          {editor && (
+            <>
+              <ImageMenu editor={editor} />
+            </>
+          )}
+
+          {/* editor content */}
           <RichTextEditor.Content />
         </RichTextEditor>
 
@@ -114,6 +143,13 @@ export default function TextEditor({ updateForm, serverPage }: EditFormProps) {
           </div>
         )}
       </div>
+
+      <details>
+        <summary>JSON</summary>
+        <pre className="overflow-hidden">
+          {JSON.stringify(editor?.getJSON(), null, 2)}
+        </pre>
+      </details>
     </>
   );
 }
