@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { BubbleMenu, Editor } from '@tiptap/react';
 
 import { Slider } from '@mantine/core';
 
-import { ImageTypeName } from '@/app/cms/_tiptap/image';
+import { ImageTypeAtts, ImageTypeName } from './image';
 
 export default function ImageMenu({ editor }: { editor: Editor }) {
   const [value, setValue] = useState(100);
@@ -13,8 +13,8 @@ export default function ImageMenu({ editor }: { editor: Editor }) {
   const fullValue = isChanging ? value : getStoredWidth() ?? 100;
 
   function getStoredWidth() {
-    const a = parseInt(editor.getAttributes(ImageTypeName).width);
-    return Number.isFinite(a) ? a : null;
+    const w = parseInt(getImageAttributes(editor).percent);
+    return Number.isFinite(w) ? w : null;
   }
 
   function handleChange(nv: number) {
@@ -41,7 +41,7 @@ export default function ImageMenu({ editor }: { editor: Editor }) {
             onChange={handleChange}
             onChangeEnd={handleChangeEnd}
             min={10}
-            max={100}
+            max={150}
             step={5}
             label={null}
             classNames={{
@@ -54,4 +54,8 @@ export default function ImageMenu({ editor }: { editor: Editor }) {
       </BubbleMenu>
     </>
   );
+}
+
+function getImageAttributes(editor: Editor) {
+  return editor.getAttributes(ImageTypeName) as ImageTypeAtts;
 }

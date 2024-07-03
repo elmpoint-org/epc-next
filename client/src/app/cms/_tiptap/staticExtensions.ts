@@ -5,7 +5,7 @@ import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
 import Superscript from '@tiptap/extension-superscript';
 import Subscript from '@tiptap/extension-subscript';
-import { Image } from './image';
+import { Image } from './image/image';
 import TextAlign from '@tiptap/extension-text-align';
 
 export const STATIC_EXTENSIONS: Extensions = [

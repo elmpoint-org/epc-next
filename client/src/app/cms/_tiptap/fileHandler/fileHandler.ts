@@ -33,15 +33,13 @@ function handleFiles(editor: FileHandlerEditor, files: File[], pos?: number) {
     if (!MIME_TYPES.includes(file.type)) return err('FILE_TYPE');
     if (file.size > megabytes(MAX_SIZE_MB)) return err('TOO_LARGE');
 
-    const data = await getDataURL(file);
+    const src = await getDataURL(file);
+    const imgWidth = await getImageWidth(src);
 
     // define command chain
     let cmd = editor.chain();
 
-    cmd = cmd.setImageBlockAt({
-      src: data,
-      pos,
-    });
+    cmd = cmd.setImageBlockAt(pos, { src, imgWidth });
     cmd = cmd.focus();
 
     cmd.run();
@@ -51,9 +49,23 @@ function handleFiles(editor: FileHandlerEditor, files: File[], pos?: number) {
 async function getDataURL(file: File) {
   return new Promise<string>((resolve) => {
     const reader = new FileReader();
-
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
+  });
+}
+
+async function getImageFromFile(file: File) {
+  return new Promise<string>((resolve) => {
+    const src = URL.createObjectURL(file);
+    resolve(src);
+  });
+}
+
+async function getImageWidth(src: string) {
+  return new Promise<number>((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(0 + img.width);
+    img.src = src;
   });
 }
 

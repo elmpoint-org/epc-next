@@ -1,20 +1,22 @@
 'use client';
 
-import { Link, RichTextEditor } from '@mantine/tiptap';
+import { useEffect, useMemo } from 'react';
 
+import { Link, RichTextEditor } from '@mantine/tiptap';
 import { useEditor } from '@tiptap/react';
+
 import { STATIC_EXTENSIONS } from '../../_tiptap/staticExtensions';
-import { FileHandler } from '../../_tiptap/fileHandler';
+import { FileHandler } from '../../_tiptap/fileHandler/fileHandler';
 import Placeholder from '@tiptap/extension-placeholder';
 
 import { clx } from '@/util/classConcat';
+import { isDev } from '@/util/dev';
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
-import type { EditFormProps } from '../edit/[id]/_components/PageEditForm';
-import { useEffect, useMemo } from 'react';
 import { proseStyles } from '../../_tiptap/proseStyles';
 import { useDebounceWithStatus } from '@/util/debounce';
+import type { EditFormProps } from '../edit/[id]/_components/PageEditForm';
 
-import ImageMenu from './editor/ImageMenu';
+import ImageMenu from '../../_tiptap/image/ImageMenu';
 
 const UPDATE_DEBOUNCE_MS = 450;
 
@@ -144,12 +146,15 @@ export default function TextEditor({
         )}
       </div>
 
-      <details>
-        <summary>JSON</summary>
-        <pre className="overflow-hidden">
-          {JSON.stringify(editor?.getJSON(), null, 2)}
-        </pre>
-      </details>
+      {/* dev mode: see editor JSON */}
+      {isDev && (
+        <details>
+          <summary>JSON</summary>
+          <pre className="overflow-hidden">
+            {JSON.stringify(editor?.getJSON(), null, 2)}
+          </pre>
+        </details>
+      )}
     </>
   );
 }
