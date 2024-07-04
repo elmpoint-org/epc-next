@@ -16,4 +16,38 @@
   & pre {
     @apply !bg-slate-200;
   }
+
+  & hr {
+    @apply rounded-full ring-slate-200 pmg-selected:border-dblack pmg-selected:ring-8;
+  }
+
+  /* COMPONENT STYLES */
+
+  & img {
+    @apply max-w-full rounded-lg ring-dgreen ring-offset-2 data-[align=center]:mx-auto data-[align=right]:ml-auto pmg-selected:ring-2;
+  }
+
+  & div[data-youtube-video] {
+    @apply relative max-w-full;
+
+    & iframe {
+      @apply relative aspect-[4/3] h-auto max-w-full;
+
+      /* alignment */
+      &[style*='text-align: center'] {
+        @apply mx-auto;
+      }
+      &[style*='text-align: right'] {
+        @apply ml-auto mr-0;
+      }
+    }
+
+    /* enable select state */
+    &:global(.ProseMirror-selectednode) iframe {
+      @apply ring-2 ring-dgreen ring-offset-2;
+    }
+  }
+  & *[contenteditable='true'] div[data-youtube-video] {
+    @apply after:absolute after:inset-0 after:bg-transparent;
+  }
 }

@@ -1,9 +1,11 @@
-import { clx } from '@/util/classConcat';
-
 import ImageRoot from '@tiptap/extension-image';
 
 import { mergeAttributes } from '@tiptap/core';
-import { getTypedAtt, type AddAttributes } from '../../_util/extensionUtils';
+import {
+  getTypedAtt,
+  type TextAlignEnum,
+  type AddAttributes,
+} from '../../_util/extensionUtils';
 
 const DEFAULT_IMAGE_WIDTH = 1000;
 
@@ -27,7 +29,7 @@ export type ImageTypeAtts = {
   src: string;
   percent: string;
   imgWidth: string;
-  textAlign: 'left' | 'center' | 'right' | 'justify';
+  textAlign: TextAlignEnum;
 };
 
 type Atts = ImageTypeAtts;
@@ -101,9 +103,5 @@ export const Image = ImageRoot.extend({
     };
   },
 }).configure({
-  HTMLAttributes: {
-    class: clx(
-      'max-w-full rounded-lg ring-dgreen ring-offset-2 data-[align=center]:mx-auto data-[align=right]:ml-auto pm-selected:ring-2',
-    ),
-  },
+  //
 });

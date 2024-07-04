@@ -22,6 +22,7 @@ const UPDATE_DEBOUNCE_MS = 450;
 
 // COMPONENT
 export default function TextEditor({
+  form,
   updateForm,
   serverPage,
   onTyping,
@@ -62,7 +63,7 @@ export default function TextEditor({
   });
 
   useEffect(() => {
-    editor?.commands.setContent(parsedContent);
+    if (parsedContent) editor?.commands.setContent(parsedContent);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parsedContent]);
 
@@ -151,7 +152,11 @@ export default function TextEditor({
         <details>
           <summary>JSON</summary>
           <pre className="overflow-hidden">
-            {JSON.stringify(editor?.getJSON(), null, 2)}
+            {JSON.stringify(
+              JSON.parse(form.content.length ? form.content : '{}'),
+              null,
+              2,
+            )}
           </pre>
         </details>
       )}

@@ -1,9 +1,10 @@
 import type { Config } from 'tailwindcss';
-import plugin from 'tailwindcss/plugin';
 import typography from '@tailwindcss/typography';
 
 import defaults from 'tailwindcss/defaultTheme';
 import colors from 'tailwindcss/colors';
+
+import { tiptapSelectors } from './src/app/cms/_tiptap/selectors';
 
 export const font = ['var(--font-default)', ...defaults.fontFamily.sans];
 
@@ -26,12 +27,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    typography,
-
-    plugin(({ addVariant }) => {
-      addVariant('pm-selected', '&.ProseMirror-selectednode');
-    }),
-  ],
+  plugins: [typography, tiptapSelectors],
 };
 export default config;

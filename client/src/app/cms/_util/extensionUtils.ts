@@ -3,6 +3,8 @@ import { Attribute } from '@tiptap/core';
 type AttsBase = Record<string, string>;
 type RecordType<T> = T extends Record<any, infer R> ? R : never;
 
+export type TextAlignEnum = 'left' | 'center' | 'right' | 'justify';
+
 export type AddAttributes<Atts extends AttsBase> = Record<
   keyof Atts,
   Omit<Attribute, 'keepOnSplit' | 'renderHTML'> & {
@@ -18,10 +20,10 @@ export const getTypedAtt =
     att: AttKey;
     default: Atts[AttKey];
     data: string;
+    rendered?: boolean;
   }): RecordType<AddAttributes<any>> => ({
     default: p.default,
     parseHTML: (el) => el.getAttribute(p.data),
     renderHTML: (a) => ({ [p.data]: a[p.att] }),
+    rendered: p.rendered ?? true,
   });
-
-3;

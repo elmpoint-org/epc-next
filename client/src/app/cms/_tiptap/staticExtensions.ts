@@ -5,8 +5,9 @@ import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
 import Superscript from '@tiptap/extension-superscript';
 import Subscript from '@tiptap/extension-subscript';
-import { Image } from './image/image';
 import TextAlign from '@tiptap/extension-text-align';
+import Youtube from '@tiptap/extension-youtube';
+import { Image } from './image/image';
 
 export const STATIC_EXTENSIONS: Extensions = [
   StarterKit,
@@ -16,5 +17,10 @@ export const STATIC_EXTENSIONS: Extensions = [
   Superscript,
   Subscript,
   Image,
-  TextAlign.configure({ types: ['heading', 'paragraph', Image.name] }),
+  Youtube.configure({
+    nocookie: true,
+  }),
+  TextAlign.configure({
+    types: ['heading', 'paragraph', Image.name, Youtube.name],
+  }),
 ];
