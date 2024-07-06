@@ -2,7 +2,7 @@
 
 import { getUser } from '@/app/_ctx/user/provider';
 import { graphError } from '@/query/graphql';
-import { graphAuthServer } from '@/query/graphql.server';
+import { oldGraphAuthServer } from '@/query/graphql.server';
 import { CmsPageCreateType, NEW_CMS_PAGE_KEY } from '../../_util/queries';
 
 export async function createNewPage() {
@@ -13,7 +13,7 @@ export async function createNewPage() {
   try {
     const user = (await getUser()) || null;
 
-    const data = await graphAuthServer(...NEW_CMS_PAGE_KEY(user?.id)).catch(
+    const data = await oldGraphAuthServer(...NEW_CMS_PAGE_KEY(user?.id)).catch(
       (err) => {
         throw graphError(err?.response?.errors);
       },

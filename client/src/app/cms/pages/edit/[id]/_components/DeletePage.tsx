@@ -10,8 +10,9 @@ import { useSkeleton } from '@/app/_ctx/skeleton/context';
 import { oldGraphAuth, graphql } from '@/query/graphql';
 import { clx } from '@/util/classConcat';
 import { confirmModal } from '@/app/_components/_base/modals';
+import type { EditFormProps } from './PageEditForm';
 
-export default function DeletePage({ pageId }: { pageId: string }) {
+export default function DeletePage({ pageId }: EditFormProps) {
   const router = useRouter();
 
   async function confirmLogout() {

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { PageParams } from '@/util/propTypes';
-import { graphAuthServer } from '@/query/graphql.server';
+import { oldGraphAuthServer } from '@/query/graphql.server';
 import { graphql } from '@/query/graphql';
 
 import PageEditForm from './_components/PageEditForm';
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EditPagePage({ params: { id } }: PageParams) {
-  const data = await graphAuthServer(
+  const data = await oldGraphAuthServer(
     graphql(`
       query CmsPage($id: ID!) {
         cmsPage(id: $id) {

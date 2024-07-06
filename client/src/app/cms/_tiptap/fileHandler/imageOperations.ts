@@ -2,47 +2,34 @@
 
 import { graphql, graphAuth } from '@/query/graphql';
 
-export async function uploadImage(file: File) {
+export async function uploadImage(file: File, pageId: string) {
   // request presigned uploader url
-  const { id, url: uploadUrl } = await getUploadUrl(file.name);
+  const { id, url: uploadUrl } = await getUploadUrl(file.name, pageId);
 
   // upload file
   await uploadFile(uploadUrl, file);
 
   // confirm upload
-  const { url } = await confirmUpload(id);
+  await confirmUpload(id);
+
+  const url = `/cms/image/${id}`;
 
   return url;
 }
 
-export async function getSignedImage(id: string) {
-  // TODO should there be a `cmsImagesMultiple` for batch get?
-  const { data, errors } = await graphAuth(
-    graphql(`
-      query CmsImage($id: ID!) {
-        cmsImage(id: $id) {
-          url
-        }
-      }
-    `),
-    { id },
-  );
-  if (errors || !data?.cmsImage) throw errors?.[0].code || 'IMAGE_GET_FAILED';
-}
-
 // ---------------------------
 
-async function getUploadUrl(fileName: string) {
+async function getUploadUrl(fileName: string, pageId: string) {
   const { data, errors } = await graphAuth(
     graphql(`
-      mutation CmsImageUpload($fileName: String!) {
-        cmsImageUpload(fileName: $fileName) {
+      mutation CmsImageUpload($fileName: String!, $pageId: String!) {
+        cmsImageUpload(fileName: $fileName, pageId: $pageId) {
           id
           url
         }
       }
     `),
-    { fileName },
+    { fileName, pageId },
   );
   if (errors || !data?.cmsImageUpload)
     throw errors?.[0]?.code || 'FAILED_TO_UPLOAD';
@@ -62,11 +49,10 @@ async function uploadFile(url: string, file: File) {
 
 async function confirmUpload(id: string) {
   const { data, errors } = await graphAuth(
-    // TODO need to access "public" attribute here
     graphql(`
       mutation CmsImageConfirm($id: ID!) {
         cmsImageConfirm(id: $id) {
-          url
+          id
         }
       }
     `),

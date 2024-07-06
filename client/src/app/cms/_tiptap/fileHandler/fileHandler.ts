@@ -7,6 +7,7 @@ import FileHandlerRoot, {
   type FileHandlePluginOptions,
 } from '@tiptap-pro/extension-file-handler';
 import { uploadImage } from './imageOperations';
+import { getPageData } from '../pageData/pageData';
 
 type FileHandlerEditor = FileHandlePluginOptions['editor'];
 
@@ -35,9 +36,11 @@ function handleFiles(editor: FileHandlerEditor, files: File[], pos?: number) {
     if (!MIME_TYPES.some((t) => t === file.type)) return err('FILE_TYPE');
     if (file.size > megabytes(MAX_SIZE_MB)) return err('TOO_LARGE');
 
+    const { id: pageId } = getPageData(editor);
+
     // upload image and determine image width
     const [{ url, error }, width] = await Promise.all([
-      uploadImage(file)
+      uploadImage(file, pageId)
         .then((r) => ({ url: r, error: null }))
         .catch((c) => {
           let o = '';

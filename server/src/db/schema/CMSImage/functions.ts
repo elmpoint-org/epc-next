@@ -35,8 +35,13 @@ export const getCmsImage = h<M.QueryResolvers['cmsImage']>(
   async ({ sources, args: { id }, userId }) => {
     const img = await sources.cms.image.get(id);
 
-    // check scope based on `public` prop
-    if (!(img?.public || userId)) throw scopeError();
+    // find whether page requires user auth
+    let isPublic = false;
+    const page = await sources.cms.page.get(img.pageId);
+    if (page && !page.secure) isPublic = true;
+
+    // verify user auth if needed
+    if (!(isPublic || userId)) throw scopeError();
 
     return img;
   }
@@ -44,10 +49,14 @@ export const getCmsImage = h<M.QueryResolvers['cmsImage']>(
 
 export const cmsImageUpload = h<M.MutationResolvers['cmsImageUpload']>(
   scoped('ADMIN', 'EDIT'),
-  async ({ sources, args: { fileName }, userId }) => {
+  async ({ sources, args: { fileName, pageId }, userId }) => {
     // verify file type
     const imageType = checkImageType(fileName);
     if (!imageType) throw err('INVALID_FILE_FORMAT');
+
+    // verify page ID
+    const page = await sources.cms.page.get(pageId);
+    if (!page) throw err('PAGE_NOT_FOUND');
 
     // generate image properties
     const id = uuid();
@@ -63,15 +72,13 @@ export const cmsImageUpload = h<M.MutationResolvers['cmsImageUpload']>(
       .create({
         confirmed: false,
         authorId: userId,
+        pageId: page.id,
 
         id,
         uri,
         name: name,
         ext: imageType.ext,
         mime: imageType.type,
-
-        // defaults...
-        public: false,
       } as DBCmsImage)
       .catch((error) => {
         throw err('SERVER_ERROR', undefined, error);
@@ -87,7 +94,7 @@ export const cmsImageUpload = h<M.MutationResolvers['cmsImageUpload']>(
 
 export const cmsImageConfirm = h<M.MutationResolvers['cmsImageConfirm']>(
   scoped('ADMIN', 'EDIT'),
-  async ({ sources, args: { id, public: isPublic } }) => {
+  async ({ sources, args: { id } }) => {
     // make sure id is valid
     const img = await sources.cms.image.get(id);
     if (!img) throw err('INVALID_ID');
@@ -102,7 +109,6 @@ export const cmsImageConfirm = h<M.MutationResolvers['cmsImageConfirm']>(
 
     // if confirmed, update the db entry
     const updates: Partial<CmsImage> = { confirmed: true };
-    if (typeof isPublic === 'boolean') updates.public = isPublic;
 
     return sources.cms.image.update(id, updates);
   }
@@ -113,6 +119,16 @@ export const cmsImageUpdate = h<M.MutationResolvers['cmsImageUpdate']>(
   async ({ sources, args: { id, ...updates } }) => {
     const img = await sources.cms.image.get(id);
     if (!img) throw err('IMAGE_NOT_FOUND');
+
+    // if author or page is defined, check that they are valid
+    if (updates.authorId) {
+      const author = await sources.user.get(updates.authorId);
+      if (!author) throw err('USER_NOT_FOUND');
+    }
+    if (updates.pageId) {
+      const page = await sources.cms.page.get(updates.pageId);
+      if (!page) throw err('PAGE_NOT_FOUND');
+    }
 
     return sources.cms.image.update(id, updates);
   }
@@ -160,6 +176,14 @@ export const getCmsImageAuthor = h<M.CMSImageResolvers['author']>(
     const { authorId } = parent as DBType<DBCmsImage>;
 
     return sources.user.get(authorId);
+  }
+);
+
+export const getCmsImagePage = h<M.CMSImageResolvers['page']>(
+  async ({ sources, parent }) => {
+    const { pageId } = parent as DBType<DBCmsImage>;
+
+    return sources.cms.page.get(pageId);
   }
 );
 

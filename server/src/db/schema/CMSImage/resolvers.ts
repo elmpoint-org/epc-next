@@ -18,6 +18,7 @@ const resolvers: CmsImageModule.Resolvers = {
 
   CMSImage: {
     author: f.getCmsImageAuthor,
+    page: f.getCmsImagePage,
     confirmed: f.getCmsImageConfirmed,
     url: f.getCmsImageUrl,
 

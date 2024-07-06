@@ -134,7 +134,7 @@ export default function PageEditForm({ id }: { id: string }) {
     return () => window.removeEventListener('beforeunload', cb);
   }, [saveState]);
 
-  const formProps: EditFormProps = { form, updateForm, serverPage };
+  const formProps: EditFormProps = { form, updateForm, serverPage, pageId: id };
   return (
     <>
       <SkeletonProvider ready={!pageQuery.isPending}>
@@ -160,7 +160,7 @@ export default function PageEditForm({ id }: { id: string }) {
           <SaveRow onClick={save} state={saveState} />
         </div>
 
-        <DeletePage pageId={id} />
+        <DeletePage {...formProps} />
       </SkeletonProvider>
     </>
   );
@@ -185,4 +185,5 @@ export type EditFormProps = {
   form: EditForm;
   updateForm: (d: Partial<EditForm>) => void;
   serverPage: ResultOf<typeof GET_CMS_PAGE>['cmsPage'];
+  pageId: string;
 };

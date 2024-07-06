@@ -7,6 +7,7 @@ import { useEditor } from '@tiptap/react';
 
 import { STATIC_EXTENSIONS } from '../../_tiptap/staticExtensions';
 import { FileHandler } from '../../_tiptap/fileHandler/fileHandler';
+import { RegisterPageData } from '../../_tiptap/pageData/pageData';
 import Placeholder from '@tiptap/extension-placeholder';
 
 import { clx } from '@/util/classConcat';
@@ -22,6 +23,7 @@ const UPDATE_DEBOUNCE_MS = 450;
 
 // COMPONENT
 export default function TextEditor({
+  pageId,
   form,
   updateForm,
   serverPage,
@@ -54,6 +56,7 @@ export default function TextEditor({
       Link,
       FileHandler,
       Placeholder.configure({ placeholder: 'Start writing...' }),
+      RegisterPageData(pageId),
     ],
     content: parsedContent ?? undefined,
 

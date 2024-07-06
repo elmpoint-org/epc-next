@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { IconPencil } from '@tabler/icons-react';
 
 import { graphError, graphql } from '@/query/graphql';
-import { graphAuthServer } from '@/query/graphql.server';
+import { oldGraphAuthServer } from '@/query/graphql.server';
 import { PageParams } from '@/util/propTypes';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 import { getUser } from '@/app/_ctx/user/provider';
@@ -45,7 +45,7 @@ const getPage = cache(async (slug: string) => {
     error: null,
   };
   try {
-    const d = await graphAuthServer(GET_PAGE_FROM_SLUG, { slug });
+    const d = await oldGraphAuthServer(GET_PAGE_FROM_SLUG, { slug });
     o.data = d.cmsPageFromSlug;
   } catch (err: any) {
     o.error = graphError(err?.response?.errors);

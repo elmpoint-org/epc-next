@@ -3,6 +3,7 @@ import type { CmsImage } from '@@/db/__types/graphql-types';
 
 export type DBCmsImage = CmsImage & {
   authorId: string;
+  pageId: string;
 };
 
 class CMSImageSource extends Model<DBCmsImage> {

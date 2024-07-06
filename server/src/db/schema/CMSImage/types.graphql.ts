@@ -16,18 +16,21 @@ export default gql`
     uri: String!
     "the resolved URL for the image, presigned if necessary."
     url: String!
-    "whether the image requires login to view."
-    public: Boolean!
     "whether this image was confirmed as succesfully uploaded. unconfirmed images will be periodically purged."
     confirmed: Boolean!
 
+    # relational
     "the user who uploaded this image."
     author: User
+    "the page this image is displayed on."
+    page: CMSPage
     timestamp: TS!
   }
 
   type CMSImageUploadOutput {
+    "the new image's id, which should be used to confirm the upload once complete."
     id: String!
+    "the upload url. send a PUT request to this url with the file to upload."
     url: String!
   }
 
@@ -54,19 +57,25 @@ export default gql`
 
     begin an image upload. pass the file name (containing a valid file extension) to get a presigned upload url.
     """
-    cmsImageUpload(fileName: String!): CMSImageUploadOutput!
+    cmsImageUpload(fileName: String!, pageId: String!): CMSImageUploadOutput!
     """
     **SCOPE: ADMIN | EDIT**
 
     confirm image upload. once the image was successfully uploaded, run this to "save" the image.
     """
-    cmsImageConfirm(id: ID!, public: Boolean): CMSImage!
+    cmsImageConfirm(id: ID!): CMSImage!
     """
     **SCOPE: ADMIN | EDIT**
 
     update a CMS image
     """
-    cmsImageUpdate(id: ID!, name: String, authorId: String): CMSImage!
+    cmsImageUpdate(
+      id: ID!
+      name: String
+      authorId: String
+      pageId: String
+      public: Boolean
+    ): CMSImage!
     """
     **SCOPE: ADMIN | EDIT**
 

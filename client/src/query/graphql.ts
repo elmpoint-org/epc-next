@@ -44,7 +44,7 @@ export async function graphAuth<R, V>(...[d, v]: GQL<R, V, {}>) {
       authorization: getAuthHeader(),
     })
     .catch((e) => {
-      let errs = (e?.reponse as GraphQLResponse)?.errors;
+      let errs = (e?.response as GraphQLResponse)?.errors;
 
       const parsed = errs?.map((e) => {
         const out: Inside<typeof errors> = {
@@ -65,7 +65,7 @@ export async function graphAuth<R, V>(...[d, v]: GQL<R, V, {}>) {
 
   return { errors, data };
 }
-type GraphAuthErrors = {
+export type GraphAuthErrors = {
   code: string | null;
   error: GraphQLError;
 }[];
