@@ -12,7 +12,7 @@ import { getPageData } from '../pageData/pageData';
 type FileHandlerEditor = FileHandlePluginOptions['editor'];
 
 const MIME_TYPES = ALLOWED_TYPES;
-const MAX_SIZE_MB = 0.5;
+const MAX_SIZE_MB = 10;
 
 export const FileHandler = FileHandlerRoot.configure({
   onDrop(editor, files, pos) {
@@ -21,7 +21,7 @@ export const FileHandler = FileHandlerRoot.configure({
   onPaste(editor, files, htmlContent) {
     if (htmlContent) {
       // TODO should this be handled separately
-      // return false;
+      return false;
     }
 
     handleFiles(editor, files);
