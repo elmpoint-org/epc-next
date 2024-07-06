@@ -73,5 +73,12 @@ export default gql`
     delete a CMS image (this also deletes the stored file)
     """
     cmsImageDelete(id: ID!): CMSImage!
+
+    """
+    **SCOPE: ADMIN | EDIT**
+
+    delete all images that haven't been confirmed as uploaded
+    """
+    cmsImageDeleteUnconfirmed: [CMSImage]!
   }
 `;

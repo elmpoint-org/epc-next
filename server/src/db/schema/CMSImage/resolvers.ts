@@ -13,10 +13,12 @@ const resolvers: CmsImageModule.Resolvers = {
     cmsImageConfirm: f.cmsImageConfirm,
     cmsImageUpdate: f.cmsImageUpdate,
     cmsImageDelete: f.cmsImageDelete,
+    cmsImageDeleteUnconfirmed: f.cmsImageDeleteUnconfirmed,
   },
 
   CMSImage: {
     author: f.getCmsImageAuthor,
+    confirmed: f.getCmsImageConfirmed,
     url: f.getCmsImageUrl,
 
     timestamp,

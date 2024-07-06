@@ -1,4 +1,4 @@
-/* AWS db.js v1.4.0 by mbf. updated 2024.02.08. */
+/* AWS db.js v1.5.0 by mbf. updated 2024.02.08. */
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import {

@@ -135,11 +135,37 @@ export const cmsImageDelete = h<M.MutationResolvers['cmsImageDelete']>(
   }
 );
 
+export const cmsImageDeleteUnconfirmed = h<
+  M.MutationResolvers['cmsImageDeleteUnconfirmed']
+>(scoped('ADMIN', 'EDIT'), async ({ sources }) => {
+  const images = await sources.cms.image.findBy('confirmed', 0);
+
+  // attempt to delete images as well
+  await Promise.all(
+    images.map(async (img) => {
+      const fp = parseS3Uri(img.uri);
+      if (!fp) throw err('INVALID_URI');
+      await deleteS3File(fp).catch((error) => {
+        throw err('FAILED_TO_DELETE', undefined, error);
+      });
+    })
+  );
+
+  // delete db entries
+  return Promise.all(images.map((img) => sources.cms.image.delete(img.id)));
+});
+
 export const getCmsImageAuthor = h<M.CMSImageResolvers['author']>(
   async ({ sources, parent }) => {
     const { authorId } = parent as DBType<DBCmsImage>;
 
     return sources.user.get(authorId);
+  }
+);
+
+export const getCmsImageConfirmed = h<M.CMSImageResolvers['confirmed']>(
+  async ({ parent }) => {
+    return !!parent.confirmed;
   }
 );
 
