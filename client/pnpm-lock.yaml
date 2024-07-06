@@ -44,7 +44,19 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.40.1
         version: 5.40.1(react@18.3.1)
+      '@tiptap-pro/extension-file-handler':
+        specifier: ^2.9.2
+        version: 2.9.2(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)
+      '@tiptap/core':
+        specifier: ^2.4.0
+        version: 2.4.0(@tiptap/pm@2.4.0)
+      '@tiptap/extension-focus':
+        specifier: ^2.4.0
+        version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)
       '@tiptap/extension-highlight':
+        specifier: ^2.4.0
+        version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))
+      '@tiptap/extension-image':
         specifier: ^2.4.0
         version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))
       '@tiptap/extension-link':
@@ -66,6 +78,9 @@ importers:
         specifier: ^2.4.0
         version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))
       '@tiptap/extension-underline':
+        specifier: ^2.4.0
+        version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))
+      '@tiptap/extension-youtube':
         specifier: ^2.4.0
         version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))
       '@tiptap/html':
@@ -879,6 +894,12 @@ packages:
     peerDependencies:
       react: ^18.0.0
 
+  '@tiptap-pro/extension-file-handler@2.9.2':
+    resolution: {integrity: sha512-INHTwb8UBlnVam1N1UYB23Cg3LmQ/XbH3asnwaHk62S/xEqYY9MlFIHhnEb3nvLSlaBVTp9LwNqJxdNodG0AWg==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+      '@tiptap/pm': ^2.0.0
+
   '@tiptap/core@2.4.0':
     resolution: {integrity: sha512-YJSahk8pkxpCs8SflCZfTnJpE7IPyUWIylfgXM2DefjRQa5DZ+c6sNY0s/zbxKYFQ6AuHVX40r9pCfcqHChGxQ==}
     peerDependencies:
@@ -933,6 +954,12 @@ packages:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
 
+  '@tiptap/extension-focus@2.4.0':
+    resolution: {integrity: sha512-41P51OImJzvp0zPUudsDPOGIIQkFUK9Yew8MVdtA3EIWkHOl8BZN/X3E/fX9sxzY6WPGgZD0UBRk7f9EA9X5JQ==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+      '@tiptap/pm': ^2.0.0
+
   '@tiptap/extension-gapcursor@2.4.0':
     resolution: {integrity: sha512-F4y/0J2lseohkFUw9P2OpKhrJ6dHz69ZScABUvcHxjznJLd6+0Zt7014Lw5PA8/m2d/w0fX8LZQ88pZr4quZPQ==}
     peerDependencies:
@@ -965,6 +992,11 @@ packages:
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0
+
+  '@tiptap/extension-image@2.4.0':
+    resolution: {integrity: sha512-NIVhRPMO/ONo8OywEd+8zh0Q6Q7EbFHtBxVsvfOKj9KtZkaXQfUO4MzONTyptkvAchTpj9pIzeaEY5fyU87gFA==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
 
   '@tiptap/extension-italic@2.4.0':
     resolution: {integrity: sha512-aaW/L9q+KNHHK+X73MPloHeIsT191n3VLd3xm6uUcFDnUNvzYJ/q65/1ZicdtCaOLvTutxdrEvhbkrVREX6a8g==}
@@ -1030,6 +1062,11 @@ packages:
 
   '@tiptap/extension-underline@2.4.0':
     resolution: {integrity: sha512-guWojb7JxUwLz4OKzwNExJwOkhZjgw/ttkXCMBT0PVe55k998MMYe1nvN0m2SeTW9IxurEPtScH4kYJ0XuSm8Q==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+
+  '@tiptap/extension-youtube@2.4.0':
+    resolution: {integrity: sha512-Ew6Oik9DaqP0xgQSUIWwozqeToJVOY4nqjRoKExGRuLdzgZeS+SmEA22ITBMcnZSJj8XBMgGBLcCWi+A7x1KAg==}
     peerDependencies:
       '@tiptap/core': ^2.0.0
 
@@ -4126,6 +4163,11 @@ snapshots:
       '@tanstack/query-core': 5.40.0
       react: 18.3.1
 
+  '@tiptap-pro/extension-file-handler@2.9.2(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)':
+    dependencies:
+      '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
+      '@tiptap/pm': 2.4.0
+
   '@tiptap/core@2.4.0(@tiptap/pm@2.4.0)':
     dependencies:
       '@tiptap/pm': 2.4.0
@@ -4172,6 +4214,11 @@ snapshots:
       '@tiptap/pm': 2.4.0
       tippy.js: 6.3.7
 
+  '@tiptap/extension-focus@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)':
+    dependencies:
+      '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
+      '@tiptap/pm': 2.4.0
+
   '@tiptap/extension-gapcursor@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)':
     dependencies:
       '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
@@ -4198,6 +4245,10 @@ snapshots:
     dependencies:
       '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
       '@tiptap/pm': 2.4.0
+
+  '@tiptap/extension-image@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))':
+    dependencies:
+      '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
 
   '@tiptap/extension-italic@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))':
     dependencies:
@@ -4251,6 +4302,10 @@ snapshots:
       '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
 
   '@tiptap/extension-underline@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))':
+    dependencies:
+      '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
+
+  '@tiptap/extension-youtube@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))':
     dependencies:
       '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
 
@@ -4906,7 +4961,7 @@ snapshots:
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.57.0)
       eslint-plugin-react: 7.34.1(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.0)
@@ -4930,7 +4985,7 @@ snapshots:
       enhanced-resolve: 5.16.1
       eslint: 8.57.0
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.4
       is-core-module: 2.13.1
@@ -4952,7 +5007,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5

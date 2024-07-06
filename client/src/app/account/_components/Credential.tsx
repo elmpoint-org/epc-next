@@ -7,9 +7,9 @@ import { IconTrash } from '@tabler/icons-react';
 import { UserDataType, invalidateUserData } from '../_ctx/userData';
 import type { Inside } from '@/util/inferTypes';
 import { clx } from '@/util/classConcat';
-import { modals } from '@mantine/modals';
-import { graphAuth, oldGraphError, graphql } from '@/query/graphql';
+import { oldGraphAuth, oldGraphError, graphql } from '@/query/graphql';
 import { pkeyErrorMap } from '@/app/auth/passwordless';
+import { confirmModal } from '@/app/_components/_base/modals';
 
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 
@@ -21,24 +21,16 @@ export function Credential(p: {
   const { credential: c, order } = p;
   const skeleton = !c;
 
-  function handleDelete() {
-    modals.openConfirmModal({
-      title: 'Delete this passkey?',
-      children: <DeleteConfirmation name={c?.nickname ?? ''} />,
-      labels: { confirm: 'Delete passkey', cancel: 'Don’t delete it' },
-      confirmProps: { color: 'red' },
-      classNames: {
-        content: clx('rounded-xl p-2'),
-      },
-      onConfirm: deletePasskey,
-    });
+  async function handleDelete() {
+    const yes = await confirmDeleteModal({ name: c?.nickname ?? '' });
+    if (yes) deletePasskey();
   }
 
   const [isDeleting, setIsDeleting] = useState(false);
   async function deletePasskey() {
     setIsDeleting(true);
     try {
-      await graphAuth(
+      await oldGraphAuth(
         graphql(`
           mutation UserDeleteCredential($credentialId: ID!) {
             userDeleteCredential(id: $credentialId) {
@@ -120,26 +112,31 @@ export function Credential(p: {
   );
 }
 
-function DeleteConfirmation(p: { name: string }) {
-  return (
-    <>
-      <div className="mb-2 border-y border-slate-200 py-3 text-sm text-slate-600">
-        <span className="relative">To be deleted:&nbsp; “</span>
-        <span className="-mx-2.5 -my-0.5 rounded-md bg-slate-200 px-2.5 py-0.5">
-          {p.name}
-        </span>
-        <span>”</span>
-      </div>
-      <div className="prose prose-sm leading-normal">
-        <p>
-          Are you sure you want to delete this passkey? This can’t be undone.
-        </p>
-        <p>
-          Doing this will prevent the passkey from being recognized anymore, but{' '}
-          <b>you’ll still need to delete it off of your device</b>.
-        </p>
-      </div>
-      <div className="h-2"></div>
-    </>
-  );
+function confirmDeleteModal(p: { name: string }) {
+  return confirmModal({
+    color: 'red',
+    title: <>Delete this passkey?</>,
+    children: (
+      <>
+        <div className="mb-2 border-y border-slate-200 py-3 text-sm text-slate-600">
+          <span className="relative">To be deleted:&nbsp; “</span>
+          <span className="-mx-2.5 -my-0.5 rounded-md bg-slate-200 px-2.5 py-0.5">
+            {p.name}
+          </span>
+          <span>”</span>
+        </div>
+        <div className="prose prose-sm leading-normal">
+          <p>
+            Are you sure you want to delete this passkey? This can’t be undone.
+          </p>
+          <p>
+            Doing this will prevent the passkey from being recognized anymore,
+            but <b>you’ll still need to delete it off of your device</b>.
+          </p>
+        </div>
+        <div className="h-2"></div>
+      </>
+    ),
+    buttons: { confirm: 'Delete passkey', cancel: 'Don’t delete it' },
+  });
 }

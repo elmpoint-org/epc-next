@@ -5,7 +5,7 @@ import { FormEvent, useState, useTransition } from 'react';
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
-import { graphAuth, oldGraphError, graphql } from '@/query/graphql';
+import { oldGraphAuth, oldGraphError, graphql } from '@/query/graphql';
 
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 
@@ -21,7 +21,7 @@ export default function InviteUser() {
       });
 
     loading(async () => {
-      const r = await graphAuth(
+      const r = await oldGraphAuth(
         graphql(`
           mutation PreUserCreate($email: String!) {
             preUserCreate(email: $email) {

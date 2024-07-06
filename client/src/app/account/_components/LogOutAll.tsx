@@ -1,18 +1,20 @@
 'use client';
 
-import { useUser } from '@/app/_ctx/user/context';
-import { graphAuth, graphql } from '@/query/graphql';
-import { clx } from '@/util/classConcat';
-import { Button } from '@mantine/core';
-import { modals } from '@mantine/modals';
-import { notifications } from '@mantine/notifications';
 import { useTransition } from 'react';
+
+import { Button } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+
+import { confirmModal } from '@/app/_components/_base/modals';
+import { useUser } from '@/app/_ctx/user/context';
+import { oldGraphAuth, graphql } from '@/query/graphql';
 
 export default function LogOutAll() {
   const user = useUser();
 
-  function confirmLogout() {
-    modals.openConfirmModal(modalLogoutConfirm({ onConfirm: logoutAll }));
+  async function confirmLogout() {
+    const yes = await confirmLogoutModal();
+    if (yes) logoutAll();
   }
 
   const [isLoading, loading] = useTransition();
@@ -21,7 +23,7 @@ export default function LogOutAll() {
       if (!user) return;
 
       // send logout request
-      const f = await graphAuth(
+      const f = await oldGraphAuth(
         graphql(`
           mutation UserResetSecret($id: ID!) {
             userResetSecret(id: $id) {
@@ -63,31 +65,18 @@ export default function LogOutAll() {
   );
 }
 
-function modalLogoutConfirm(p: { onConfirm?: () => void }): ConfirmModalProps {
-  return {
+function confirmLogoutModal() {
+  return confirmModal({
+    color: 'red',
     title: <>Are you sure?</>,
-    children: (
+    body: (
       <>
-        <div className="mb-4 border-b border-slate-200" />
-
-        <div className="prose prose-sm leading-normal">
-          <p>
-            Are you sure you want to log out <b>all of your devices</b>?
-          </p>
-          <p>
-            You’ll need to log in again on every device, including this one.
-          </p>
-        </div>
-        <div className="h-2"></div>
+        <p>
+          Are you sure you want to log out <b>all of your devices</b>?
+        </p>
+        <p>You’ll need to log in again on every device, including this one.</p>
       </>
     ),
-    labels: { confirm: 'Log out all devices', cancel: 'Cancel' },
-    confirmProps: { color: 'red' },
-    classNames: {
-      content: clx('rounded-xl p-2'),
-    },
-    onConfirm: p.onConfirm,
-  };
+    buttons: { confirm: 'Log out all devices' },
+  });
 }
-
-type ConfirmModalProps = Parameters<(typeof modals)['openConfirmModal']>[0];

@@ -7,6 +7,8 @@ import PreUserModule from './PreUser/module';
 import PreUserSource from './PreUser/source';
 import CMSPageModule from './CMSPage/module';
 import CMSPageSource from './CMSPage/source';
+import CmsImageModule from './CMSImage/module';
+import CMSImageSource from './CMSImage/source';
 
 // DEFINE SCHEMA
 
@@ -16,6 +18,7 @@ export const modules: Module[] = [
   UserModule,
   PreUserModule,
   CMSPageModule,
+  CmsImageModule,
 ];
 
 export const sources = () => ({
@@ -23,5 +26,6 @@ export const sources = () => ({
   preUser: new PreUserSource(),
   cms: {
     page: new CMSPageSource(),
+    image: new CMSImageSource(),
   },
 });

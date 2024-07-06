@@ -1,4 +1,4 @@
-/* Model.ts - AWS db.js v1.4.0 by mbf. updated 2024.02.08. */
+/* Model.ts - AWS db.js v1.5.0 by mbf. updated 2024.07.06. */
 
 import db from './db';
 import { randomUUID as uuid } from 'node:crypto';
@@ -45,26 +45,28 @@ abstract class Model<Type> {
   protected abstract table: string;
 
   // add internal properties to this entry, such as created/updated timestamps and a unique id
-  private schema = (self: Model<Type>, old?: boolean) => (data: any) => {
-    const ts = timestamp();
-    let out = data;
+  protected schema(self: Model<Type>, old?: boolean) {
+    return (data: any) => {
+      const ts = timestamp();
+      let out = data;
 
-    if (!old)
-      out = {
-        type: self.type,
-        id: uuid(),
-        ...out,
+      if (!old)
+        out = {
+          type: self.type,
+          id: uuid(),
+          ...out,
 
-        query: 0,
-        tcreated: ts,
-      };
-    out.tupdated = ts;
+          query: 0,
+          tcreated: ts,
+        };
+      out.tupdated = ts;
 
-    return Object.keys(out).reduce((obj, it) => {
-      if (typeof out[it] !== 'undefined') return { ...obj, [it]: out[it] };
-      return obj;
-    }, {} as DBType<Type>);
-  };
+      return Object.keys(out).reduce((obj, it) => {
+        if (typeof out[it] !== 'undefined') return { ...obj, [it]: out[it] };
+        return obj;
+      }, {} as DBType<Type>);
+    };
+  }
 
   // deduping function
   private loader = new DataLoader(this.DBbatchGet.bind(this));

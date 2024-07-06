@@ -1,6 +1,6 @@
 import { authErrorMap } from '@/app/auth/_util/authErrors';
 import { pkeyErrorMap, usePkey } from '@/app/auth/passwordless';
-import { graphAuth, oldGraphError, graphql } from '@/query/graphql';
+import { oldGraphAuth, oldGraphError, graphql } from '@/query/graphql';
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { FormEvent, useState, useTransition } from 'react';
@@ -27,7 +27,7 @@ export default function NewPasskey({ onClose }: { onClose?: () => void }) {
       // get token
       let token;
       try {
-        const data = await graphAuth(
+        const data = await oldGraphAuth(
           graphql(`
             mutation Mutation {
               userCreateCredential

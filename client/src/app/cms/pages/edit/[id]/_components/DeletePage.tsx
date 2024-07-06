@@ -4,27 +4,27 @@ import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@mantine/core';
-import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
-import { graphAuth, graphql } from '@/query/graphql';
+import { oldGraphAuth, graphql } from '@/query/graphql';
 import { clx } from '@/util/classConcat';
+import { confirmModal } from '@/app/_components/_base/modals';
+import type { EditFormProps } from './PageEditForm';
 
-export default function DeletePage({ pageId }: { pageId: string }) {
+export default function DeletePage({ pageId }: EditFormProps) {
   const router = useRouter();
 
   async function confirmLogout() {
-    const a = await confirmDeleteModal();
-    if (!a) return;
-    deletePage();
+    const yes = await confirmDeleteModal();
+    if (yes) deletePage();
   }
 
   const [isLoading, loading] = useTransition();
   function deletePage() {
     loading(async () => {
       // send delete request
-      const f = await graphAuth(
+      const f = await oldGraphAuth(
         graphql(`
           mutation CmsPageDelete($id: ID!) {
             cmsPageDelete(id: $id) {
@@ -77,29 +77,21 @@ export default function DeletePage({ pageId }: { pageId: string }) {
   );
 }
 
-async function confirmDeleteModal() {
-  return new Promise<boolean>((resolve) =>
-    modals.openConfirmModal({
-      title: <>Are you sure?</>,
-      children: (
-        <>
-          <div className="mb-4 border-b border-slate-200" />
-
-          <div className="prose prose-sm leading-normal">
-            <p>
-              Are you sure you want to <b>permanently delete</b> this page?
-            </p>
-          </div>
-          <div className="h-2"></div>
-        </>
-      ),
-      labels: { confirm: 'Permanently delete', cancel: 'Cancel' },
-      confirmProps: { color: 'red' },
-      classNames: {
-        content: clx('rounded-xl p-2'),
-      },
-      onConfirm: () => resolve(true),
-      onCancel: () => resolve(false),
-    }),
-  );
+function confirmDeleteModal() {
+  return confirmModal({
+    color: 'red',
+    title: <>Are you sure?</>,
+    body: (
+      <>
+        <p>
+          Are you sure you want to <b>permanently delete</b> this page?
+        </p>
+        <p>
+          You can always unpublish the page if you just want to make it
+          temporarily inaccessible.
+        </p>
+      </>
+    ),
+    buttons: { confirm: 'Permanently delete' },
+  });
 }

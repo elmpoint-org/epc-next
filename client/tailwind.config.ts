@@ -4,6 +4,8 @@ import typography from '@tailwindcss/typography';
 import defaults from 'tailwindcss/defaultTheme';
 import colors from 'tailwindcss/colors';
 
+import { tiptapSelectors } from './src/app/cms/_tiptap/selectors';
+
 export const font = ['var(--font-default)', ...defaults.fontFamily.sans];
 
 const config: Config = {
@@ -25,6 +27,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [typography],
+  plugins: [typography, tiptapSelectors],
 };
 export default config;

@@ -7,7 +7,7 @@ import type { ResultOf } from '@graphql-typed-document-node/core';
 import { notifications } from '@mantine/notifications';
 import { getHotkeyHandler } from '@mantine/hooks';
 
-import { graphAuth, graphError, graphql } from '@/query/graphql';
+import { oldGraphAuth, graphError, graphql } from '@/query/graphql';
 import { useGraphQuery } from '@/query/query';
 import { useUser } from '@/app/_ctx/user/context';
 import { revalidatePage } from '../../../_actions/edit';
@@ -88,18 +88,23 @@ export default function PageEditForm({ id }: { id: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverPage]);
 
-  // save flow
+  // save state
   const [isSaving, saving] = useTransition();
+  const [isTyping, setIsTyping] = useState(false);
   const saveState = useMemo<SaveState>(() => {
+    if (isTyping) return 'TYPING';
     if (isSaving) return 'SAVING';
     if (fdeq(form, initForm(serverPage, user?.id))) return 'SAVED';
     return 'UNSAVED';
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSaving, form, serverPage]);
+  }, [isTyping, isSaving, form, serverPage]);
+
+  // handle save
   function save() {
+    if (saveState === 'TYPING') return;
     saving(async () => {
       const cc = form.shouldAddContributor;
-      const f = await graphAuth(UPDATE_CMS_PAGE, {
+      const f = await oldGraphAuth(UPDATE_CMS_PAGE, {
         id,
         ...form,
         contributorAdd: (cc && user?.id) || null,
@@ -129,7 +134,7 @@ export default function PageEditForm({ id }: { id: string }) {
     return () => window.removeEventListener('beforeunload', cb);
   }, [saveState]);
 
-  const formProps: EditFormProps = { form, updateForm, serverPage };
+  const formProps: EditFormProps = { form, updateForm, serverPage, pageId: id };
   return (
     <>
       <SkeletonProvider ready={!pageQuery.isPending}>
@@ -147,7 +152,7 @@ export default function PageEditForm({ id }: { id: string }) {
           <PageOptions {...formProps} />
 
           {/* page content */}
-          <TextEditor {...formProps} />
+          <TextEditor {...formProps} onTyping={setIsTyping} />
 
           {/* page link */}
           <ViewPageLink {...formProps} />
@@ -155,7 +160,7 @@ export default function PageEditForm({ id }: { id: string }) {
           <SaveRow onClick={save} state={saveState} />
         </div>
 
-        <DeletePage pageId={id} />
+        <DeletePage {...formProps} />
       </SkeletonProvider>
     </>
   );
@@ -180,4 +185,5 @@ export type EditFormProps = {
   form: EditForm;
   updateForm: (d: Partial<EditForm>) => void;
   serverPage: ResultOf<typeof GET_CMS_PAGE>['cmsPage'];
+  pageId: string;
 };
