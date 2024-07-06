@@ -52,7 +52,7 @@ export async function graphAuth<R, V>(...[d, v]: GQL<R, V, {}>) {
           error: e,
         };
 
-        const code = e.extensions?.code;
+        const code = e?.extensions?.code;
         if (typeof code === 'string') out.code = code;
         return out;
       });

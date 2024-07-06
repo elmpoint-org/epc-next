@@ -1,14 +1,16 @@
 'use client';
 
 import { prettyError } from '@/util/prettyErrors';
+import { ALLOWED_TYPES } from '@@/s3/IMAGE_OPTIONS';
 import { notifications } from '@mantine/notifications';
 import FileHandlerRoot, {
   type FileHandlePluginOptions,
 } from '@tiptap-pro/extension-file-handler';
+import { uploadImage } from './imageOperations';
 
 type FileHandlerEditor = FileHandlePluginOptions['editor'];
 
-const MIME_TYPES = ['image/png', 'image/jpeg'];
+const MIME_TYPES = ALLOWED_TYPES;
 const MAX_SIZE_MB = 0.5;
 
 export const FileHandler = FileHandlerRoot.configure({
@@ -30,41 +32,40 @@ function handleFiles(editor: FileHandlerEditor, files: File[], pos?: number) {
   if (typeof pos === 'undefined') pos = editor.state.selection.anchor;
 
   files.forEach(async (file) => {
-    if (!MIME_TYPES.includes(file.type)) return err('FILE_TYPE');
+    if (!MIME_TYPES.some((t) => t === file.type)) return err('FILE_TYPE');
     if (file.size > megabytes(MAX_SIZE_MB)) return err('TOO_LARGE');
 
-    const src = await getDataURL(file);
-    const imgWidth = await getImageWidth(src);
+    // upload image and determine image width
+    const [{ url, error }, width] = await Promise.all([
+      uploadImage(file)
+        .then((r) => ({ url: r, error: null }))
+        .catch((c) => {
+          let o = '';
+          if (typeof c === 'string') o = c;
+          else o = 'UPLOAD_ERROR';
+          return { error: o, url: null };
+        }),
+      getImageWidth(file),
+    ]);
+    if (error || !url) return err(error);
 
-    // define command chain
+    // create an image block
     let cmd = editor.chain();
-
-    cmd = cmd.setImageBlockAt(pos, { src, imgWidth });
+    cmd = cmd.setImageBlockAt(pos, { src: url, imgWidth: width });
     cmd = cmd.focus();
-
     cmd.run();
   });
 }
 
-async function getDataURL(file: File) {
-  return new Promise<string>((resolve) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-  });
-}
-
-async function getBlobFromFile(file: File) {
-  return new Promise<string>((resolve) => {
-    const src = URL.createObjectURL(file);
-    resolve(src);
-  });
-}
-
-async function getImageWidth(src: string) {
+async function getImageWidth(file: File) {
   return new Promise<number>((resolve) => {
+    const src = URL.createObjectURL(file);
     const img = new Image();
-    img.onload = () => resolve(0 + img.width);
+    img.onload = () => {
+      const w = 0 + img.width;
+      URL.revokeObjectURL(src);
+      resolve(w);
+    };
     img.src = src;
   });
 }
