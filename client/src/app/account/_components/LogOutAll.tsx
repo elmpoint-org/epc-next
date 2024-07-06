@@ -7,7 +7,7 @@ import { notifications } from '@mantine/notifications';
 
 import { confirmModal } from '@/app/_components/_base/modals';
 import { useUser } from '@/app/_ctx/user/context';
-import { graphAuth, graphql } from '@/query/graphql';
+import { oldGraphAuth, graphql } from '@/query/graphql';
 
 export default function LogOutAll() {
   const user = useUser();
@@ -23,7 +23,7 @@ export default function LogOutAll() {
       if (!user) return;
 
       // send logout request
-      const f = await graphAuth(
+      const f = await oldGraphAuth(
         graphql(`
           mutation UserResetSecret($id: ID!) {
             userResetSecret(id: $id) {

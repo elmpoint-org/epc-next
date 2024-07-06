@@ -7,7 +7,7 @@ import { Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
-import { graphAuth, graphql } from '@/query/graphql';
+import { oldGraphAuth, graphql } from '@/query/graphql';
 import { clx } from '@/util/classConcat';
 import { confirmModal } from '@/app/_components/_base/modals';
 
@@ -23,7 +23,7 @@ export default function DeletePage({ pageId }: { pageId: string }) {
   function deletePage() {
     loading(async () => {
       // send delete request
-      const f = await graphAuth(
+      const f = await oldGraphAuth(
         graphql(`
           mutation CmsPageDelete($id: ID!) {
             cmsPageDelete(id: $id) {

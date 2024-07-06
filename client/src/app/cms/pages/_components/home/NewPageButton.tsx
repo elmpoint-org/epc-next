@@ -7,7 +7,7 @@ import { ActionIcon } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconPlus } from '@tabler/icons-react';
 
-import { graphAuth } from '@/query/graphql';
+import { oldGraphAuth } from '@/query/graphql';
 import { useUser } from '@/app/_ctx/user/context';
 import { NEW_CMS_PAGE_KEY } from '@/app/cms/_util/queries';
 
@@ -18,7 +18,7 @@ export default function NewPageButton() {
 
   function createPage() {
     loading(async () => {
-      const data = await graphAuth(...NEW_CMS_PAGE_KEY(user?.id)).catch(() => {
+      const data = await oldGraphAuth(...NEW_CMS_PAGE_KEY(user?.id)).catch(() => {
         notifications.show({ message: 'An error occurred.' });
       });
       if (!data?.cmsPageCreate) return;

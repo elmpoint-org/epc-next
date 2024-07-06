@@ -7,7 +7,7 @@ import { IconTrash } from '@tabler/icons-react';
 import { UserDataType, invalidateUserData } from '../_ctx/userData';
 import type { Inside } from '@/util/inferTypes';
 import { clx } from '@/util/classConcat';
-import { graphAuth, oldGraphError, graphql } from '@/query/graphql';
+import { oldGraphAuth, oldGraphError, graphql } from '@/query/graphql';
 import { pkeyErrorMap } from '@/app/auth/passwordless';
 import { confirmModal } from '@/app/_components/_base/modals';
 
@@ -30,7 +30,7 @@ export function Credential(p: {
   async function deletePasskey() {
     setIsDeleting(true);
     try {
-      await graphAuth(
+      await oldGraphAuth(
         graphql(`
           mutation UserDeleteCredential($credentialId: ID!) {
             userDeleteCredential(id: $credentialId) {

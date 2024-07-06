@@ -8,7 +8,7 @@ import { IconEdit, IconRestore } from '@tabler/icons-react';
 
 import { invalidateUserData, useUserData } from '../_ctx/userData';
 import { useUser } from '@/app/_ctx/user/context';
-import { graphAuth, oldGraphError, graphql } from '@/query/graphql';
+import { oldGraphAuth, oldGraphError, graphql } from '@/query/graphql';
 import { notifications } from '@mantine/notifications';
 import { invalidateUser } from '@/app/_ctx/user/actions';
 import fdeq from 'fast-deep-equal';
@@ -66,7 +66,7 @@ const AccountDetails = () => {
   function handleSubmit(values: typeof formInit) {
     loading(async () => {
       if (!user) return;
-      const f = await graphAuth(
+      const f = await oldGraphAuth(
         graphql(`
           mutation UserUpdate(
             $id: ID!
