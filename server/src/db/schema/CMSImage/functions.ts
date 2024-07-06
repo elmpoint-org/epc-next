@@ -47,6 +47,25 @@ export const getCmsImage = h<M.QueryResolvers['cmsImage']>(
   }
 );
 
+export const getCmsImagesFromPageId = h<
+  M.QueryResolvers['cmsImagesFromPageId']
+>(
+  scoped('ADMIN', 'EDIT'), //
+  async ({ sources, args: { pageId, confirmed } }) => {
+    const page = await sources.cms.page.get(pageId);
+    if (!page) throw err('PAGE_NOT_FOUND');
+
+    let imgs = await sources.cms.image.findBy('pageId', pageId);
+
+    // filter by confirmed if defined
+    if (typeof confirmed === 'boolean') {
+      imgs = imgs.filter((img) => !!img.confirmed === confirmed);
+    }
+
+    return imgs;
+  }
+);
+
 export const cmsImageUpload = h<M.MutationResolvers['cmsImageUpload']>(
   scoped('ADMIN', 'EDIT'),
   async ({ sources, args: { fileName, pageId }, userId }) => {
@@ -148,6 +167,29 @@ export const cmsImageDelete = h<M.MutationResolvers['cmsImageDelete']>(
     });
 
     return sources.cms.image.delete(id);
+  }
+);
+
+export const cmsImageDeleteMultiple = h<
+  M.MutationResolvers['cmsImageDeleteMultiple']
+>(
+  scoped('ADMIN', 'EDIT'), //
+  async ({ sources, args: { ids } }) => {
+    const imgs = await sources.cms.image.getMultiple(ids);
+
+    // attempt to delete images as well
+    await Promise.all(
+      imgs.map(async (img) => {
+        const fp = parseS3Uri(img?.uri ?? '');
+        if (!fp) return;
+        await deleteS3File(fp).catch((error) => {
+          throw err('FAILED_TO_DELETE', undefined, error);
+        });
+      })
+    );
+
+    await sources.cms.image.deleteMultiple(ids, /* output: */ false);
+    return imgs;
   }
 );
 

@@ -43,12 +43,20 @@ export default gql`
     get all CMS images
     """
     cmsImages: [CMSImage]!
+
     """
     **SCOPE: !public? userId**
 
     get a single CMS image
     """
     cmsImage(id: ID!): CMSImage
+
+    """
+    **SCOPE: ADMIN | EDIT**
+
+    get all images associated with a page
+    """
+    cmsImagesFromPageId(pageId: ID!, confirmed: Boolean): [CMSImage]!
   }
 
   type Mutation {
@@ -82,6 +90,13 @@ export default gql`
     delete a CMS image (this also deletes the stored file)
     """
     cmsImageDelete(id: ID!): CMSImage!
+
+    """
+    **SCOPE: ADMIN | EDIT**
+
+    delete a set of CMS images (this also deletes their stored files)
+    """
+    cmsImageDeleteMultiple(ids: [ID!]!): [CMSImage]!
 
     """
     **SCOPE: ADMIN | EDIT**

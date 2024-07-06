@@ -7,12 +7,14 @@ const resolvers: CmsImageModule.Resolvers = {
   Query: {
     cmsImages: f.getCmsImages,
     cmsImage: f.getCmsImage,
+    cmsImagesFromPageId: f.getCmsImagesFromPageId,
   },
   Mutation: {
     cmsImageUpload: f.cmsImageUpload,
     cmsImageConfirm: f.cmsImageConfirm,
     cmsImageUpdate: f.cmsImageUpdate,
     cmsImageDelete: f.cmsImageDelete,
+    cmsImageDeleteMultiple: f.cmsImageDeleteMultiple,
     cmsImageDeleteUnconfirmed: f.cmsImageDeleteUnconfirmed,
   },
 
