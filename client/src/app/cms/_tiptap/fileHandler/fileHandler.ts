@@ -54,7 +54,7 @@ async function getDataURL(file: File) {
   });
 }
 
-async function getImageFromFile(file: File) {
+async function getBlobFromFile(file: File) {
   return new Promise<string>((resolve) => {
     const src = URL.createObjectURL(file);
     resolve(src);

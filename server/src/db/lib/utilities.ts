@@ -54,6 +54,16 @@ export const scoped =
     if (!scopeDiff(ctx.scope, scope)) throw scopeError();
   };
 
+export const loggedIn =
+  () =>
+  (
+    ctx: CtxExtended<
+      ResolverFn<unknown, unknown, ResolverContextType<unknown>, unknown>
+    >
+  ): undefined => {
+    if (!ctx.userId) throw scopeError();
+  };
+
 /**
  * get a typed version of scope functions by passing your context type
  * @returns scoped utility functions with your types
