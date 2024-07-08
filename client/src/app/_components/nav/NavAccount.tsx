@@ -46,7 +46,8 @@ export default function NavAccount() {
                 <NavLink
                   key={i}
                   {...it}
-                  className="bg-dgreen hover:bg-emerald-700/50 data-[here]:bg-emerald-700/75"
+                  onClick={close}
+                  className="border-emerald-800 bg-dgreen hover:bg-emerald-700/50"
                 />
               ))}
             </div>
@@ -75,7 +76,7 @@ function NavAccountButton({
 
   return (
     <button
-      className="relative flex w-full flex-row items-center gap-2 overflow-hidden rounded-lg bg-emerald-700/80 px-4 py-3 hover:bg-emerald-700 data-[nu]:px-6"
+      className="relative flex w-full flex-row items-center gap-3 overflow-hidden rounded-lg bg-emerald-700/80 px-4 py-3 hover:bg-emerald-700 data-[nu]:px-6"
       data-nu={!user || null}
       {...props}
     >

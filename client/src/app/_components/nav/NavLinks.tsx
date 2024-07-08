@@ -11,7 +11,6 @@ import NavLink, { NavLinkType } from './NavLink';
 const links: NavLinkType[] = [
   { href: '/', text: 'Home', icon: IconHome },
   { href: '/pages/instructions', text: 'Camp How-tos', icon: IconEyeQuestion },
-
   {
     href: '/calendar/new',
     text: 'Calendar - Add Stay',

@@ -5,7 +5,6 @@ import { homeLinks } from '@/sampleLinksData';
 import A from './_components/_base/A';
 import LogoPanel from './_components/_base/LogoPanel';
 import LinkBlock from './_components/home/LinkBlock';
-import { Button } from '@mantine/core';
 
 export default async function HomePage() {
   const links = homeLinks; // TODO should be db
