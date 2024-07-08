@@ -55,6 +55,7 @@
     "react-dom": "^18",
     "recoil": "^0.7.7",
     "sst": "ion",
+    "tailwind-merge": "^2.4.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

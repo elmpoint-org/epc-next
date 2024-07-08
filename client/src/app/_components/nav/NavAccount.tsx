@@ -12,7 +12,7 @@ import {
 } from '@tabler/icons-react';
 
 import { useUser } from '@/app/_ctx/user/context';
-import type { NavLinkType } from './_util/linksType';
+import NavLink, { NavLinkType } from './NavLink';
 
 const links: NavLinkType[] = [
   {
@@ -30,7 +30,7 @@ const links: NavLinkType[] = [
   },
 ];
 
-const NavAccount = () => {
+export default function NavAccount() {
   const [isOpen, { toggle, close }] = useDisclosure();
 
   const user = useUser();
@@ -42,18 +42,12 @@ const NavAccount = () => {
         {user && (
           <Collapse in={isOpen}>
             <div className="flex flex-col gap-2 p-4">
-              {links.map(({ href, text, icon: Icon }, i) => (
-                <Link
+              {links.map((it, i) => (
+                <NavLink
                   key={i}
-                  href={href}
-                  onClick={() => close()}
-                  className="flex flex-row items-center gap-5 rounded-full bg-dgreen px-4 py-2.5 hover:bg-emerald-700/50"
-                >
-                  <div className="size-5">
-                    {Icon && <Icon className="h-full" />}
-                  </div>
-                  <div className="flex-1 leading-none">{text}</div>
-                </Link>
+                  {...it}
+                  className="bg-dgreen hover:bg-emerald-700/50 data-[here]:bg-emerald-700/75"
+                />
               ))}
             </div>
           </Collapse>
@@ -71,8 +65,7 @@ const NavAccount = () => {
       </AppShell.Section>
     </>
   );
-};
-export default NavAccount;
+}
 
 function NavAccountButton({
   isOpen,
