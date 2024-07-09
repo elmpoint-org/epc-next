@@ -13,7 +13,7 @@ import { IconAlertTriangle } from '@tabler/icons-react';
 
 import RoomOption from './RoomOption';
 
-import { cabins, rooms, CUSTOM_ROOM_ID } from '@/sampleRoomData';
+import { cabins, rooms, CUSTOM_ROOM_ID } from '@/sample-data/roomData';
 import { Cabin, Room, useFormCtxRoomState } from '../state/formCtx';
 
 const SEPARATOR = `/`;

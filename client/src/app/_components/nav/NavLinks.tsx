@@ -1,28 +1,11 @@
+import { Fragment } from 'react';
+
 import { AppShell, ScrollArea } from '@mantine/core';
-import {
-  IconCalendarPlus,
-  IconEyeQuestion,
-  IconHome,
-  IconNotebook,
-} from '@tabler/icons-react';
 
-import NavLink, { NavLinkType } from './NavLink';
+import { navLinks } from '@/sample-data/navLinksData';
 
-const links: NavLinkType[] = [
-  { href: '/', text: 'Home', icon: IconHome },
-  { href: '/pages/instructions', text: 'Camp How-tos', icon: IconEyeQuestion },
-  {
-    href: '/calendar/new',
-    text: 'Calendar - Add Stay',
-    icon: IconCalendarPlus,
-  },
-  { href: '/cms/pages', text: 'Pages', icon: IconNotebook },
-
-  { href: '#', text: <>&nbsp;</> },
-  { href: '#', text: <>&nbsp;</> },
-  { href: '#', text: <>&nbsp;</> },
-  { href: '#', text: <>&nbsp;</> },
-];
+import NavLink from './NavLink';
+import NavLinkDropdown from './NavLinkDropdown';
 
 const NavLinks = () => {
   return (
@@ -39,8 +22,14 @@ const NavLinks = () => {
         )}
       >
         <div className="flex flex-col space-y-2 p-2">
-          {links.map((it, i) => (
-            <NavLink key={i} {...it} />
+          {navLinks.map((it, i) => (
+            <Fragment key={i}>
+              {'links' in it ? (
+                <NavLinkDropdown {...it} />
+              ) : (
+                <NavLink {...it} />
+              )}
+            </Fragment>
           ))}
         </div>
       </AppShell.Section>

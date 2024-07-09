@@ -4,3 +4,5 @@ import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 export type IconType = ForwardRefExoticComponent<
   Omit<IconProps, 'ref'> & RefAttributes<Icon>
 >;
+
+export type IconTypeProps = Parameters<IconType>[0];

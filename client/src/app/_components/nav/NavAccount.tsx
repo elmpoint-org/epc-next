@@ -12,7 +12,9 @@ import {
 } from '@tabler/icons-react';
 
 import { useUser } from '@/app/_ctx/user/context';
-import NavLink, { NavLinkType } from './NavLink';
+import { useIsHere } from './isHere';
+import NavLink from './NavLink';
+import { NavLinkType } from './navTypes';
 
 const links: NavLinkType[] = [
   {
@@ -20,9 +22,9 @@ const links: NavLinkType[] = [
     text: 'Account Overview',
     icon: IconTableOptions,
   },
-  { href: '#', text: '' },
-  { href: '#', text: '' },
-  { href: '#', text: '' },
+  { text: '' },
+  { text: '' },
+  { text: '' },
   {
     href: '/auth/logout',
     text: 'Log out',
@@ -31,9 +33,11 @@ const links: NavLinkType[] = [
 ];
 
 export default function NavAccount() {
-  const [isOpen, { toggle, close }] = useDisclosure();
+  const [isOpen, { toggle, open, close }] = useDisclosure();
 
   const user = useUser();
+
+  useIsHere(links, (h) => (h ? open() : close()));
 
   return (
     <>
@@ -46,7 +50,6 @@ export default function NavAccount() {
                 <NavLink
                   key={i}
                   {...it}
-                  onClick={close}
                   className="border-emerald-800 bg-dgreen hover:bg-emerald-700/50"
                 />
               ))}

@@ -1,6 +1,6 @@
 import { IconCheck, IconX } from '@tabler/icons-react';
 
-import type { IconType } from '@/util/iconType';
+import type { IconTypeProps } from '@/util/iconType';
 import { clx } from '@/util/classConcat';
 
 export default function BooleanStatus({
@@ -10,7 +10,7 @@ export default function BooleanStatus({
   value: boolean;
   className?: string;
 }) {
-  const iconProps: Parameters<IconType>[0] = {
+  const iconProps: IconTypeProps = {
     stroke: 1,
   };
   return (
