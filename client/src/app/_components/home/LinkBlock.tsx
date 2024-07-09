@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-import type { HomeLink } from '@/sampleLinksData';
+import type { HomeLink } from '@/sample-data/homeLinksData';
 import {
   IconChevronRight,
   IconExternalLink,

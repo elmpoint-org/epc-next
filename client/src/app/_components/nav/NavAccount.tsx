@@ -12,7 +12,9 @@ import {
 } from '@tabler/icons-react';
 
 import { useUser } from '@/app/_ctx/user/context';
-import type { NavLinkType } from './_util/linksType';
+import { useIsHere } from './isHere';
+import NavLink from './NavLink';
+import { NavLinkType } from './navTypes';
 
 const links: NavLinkType[] = [
   {
@@ -20,9 +22,9 @@ const links: NavLinkType[] = [
     text: 'Account Overview',
     icon: IconTableOptions,
   },
-  { href: '#', text: '' },
-  { href: '#', text: '' },
-  { href: '#', text: '' },
+  { text: '' },
+  { text: '' },
+  { text: '' },
   {
     href: '/auth/logout',
     text: 'Log out',
@@ -30,10 +32,12 @@ const links: NavLinkType[] = [
   },
 ];
 
-const NavAccount = () => {
-  const [isOpen, { toggle, close }] = useDisclosure();
+export default function NavAccount() {
+  const [isOpen, { toggle, open, close }] = useDisclosure();
 
   const user = useUser();
+
+  useIsHere(links, (h) => (h ? open() : close()));
 
   return (
     <>
@@ -42,18 +46,12 @@ const NavAccount = () => {
         {user && (
           <Collapse in={isOpen}>
             <div className="flex flex-col gap-2 p-4">
-              {links.map(({ href, text, icon: Icon }, i) => (
-                <Link
+              {links.map((it, i) => (
+                <NavLink
                   key={i}
-                  href={href}
-                  onClick={() => close()}
-                  className="flex flex-row items-center gap-5 rounded-full bg-dgreen px-4 py-2.5 hover:bg-emerald-700/50"
-                >
-                  <div className="size-5">
-                    {Icon && <Icon className="h-full" />}
-                  </div>
-                  <div className="flex-1 leading-none">{text}</div>
-                </Link>
+                  {...it}
+                  className="border-emerald-800 bg-dgreen hover:bg-emerald-700/50"
+                />
               ))}
             </div>
           </Collapse>
@@ -71,8 +69,7 @@ const NavAccount = () => {
       </AppShell.Section>
     </>
   );
-};
-export default NavAccount;
+}
 
 function NavAccountButton({
   isOpen,
@@ -82,7 +79,7 @@ function NavAccountButton({
 
   return (
     <button
-      className="relative flex w-full flex-row items-center gap-2 overflow-hidden rounded-lg bg-emerald-700/80 px-4 py-3 hover:bg-emerald-700 data-[nu]:px-6"
+      className="relative flex w-full flex-row items-center gap-3 overflow-hidden rounded-lg bg-emerald-700/80 px-4 py-3 hover:bg-emerald-700 data-[nu]:px-6"
       data-nu={!user || null}
       {...props}
     >

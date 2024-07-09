@@ -1,20 +1,11 @@
+import { Fragment } from 'react';
+
 import { AppShell, ScrollArea } from '@mantine/core';
 
+import { navLinks } from '@/sample-data/navLinksData';
+
 import NavLink from './NavLink';
-import type { NavLinkType } from './_util/linksType';
-
-const links: NavLinkType[] = [
-  { href: '/', text: 'Home' },
-  { href: '/pages/instructions', text: 'Camp How-tos' },
-
-  { href: '/calendar/new', text: 'Calendar - Add Stay' },
-  { href: '/cms/pages', text: 'Pages' },
-
-  { href: '#', text: <>&nbsp;</> },
-  { href: '#', text: <>&nbsp;</> },
-  { href: '#', text: <>&nbsp;</> },
-  { href: '#', text: <>&nbsp;</> },
-];
+import NavLinkDropdown from './NavLinkDropdown';
 
 const NavLinks = () => {
   return (
@@ -31,10 +22,14 @@ const NavLinks = () => {
         )}
       >
         <div className="flex flex-col space-y-2 p-2">
-          {links.map((it, i) => (
-            <NavLink key={i} href={it.href}>
-              {it.text}
-            </NavLink>
+          {navLinks.map((it, i) => (
+            <Fragment key={i}>
+              {'links' in it ? (
+                <NavLinkDropdown {...it} />
+              ) : (
+                <NavLink {...it} />
+              )}
+            </Fragment>
           ))}
         </div>
       </AppShell.Section>

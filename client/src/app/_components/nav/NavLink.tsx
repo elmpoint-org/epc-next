@@ -1,28 +1,38 @@
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import type { Children } from '@/util/propTypes';
-import { clx } from '@/util/classConcat';
 
-type NavLinkProps = {
-  href: string;
-  className?: string;
-} & Partial<Parameters<typeof Link>[0]> &
-  Children;
+import { clmx } from '@/util/classConcat';
 
-const NavLink = ({ href, children, className, ...props }: NavLinkProps) => {
-  const path = usePathname();
+import { useIsHere } from './isHere';
+import { NavLinkType } from './navTypes';
+
+type NavLinkProps = NavLinkType & Partial<Parameters<typeof Link>[0]>;
+
+const NavLink = ({
+  href,
+  icon: Icon,
+  text,
+  className,
+  ...props
+}: NavLinkProps) => {
+  const isHere = useIsHere([{ href }]);
 
   return (
     <Link
-      href={href}
-      className={clx(
-        'rounded-full bg-emerald-900/80 px-6 py-2 hover:bg-emerald-900 data-[here]:bg-emerald-950/80',
-        className || '',
+      href={href ?? ''}
+      onClick={(e) => {
+        if (typeof href === 'undefined') e.preventDefault();
+      }}
+      className={clmx(
+        'flex flex-row items-center gap-5 rounded-full bg-emerald-900/80 px-5 py-2.5 hover:bg-emerald-900 data-[here]:bg-emerald-950/80',
+        className,
       )}
-      data-here={path === href || null}
+      data-here={isHere || null}
       {...props}
     >
-      {children}
+      <div className={clmx('h-5', !!Icon && 'w-5', !Icon && '-mx-1')}>
+        {Icon && <Icon className="h-full" />}
+      </div>
+      <div className="flex-1 leading-none">{text}</div>
     </Link>
   );
 };
