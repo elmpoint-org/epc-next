@@ -29,7 +29,7 @@ const Navbar = ({
 
   return (
     <>
-      <AppShell.Navbar className="max-w-xs space-y-2 border-emerald-900 bg-dgreen p-2 text-dwhite">
+      <AppShell.Navbar className="max-w-xs space-y-2 border-transparent bg-dgreen p-2 text-dwhite">
         <AppShell.Section className="relative flex flex-row items-center p-4">
           <button
             className="group z-50 -m-4 p-4 data-[off]:invisible"

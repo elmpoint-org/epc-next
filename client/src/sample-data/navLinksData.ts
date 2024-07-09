@@ -25,6 +25,7 @@ export const navLinks: DeepNavLinks = [
         href: '/calendar/new',
         icon: IconCalendarPlus,
       },
+      { text: '' },
       // ...
     ],
   },
@@ -33,6 +34,9 @@ export const navLinks: DeepNavLinks = [
     icon: IconBoxMargin,
     links: [
       { href: '/cms/pages', text: 'Pages', icon: IconNotebook },
+      { text: '' },
+      { text: '' },
+      { text: '' },
       // ...
     ],
   },

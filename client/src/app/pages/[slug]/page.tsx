@@ -78,7 +78,7 @@ export default async function CmsPage({ params: { slug } }: PageParams) {
 
       {/* edit link */}
       {canEdit && (
-        <div className="absolute right-0 top-0 p-2">
+        <div className="absolute right-0 top-0 p-2 print:hidden">
           <A href={`/cms/pages/edit/${page.id}`}>
             <IconPencil className="mb-1 inline size-5" /> Edit this page
           </A>
