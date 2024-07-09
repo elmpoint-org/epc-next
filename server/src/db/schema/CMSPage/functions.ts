@@ -29,7 +29,7 @@ export const getCmsPageFromSlug = h<M.QueryResolvers['cmsPageFromSlug']>(
   async ({ sources, args: { slug } }) => {
     const q = await sources.cms.page.findBy('slug', slug);
     const p = q?.[0] ?? null;
-    if (p && !p.publish) return null;
+    if (p && !p.publish) throw err('NOT_PUBLISHED');
 
     return p;
   }
