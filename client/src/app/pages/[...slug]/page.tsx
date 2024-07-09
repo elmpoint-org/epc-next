@@ -1,11 +1,11 @@
 import { cache } from 'react';
 import { notFound } from 'next/navigation';
 
-import { IconPencil } from '@tabler/icons-react';
+import { IconContract, IconPencil } from '@tabler/icons-react';
 
-import { graphError, graphql } from '@/query/graphql';
-import { oldGraphAuthServer } from '@/query/graphql.server';
-import { PageParams } from '@/util/propTypes';
+import { graphql } from '@/query/graphql';
+import { graphAuthServer } from '@/query/graphql.server';
+import { PageArrayParams, PageParams } from '@/util/propTypes';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 import { getUser } from '@/app/_ctx/user/provider';
 import { scopeCheck } from '@/util/scopeCheck';
@@ -14,6 +14,7 @@ import A from '@/app/_components/_base/A';
 import LoginBoundaryRedirect from '@/app/_components/_base/LoginBoundary/LoginBoundaryRedirect';
 import PageRender from './_components/PageRender';
 import PageStats from './_components/PageStats';
+import PageError from '@/app/_components/_base/PageError';
 
 const GET_PAGE_FROM_SLUG = graphql(`
   query CmsPageFromSlug($slug: String!) {
@@ -40,24 +41,26 @@ export type PagePropType = ResultOf<
 >['cmsPageFromSlug'] & {};
 
 const getPage = cache(async (slug: string) => {
-  const o: { data: PagePropType | null; error: string | null } = {
-    data: null,
-    error: null,
-  };
-  try {
-    const d = await oldGraphAuthServer(GET_PAGE_FROM_SLUG, { slug });
-    o.data = d.cmsPageFromSlug;
-  } catch (err: any) {
-    o.error = graphError(err?.response?.errors);
-  }
-  return o;
+  const { data, errors } = await graphAuthServer(GET_PAGE_FROM_SLUG, { slug });
+  let error;
+  if (!(error = errors?.[0].code)) error = errors;
+
+  return { page: data?.cmsPageFromSlug ?? null, error };
 });
 
 // COMPONENT
-export default async function CmsPage({ params: { slug } }: PageParams) {
+export default async function CmsPage({ params: { slug } }: PageArrayParams) {
   // attempt to find page
-  const { data: page, error } = await getPage(slug);
+  const { page, error } = await getPage(slug.join('/'));
   if (error === 'NEED_PERMISSION') return <LoginBoundaryRedirect />;
+  if (error === 'NOT_PUBLISHED')
+    return (
+      <PageError
+        icon={IconContract}
+        heading="Draft Page"
+        text="This page is still a draft."
+      />
+    );
   if (!page) notFound();
 
   // check scope for edit link
@@ -68,28 +71,40 @@ export default async function CmsPage({ params: { slug } }: PageParams) {
     <>
       {/* page */}
       <div className="flex flex-1 flex-col space-y-2">
+        {/* title bar */}
         <div className="mb-6 flex flex-col items-center justify-center text-center">
           <h1 className="text-4xl">{page.title}</h1>
           <PageStats page={page} />
         </div>
 
+        {/* page content */}
         <PageRender page={page} />
       </div>
 
       {/* edit link */}
       {canEdit && (
-        <div className="absolute right-0 top-0 p-2 print:hidden">
+        <div
+          className="absolute right-0 top-0 p-2 data-[d]:right-7 print:hidden"
+          data-d={!page.publish || null}
+        >
           <A href={`/cms/pages/edit/${page.id}`}>
             <IconPencil className="mb-1 inline size-5" /> Edit this page
           </A>
+        </div>
+      )}
+
+      {/* draft banner */}
+      {!page.publish && (
+        <div className="fixed inset-y-0 right-0 flex rotate-180 flex-row justify-center bg-amber-600/80 p-1 text-sm uppercase text-dwhite [writing-mode:vertical-lr]">
+          <div className="">Draft Page</div>
         </div>
       )}
     </>
   );
 }
 
-export async function generateMetadata({ params: { slug } }: PageParams) {
-  const { data } = await getPage(slug);
+export async function generateMetadata({ params: { slug } }: PageArrayParams) {
+  const { page: data } = await getPage(slug.join('/'));
   const t = data?.title;
   if (t?.length) return { title: t };
 }

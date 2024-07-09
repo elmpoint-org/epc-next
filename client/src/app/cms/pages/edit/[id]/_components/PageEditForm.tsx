@@ -143,7 +143,10 @@ export default function PageEditForm({ id }: { id: string }) {
           tabIndex={0}
           onKeyDown={getHotkeyHandler([['mod+shift+Enter', save]])}
         >
-          <SaveRow onClick={save} state={saveState} />
+          <div className="flex flex-row items-center justify-between">
+            <ViewPageLink {...formProps} />
+            <SaveRow onClick={save} state={saveState} />
+          </div>
 
           {/* text fields */}
           <TextFields {...formProps} />
@@ -154,10 +157,9 @@ export default function PageEditForm({ id }: { id: string }) {
           {/* page content */}
           <TextEditor {...formProps} onTyping={setIsTyping} />
 
-          {/* page link */}
-          <ViewPageLink {...formProps} />
-
-          <SaveRow onClick={save} state={saveState} />
+          <div className="flex flex-row justify-end">
+            <SaveRow onClick={save} state={saveState} />
+          </div>
         </div>
 
         <DeletePage {...formProps} />

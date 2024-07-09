@@ -26,12 +26,15 @@ export const getCmsPage = h<M.QueryResolvers['cmsPage']>(
 );
 
 export const getCmsPageFromSlug = h<M.QueryResolvers['cmsPageFromSlug']>(
-  async ({ sources, args: { slug } }) => {
+  async ({ sources, args: { slug }, scope }) => {
     const q = await sources.cms.page.findBy('slug', slug);
-    const p = q?.[0] ?? null;
-    if (p && !p.publish) return null;
+    const page = q?.[0] ?? null;
 
-    return p;
+    // if unpublished, prevent non-editors from viewing
+    if (page && !page.publish && !scopeDiff(scope, 'ADMIN', 'EDIT'))
+      throw err('NOT_PUBLISHED');
+
+    return page;
   }
 );
 
