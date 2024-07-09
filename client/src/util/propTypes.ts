@@ -11,6 +11,9 @@ export type SearchParams = {
 export type PageParams = {
   params: { [key: string]: string };
 };
+export type PageArrayParams = {
+  params: { [key: string]: string[] };
+};
 
 export type Key = {
   key?: React.Key;

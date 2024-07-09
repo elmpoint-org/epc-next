@@ -5,7 +5,7 @@ import { IconContract, IconPencil } from '@tabler/icons-react';
 
 import { graphql } from '@/query/graphql';
 import { graphAuthServer } from '@/query/graphql.server';
-import { PageParams } from '@/util/propTypes';
+import { PageArrayParams, PageParams } from '@/util/propTypes';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 import { getUser } from '@/app/_ctx/user/provider';
 import { scopeCheck } from '@/util/scopeCheck';
@@ -49,9 +49,9 @@ const getPage = cache(async (slug: string) => {
 });
 
 // COMPONENT
-export default async function CmsPage({ params: { slug } }: PageParams) {
+export default async function CmsPage({ params: { slug } }: PageArrayParams) {
   // attempt to find page
-  const { page, error } = await getPage(slug);
+  const { page, error } = await getPage(slug.join('/'));
   if (error === 'NEED_PERMISSION') return <LoginBoundaryRedirect />;
   if (error === 'NOT_PUBLISHED')
     return (
@@ -71,20 +71,32 @@ export default async function CmsPage({ params: { slug } }: PageParams) {
     <>
       {/* page */}
       <div className="flex flex-1 flex-col space-y-2">
+        {/* title bar */}
         <div className="mb-6 flex flex-col items-center justify-center text-center">
           <h1 className="text-4xl">{page.title}</h1>
           <PageStats page={page} />
         </div>
 
+        {/* page content */}
         <PageRender page={page} />
       </div>
 
       {/* edit link */}
       {canEdit && (
-        <div className="absolute right-0 top-0 p-2 print:hidden">
+        <div
+          className="absolute right-0 top-0 p-2 data-[d]:right-7 print:hidden"
+          data-d={!page.publish || null}
+        >
           <A href={`/cms/pages/edit/${page.id}`}>
             <IconPencil className="mb-1 inline size-5" /> Edit this page
           </A>
+        </div>
+      )}
+
+      {/* draft banner */}
+      {!page.publish && (
+        <div className="fixed inset-y-0 right-0 flex rotate-180 flex-row justify-center bg-amber-600/80 p-1 text-sm uppercase text-dwhite [writing-mode:vertical-lr]">
+          <div className="">Draft Page</div>
         </div>
       )}
     </>

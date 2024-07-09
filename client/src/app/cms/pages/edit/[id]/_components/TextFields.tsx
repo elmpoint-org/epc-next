@@ -22,19 +22,21 @@ export default function TextFields({
   // auto slug generation
   const [isAutoSlug, setIsAutoSlug] = useState(false);
   useEffect(() => {
-    if (isAutoSlug) updateForm({ slug: formatSlug(form.title, 'STRIP') });
+    if (isAutoSlug)
+      updateForm({ slug: formatSlug(form.title, 'STRIP', 'NO_SLASH') });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.title, isAutoSlug]);
   function changeSlug(ns: string) {
     if (isAutoSlug) setIsAutoSlug(false);
     updateForm({ slug: formatSlug(ns) });
   }
-  function formatSlug(newSlug: string, strip?: 'STRIP') {
+  function formatSlug(newSlug: string, ...opts: ('STRIP' | 'NO_SLASH')[]) {
     let ns = newSlug
       .toLowerCase()
-      .replace(/[^a-z0-9]/g, '-')
-      .replace(/-{2,}/g, '-');
-    if (strip) ns = ns.replace(/^-+|-+$/g, '');
+      .replace(/[^a-z0-9\/]/g, '-')
+      .replace(/([-\/]){2,}/g, '$1');
+    if (opts.includes('NO_SLASH')) ns = ns.replace(/\//g, '-');
+    if (opts.includes('STRIP')) ns = ns.replace(/^-+|-+$/g, '');
     return ns;
   }
 

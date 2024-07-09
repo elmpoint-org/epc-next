@@ -27,7 +27,7 @@ export default function SaveRow({
 
   return (
     <>
-      <div className="flex flex-row items-center justify-end gap-2">
+      <div className="flex flex-row items-center gap-2">
         {!isSkeleton ? (
           <>
             <div className="text-sm text-slate-600">
