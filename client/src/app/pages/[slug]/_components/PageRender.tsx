@@ -9,7 +9,8 @@ import type { PagePropType } from '../page';
 export default function PageRender({ page }: { page: PagePropType }) {
   let body;
   try {
-    const c = JSON.parse(page.content!);
+    if (!page.content) return '';
+    const c = JSON.parse(page.content);
     body = generateHTML(c, [...STATIC_EXTENSIONS, Link]);
   } catch (_) {
     return (

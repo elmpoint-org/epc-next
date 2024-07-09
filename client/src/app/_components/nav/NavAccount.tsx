@@ -47,11 +47,7 @@ export default function NavAccount() {
           <Collapse in={isOpen}>
             <div className="flex flex-col gap-2 p-4">
               {links.map((it, i) => (
-                <NavLink
-                  key={i}
-                  {...it}
-                  className="border-emerald-800 bg-dgreen hover:bg-emerald-700/50"
-                />
+                <NavLink key={i} {...it} variant="LIGHT" />
               ))}
             </div>
           </Collapse>

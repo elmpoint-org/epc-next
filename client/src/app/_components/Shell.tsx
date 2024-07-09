@@ -4,9 +4,9 @@ import type { Children } from '@/util/propTypes';
 
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconMenu } from '@tabler/icons-react';
 
 import Navbar from './Navbar';
+import NavOpen from './nav/NavOpen';
 
 const Shell = ({ children }: Children) => {
   const navState = useDisclosure();
@@ -14,12 +14,7 @@ const Shell = ({ children }: Children) => {
 
   return (
     <>
-      <button
-        className="fixed left-0 top-0 z-50 rounded-br-2xl bg-dwhite/30 p-4 transition-all hover:bg-dwhite/60"
-        onClick={open}
-      >
-        <IconMenu />
-      </button>
+      <NavOpen onClick={open} />
 
       <AppShell
         navbar={{

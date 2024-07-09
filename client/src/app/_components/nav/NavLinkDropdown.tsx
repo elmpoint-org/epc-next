@@ -49,11 +49,7 @@ export default function NavLinkDropdown({
         <Collapse in={isOpen}>
           <div className="flex flex-col gap-2 border-t border-white/10 p-4">
             {links.map((it, i) => (
-              <NavLink
-                key={i}
-                {...it}
-                className="gap-4 border-emerald-800 bg-dgreen px-4 hover:bg-emerald-700/50"
-              />
+              <NavLink key={i} {...it} variant="LIGHT" className="gap-4" />
             ))}
           </div>
         </Collapse>
