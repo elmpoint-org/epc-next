@@ -103,8 +103,8 @@ export default async function CmsPage({ params: { slug } }: PageArrayParams) {
   );
 }
 
-export async function generateMetadata({ params: { slug } }: PageParams) {
-  const { page: data } = await getPage(slug);
+export async function generateMetadata({ params: { slug } }: PageArrayParams) {
+  const { page: data } = await getPage(slug.join('/'));
   const t = data?.title;
   if (t?.length) return { title: t };
 }
