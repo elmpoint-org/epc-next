@@ -9,6 +9,10 @@ import CMSPageModule from './CMSPage/module';
 import CMSPageSource from './CMSPage/source';
 import CmsImageModule from './CMSImage/module';
 import CMSImageSource from './CMSImage/source';
+import RoomModule from './Room/module';
+import RoomSource from './Room/source';
+import CabinModule from './Cabin/module';
+import CabinSource from './Cabin/source';
 
 // DEFINE SCHEMA
 
@@ -19,6 +23,8 @@ export const modules: Module[] = [
   PreUserModule,
   CMSPageModule,
   CmsImageModule,
+  RoomModule,
+  CabinModule,
 ];
 
 export const sources = () => ({
@@ -28,4 +34,6 @@ export const sources = () => ({
     page: new CMSPageSource(),
     image: new CMSImageSource(),
   },
+  room: new RoomSource(),
+  cabin: new CabinSource(),
 });
