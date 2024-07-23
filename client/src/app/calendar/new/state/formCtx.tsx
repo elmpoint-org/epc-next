@@ -45,11 +45,11 @@ export const eventTextInitial = (): EventText => ({
 
 export type FormCtx = {
   dates: DatesRange;
-  setDates: React.Dispatch<React.SetStateAction<DatesRange>>;
+  setDates: SetState<DatesRange>;
   guests: GuestEntry[];
-  setGuests: React.Dispatch<React.SetStateAction<GuestEntry[]>>;
+  setGuests: SetState<GuestEntry[]>;
   eventText: EventText;
-  setEventText: React.Dispatch<React.SetStateAction<EventText>>;
+  setEventText: SetState<EventText>;
 };
 export const FormCtx = createContext<FormCtx>({
   dates: [null, null],
@@ -114,3 +114,5 @@ export const useFormCtxRoomState = (i: number) => {
     setSelectedCabin,
   };
 };
+
+type SetState<T> = React.Dispatch<React.SetStateAction<T>>;

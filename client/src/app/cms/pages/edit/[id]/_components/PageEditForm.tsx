@@ -7,7 +7,7 @@ import type { ResultOf } from '@graphql-typed-document-node/core';
 import { notifications } from '@mantine/notifications';
 import { getHotkeyHandler } from '@mantine/hooks';
 
-import { oldGraphAuth, graphError, graphql } from '@/query/graphql';
+import { graphql, graphAuth } from '@/query/graphql';
 import { useGraphQuery } from '@/query/query';
 import { useUser } from '@/app/_ctx/user/context';
 import { revalidatePage } from '../../../_actions/edit';
@@ -104,20 +104,19 @@ export default function PageEditForm({ id }: { id: string }) {
     if (saveState === 'TYPING') return;
     saving(async () => {
       const cc = form.shouldAddContributor;
-      const f = await oldGraphAuth(UPDATE_CMS_PAGE, {
+      const { data, errors } = await graphAuth(UPDATE_CMS_PAGE, {
         id,
         ...form,
         contributorAdd: (cc && user?.id) || null,
         contributorRemove: (!cc && user?.id) || null,
-      }).catch((err) => {
-        console.log(err);
+      });
+      if (errors || !data?.cmsPageUpdate) {
         notifications.show({
           color: 'red',
-          message: `Error: ${cmsErrorMap(graphError(err?.response?.errors))}`,
+          message: `Error: ${cmsErrorMap(errors?.[0].code)}`,
         });
-        return false;
-      });
-      if (!f) return;
+        return;
+      }
 
       pageQuery.refetch();
       if (form.slug.length) revalidatePage(form.slug);
