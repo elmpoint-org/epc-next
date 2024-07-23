@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useState } from 'react';
 
+import type { SetState } from '@/util/stateType';
+
 export interface Cabin {
   id: string;
   name: string;
@@ -114,5 +116,3 @@ export const useFormCtxRoomState = (i: number) => {
     setSelectedCabin,
   };
 };
-
-type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
