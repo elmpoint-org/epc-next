@@ -57,5 +57,17 @@ export default gql`
     delete a cabin
     """
     cabinDelete(id: ID!): Cabin!
+
+    """
+    **SCOPE: ADMIN | CALENDAR_ADMIN**
+
+    create multiple cabins at once
+    """
+    cabinCreateMultiple(cabins: [CabinCreate!]!): [Cabin!]!
+  }
+
+  input CabinCreate {
+    name: String!
+    aliases: [String!]!
   }
 `;

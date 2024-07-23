@@ -91,5 +91,23 @@ export default gql`
     delete a room
     """
     roomDelete(id: ID!): Room!
+
+    """
+    **SCOPE: ADMIN | CALENDAR_ADMIN**
+
+    create multiple rooms at once
+    """
+    roomCreateMultiple(rooms: [RoomCreate!]!): [Room!]!
+  }
+
+  input RoomCreate {
+    name: String!
+    aliases: [String!]!
+
+    cabinId: String!
+    beds: Int!
+
+    forCouples: Boolean
+    noCount: Boolean
   }
 `;

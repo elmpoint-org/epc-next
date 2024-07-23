@@ -11,6 +11,7 @@ const resolvers: CabinModule.Resolvers = {
   },
   Mutation: {
     cabinCreate: f.cabinCreate,
+    cabinCreateMultiple: f.cabinCreateMultiple,
     cabinUpdate: f.cabinUpdate,
     cabinDelete: f.cabinDelete,
   },

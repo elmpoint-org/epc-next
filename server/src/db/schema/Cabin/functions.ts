@@ -34,6 +34,17 @@ export const cabinCreate = h<M.MutationResolvers['cabinCreate']>(
   }
 );
 
+export const cabinCreateMultiple = h<
+  M.MutationResolvers['cabinCreateMultiple']
+>(
+  scoped('ADMIN', 'CALENDAR_ADMIN'), //
+  async ({ sources, args: { cabins } }) => {
+    const items = cabins as DBCabin[];
+
+    return sources.cabin.createMultiple(items);
+  }
+);
+
 export const cabinUpdate = h<M.MutationResolvers['cabinUpdate']>(
   scoped('ADMIN', 'CALENDAR_ADMIN'),
   async ({ sources, args: { id, ...updates } }) => {

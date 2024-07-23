@@ -46,6 +46,20 @@ export const roomCreate = h<M.MutationResolvers['roomCreate']>(
   }
 );
 
+export const roomCreateMultiple = h<M.MutationResolvers['roomCreateMultiple']>(
+  scoped('ADMIN', 'CALENDAR_ADMIN'),
+  async ({ sources, args: { rooms } }) => {
+    const items = rooms as DBRoom[];
+
+    // check cabins exist
+    const cabinIds = items.map((r) => r.cabinId);
+    const cabins = await sources.cabin.getMultiple(cabinIds);
+    if (cabins.filter((it) => !it?.id).length) throw err('CABIN_NOT_FOUND');
+
+    return sources.room.createMultiple(items);
+  }
+);
+
 export const roomUpdate = h<M.MutationResolvers['roomUpdate']>(
   scoped('ADMIN', 'CALENDAR_ADMIN'),
   async ({ sources, args: { id, ...updates } }) => {
@@ -78,5 +92,12 @@ export const getRoomCabin = h<M.RoomResolvers['cabin']>(
   async ({ sources, parent }) => {
     const { cabinId } = parent as DBRoom;
     return sources.cabin.get(cabinId);
+  }
+);
+
+export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
+  async ({ sources }) => {
+    // TODO calculate based on reservations
+    return 0;
   }
 );

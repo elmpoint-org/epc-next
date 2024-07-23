@@ -12,12 +12,14 @@ const resolvers: RoomModule.Resolvers = {
   },
   Mutation: {
     roomCreate: f.roomCreate,
+    roomCreateMultiple: f.roomCreateMultiple,
     roomUpdate: f.roomUpdate,
     roomDelete: f.roomDelete,
   },
 
   Room: {
     cabin: f.getRoomCabin,
+    availableBeds: f.getRoomAvailableBeds,
 
     timestamp,
   },
