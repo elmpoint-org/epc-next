@@ -16,7 +16,7 @@ export default gql`
     "the number of beds in the room"
     beds: Int!
     "the number of currently unreserved beds in this room"
-    availableBeds: Int!
+    availableBeds: Int
 
     "does this room have a bed big enough for two people"
     forCouples: Boolean

@@ -98,6 +98,6 @@ export const getRoomCabin = h<M.RoomResolvers['cabin']>(
 export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
   async ({ sources }) => {
     // TODO calculate based on reservations
-    return 0;
+    return null;
   }
 );
