@@ -9,7 +9,7 @@ import {
   IconCircleChevronRight,
 } from '@tabler/icons-react';
 
-import { useFormCtx } from '../state/formCtx';
+import { DatesRange, useFormCtx } from '../state/formCtx';
 
 const FormCalendar = () => {
   const { dates, setDates } = useFormCtx();
@@ -39,8 +39,18 @@ const FormCalendar = () => {
         console.log('invalid', value);
       }
     };
-  const prettify = (id: 0 | 1) => () =>
-    setTdates((o) => ({ ...o, [id]: parseDate(dates[id]) }));
+  const prettify = (id: 0 | 1) => () => {
+    let temp: DatesRange = dates;
+    // reorder dates if necessary
+    if ((temp[0]?.valueOf() ?? 0) > (temp[1]?.valueOf() ?? 0)) {
+      temp = [temp[1], temp[0]];
+      setDates(temp);
+      setTdates(temp.map((it) => parseDate(it)));
+    } else {
+      // otherwise just format the text
+      setTdates((o) => ({ ...o, [id]: parseDate(dates[id]) }));
+    }
+  };
 
   return (
     <>
@@ -56,6 +66,9 @@ const FormCalendar = () => {
 
         <TextInput
           label="Start Date"
+          description={
+            <>The day you arrive, intending to sleep at camp that night.</>
+          }
           placeholder="Start Date"
           value={tdates[0]}
           onChange={updateTdate(0)}
@@ -64,6 +77,12 @@ const FormCalendar = () => {
         />
         <TextInput
           label="End Date"
+          description={
+            <>
+              The day you leave, intending <b>not</b> to sleep at camp that
+              night.
+            </>
+          }
           placeholder="End Date"
           value={tdates[1]}
           onChange={updateTdate(1)}
@@ -79,8 +98,8 @@ const FormCalendar = () => {
           firstDayOfWeek={0}
           allowSingleDateInRange={true}
           classNames={{
-            levelsGroup: 'p-4 justify-center border-x-8 border-slate-200/80',
-            day: 'data-[weekend]:[&:not([data-selected])]:text-emerald-800/80 data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border-slate-800/50 border-solid',
+            levelsGroup: 'justify-center border-x-8 border-slate-200/80 p-4',
+            day: 'border-solid data-[weekend]:[&:not([data-selected])]:text-emerald-800/80 data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border-slate-800/50',
           }}
         />
       </Collapse>
