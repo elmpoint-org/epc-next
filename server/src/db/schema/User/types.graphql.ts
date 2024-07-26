@@ -31,10 +31,14 @@ export default gql`
   "allowed permissions for app users, to be stored in scope arrays."
   enum UserScopeProp {
     # __ GLOBAL SCOPES __
-    "allows a user to edit CMS data, such as website and calendar data"
+    "allows a user to edit CMS data, such as website pages and updates"
     EDIT
     "full site administrator access"
     ADMIN
+
+    # __ CALENDAR SPECIFIC __
+    "allows a user to edit all calendar data, including batch edits to events and room/cabin data"
+    CALENDAR_ADMIN
 
     # __ PHOTO CONTEST SPECIFIC __
     "allows a user to vote in the photo contest"

@@ -189,7 +189,7 @@ export const cmsImageDeleteMultiple = h<
     );
 
     await sources.cms.image.deleteMultiple(ids, /* output: */ false);
-    return imgs;
+    return imgs.map((it) => it ?? null);
   }
 );
 
