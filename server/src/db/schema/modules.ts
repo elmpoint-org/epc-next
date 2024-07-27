@@ -13,6 +13,8 @@ import RoomModule from './Room/module';
 import RoomSource from './Room/source';
 import CabinModule from './Cabin/module';
 import CabinSource from './Cabin/source';
+import StayModule from './Stay/module';
+import StaySource from './Stay/source';
 
 // DEFINE SCHEMA
 
@@ -25,6 +27,7 @@ export const modules: Module[] = [
   CmsImageModule,
   RoomModule,
   CabinModule,
+  StayModule,
 ];
 
 export const sources = () => ({
@@ -36,4 +39,5 @@ export const sources = () => ({
   },
   room: new RoomSource(),
   cabin: new CabinSource(),
+  stay: new StaySource(),
 });
