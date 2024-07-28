@@ -1,4 +1,4 @@
-import { ALLOWED_TYPES } from './IMAGE_OPTIONS';
+import { IMAGE_TYPES } from './FILE_TYPES';
 import { Buckets, checkFileType } from './s3';
 
 // CONSTANTS
@@ -8,4 +8,4 @@ export const PATH = 'images/';
 // FUNCTIONS
 
 export const checkImageType = (filename: string) =>
-  checkFileType(filename, ...ALLOWED_TYPES);
+  checkFileType(filename, ...IMAGE_TYPES);

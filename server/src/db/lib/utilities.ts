@@ -26,6 +26,10 @@ export const err = (code: string, msg?: string, log?: unknown) => {
   return new GraphQLError(msg, { extensions: { code } });
 };
 
+export const errt = (...p: Parameters<typeof err>) => {
+  throw err(...p);
+};
+
 // scope checking functions
 export const scopeError = () => err('NEED_PERMISSION');
 export const scopeDiff = (scope: Scope, required: string) => {
