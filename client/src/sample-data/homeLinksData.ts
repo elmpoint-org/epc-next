@@ -24,8 +24,18 @@ export const homeLinks: HomeLink[] = [
     timestamp: { created: 1672524367, updated: 1672530391 },
   },
   {
-    id: '40fe1322-4b02-46ab-b124-bbfd2d3851b9',
+    id: 'abc123',
     order: 1,
+    url: '/pages/links',
+    name: 'Recent Updates & Links',
+    description:
+      'The most up-to-date resources added by board members and website admins.',
+    flags: { secure: true },
+    timestamp: { created: 0, updated: 0 },
+  },
+  {
+    id: '40fe1322-4b02-46ab-b124-bbfd2d3851b9',
+    order: 2,
     url: '/projects',
     name: 'Project list',
     description:
@@ -35,7 +45,7 @@ export const homeLinks: HomeLink[] = [
   },
   {
     id: '2685e0ec-c6ab-4739-9b7c-bcd1a1ee9e50',
-    order: 2,
+    order: 3,
     url: '/documents',
     name: 'Document center',
     description:
@@ -43,16 +53,7 @@ export const homeLinks: HomeLink[] = [
     flags: { secure: true },
     timestamp: { created: 1672524367, updated: 1672531547 },
   },
-  {
-    id: 'c5605c6b-c202-4038-9705-50103a59b937',
-    order: 3,
-    url: '/photocontest',
-    name: 'Photo contest',
-    description:
-      'Click here to submit your entry to the annual photo contest, and browse past years’ submissions!',
-    flags: {},
-    timestamp: { created: 1672524367, updated: 1672530457 },
-  },
+
   {
     id: '346109ef-110b-4510-8e1d-147860ed930a',
     order: 4,
@@ -74,3 +75,14 @@ export const homeLinks: HomeLink[] = [
     timestamp: { created: 1672524367, updated: 1672530499 },
   },
 ];
+
+// {
+//   id: 'c5605c6b-c202-4038-9705-50103a59b937',
+//   order: 3,
+//   url: '/photocontest',
+//   name: 'Photo contest',
+//   description:
+//     'Click here to submit your entry to the annual photo contest, and browse past years’ submissions!',
+//   flags: {},
+//   timestamp: { created: 1672524367, updated: 1672530457 },
+// },
