@@ -4,6 +4,7 @@ import {
   IconBoxMargin,
   IconCalendar,
   IconCalendarPlus,
+  IconClick,
   IconEyeQuestion,
   IconHome2,
   IconNotebook,
@@ -44,6 +45,7 @@ export const navLinks: DeepNavLinks = [
     text: 'Reference Pages',
     icon: IconEyeQuestion,
     links: [
+      { href: '/pages/links', text: 'Updates & Links', icon: IconClick },
       {
         text: 'Camp How-tos',
         href: '/pages/instructions',

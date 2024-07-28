@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-import { Table } from '@mantine/core';
+import { SegmentedControl, SegmentedControlItem, Table } from '@mantine/core';
 
 import type { PagesType } from './PagesContainer';
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
@@ -10,6 +10,8 @@ import { clx } from '@/util/classConcat';
 
 import A from '@/app/_components/_base/A';
 import BooleanStatus from '@/app/_components/_base/BooleanStatus';
+import { useState } from 'react';
+import { Inside } from '@/util/inferTypes';
 
 const STALE_PAGE_SECONDS = 2 * 3600;
 
@@ -22,8 +24,57 @@ export default function PagesList({
 }) {
   const isSkeleton = useSkeleton();
 
+  // list sorting
+  type SortBy = 'UPDATED' | 'CREATED' | 'SLUG' | 'TITLE';
+  const [sortBy, setSortBy] = useState<SortBy>(unused ? 'CREATED' : 'SLUG');
+  function sorter(a: Inside<PagesType>, b: Inside<PagesType>) {
+    if (!(a && b)) return 0;
+    switch (sortBy) {
+      case 'SLUG':
+        if ((a.slug ?? '') < (b.slug ?? '')) return -1;
+        if ((a.slug ?? '') > (b.slug ?? '')) return 1;
+        return 0;
+
+      case 'TITLE':
+        if ((a.title ?? '') < (b.title ?? '')) return -1;
+        if ((a.title ?? '') > (b.title ?? '')) return 1;
+        return 0;
+
+      case 'CREATED':
+        return b.timestamp.created - a.timestamp.created;
+
+      case 'UPDATED':
+        return b.timestamp.updated - a.timestamp.updated;
+
+      default:
+        return 0;
+    }
+  }
+
   return (
     <>
+      {/* sort options */}
+      {!unused && (
+        <div className="flex sm:flex-row flex-col sm:items-center gap-2 px-2">
+          <div className="text-sm text-slate-600">sort by:</div>
+          <SegmentedControl
+            color="emerald"
+            size="xs"
+            value={sortBy}
+            onChange={(s) => setSortBy(s as SortBy)}
+            data={
+              [
+                { value: 'SLUG', label: 'Link' },
+                { value: 'TITLE', label: 'Title' },
+                { value: 'UPDATED', label: 'Date Modified' },
+                { value: 'CREATED', label: 'Date Created' },
+              ] as (SegmentedControlItem & { value: SortBy })[]
+            }
+          />
+        </div>
+      )}
+
+      {/* table container */}
       <div className="overflow-x-auto">
         <Table withRowBorders={false}>
           {/* table headers */}
@@ -50,7 +101,7 @@ export default function PagesList({
                       STALE_PAGE_SECONDS
                   );
                 })
-                .sort((a, b) => b!.timestamp.created - a!.timestamp.created)
+                .sort(sorter)
                 .map((p, i) => {
                   const page = p!;
                   return (
