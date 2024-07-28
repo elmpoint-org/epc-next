@@ -3,10 +3,12 @@ import {
   type PutObjectCommandInput,
   S3Client,
   GetObjectCommand,
-  GetObjectCommandOutput,
   HeadObjectCommand,
   NotFound,
   DeleteObjectCommand,
+  ListObjectsV2Command,
+  CopyObjectCommand,
+  S3ServiceException,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl as presign } from '@aws-sdk/s3-request-presigner';
 
@@ -14,6 +16,8 @@ import mime from 'mime/lite';
 import type { MimeType } from '@@/util/mimeTypes';
 
 import { FILE_GET_PRESIGN_EXPIRE, UPLOAD_PRESIGN_EXPIRE } from '@@/CONSTANTS';
+import { getDateSec } from '@@/util/time';
+import { PATH_UNKNOWN_STRING } from './FILE_TYPES';
 
 export enum Buckets {
   EPC_ONE = 'epc-one',
@@ -22,7 +26,7 @@ export enum Buckets {
 
 const s3 = new S3Client();
 
-type FilePath = { bucket: Buckets; path: string };
+export type FilePath = { bucket: Buckets; path: string };
 
 type GetUploadUrlProps = {
   bucket: Buckets;
@@ -30,7 +34,7 @@ type GetUploadUrlProps = {
   // type:
   expiresSec?: number;
 };
-export async function getUploadUrl({
+export async function getS3UploadUrl({
   bucket,
   path,
   expiresSec,
@@ -126,11 +130,91 @@ export async function doesFileExist(fp: FilePath) {
   return true;
 }
 
+/**
+ * delete a file
+ * @throws usually an {@link S3ServiceException}
+ */
 export async function deleteS3File(fp: FilePath) {
   await s3.send(
     new DeleteObjectCommand({
       Bucket: fp.bucket,
       Key: fp.path,
+    })
+  );
+}
+
+export async function listS3Files(
+  bucket: Buckets,
+  folder?: string,
+  paged?: {
+    /** max number of items to return */
+    max?: number;
+    /** the last key returned in the last request */
+    start?: string;
+  }
+) {
+  const objects = await s3
+    .send(
+      new ListObjectsV2Command({
+        Bucket: bucket,
+        Prefix: folder,
+        MaxKeys: paged?.max,
+        StartAfter: paged?.start,
+      })
+    )
+    .catch(() => null); // TODO get error
+  if (!objects) return null;
+
+  const list =
+    objects.Contents?.map((it) => ({
+      path: it.Key ?? PATH_UNKNOWN_STRING,
+      lastModified: getDateSec(it.LastModified) ?? undefined,
+      size: it.Size,
+    })) ?? null;
+
+  return { data: list, isComplete: !objects.IsTruncated };
+}
+
+/**
+ * rename a file
+ * @throws usually an {@link S3ServiceException}
+ */
+export async function moveS3File({
+  bucket,
+  path,
+  newPath,
+  deleteOld,
+}: {
+  bucket: Buckets;
+  path: string;
+  newPath: string;
+  deleteOld?: boolean;
+}) {
+  await s3.send(
+    new CopyObjectCommand({
+      Bucket: bucket,
+      CopySource: bucket + '/' + path,
+      Key: newPath,
+    })
+  );
+  if (deleteOld)
+    await s3.send(
+      new DeleteObjectCommand({
+        Bucket: bucket,
+        Key: path,
+      })
+    );
+}
+
+/**
+ * create a new empty folder object.
+ * @throws usually an {@link S3ServiceException}
+ */
+export async function createS3Folder(bucket: Buckets, folder: string) {
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: folder,
     })
   );
 }
