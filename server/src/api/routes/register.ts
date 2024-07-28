@@ -86,6 +86,7 @@ export const createUser = t.procedure
         query GetPreUser($preUserId: ID!) {
           preUser(id: $preUserId) {
             id
+            scope
           }
         }
       `),
@@ -100,13 +101,19 @@ export const createUser = t.procedure
           $email: String!
           $name: String!
           $firstName: String!
+          $scope: [UserScopeProp!]
         ) {
-          userCreate(email: $email, name: $name, firstName: $firstName) {
+          userCreate(
+            email: $email
+            name: $name
+            firstName: $firstName
+            scope: $scope
+          ) {
             id
           }
         }
       `),
-      { ...user }
+      { ...user, scope: d0.preUser.scope }
     );
     if (e1 || !d1?.userCreate)
       throw err(

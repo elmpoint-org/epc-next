@@ -8,6 +8,7 @@ export default gql`
     id: ID!
     email: String!
     name: String
+    scope: [UserScopeProp!]
 
     timestamp: TS!
   }
@@ -48,7 +49,7 @@ export default gql`
 
     update a preuser
     """
-    preUserUpdate(id: ID!, name: String): PreUser!
+    preUserUpdate(id: ID!, name: String, scope: [UserScopeProp!]): PreUser!
 
     """
     **SCOPE: admin**
