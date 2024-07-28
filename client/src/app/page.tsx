@@ -51,6 +51,17 @@ export default async function HomePage() {
                   <LinkBlock key={i} {...props} />
                 ))}
             </div>
+
+            {/* suggestion */}
+            <div className="px-5 text-right text-sm italic hover:underline">
+              <a
+                href="https://github.com/elmpoint-org/epc-next/discussions/categories/suggestions"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Have a suggestion? Found a bug?
+              </a>
+            </div>
           </div>
         </div>
       </div>

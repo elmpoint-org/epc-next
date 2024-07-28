@@ -54,11 +54,11 @@ const FormCalendar = () => {
 
   return (
     <>
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-row items-end gap-2">
         <ActionIcon
           onClick={toggleCal}
           aria-label="toggle calendar"
-          className="mt-6"
+          className="mb-1.5"
           variant="light"
         >
           {isCalOpen ? <IconCircleChevronDown /> : <IconCircleChevronRight />}
