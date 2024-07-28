@@ -53,7 +53,6 @@ export const homeLinks: HomeLink[] = [
     flags: { secure: true },
     timestamp: { created: 1672524367, updated: 1672531547 },
   },
-
   {
     id: '346109ef-110b-4510-8e1d-147860ed930a',
     order: 4,
