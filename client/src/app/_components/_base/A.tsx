@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Children } from '@/util/propTypes';
-import { clx } from '@/util/classConcat';
+import { clmx } from '@/util/classConcat';
 
 const A = ({
   href,
@@ -12,7 +12,10 @@ const A = ({
     <>
       <Link
         href={href}
-        className={clx('text-emerald-700 font-bold hover:underline', className)}
+        className={clmx(
+          'font-bold text-emerald-700 hover:underline',
+          className,
+        )}
         {...props}
       >
         {children}
