@@ -22,6 +22,13 @@ export default gql`
       startAfter: String
       recursive: Boolean
     ): CMSFileListOutput
+
+    """
+    **SCOPE: userId**
+
+    get a presigned url for a file path.
+    """
+    cmsFilePresign(path: String!): String
   }
 
   type Mutation {

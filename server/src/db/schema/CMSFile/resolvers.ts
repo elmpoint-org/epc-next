@@ -5,6 +5,7 @@ import * as f from './functions';
 const resolvers: CmsFileModule.Resolvers = {
   Query: {
     cmsFiles: f.getCmsFiles,
+    cmsFilePresign: f.getCmsFilePresign,
   },
   Mutation: {
     cmsFileUpload: f.cmsFileUpload,
