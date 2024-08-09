@@ -176,7 +176,7 @@ export async function listS3Files(
 }
 
 /**
- * rename a file
+ * move or copy (or rename) a file
  * @throws usually an {@link S3ServiceException}
  */
 export async function moveS3File({

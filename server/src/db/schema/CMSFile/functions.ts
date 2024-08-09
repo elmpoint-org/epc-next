@@ -7,13 +7,13 @@ import {
   getTypedScopeFunctions,
   handle as h,
   loggedIn,
-  errt,
 } from '@@/db/lib/utilities';
 import {
   createS3Folder,
   deleteS3File,
   getS3UploadUrl,
   getS3Uri,
+  getSignedS3Url,
   listS3Files,
   moveS3File,
 } from '@@/s3/s3';
@@ -36,20 +36,25 @@ export const getCmsFiles = h<M.QueryResolvers['cmsFiles']>(
       max: max ?? DEFAULT_MAX_FILES_LIST_LIMIT,
       start: startAfter ?? undefined,
     });
-    if (!resp?.data) throw err('S3_ERROR');
-    let list = resp.data;
+    let list = resp?.data ?? [];
 
     const isInDirectory = (path: string) =>
       !path.slice(root?.length).match(/\/.+$/);
 
     // filter to current directory only
-    if (!recursive)
+    if (!recursive && resp?.data)
       list = resp.data.filter((it, i) => {
         if (it.path === root) return false;
         return isInDirectory(it.path);
       });
 
-    return { files: list, isComplete: resp.isComplete };
+    return { files: list, isComplete: resp?.isComplete ?? false };
+  }
+);
+
+export const getCmsFilePresign = h<M.QueryResolvers['cmsFilePresign']>(
+  async ({ args: { path } }) => {
+    return getSignedS3Url({ bucket: BUCKET, path });
   }
 );
 
