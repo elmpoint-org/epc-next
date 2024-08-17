@@ -14,7 +14,7 @@ const LineLabel = ({
         )}
       >
         <div className="flex-1 border-t"></div>
-        <div className="bg-dwhite">or</div>
+        <div className="bg-dwhite">{children}</div>
         <div className="flex-1 border-t"></div>
       </div>
     </>

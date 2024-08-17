@@ -131,7 +131,7 @@ const AccountDetails = () => {
             </div>
           </div>
 
-          <div className=" flex flex-col gap-4 rounded-lg sm:flex-row sm:items-center">
+          <div className="flex flex-col gap-4 rounded-lg sm:flex-row">
             {/* avatar view */}
             <div className="relative flex flex-col items-center rounded-xl p-4 sm:max-w-56">
               <a
@@ -198,6 +198,30 @@ const AccountDetails = () => {
                 }}
                 {...form.getInputProps('email')}
               />
+              <details className="rounded-md border border-transparent p-3 text-xs open:border-red-800/50 open:bg-red-400/20">
+                <summary className="cursor-pointer text-red-800 hover:underline">
+                  Be cautious about changing your email. (click for more)
+                </summary>
+                <div className="mt-1 space-y-3 p-2 text-sm text-red-900">
+                  <p>
+                    <b>
+                      If you don’t have access to the email you list here, you
+                      may become unable to login.
+                    </b>{' '}
+                    Double check that it’s correct.
+                  </p>
+                  <p>
+                    Additionally, your passkeys are stored with an email address
+                    which is shown to you upon login. Changing the email listed
+                    here{' '}
+                    <b>
+                      will not update the email address shown on your passkey
+                    </b>
+                    , although the passkeys will still work. All passkey managers
+                    allow you to manually change their stored email address.
+                  </p>
+                </div>
+              </details>
             </div>
           </div>
         </div>

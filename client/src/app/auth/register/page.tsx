@@ -1,11 +1,15 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
+import type { SearchParams } from '@/util/propTypes';
 
 import SignupForm from './_components/SignupForm';
 import A from '@/app/_components/_base/A';
 
 export const metadata: Metadata = { title: 'Sign up' };
 
-export default function RegisterPage() {
+export default function RegisterPage({ searchParams }: SearchParams) {
+  let initialEmail = searchParams.email;
+  if (typeof initialEmail !== 'string') initialEmail = undefined;
+
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -34,7 +38,7 @@ export default function RegisterPage() {
 
         <hr className="border-slate-300" />
 
-        <SignupForm />
+        <SignupForm initialEmail={initialEmail} />
 
         <div className="t">
           <A href="login">I already have an account</A>

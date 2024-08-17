@@ -67,6 +67,7 @@ export const getUserSECURE = h<QueryResolvers['userSECURE']>(
 );
 
 export const userCreate = h<MutationResolvers['userCreate']>(
+  scoped('ADMIN'),
   async ({ sources, args: newUser, scope }) => {
     const nu = newUser as DBUser;
     nu.email = prepEmail(nu.email);

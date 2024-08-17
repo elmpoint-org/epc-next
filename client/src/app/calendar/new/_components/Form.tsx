@@ -68,7 +68,7 @@ const NewEventForm = () => {
 
             <hr className="t" />
 
-            <TitleBlock number={3} title="Check the calendar message">
+            <TitleBlock number={3} title="Add a message">
               <p>
                 Use this section to edit how your stay will appear on the
                 calendar. I have attempted to guess a title for you, but you can

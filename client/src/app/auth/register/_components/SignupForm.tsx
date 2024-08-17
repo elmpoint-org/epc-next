@@ -9,8 +9,8 @@ import { TRPCClientError } from '@trpc/client';
 import { authErrorMap } from '../../_util/authErrors';
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
 
-const SignupForm = () => {
-  const [email, setEmail] = useState('');
+const SignupForm = ({ initialEmail }: { initialEmail?: string }) => {
+  const [email, setEmail] = useState(initialEmail ?? '');
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setEmail(e.currentTarget.value);
   }
