@@ -6,7 +6,12 @@ import { IconHome2 } from '@tabler/icons-react';
 import { FileManagerProps } from './FileManager';
 import A from '@/app/_components/_base/A';
 
-const HOME_FOLDER_PREFIX = <IconHome2 className="-mt-1 inline size-5" />;
+const HOME_FOLDER_PREFIX = (
+  <IconHome2
+    className="-mt-1 inline size-5 hover:fill-dgreen/15"
+    stroke={1.5}
+  />
+);
 
 export default function Breadcrumbs({ folder, setFolder }: FileManagerProps) {
   const crumbs = useMemo(() => {

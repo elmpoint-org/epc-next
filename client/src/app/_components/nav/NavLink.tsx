@@ -14,10 +14,11 @@ const NavLink = ({
   icon: Icon,
   text,
   variant,
+  exact,
   className,
   ...props
 }: NavLinkProps) => {
-  const isHere = useIsHere([{ href }]);
+  const isHere = useIsHere([{ href }], undefined, exact);
 
   return (
     <Link

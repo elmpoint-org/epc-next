@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
 
-import { Checkbox as MantineCheckbox } from '@mantine/core';
-import { IconCheck, IconLoader2 } from '@tabler/icons-react';
+import { IconLoader2 } from '@tabler/icons-react';
 
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
 
@@ -23,7 +22,7 @@ export default function FilesList({
         <SelectionActions totalFiles={files?.length} {...props} />
 
         {/* files list */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           {files?.map((f) => (
             <Fragment key={f.path}>
               <FilesListItem file={f} {...props} />
@@ -32,19 +31,20 @@ export default function FilesList({
 
           {/* SKELETON */}
           {isSkeleton &&
-            Array(6)
+            Array(3)
               .fill(0)
               .map((_, i) => (
-                <div
-                  key={i}
-                  className="flex h-10 animate-pulse flex-row justify-between rounded-md bg-slate-100 px-4 py-1"
-                  style={{ opacity: 1 - 0.1 * i }}
-                />
+                <div className="py-1" key={i}>
+                  <div
+                    className="flex h-10 animate-pulse flex-row justify-between rounded-md bg-slate-100 px-4 py-1"
+                    style={{ opacity: 1 - 0.1 * i }}
+                  />
+                </div>
               ))}
 
           {/* new folder loader */}
           {!isSkeleton && !files?.length && newLoad && (
-            <div className="flex flex-row justify-center">
+            <div className="my-4 flex flex-row justify-center">
               <div className="animate-spin text-dgreen">
                 <IconLoader2 className="size-8" />
               </div>
@@ -52,7 +52,7 @@ export default function FilesList({
           )}
 
           {/* no files message */}
-          <div className="hidden px-2 text-sm italic text-slate-600 first:block">
+          <div className="hidden py-2 px-4 text-sm italic text-slate-600 first:block">
             no files
           </div>
         </div>

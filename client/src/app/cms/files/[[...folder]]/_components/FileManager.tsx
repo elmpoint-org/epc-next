@@ -78,12 +78,12 @@ export default function FileManager({ folder }: { folder: string }) {
 
   return (
     <>
-      <SkeletonProvider ready={!query.isPending}>
+      <SkeletonProvider ready={!query.isPlaceholderData}>
         <div className="space-y-4 p-4">
-          {/* control bar */}
+          {/* breadcrumbs bar */}
           <FilesPathBar {...fileManagerProps} />
 
-          {/* files list  */}
+          {/* main files list */}
           <FilesList
             {...fileManagerProps}
             newLoad={query.isFetching || isUnfetched}

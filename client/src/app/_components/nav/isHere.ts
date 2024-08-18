@@ -8,6 +8,7 @@ import type { NavLinkType } from './navTypes';
 export function useIsHere(
   links: Partial<NavLinkType>[],
   cb?: (here: boolean) => unknown,
+  exact?: boolean,
 ) {
   const path = usePathname();
 
@@ -16,7 +17,9 @@ export function useIsHere(
     const here = links.some(
       (it) =>
         it.href &&
-        p.startsWith(new URL(it.href, 'https://one.elmpoint.xyz').pathname),
+        (exact
+          ? p === comparableURL(it.href)
+          : p.startsWith(comparableURL(it.href))),
     );
     cb?.(here);
     return here;
@@ -24,4 +27,8 @@ export function useIsHere(
   }, [links, path]);
 
   return isHere;
+}
+
+function comparableURL(url: string) {
+  return new URL(url, 'https://one.elmpoint.xyz').pathname;
 }

@@ -12,7 +12,7 @@ import {
 } from '@tabler/icons-react';
 
 export const navLinks: DeepNavLinks = [
-  { href: '/', text: 'Home', icon: IconHome2 },
+  { href: '/', text: 'Home', icon: IconHome2, exact: true },
   {
     text: 'Calendar',
     icon: IconCalendar,
@@ -21,6 +21,7 @@ export const navLinks: DeepNavLinks = [
         text: 'View Calendar',
         href: '/calendar',
         icon: IconCalendar,
+        exact: true,
       },
       {
         text: 'Add Stay',

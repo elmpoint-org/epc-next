@@ -22,6 +22,7 @@ export default function SelectionActions({
               if (!isPartial) select.selectNone();
               else select.selectAll();
             }}
+            aria-label="select all"
           />
 
           <div className="text-sm text-slate-500">
