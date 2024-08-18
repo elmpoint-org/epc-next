@@ -13,7 +13,7 @@ This repository contains the codebase for the updated Elm Point website. The mos
 
 Website editors can most easily make contributions through the website CMS (Content Management System). If you have website editing permissions, head to [elmpoint.org/cms](https://one.elmpoint.xyz/cms/pages) to get started.
 
-To edit anything else not found in the CMS editor, **you'll need a free Github account**. Editing simple text or hard-coded items such as the sidebar links can be easily done [on this Github site](#editing-website-data-online). More complex operations may require [running the code locally]().
+To edit anything else not found in the CMS editor, **you'll need a free Github account**. Editing simple text or hard-coded items such as the sidebar links can be easily done [on this Github site](#editing-website-data-online). More complex operations may require [running the code locally](#running-the-code-locally).
 
 ### Editing website data online
 
@@ -24,7 +24,9 @@ For example, let's say you found a typo in a help message on the site.
 1. Use the search function above to look for a snippet of the text you'd like to update. What you're looking for will be in the `/client/src/` directory.
 1. Click the pencil in the top right to edit the document online. Make your changes.
 1. Click the green **Commit changes...** button.
-   - In the popup screen, write a quite explanation of what you changed
+   - In the popup screen, write a quick explanation of what you changed.
+   - Click **Propose changes**.
+1. A **Pull Request** will be created for you, where someone may comment on your change, make or suggest an additional revision, or merge the change directly into the website.
 
 ### Running the code locally
 
