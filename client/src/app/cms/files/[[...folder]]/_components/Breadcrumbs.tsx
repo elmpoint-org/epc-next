@@ -1,11 +1,12 @@
 import { Fragment, useMemo } from 'react';
 import { Children } from '@/util/propTypes';
 
-import { FileManagerProps } from './FileManager';
+import { IconHome2 } from '@tabler/icons-react';
 
+import { FileManagerProps } from './FileManager';
 import A from '@/app/_components/_base/A';
 
-const HOME_FOLDER_PREFIX = 'home';
+const HOME_FOLDER_PREFIX = <IconHome2 className="-mt-1 inline size-5" />;
 
 export default function Breadcrumbs({ folder, setFolder }: FileManagerProps) {
   const crumbs = useMemo(() => {
@@ -17,14 +18,17 @@ export default function Breadcrumbs({ folder, setFolder }: FileManagerProps) {
     return vals;
   }, [folder]);
 
+  const getFullCrumbPath = (i: number) =>
+    crumbs.slice(0, i + 1).join('/') + '/';
+
   return (
     <>
       <div className="flex flex-row items-center gap-1">
         {crumbs.map((crumb, i) => (
           <Fragment key={i}>
             <Breadcrumb
-              path={crumb}
-              onClick={() => setFolder(crumbs.slice(0, i + 1).join('/') + '/')}
+              path={getFullCrumbPath(i)}
+              onClick={() => setFolder(getFullCrumbPath(i))}
             >
               {crumb.length ? crumb : HOME_FOLDER_PREFIX}
             </Breadcrumb>
@@ -44,7 +48,7 @@ function Breadcrumb({
   return (
     <>
       <A
-        href={'files/' + path}
+        href={'/cms/files' + path}
         onClick={(e) => {
           e.preventDefault();
           onClick?.();

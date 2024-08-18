@@ -15,7 +15,8 @@ export function useIsHere(
     const p = '' + path;
     const here = links.some(
       (it) =>
-        it.href && p === new URL(it.href, 'https://one.elmpoint.xyz').pathname,
+        it.href &&
+        p.startsWith(new URL(it.href, 'https://one.elmpoint.xyz').pathname),
     );
     cb?.(here);
     return here;
