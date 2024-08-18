@@ -25,8 +25,8 @@ For example, let's say you found a typo in a help message on the site.
 1. Click the pencil in the top right to edit the document online. Make your changes.
 1. Click the green **Commit changes...** button.
    - In the popup screen, write a quick explanation of what you changed.
-   - Click **Propose changes**.
-1. A **Pull Request** will be created for you, where someone may comment on your change, make or suggest an additional revision, or merge the change directly into the website.
+   - Click **Propose changes**, then **Create Pull Request**.
+1. You are now shown the **Pull Request** created for you, which is where someone may comment on your change, make or suggest an additional revision, or merge the change directly into the website.
 
 ### Running the code locally
 
