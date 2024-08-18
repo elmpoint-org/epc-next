@@ -43,7 +43,7 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
     1. Create an IAM user ([tutorial](https://guide.sst.dev/chapters/create-an-iam-user.html)) with administrator access.
 
     1. Register the IAM user in your environment.
-       You can do this by creating the file `client/.env`, which should look lie this:
+       You can do this by creating the file `client/.env`, which should look like this:
 
     ```sh
     # if you only use this AWS account for this project...
@@ -56,7 +56,7 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
     AWS_PROFILE=your-profile-name-here
     ```
 
-1.  **Create a Tiptap account.** The project uses Tiptap for text editing purposes, and they require that you create a free account to access their code. Follow Tiptap's instructions [here](https://tiptap.dev/docs/guides/pro-extensions#configure-per-project-authentication) to do so.
+1.  **Create a Tiptap account.** The site uses Tiptap for rich text editing, and they require that you create a free account to access their code. Follow Tiptap's instructions [here](https://tiptap.dev/docs/guides/pro-extensions#configure-per-project-authentication) to do so.
 1.  **Install project dependencies.** Run the following command in the root project folder to install the required dependencies:
     ```
     pnpm install
