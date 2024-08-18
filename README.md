@@ -13,7 +13,7 @@ This repository contains the codebase for the updated Elm Point website. The mos
 
 Website editors can most easily make contributions through the website CMS (Content Management System). If you have website editing permissions, head to [elmpoint.org/cms](https://one.elmpoint.xyz/cms/pages) to get started.
 
-To edit anything else not found in the CMS editor, **you'll need a free Github account**. Editing simple text or hard-coded items such as the sidebar links can be easily done [on this Github site](#editing-website-data-online). More complex operations may require [running the code locally]().
+To edit anything else not found in the CMS editor, **you'll need a free Github account**. Editing simple text or hard-coded items such as the sidebar links can be easily done [on this Github site](#editing-website-data-online). More complex operations may require [running the code locally](#running-the-code-locally).
 
 ### Editing website data online
 
@@ -24,7 +24,9 @@ For example, let's say you found a typo in a help message on the site.
 1. Use the search function above to look for a snippet of the text you'd like to update. What you're looking for will be in the `/client/src/` directory.
 1. Click the pencil in the top right to edit the document online. Make your changes.
 1. Click the green **Commit changes...** button.
-   - In the popup screen, write a quite explanation of what you changed
+   - In the popup screen, write a quick explanation of what you changed.
+   - Click **Propose changes**, then **Create Pull Request**.
+1. You are now shown the **Pull Request** created for you, which is where someone may comment on your change, make or suggest an additional revision, or merge the change directly into the website.
 
 ### Running the code locally
 
@@ -34,7 +36,7 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
 1.  **Download required software.** To run the software, you'll need
     - [Node.js](https://nodejs.org/) - The most recent LTS version will probably work.
     - [PNPM](https://pnpm.io) - This is the package manager that manages project dependencies. It is usually easiest to install with [corepack](https://pnpm.io/installation#using-corepack).
-    - [SST Ion](https://sst.dev/docs/reference/cli/) - This software is used to manage the server processing for the website.
+    - [SST Ion](https://sst.dev/docs/reference/cli/) - This software is used to manage the server processing for the website. Pending a migration to the new version, please install using the bash script. Reference the [deployment script](https://github.com/elmpoint-org/epc-next/blob/main/.github/workflows/deploy_client.yml#L33) for the correct version.
     - (recommended) [Visual Studio Code](https://code.visualstudio.com/) - VSCode settings and extensions come with the project to get you running fastest.
 1.  **Add AWS Credentials.** In order to run build tests, SST uses an AWS account to manage a few assets in development. You'll need an AWS Account for this, but no created assets will surpass the standard AWS free tier.
 
