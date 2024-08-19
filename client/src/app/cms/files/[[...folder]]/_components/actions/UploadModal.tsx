@@ -1,22 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { ActionIcon, Button, Modal } from '@mantine/core';
-
-import { clx } from '@/util/classConcat';
-import { IconFileFilled, IconTrash } from '@tabler/icons-react';
-import UploadFile from './UploadFile';
+import { Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+
+import FileModal, { FileModalProps } from './FileModal';
 import { useReverseCbTrigger } from '@/util/reverseCb';
+
+import UploadFile from './UploadFile';
 
 export default function UploadModal({
   show,
   onHide,
   currentFolder,
-}: {
-  show: boolean;
-  onHide?: (fullReset?: boolean) => void;
-  currentFolder: string;
-}) {
+}: FileModalProps) {
   const filesRef = useRef<HTMLInputElement | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [isOnTop, setIsOnTop] = useState(false);
@@ -66,19 +62,11 @@ export default function UploadModal({
 
   return (
     <>
-      <Modal
+      <FileModal
         opened={show}
         onClose={() => onHide?.(finished.length === files.length)}
         title="Upload files"
-        classNames={{
-          content: clx('rounded-xl p-2'),
-          header:
-            'before:absolute before:inset-x-0 before:-top-6 before:h-6 before:bg-dwhite/30 before:backdrop-blur-md',
-        }}
       >
-        <div className="mb-4 border-b border-slate-200" />
-
-        {/* body */}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -160,7 +148,7 @@ export default function UploadModal({
             </Button>
           </div>
         </form>
-      </Modal>
+      </FileModal>
     </>
   );
 }

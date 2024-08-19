@@ -7,13 +7,13 @@ export async function confirmAndDelete(folder: string, files: string[]) {
     title: <>Are you sure?</>,
     body: (
       <>
-        Are you sure you want to <b>permanently delete</b> the selected files?
+        Are you sure you want to <b>permanently delete</b> the selected items?
       </>
     ),
   });
-  if (!yes) return;
+  if (!yes) return false;
   const y2 = confirm('Are you really sure?');
-  if (!y2) return;
+  if (!y2) return false;
 
   const { data, errors } = await graphAuth(
     graphql(`
@@ -21,9 +21,12 @@ export async function confirmAndDelete(folder: string, files: string[]) {
         cmsFileDelete(paths: $paths)
       }
     `),
-    {
-      paths: files.map((file) => folder + file),
-    },
+    { paths: files },
   );
-  if (errors || !data?.cmsFileDelete) console.log(errors?.[0].code ?? errors);
+  if (errors || !data?.cmsFileDelete) {
+    console.log(errors?.[0].code ?? errors);
+    return false;
+  }
+
+  return true;
 }

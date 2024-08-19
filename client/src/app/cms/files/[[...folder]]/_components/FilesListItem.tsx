@@ -6,8 +6,15 @@ import { Inside } from '@/util/inferTypes';
 import { FileManagerProps } from './FileManager';
 import Checkbox from './Checkbox';
 import { ActionIcon } from '@mantine/core';
-import { IconLink } from '@tabler/icons-react';
+import {
+  IconFileFilled,
+  IconFolder,
+  IconFolderFilled,
+  IconLink,
+} from '@tabler/icons-react';
 import { siteDomain } from '@/util/dev';
+import { IconType } from '@/util/iconType';
+import { clmx } from '@/util/classConcat';
 
 export default function FilesListItem({
   file,
@@ -47,13 +54,17 @@ export default function FilesListItem({
             />
 
             {/* file/folder name link */}
-            <div className="truncate group-data-[s]:font-bold group-data-[s]:text-dgreen">
+            <div className="flex flex-row gap-2 truncate group-data-[s]:font-bold group-data-[s]:text-dgreen">
+              {/* file type icon */}
+              <FileIcon icon={isFolder ? IconFolderFilled : IconFileFilled} />
+
               {isFolder ? (
                 // folder
                 <>
                   <Link
                     className="hover:text-emerald-700 hover:underline"
                     href={fileHref}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {readablePath}
                   </Link>
@@ -64,6 +75,7 @@ export default function FilesListItem({
                   <a
                     className="hover:text-emerald-700 hover:underline"
                     href={fileHref}
+                    onClick={(e) => e.stopPropagation()}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -74,10 +86,12 @@ export default function FilesListItem({
             </div>
           </div>
 
+          {/* copy link button */}
           {!isFolder && (
             <ActionIcon
               size="sm"
               variant="subtle"
+              className="invisible group-hover:visible"
               onClick={(e) => {
                 e.stopPropagation();
                 prompt(
@@ -96,3 +110,24 @@ export default function FilesListItem({
 }
 
 type FileType = Inside<FileManagerProps['files']>;
+
+function FileIcon({
+  icon: Icon,
+  className,
+}: {
+  icon: IconType;
+  className?: string;
+}) {
+  return (
+    <>
+      <div className="flex items-center justify-center">
+        <Icon
+          className={clmx(
+            'size-5 text-slate-400 group-data-[s]:text-dgreen',
+            className,
+          )}
+        />
+      </div>
+    </>
+  );
+}

@@ -13,6 +13,8 @@ import { FileManagerProps } from './FileManager';
 import { ModalTypes } from './actions/actions';
 import UploadModal from './actions/UploadModal';
 import { confirmAndDelete } from './actions/deleteModal';
+import RenameModal from './actions/RenameModal';
+import NewFolderModal from './actions/NewFolderModal';
 
 export default function SelectionActions({
   select,
@@ -67,6 +69,7 @@ export default function SelectionActions({
               disabled={!isOne || hasFolder}
               size="sm"
               variant="subtle"
+              onClick={() => setModal('RENAME')}
             >
               <IconPencilMinus />
             </ActionIcon>
@@ -89,8 +92,11 @@ export default function SelectionActions({
               variant="subtle"
               onClick={async () => {
                 setModal('DELETE');
-                await confirmAndDelete(folderParsed, select.getSelected());
-                setModal('RESET_MODALS');
+                const success = await confirmAndDelete(
+                  folderParsed,
+                  select.getSelected(),
+                );
+                setModal(success ? 'RESET_MODALS' : null);
               }}
             >
               <IconTrash />
@@ -101,7 +107,12 @@ export default function SelectionActions({
 
           {/* generic actions */}
           <Tooltip label="Add Folder">
-            <ActionIcon aria-label="add a folder" size="sm" variant="subtle">
+            <ActionIcon
+              onClick={() => setModal('NEW_FOLDER')}
+              aria-label="add a folder"
+              size="sm"
+              variant="subtle"
+            >
               <IconFolderPlus />
             </ActionIcon>
           </Tooltip>
@@ -118,13 +129,24 @@ export default function SelectionActions({
 
           {/* ACTION MODALS */}
           {modal !== 'RESET_MODALS' && (
-            <UploadModal
-              show={modal === 'NEW_FILE'}
-              onHide={(s) => {
-                setModal(s ? 'RESET_MODALS' : null);
-              }}
-              currentFolder={folderParsed}
-            />
+            <>
+              <UploadModal
+                show={modal === 'NEW_FILE'}
+                onHide={(s) => setModal(s ? 'RESET_MODALS' : null)}
+                currentFolder={folderParsed}
+              />
+              <RenameModal
+                show={modal === 'RENAME'}
+                onHide={(s) => setModal(s ? 'RESET_MODALS' : null)}
+                path={select.getSelected()[0]}
+                currentFolder={folderParsed}
+              />
+              <NewFolderModal
+                show={modal === 'NEW_FOLDER'}
+                onHide={(s) => setModal(s ? 'RESET_MODALS' : null)}
+                currentFolder={folderParsed}
+              />
+            </>
           )}
         </div>
       </div>

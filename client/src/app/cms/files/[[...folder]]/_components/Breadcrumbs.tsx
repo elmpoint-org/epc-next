@@ -28,7 +28,7 @@ export default function Breadcrumbs({ folder, setFolder }: FileManagerProps) {
 
   return (
     <>
-      <div className="flex flex-row items-center gap-1">
+      <div className="flex flex-row items-center gap-1 overflow-x-auto">
         {crumbs.map((crumb, i) => (
           <Fragment key={i}>
             <Breadcrumb
@@ -58,7 +58,7 @@ function Breadcrumb({
           e.preventDefault();
           onClick?.();
         }}
-        className="font-normal"
+        className="font-normal flex-shrink-0"
       >
         {children}
       </A>

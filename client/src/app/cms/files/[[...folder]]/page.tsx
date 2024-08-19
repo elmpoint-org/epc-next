@@ -9,7 +9,8 @@ export const metadata: Metadata = {
 export default function FilesPage({
   params: { folder: folder_in },
 }: PageArrayOptParams) {
-  const folder = '/' + (folder_in?.join('/') ?? '');
+  const folder =
+    '/' + (folder_in?.map((f) => decodeURIComponent(f)).join('/') ?? '');
 
   return (
     <>
