@@ -6,3 +6,7 @@ export const api =
   isDev && !isUsingPublicApi
     ? 'http://localhost:3000'
     : 'https://api.elmpoint.xyz/one';
+
+export const siteDomain = isDev
+  ? 'http://localhost:3001'
+  : 'https://one.elmpoint.xyz';
