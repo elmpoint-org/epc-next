@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { getGQLError, graphql } from '@/query/graphql';
-import { useGraphQuery } from '@/query/query';
-import { ResultOf } from '@graphql-typed-document-node/core';
+import { queryClient, useGraphQuery } from '@/query/query';
+import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 import { SkeletonProvider } from '@/app/_ctx/skeleton/context';
 import { SelectedFns, useSelectedFiles } from '../_ctx/selectedFiles';
 import FilesPathBar from './FilesPathBar';
 import FilesList from './FilesList';
+import { TadaDocumentNode } from 'gql.tada';
 
 const GET_CMS_FILES = graphql(`
   query Files($root: String, $recursive: Boolean) {
@@ -49,21 +50,25 @@ export default function FileManager({ folder }: { folder: string }) {
     router.push('/cms/files/' + p);
   }
 
-  const query = useGraphQuery(
+  // db query
+  const QUERY = [
     GET_CMS_FILES,
-    {
-      root: folderParsed,
-      recursive: false,
+    { root: folderParsed, recursive: false },
+  ] satisfies [TadaDocumentNode, VariablesOf<typeof GET_CMS_FILES>];
+  const query = useGraphQuery(...QUERY, {
+    retry(_, error) {
+      const a = getGQLError(error);
+      if (a?.length) return false;
+      return true;
     },
-    {
-      retry(_, error) {
-        const a = getGQLError(error);
-        if (a?.length) return false;
-        return true;
-      },
-    },
-  );
+  });
   const files = query.data?.cmsFiles?.files;
+
+  function revalidate() {
+    queryClient.invalidateQueries({
+      queryKey: QUERY,
+    });
+  }
 
   // selected files
   const selectFns = useSelectedFiles(files);
@@ -74,12 +79,13 @@ export default function FileManager({ folder }: { folder: string }) {
     files,
     folderParsed,
     select: selectFns,
+    revalidate,
   };
 
   return (
     <>
       <SkeletonProvider ready={!query.isPlaceholderData}>
-        <div className="space-y-4 p-4">
+        <div className="space-y-4 sm:p-4">
           {/* breadcrumbs bar */}
           <FilesPathBar {...fileManagerProps} />
 
@@ -100,4 +106,5 @@ export type FileManagerProps = {
   setFolder: (s: string) => void;
   files: FilesType | undefined;
   select: SelectedFns;
+  revalidate: () => void;
 };

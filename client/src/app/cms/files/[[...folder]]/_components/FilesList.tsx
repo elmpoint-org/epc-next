@@ -12,7 +12,7 @@ export default function FilesList({
   newLoad,
   ...props
 }: { newLoad?: boolean } & FileManagerProps) {
-  const { files, select } = props;
+  const { files } = props;
   const isSkeleton = useSkeleton();
 
   return (
@@ -52,7 +52,7 @@ export default function FilesList({
           )}
 
           {/* no files message */}
-          <div className="hidden py-2 px-4 text-sm italic text-slate-600 first:block">
+          <div className="hidden px-4 py-2 text-sm italic text-slate-600 first:block">
             no files
           </div>
         </div>

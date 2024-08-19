@@ -53,6 +53,7 @@ export const getCmsFiles = h<M.QueryResolvers['cmsFiles']>(
 );
 
 export const getCmsFilePresign = h<M.QueryResolvers['cmsFilePresign']>(
+  loggedIn(),
   async ({ args: { path } }) => {
     return getSignedS3Url({ bucket: BUCKET, path });
   }
@@ -62,11 +63,13 @@ export const cmsFileUpload = h<M.MutationResolvers['cmsFileUpload']>(
   scoped('ADMIN', 'EDIT'),
   async ({ args: { fileName, root } }) => {
     // validate args
-    if (!root.match(/^\w/)) throw err('BAD_FOLDER_NAME');
-    if (!root.match(/\/$/)) throw err('ROOT_FOLDER_MISSING_TRAILING_SLASH');
+    if (root.length) {
+      if (!root.match(/^\w/)) throw err('BAD_FOLDER_NAME');
+      if (!root.match(/\/$/)) throw err('ROOT_FOLDER_MISSING_TRAILING_SLASH');
+    }
 
     // generate filepath
-    const name = fileName.trim().match(/([^\/]*)\.[^\.]+$/)?.[1];
+    const name = fileName.trim().match(/([^\/]*\.[^\.]+)$/)?.[1];
     if (!name?.length) throw err('BAD_FILENAME');
     const fp = {
       bucket: BUCKET,
@@ -106,7 +109,7 @@ export const cmsFileMove = h<M.MutationResolvers['cmsFileMove']>(
           bucket: BUCKET,
           path,
           newPath,
-          deleteOld: copy ?? false,
+          deleteOld: copy !== undefined ? !copy : true,
         })
           .then(() => finished++)
           .catch((e) => {

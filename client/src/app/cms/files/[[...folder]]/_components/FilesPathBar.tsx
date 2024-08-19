@@ -14,7 +14,7 @@ export default function FilesPathBar(props: FileManagerProps) {
         <ActionIcon
           variant="subtle"
           size="sm"
-          color="black"
+          color="slate"
           onClick={() => {
             let m = folder.match(/^(.+\/)[^\/]+\/?$/);
             if (m?.[1]) return setFolder(m[1]);
