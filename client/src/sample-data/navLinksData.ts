@@ -6,7 +6,7 @@ import {
   IconCalendarPlus,
   IconClick,
   IconEyeQuestion,
-  IconFileText,
+  IconFolders,
   IconHome2,
   IconNotebook,
 } from '@tabler/icons-react';
@@ -37,7 +37,7 @@ export const navLinks: DeepNavLinks = [
     icon: IconBoxMargin,
     links: [
       { href: '/cms/pages', text: 'Pages', icon: IconNotebook },
-      { href: '/cms/files', text: 'File Manager', icon: IconFileText },
+      { href: '/cms/files', text: 'File Manager', icon: IconFolders },
       { text: '' },
       { text: '' },
       // ...
