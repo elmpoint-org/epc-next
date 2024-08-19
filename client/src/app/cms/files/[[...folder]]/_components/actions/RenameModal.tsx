@@ -65,20 +65,20 @@ export default function RenameModal(props: { path: string } & FileModalProps) {
           }}
         >
           <div className="flex flex-col gap-2 text-sm">
-            <p className="">
+            <p className="leading-relaxed">
               Choose a new name for{' '}
-              <em className="-my-1.5 rounded-md bg-slate-200 p-1.5 font-bold not-italic">
+              <em className="-my-0.5 rounded-md bg-slate-200 p-0.5 font-bold not-italic">
                 {filename}
               </em>
               .
             </p>
 
-            <hr className="mt-3" />
+            <hr className="mt-2.5" />
 
             <div className="py-4">
               <TextInput
                 placeholder="filename.jpg"
-                label="New name"
+                aria-label="New filename"
                 value={text}
                 onChange={({ currentTarget: { value: v } }) => setText(v)}
                 rightSection={<CloseButton onClick={() => setText('')} />}

@@ -13,9 +13,7 @@ export default function NewFolderModal(props: FileModalProps) {
 
   const [isLoading, loading] = useTransition();
   function handleSubmit() {
-
     console.log('what the hell');
-    
 
     if (!text.length || text.match('/'))
       return notifications.show({ color: 'red', message: 'Invalid file name' });
@@ -56,14 +54,14 @@ export default function NewFolderModal(props: FileModalProps) {
           }}
         >
           <div className="flex flex-col gap-2 text-sm">
-            <p className="">Enter the new folder name.</p>
+            <p className="leading-relaxed">Enter the new folder name.</p>
 
-            <hr className="mt-3" />
+            <hr className="mt-2.5" />
 
             <div className="py-4">
               <TextInput
                 placeholder="New Folder"
-                label="Folder name"
+                aria-label="Folder name"
                 value={text}
                 onChange={({ currentTarget: { value: v } }) => setText(v)}
                 rightSection={<CloseButton onClick={() => setText('')} />}
@@ -74,7 +72,9 @@ export default function NewFolderModal(props: FileModalProps) {
           <div className="h-2"></div>
 
           <div className="flex flex-row justify-end">
-            <Button type='submit' loading={isLoading}>Create</Button>
+            <Button type="submit" loading={isLoading}>
+              Create
+            </Button>
           </div>
         </form>
       </FileModal>

@@ -134,9 +134,12 @@ function StatusIcon({
 }) {
   return (
     <>
-      <Icon
-        className={clmx('size-4 flex-shrink-0 text-slate-500/80', className)}
-      />
+      <div className="flex items-center justify-center">
+        <Icon
+          size={16}
+          className={clmx('flex-shrink-0 text-slate-500/80', className)}
+        />
+      </div>
     </>
   );
 }

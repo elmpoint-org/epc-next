@@ -21,7 +21,7 @@ export default function FileModal(
         classNames={{
           content: clx('rounded-xl p-2'),
           header:
-            'before:absolute before:inset-x-0 before:-top-6 before:h-6 before:bg-dwhite/30 before:backdrop-blur-md',
+            'before:absolute before:inset-x-0 before:-top-40 before:h-40 before:bg-dwhite',
         }}
       >
         <div className="mb-4 border-b border-slate-200" />
