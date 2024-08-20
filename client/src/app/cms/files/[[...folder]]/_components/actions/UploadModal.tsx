@@ -64,7 +64,9 @@ export default function UploadModal({
     <>
       <FileModal
         open={show}
-        onClose={() => onHide(finished.length === files.length)}
+        onClose={() =>
+          onHide(!!files.length && finished.length === files.length)
+        }
         title="Upload Files"
       >
         <form
