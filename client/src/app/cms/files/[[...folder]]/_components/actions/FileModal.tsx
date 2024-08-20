@@ -1,34 +1,62 @@
-import { Modal } from '@mantine/core';
+import { CloseButton } from '@mantine/core';
 
 import type { Children } from '@/util/propTypes';
-import { clx } from '@/util/classConcat';
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from '@headlessui/react';
 
 export type FileModalProps = {
   show: boolean;
-  onHide?: (fullReset?: boolean) => void;
+  onHide: (fullReset?: boolean) => void;
   currentFolder: string;
 };
 
-export default function FileModal(
-  props: Children & Parameters<typeof Modal>[0],
-) {
-  const { children } = props;
+export function FileModal({
+  children,
+  title,
+  ...props
+}: { title?: React.ReactNode } & Parameters<typeof Dialog>[0] & Children) {
+  return (
+    <Dialog {...props}>
+      {/* backdrop */}
+      <DialogBackdrop
+        transition
+        className="fixed inset-0 z-50 bg-black/50 transition duration-300 ease-out data-[closed]:opacity-0"
+      />
 
+      <div className="fixed inset-0 z-50 flex flex-col items-center overflow-y-auto p-4 pt-8 sm:pt-12">
+        {/* panel */}
+        <DialogPanel
+          transition
+          className="flex w-full max-w-md translate-y-0 flex-col gap-4 rounded-xl bg-dwhite p-6 shadow-xl transition duration-150 ease-out data-[closed]:-translate-y-8 data-[closed]:opacity-0"
+        >
+          {/* header */}
+          <div className="flex flex-row items-center gap-2 border-b border-slate-300 pb-4">
+            <DialogTitle className="flex-1">{title}</DialogTitle>
+
+            <CloseButton onClick={() => props.onClose(false)} />
+          </div>
+
+          {/* body */}
+          {children}
+        </DialogPanel>
+      </div>
+    </Dialog>
+  );
+}
+
+/**
+ * the modal footer expects to be placed in parent with a gap of **1rem**. if your already-existing parent doesn't account for this, wrap this with a `div.space-y-4`.
+ */
+export function FileModalFooter({ children }: Children) {
   return (
     <>
-      <Modal
-        {...props}
-        classNames={{
-          content: clx('rounded-xl p-2'),
-          header:
-            'before:absolute before:inset-x-0 before:-top-6 before:h-6 before:bg-dwhite/30 before:backdrop-blur-md',
-        }}
-      >
-        <div className="mb-4 border-b border-slate-200" />
+      <hr className="mt-2 border-slate-300" />
 
-        {/* body */}
-        {children}
-      </Modal>
+      {children}
     </>
   );
 }

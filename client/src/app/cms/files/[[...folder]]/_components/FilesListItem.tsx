@@ -95,7 +95,7 @@ export default function FilesListItem({
               onClick={(e) => {
                 e.stopPropagation();
                 prompt(
-                  'Press Cmd/Ctrl+C to copy the file URL.',
+                  'Use Ctrl/Cmd+C to copy the file URL.',
                   siteDomain + fileHref,
                 );
               }}

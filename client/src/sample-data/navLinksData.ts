@@ -38,8 +38,6 @@ export const navLinks: DeepNavLinks = [
     links: [
       { href: '/cms/pages', text: 'Pages', icon: IconNotebook },
       { href: '/cms/files', text: 'File Manager', icon: IconFolders },
-      { text: '' },
-      { text: '' },
       // ...
     ],
   },

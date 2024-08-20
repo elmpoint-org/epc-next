@@ -34,7 +34,7 @@ export default function FilesPage({
                 If you accidentally delete or overwrite a crucial file, email{' '}
                 <b>backups@elmpoint.xyz</b> as soon as possible. We keep backups
                 and can usually manually restore lost files or data as long as
-                you contact us within 30 days.
+                you contact us within 14 days.
               </p>
             </details>
             {/* folders disclosure */}

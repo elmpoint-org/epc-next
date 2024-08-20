@@ -1,22 +1,21 @@
-import { useEffect, useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+
 import { graphAuth, graphql } from '@/query/graphql';
 
-import FileModal, { FileModalProps } from './FileModal';
+import { FileModal, FileModalFooter, FileModalProps } from './FileModal';
+import FocusOnRender from '@/app/_components/_base/FocusOnRender';
 
 export default function NewFolderModal(props: FileModalProps) {
   const { show, onHide, currentFolder } = props;
 
   const [text, setText] = useState('');
+  const textboxRef = useRef<HTMLInputElement | null>(null);
 
   const [isLoading, loading] = useTransition();
   function handleSubmit() {
-
-    console.log('what the hell');
-    
-
     if (!text.length || text.match('/'))
       return notifications.show({ color: 'red', message: 'Invalid file name' });
 
@@ -38,43 +37,42 @@ export default function NewFolderModal(props: FileModalProps) {
         return;
       }
 
-      onHide?.(true);
+      onHide(true);
     });
   }
 
   return (
     <>
-      <FileModal
-        opened={show}
-        onClose={() => onHide?.()}
-        title="Create new folder"
-      >
+      <FileModal open={show} onClose={() => onHide()} title="Create New Folder">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSubmit();
           }}
         >
-          <div className="flex flex-col gap-2 text-sm">
-            <p className="">Enter the new folder name.</p>
+          <div className="flex flex-col gap-4">
+            {/* body text */}
+            <p className="text-sm leading-relaxed">
+              Enter a name for the folder.
+            </p>
 
-            <hr className="mt-3" />
+            <TextInput
+              placeholder="New Folder"
+              aria-label="Folder name"
+              ref={textboxRef}
+              value={text}
+              onChange={({ currentTarget: { value: v } }) => setText(v)}
+              rightSection={<CloseButton onClick={() => setText('')} />}
+            />
+            <FocusOnRender el={textboxRef} />
 
-            <div className="py-4">
-              <TextInput
-                placeholder="New Folder"
-                label="Folder name"
-                value={text}
-                onChange={({ currentTarget: { value: v } }) => setText(v)}
-                rightSection={<CloseButton onClick={() => setText('')} />}
-              />
-            </div>
-          </div>
-
-          <div className="h-2"></div>
-
-          <div className="flex flex-row justify-end">
-            <Button type='submit' loading={isLoading}>Create</Button>
+            <FileModalFooter>
+              <div className="flex flex-row justify-end">
+                <Button type="submit" loading={isLoading}>
+                  Create
+                </Button>
+              </div>
+            </FileModalFooter>
           </div>
         </form>
       </FileModal>

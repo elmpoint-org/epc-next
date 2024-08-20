@@ -1,10 +1,12 @@
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+
 import { graphAuth, graphql } from '@/query/graphql';
 
-import FileModal, { FileModalProps } from './FileModal';
+import { FileModal, FileModalFooter, FileModalProps } from './FileModal';
+import FocusOnRender from '@/app/_components/_base/FocusOnRender';
 
 export default function RenameModal(props: { path: string } & FileModalProps) {
   const { show, onHide, path, currentFolder } = props;
@@ -17,6 +19,7 @@ export default function RenameModal(props: { path: string } & FileModalProps) {
     setText(filename);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
+  const textboxRef = useRef<HTMLInputElement | null>(null);
 
   const [isLoading, loading] = useTransition();
   function handleSubmit() {
@@ -51,47 +54,45 @@ export default function RenameModal(props: { path: string } & FileModalProps) {
         return;
       }
 
-      onHide?.(true);
+      onHide(true);
     });
   }
 
   return (
     <>
-      <FileModal opened={show} onClose={() => onHide?.()} title="Rename file">
+      <FileModal open={show} onClose={() => onHide()} title="Rename File">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSubmit();
           }}
         >
-          <div className="flex flex-col gap-2 text-sm">
-            <p className="">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm leading-relaxed">
               Choose a new name for{' '}
-              <em className="-my-1.5 rounded-md bg-slate-200 p-1.5 font-bold not-italic">
+              <em className="-my-0.5 rounded-md bg-slate-200 p-0.5 font-bold not-italic">
                 {filename}
               </em>
               .
             </p>
 
-            <hr className="mt-3" />
+            <TextInput
+              placeholder="filename.jpg"
+              aria-label="New filename"
+              value={text}
+              onChange={({ currentTarget: { value: v } }) => setText(v)}
+              rightSection={<CloseButton onClick={() => setText('')} />}
+              ref={textboxRef}
+            />
+            <FocusOnRender el={textboxRef} select />
 
-            <div className="py-4">
-              <TextInput
-                placeholder="filename.jpg"
-                label="New name"
-                value={text}
-                onChange={({ currentTarget: { value: v } }) => setText(v)}
-                rightSection={<CloseButton onClick={() => setText('')} />}
-              />
-            </div>
-          </div>
-
-          <div className="h-2"></div>
-
-          <div className="flex flex-row justify-end">
-            <Button type="submit" loading={isLoading}>
-              Rename
-            </Button>
+            <FileModalFooter>
+              <div className="flex flex-row justify-end">
+                <Button type="submit" loading={isLoading}>
+                  Rename
+                </Button>
+              </div>
+            </FileModalFooter>
           </div>
         </form>
       </FileModal>

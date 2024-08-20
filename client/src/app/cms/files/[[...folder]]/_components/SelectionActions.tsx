@@ -15,6 +15,8 @@ import UploadModal from './actions/UploadModal';
 import { confirmAndDelete } from './actions/deleteModal';
 import RenameModal from './actions/RenameModal';
 import NewFolderModal from './actions/NewFolderModal';
+import MoveCopyModal from './actions/MoveCopyModal';
+import { FileModalProps } from './actions/FileModal';
 
 export default function SelectionActions({
   select,
@@ -38,6 +40,12 @@ export default function SelectionActions({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modal]);
+
+  // modal props
+  const modalProps = {
+    onHide: (s) => setModal(s ? 'RESET_MODALS' : null),
+    currentFolder: folderParsed,
+  } satisfies Partial<FileModalProps>;
 
   return (
     <>
@@ -80,6 +88,7 @@ export default function SelectionActions({
               disabled={!hasChecked || hasFolder}
               size="sm"
               variant="subtle"
+              onClick={() => setModal('MOVE')}
             >
               <IconFileImport />
             </ActionIcon>
@@ -130,21 +139,17 @@ export default function SelectionActions({
           {/* ACTION MODALS */}
           {modal !== 'RESET_MODALS' && (
             <>
-              <UploadModal
-                show={modal === 'NEW_FILE'}
-                onHide={(s) => setModal(s ? 'RESET_MODALS' : null)}
-                currentFolder={folderParsed}
-              />
+              <UploadModal {...modalProps} show={modal === 'NEW_FILE'} />
+              <NewFolderModal {...modalProps} show={modal === 'NEW_FOLDER'} />
               <RenameModal
+                {...modalProps}
                 show={modal === 'RENAME'}
-                onHide={(s) => setModal(s ? 'RESET_MODALS' : null)}
                 path={select.getSelected()[0]}
-                currentFolder={folderParsed}
               />
-              <NewFolderModal
-                show={modal === 'NEW_FOLDER'}
-                onHide={(s) => setModal(s ? 'RESET_MODALS' : null)}
-                currentFolder={folderParsed}
+              <MoveCopyModal
+                {...modalProps}
+                show={modal === 'MOVE'}
+                selected={select.getSelected()}
               />
             </>
           )}
