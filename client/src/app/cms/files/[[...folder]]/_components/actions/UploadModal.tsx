@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
-import FileModal, { FileModalProps } from './FileModal';
+import { FileModal, FileModalFooter, FileModalProps } from './FileModal';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 
 import UploadFile from './UploadFile';
@@ -50,7 +50,7 @@ export default function UploadModal({
 
   const { prop: uplCb, trigger: startUpload } = useReverseCbTrigger();
   function handleSubmit() {
-    if (finished.length) return onHide?.(true);
+    if (finished.length) return onHide(true);
 
     setIsLoading(true);
     startUpload();
@@ -63,9 +63,9 @@ export default function UploadModal({
   return (
     <>
       <FileModal
-        opened={show}
-        onClose={() => onHide?.(finished.length === files.length)}
-        title="Upload files"
+        open={show}
+        onClose={() => onHide(finished.length === files.length)}
+        title="Upload Files"
       >
         <form
           onSubmit={(e) => {
@@ -74,9 +74,9 @@ export default function UploadModal({
           }}
         >
           <div className="flex flex-col gap-2 text-sm">
-            <p className="t">
-              Add files below to upload them into the current folder.
-            </p>
+            {/* instructions */}
+            <p>Add files below to upload them into the current folder.</p>
+
             {/* files list */}
             <div>
               <h4 className="py-2 font-bold">Files</h4>
@@ -131,21 +131,27 @@ export default function UploadModal({
               onDragEnter={() => setIsOnTop(true)}
               onDragLeave={() => setIsOnTop(false)}
             >
-              drag files here or click
+              Drag files here or click
             </label>
           </div>
 
-          <div className="h-2"></div>
-
           {/* footer */}
-          <div className="flex flex-row justify-end">
-            <Button type="submit" disabled={!files.length} loading={isLoading}>
-              {finished.length && !isLoading ? (
-                <span>Close</span>
-              ) : (
-                <span>Start uploading</span>
-              )}
-            </Button>
+          <div className="mt-4 space-y-4">
+            <FileModalFooter>
+              <div className="flex flex-row justify-end">
+                <Button
+                  type="submit"
+                  disabled={!files.length}
+                  loading={isLoading}
+                >
+                  {finished.length && !isLoading ? (
+                    <span>Close</span>
+                  ) : (
+                    <span>Start uploading</span>
+                  )}
+                </Button>
+              </div>
+            </FileModalFooter>
           </div>
         </form>
       </FileModal>
