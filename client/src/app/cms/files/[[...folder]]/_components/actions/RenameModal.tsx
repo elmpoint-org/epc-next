@@ -47,6 +47,7 @@ export default function RenameModal(props: { path: string } & FileModalProps) {
         },
       );
       if (errors || !data?.cmsFileMove) {
+        console.log(errors?.[0].code ?? errors);
         notifications.show({
           color: 'red',
           message: 'An error occurred.',
