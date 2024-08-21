@@ -19,11 +19,9 @@ import { NavLinkType } from './navTypes';
 const links: NavLinkType[] = [
   {
     href: '/account',
-    text: 'Account Overview',
+    text: 'Account Settings',
     icon: IconTableOptions,
   },
-  { text: '' },
-  { text: '' },
   { text: '' },
   {
     href: '/auth/logout',

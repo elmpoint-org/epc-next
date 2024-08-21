@@ -30,7 +30,7 @@ export const homeLinks: HomeLink[] = [
     name: 'Recent Updates & Links',
     description:
       'The most up-to-date resources added by board members and website admins.',
-    flags: { secure: true },
+    flags: {},
     timestamp: { created: 0, updated: 0 },
   },
   {

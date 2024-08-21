@@ -115,7 +115,7 @@ export default function PagesList({
                       <Table.Td className="select-none text-slate-500">
                         {i + 1}
                       </Table.Td>
-                      <Table.Td>
+                      <Table.Td className='whitespace-nowrap max-w-[28ch] truncate'>
                         <A href={`/cms/pages/edit/${page.id}`}>
                           {page.title || <i>click to edit</i>}
                         </A>
@@ -159,7 +159,7 @@ export default function PagesList({
 
             {/* empty state */}
             <Table.Tr className="hidden first:block">
-              <Table.Td className="p-6 italic">none found</Table.Td>
+              <Table.Td className="p-6 italic whitespace-nowrap">none found</Table.Td>
             </Table.Tr>
           </Table.Tbody>
         </Table>

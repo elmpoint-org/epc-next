@@ -14,6 +14,9 @@ export type PageParams = {
 export type PageArrayParams = {
   params: { [key: string]: string[] };
 };
+export type PageArrayOptParams = {
+  params: { [key: string]: string[] | undefined };
+};
 
 export type Key = {
   key?: React.Key;

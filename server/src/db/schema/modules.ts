@@ -7,8 +7,9 @@ import PreUserModule from './PreUser/module';
 import PreUserSource from './PreUser/source';
 import CMSPageModule from './CMSPage/module';
 import CMSPageSource from './CMSPage/source';
-import CmsImageModule from './CMSImage/module';
+import CMSImageModule from './CMSImage/module';
 import CMSImageSource from './CMSImage/source';
+import CMSFileModule from './CMSFile/module';
 import RoomModule from './Room/module';
 import RoomSource from './Room/source';
 import CabinModule from './Cabin/module';
@@ -24,7 +25,8 @@ export const modules: Module[] = [
   UserModule,
   PreUserModule,
   CMSPageModule,
-  CmsImageModule,
+  CMSImageModule,
+  CMSFileModule,
   RoomModule,
   CabinModule,
   StayModule,

@@ -16,7 +16,7 @@ import {
   doesFileExist,
   getS3Uri,
   getSignedS3Url,
-  getUploadUrl,
+  getS3UploadUrl,
   parseS3Uri,
 } from '@@/s3/s3';
 
@@ -104,7 +104,7 @@ export const cmsImageUpload = h<M.MutationResolvers['cmsImageUpload']>(
       });
 
     // presign upload url
-    const { data, error } = await getUploadUrl(fp);
+    const { data, error } = await getS3UploadUrl(fp);
     if (error || !data) throw err('PRESIGN_FAILED');
 
     return { id, url: data };

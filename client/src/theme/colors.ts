@@ -10,6 +10,20 @@ export const colors: MantineThemeOverride = {
     // status colors
     red: twColors(red),
     amber: twColors(amber),
+
+    // open-colors gray mixed with tw slate
+    gray: [
+      slate[50],
+      slate[100],
+      '#eaeff5',
+      slate[200],
+      slate[300],
+      '#9babc0',
+      '#73839a',
+      slate[600],
+      slate[700],
+      slate[800],
+    ],
   },
   primaryColor: 'emerald',
   white: slate[100],

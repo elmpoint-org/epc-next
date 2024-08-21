@@ -24,7 +24,7 @@ export default function Credentials() {
           <div className="flex flex-row items-center justify-between">
             <h3 className="text-lg">Your passkeys</h3>
 
-            <ActionIcon color="black" variant="subtle" onClick={toggle}>
+            <ActionIcon color="slate" variant="subtle" onClick={toggle}>
               {isOpen ? <IconChevronDown /> : <IconPlus />}
             </ActionIcon>
           </div>

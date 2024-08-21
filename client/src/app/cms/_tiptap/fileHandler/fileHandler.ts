@@ -1,7 +1,7 @@
 'use client';
 
 import { prettyError } from '@/util/prettyErrors';
-import { ALLOWED_TYPES } from '@@/s3/IMAGE_OPTIONS';
+import { IMAGE_TYPES } from '@@/s3/FILE_TYPES';
 import { notifications } from '@mantine/notifications';
 import FileHandlerRoot, {
   type FileHandlePluginOptions,
@@ -11,7 +11,7 @@ import { getPageData } from '../pageData/pageData';
 
 type FileHandlerEditor = FileHandlePluginOptions['editor'];
 
-const MIME_TYPES = ALLOWED_TYPES;
+const MIME_TYPES = IMAGE_TYPES;
 const MAX_SIZE_MB = 10;
 
 export const FileHandler = FileHandlerRoot.configure({
