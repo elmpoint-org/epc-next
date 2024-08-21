@@ -7,6 +7,7 @@ import { graphAuth, graphql } from '@/query/graphql';
 
 import { FileModal, FileModalFooter, FileModalProps } from './FileModal';
 import FocusOnRender from '@/app/_components/_base/FocusOnRender';
+import OverwriteWarning from '../OverwriteWarning';
 
 export default function MoveCopyModal(
   props: { selected: string[] } & FileModalProps,
@@ -18,10 +19,14 @@ export default function MoveCopyModal(
   const [text, setText] = useState('');
   const textboxRef = useRef<HTMLInputElement | null>(null);
 
+  // overwrite warning
+  const [warning, setWarning] = useState(false);
+
   // show folder on load
   useEffect(() => {
     if (!show) return;
     setText('/' + currentFolder);
+    setWarning(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
@@ -37,6 +42,30 @@ export default function MoveCopyModal(
   const [isLoading, loading] = useTransition();
   function handleSubmit(shouldCopy: boolean) {
     loading(async () => {
+      // first, check for file conflicts in new location
+      if (!warning) {
+        const { data } = await graphAuth(
+          graphql(`
+            query Files($root: String) {
+              cmsFiles(root: $root) {
+                files {
+                  path
+                }
+              }
+            }
+          `),
+          { root: parsed },
+        );
+        const conflicts = data?.cmsFiles?.files.filter(({ path }) =>
+          filenames.includes(path.replace(parsed, '')),
+        );
+        if (conflicts?.length) {
+          setWarning(true);
+          return;
+        }
+      }
+
+      // now, perform move/copy operation
       const { data, errors } = await graphAuth(
         graphql(`
           mutation CmsFileMove(
@@ -93,6 +122,9 @@ export default function MoveCopyModal(
               rightSection={<CloseButton onClick={() => setText('')} />}
             />
             <FocusOnRender el={textboxRef} />
+
+            {/* overwrite warning */}
+            {warning && <OverwriteWarning />}
 
             {/* footer */}
             <FileModalFooter>

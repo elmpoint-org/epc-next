@@ -7,19 +7,27 @@ import { graphAuth, graphql } from '@/query/graphql';
 
 import { FileModal, FileModalFooter, FileModalProps } from './FileModal';
 import FocusOnRender from '@/app/_components/_base/FocusOnRender';
+import OverwriteWarning from '../OverwriteWarning';
 
-export default function RenameModal(props: { path: string } & FileModalProps) {
-  const { show, onHide, path, currentFolder } = props;
+export default function RenameModal(
+  props: { path: string; folderContents: string[] } & FileModalProps,
+) {
+  const { show, onHide, path, currentFolder, folderContents } = props;
   const filename = path?.replace(currentFolder, '') ?? '';
 
   const [text, setText] = useState('');
+
   // on load
   useEffect(() => {
     if (!show) return;
     setText(filename);
+    setWarning(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
   const textboxRef = useRef<HTMLInputElement | null>(null);
+
+  // conflicts warning
+  const [warning, setWarning] = useState(false);
 
   const [isLoading, loading] = useTransition();
   function handleSubmit() {
@@ -27,6 +35,16 @@ export default function RenameModal(props: { path: string } & FileModalProps) {
       return notifications.show({ color: 'red', message: 'Invalid file name' });
 
     loading(async () => {
+      // first, check for file conflicts in new location
+      if (text.trim() === filename) return;
+      if (!warning) {
+        if (folderContents.includes(text.trim())) {
+          setWarning(true);
+          return;
+        }
+      }
+
+      // run operation
       const { data, errors } = await graphAuth(
         graphql(`
           mutation CmsFileMove(
@@ -86,6 +104,12 @@ export default function RenameModal(props: { path: string } & FileModalProps) {
               ref={textboxRef}
             />
             <FocusOnRender el={textboxRef} select />
+
+            {warning && (
+              <OverwriteWarning>
+                A file already exists with that name and will be overwitten.
+              </OverwriteWarning>
+            )}
 
             <FileModalFooter>
               <div className="flex flex-row justify-end">
