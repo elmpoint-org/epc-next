@@ -9,6 +9,7 @@ import {
   ListObjectsV2Command,
   CopyObjectCommand,
   S3ServiceException,
+  DeleteObjectsCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl as presign } from '@aws-sdk/s3-request-presigner';
 
@@ -141,6 +142,49 @@ export async function deleteS3File(fp: FilePath) {
       Key: fp.path,
     })
   );
+}
+
+export async function deleteS3Folder(fp: FilePath) {
+  let deleted = 0; // number of files deleted
+  const errors: { key: string; code: string }[] = [];
+
+  let ContinuationToken: string | undefined;
+  do {
+    // list all files
+    const files = await s3
+      .send(
+        new ListObjectsV2Command({
+          Bucket: fp.bucket,
+          Prefix: fp.path,
+          ContinuationToken,
+        })
+      )
+      .catch(() => {});
+    if (files?.KeyCount && files.Contents) {
+      const status = await s3
+        .send(
+          new DeleteObjectsCommand({
+            Bucket: fp.bucket,
+            Delete: {
+              Objects: files.Contents.map((f) => ({ Key: f.Key })),
+              Quiet: false,
+            },
+          })
+        )
+        .catch(() => {});
+      deleted += status?.Deleted?.length ?? 0;
+      if (status?.Errors)
+        status.Errors.map(({ Key, Code }) => {
+          if (Key && Code) errors.push({ key: Key, code: Code });
+        });
+
+      // recurse if necessary
+      if (files.NextContinuationToken)
+        ContinuationToken = files.NextContinuationToken;
+    }
+  } while (ContinuationToken);
+
+  return { deleted, errors };
 }
 
 export async function listS3Files(

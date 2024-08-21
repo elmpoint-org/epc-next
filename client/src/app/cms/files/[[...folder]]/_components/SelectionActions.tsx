@@ -23,6 +23,7 @@ export default function SelectionActions({
   revalidate,
   totalFiles,
   folderParsed,
+  files,
 }: {
   totalFiles?: number;
 } & FileManagerProps) {
@@ -96,7 +97,7 @@ export default function SelectionActions({
           <Tooltip label="Delete">
             <ActionIcon
               aria-label="delete selected files"
-              disabled={!hasChecked || hasFolder}
+              disabled={!hasChecked}
               size="sm"
               variant="subtle"
               onClick={async () => {
@@ -145,6 +146,9 @@ export default function SelectionActions({
                 {...modalProps}
                 show={modal === 'RENAME'}
                 path={select.getSelected()[0]}
+                folderContents={
+                  files?.map(({ path }) => path.replace(folderParsed, '')) ?? []
+                }
               />
               <MoveCopyModal
                 {...modalProps}
