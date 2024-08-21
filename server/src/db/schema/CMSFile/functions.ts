@@ -88,6 +88,7 @@ export const cmsFileCreateFolder = h<
   M.MutationResolvers['cmsFileCreateFolder']
 >(async ({ args: { root } }) => {
   // validate folder name
+  if (!root.length) return true; // "creates" the root folder
   if (!root.match(/^\w/)) throw err('BAD_FOLDER_NAME');
   if (!root.match(/\/$/)) throw err('ROOT_FOLDER_MISSING_TRAILING_SLASH');
 
