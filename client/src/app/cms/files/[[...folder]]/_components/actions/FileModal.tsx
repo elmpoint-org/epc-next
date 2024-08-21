@@ -24,10 +24,10 @@ export function FileModal({
       {/* backdrop */}
       <DialogBackdrop
         transition
-        className="fixed inset-0 z-50 bg-black/50 transition duration-300 ease-out data-[closed]:opacity-0"
+        className="fixed inset-0 z-[200] bg-black/50 transition duration-300 ease-out data-[closed]:opacity-0"
       />
 
-      <div className="fixed inset-0 z-50 flex flex-col items-center overflow-y-auto p-4 pt-8 sm:pt-12">
+      <div className="fixed inset-0 z-[200] flex flex-col items-center overflow-y-auto p-4 pt-8 sm:pt-12">
         {/* panel */}
         <DialogPanel
           transition
