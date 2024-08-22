@@ -3,8 +3,11 @@ import gql from 'graphql-tag';
 export default gql`
   "a file available in the CMS file manager."
   type CMSFile {
+    "the directory path to the file, including its filename"
     path: String!
+    "last modified date"
     lastModified: Int
+    "number of bytes in file"
     size: Int
   }
 
@@ -40,6 +43,8 @@ export default gql`
     cmsFileUpload(fileName: String!, root: String!): CMSFileUploadOutput!
 
     """
+    **SCOPE: ADMIN | EDIT**
+
     create a blank folder at \`root\` path. root must end in \`/\`.
     """
     cmsFileCreateFolder(root: String!): Boolean
