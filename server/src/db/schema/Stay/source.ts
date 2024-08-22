@@ -2,7 +2,12 @@ import Model from '@@/db/lib/Model';
 import type { Stay } from '@@/db/__types/graphql-types';
 
 export type DBStay = Stay & {
-  //
+  reservationIds: ScalarRoom[];
+};
+export type ScalarRoom = {
+  name: string;
+  roomId?: string;
+  customText?: string;
 };
 
 class StaySource extends Model<DBStay> {
