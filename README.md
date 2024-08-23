@@ -73,6 +73,18 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
     ```
 1.  **Head to the development URL.** Your terminal should tell you where to go, but it's probably `http://localhost:3001/`.
 
+### Using the API
+
+The server API is accessible through a GraphQL endpoint, which is easiest to explore using the [Apollo Editor](https://studio.apollographql.com/sandbox/explorer?endpoint=https%3A%2F%2Fapi.elmpoint.xyz%2Fone%2Fgql) (or any other introspection viewer.) 
+
+The endpoint above allows you to explore the available commands and documentation as is, but in order to run commands you'll need to add your authentication token like so:
+![connection settings](https://github.com/user-attachments/assets/71717eb9-8285-4752-87e7-6754b4c2ca0f)
+![add authorization token](https://github.com/user-attachments/assets/dd1027b4-e249-4117-b2a1-c4464320ed3e)
+
+You can find your authorization token in your browser's cookies. 
+
+
+
 ### Submitting local changes
 
 If you've made local changes to the code, you'll need to manually submit a Pull Request for your code. Please follow standard [Github Flow](https://docs.github.com/en/get-started/using-github/github-flow).
