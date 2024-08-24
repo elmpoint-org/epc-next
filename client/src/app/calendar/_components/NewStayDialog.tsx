@@ -70,7 +70,12 @@ export default function NewStayDialog({ trigger }: { trigger: ReverseCbProp }) {
               )}
             >
               {/* HEADER */}
-              <div className="group flex flex-row items-center justify-between border-b border-slate-300 bg-slate-50 p-2 group-data-[m]:border-none">
+              <div
+                className="group flex flex-row items-center justify-between border-b border-slate-300 bg-slate-50 p-2 group-data-[m]:border-none"
+                onClick={() => {
+                  if (minimized) setMinimized(false);
+                }}
+              >
                 {/* switch sides */}
                 <ActionIcon
                   size="sm"
