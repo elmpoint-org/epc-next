@@ -8,6 +8,7 @@ import {
   loggedIn,
 } from '@@/db/lib/utilities';
 import { ResolverContext } from '@@/db/graph';
+import { ROOT_CABIN_ID } from '../Room/source';
 
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 
@@ -49,6 +50,7 @@ export const cabinUpdate = h<M.MutationResolvers['cabinUpdate']>(
   scoped('ADMIN', 'CALENDAR_ADMIN'),
   async ({ sources, args: { id, ...updates } }) => {
     // make sure cabin exists
+    if (id === ROOT_CABIN_ID) throw err('NOT_ALLOWED');
     const cabin = sources.cabin.get(id);
     if (!cabin) throw err('CABIN_NOT_FOUND');
 
@@ -60,6 +62,7 @@ export const cabinDelete = h<M.MutationResolvers['cabinDelete']>(
   scoped('ADMIN', 'CALENDAR_ADMIN'),
   async ({ sources, args: { id } }) => {
     // make sure cabin exists
+    if (id === ROOT_CABIN_ID) throw err('NOT_ALLOWED');
     const cabin = sources.cabin.get(id);
     if (!cabin) throw err('CABIN_NOT_FOUND');
 

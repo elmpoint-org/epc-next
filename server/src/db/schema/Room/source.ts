@@ -10,3 +10,5 @@ class RoomSource extends Model<DBRoom> {
   protected type = 'room';
 }
 export default RoomSource;
+
+export const ROOT_CABIN_ID = 'ROOT';

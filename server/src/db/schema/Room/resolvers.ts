@@ -8,6 +8,7 @@ const resolvers: RoomModule.Resolvers = {
   Query: {
     rooms: f.getRooms,
     room: f.getRoom,
+    roomsNoCabin: f.getRoomsNoCabin,
     roomsFromCabin: f.getRoomsFromCabin,
   },
   Mutation: {
