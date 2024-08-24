@@ -3,6 +3,8 @@
 import { Button } from '@mantine/core';
 
 import { FormCtxProvider } from '../state/formCtx';
+import { useReverseCbTrigger } from '@/util/reverseCb';
+
 import FormCalendar from './FormCalendar';
 import DateStats from './DateStats';
 import RoomNumBox from './RoomNumBox';
@@ -10,7 +12,6 @@ import FormGuestRows from './FormGuestRows';
 import FormEventText from './FormEventText';
 import TitleBlock from './TitleBlock';
 import FormSubmit from './FormSubmit';
-import { useReverseCbTrigger } from '@/util/reverseCb';
 
 export const COST_MEMBERS = 15.0;
 export const COST_GUESTS = 20.0;
@@ -23,7 +24,7 @@ const NewEventForm = () => {
     <>
       <FormCtxProvider>
         <FormSubmit trigger={submitTrigger} />
-        <div className="@md:p-8 m-6 mx-auto mt-0 max-w-full p-4">
+        <div className="m-6 mx-auto mt-0 max-w-full p-4 @md:p-8">
           <form
             onSubmit={(e) => {
               e.preventDefault();

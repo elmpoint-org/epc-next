@@ -10,23 +10,32 @@ import {
   IconChevronRightPipe,
   IconMinus,
   IconPlus,
-  IconSquare,
   IconX,
 } from '@tabler/icons-react';
-
-import { ReverseCbProp, useReverseCb } from '@/util/reverseCb';
-
-import NewEventForm from '../new/_components/NewEventForm';
-import { clx } from '@/util/classConcat';
-
 import { motion } from 'framer-motion';
 
-const PANEL_NAME = 'Add your stay';
+import { Children } from '@/util/propTypes';
+import {
+  ReverseCbProp,
+  useReverseCb,
+  type useReverseCbTrigger,
+} from '@/util/reverseCb';
+import { clx } from '@/util/classConcat';
 
 // COMPONENT
-export default function NewStayDialog({ trigger }: { trigger: ReverseCbProp }) {
+export default function FloatingWindow({
+  triggerOpen,
+  children,
+  title,
+  width,
+}: {
+  /** use a {@link useReverseCbTrigger} call to open the window. */
+  triggerOpen: ReverseCbProp;
+  title?: React.ReactNode;
+  width?: string;
+} & Children) {
   const [isOpen, { open, close }] = useDisclosure();
-  useReverseCb(trigger, open);
+  useReverseCb(triggerOpen, open);
 
   // panel state
   const [side, setSide] = useToggle(['RIGHT', 'LEFT'] as const);
@@ -51,7 +60,7 @@ export default function NewStayDialog({ trigger }: { trigger: ReverseCbProp }) {
         {/* frame */}
         <div
           className={clx(
-            'group fixed inset-2 z-[200] flex flex-row items-end sm:inset-6',
+            'group fixed inset-2 z-[199] flex flex-row items-end sm:inset-6',
             side === 'LEFT' && 'justify-start',
             side === 'RIGHT' && 'justify-end',
           )}
@@ -60,7 +69,10 @@ export default function NewStayDialog({ trigger }: { trigger: ReverseCbProp }) {
           {/* panel */}
           <motion.div
             layout
-            className="flex h-full w-[48rem] max-w-screen-sm flex-col justify-end group-data-[m]:w-96"
+            className="flex h-full max-w-screen-sm flex-col justify-end group-data-[m]:!w-96"
+            style={{
+              width: width ?? '48rem',
+            }}
           >
             <DialogPanel
               transition
@@ -78,6 +90,7 @@ export default function NewStayDialog({ trigger }: { trigger: ReverseCbProp }) {
               >
                 {/* switch sides */}
                 <ActionIcon
+                  aria-label="switch to other side"
                   size="sm"
                   variant="subtle"
                   color="slate"
@@ -89,11 +102,12 @@ export default function NewStayDialog({ trigger }: { trigger: ReverseCbProp }) {
                 </ActionIcon>
 
                 {/* panel name */}
-                <div className="select-none text-sm">{PANEL_NAME}</div>
+                <div className="select-none text-sm">{title}</div>
 
                 <div className="flex flex-row items-center gap-1">
                   {/* minimize */}
                   <ActionIcon
+                    aria-label="minimize"
                     size="sm"
                     variant="subtle"
                     color="slate"
@@ -104,6 +118,7 @@ export default function NewStayDialog({ trigger }: { trigger: ReverseCbProp }) {
                   </ActionIcon>
                   {/* close */}
                   <ActionIcon
+                    aria-label="close window"
                     size="sm"
                     variant="subtle"
                     color="slate"
@@ -121,8 +136,8 @@ export default function NewStayDialog({ trigger }: { trigger: ReverseCbProp }) {
                   scrollbar: 'm-1',
                 }}
               >
-                <div className="@container flex h-full w-full flex-col">
-                  <NewEventForm />
+                <div className="flex h-full w-full flex-col @container">
+                  {children}
                 </div>
               </ScrollArea>
             </DialogPanel>

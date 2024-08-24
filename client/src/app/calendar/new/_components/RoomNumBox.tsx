@@ -41,8 +41,8 @@ const RoomNumBox = () => {
           max={MAX_ROOMS}
           size="sm"
           classNames={{
-            root: 'w-16 -mt-6',
-            input: 'text-center pr-8',
+            root: '-mt-6 w-16',
+            input: 'pr-8 text-center',
           }}
         />
       </div>

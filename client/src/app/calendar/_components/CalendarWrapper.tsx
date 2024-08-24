@@ -6,7 +6,8 @@ import { IconPlus } from '@tabler/icons-react';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 
 import ViewEvents from './ViewEvents';
-import NewStayDialog from './NewStayDialog';
+import FloatingWindow from '@/app/_components/_base/FloatingWindow';
+import NewEventForm from '../new/_components/NewEventForm';
 
 export default function CalendarWrapper() {
   const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
@@ -15,14 +16,7 @@ export default function CalendarWrapper() {
     <>
       <div className="flex flex-row justify-between">
         <h3 className="text-xl">calendar page</h3>
-        <ActionIcon
-          // component={Link}
-          // href="/calendar/new"
-          // size="sm"
-          color="slate"
-          variant="light"
-          onClick={openNewStay}
-        >
+        <ActionIcon color="slate" variant="light" onClick={openNewStay}>
           <IconPlus />
         </ActionIcon>
       </div>
@@ -31,7 +25,13 @@ export default function CalendarWrapper() {
 
       <ViewEvents />
 
-      <NewStayDialog trigger={newStay} />
+      <FloatingWindow
+        triggerOpen={newStay}
+        title={<>Add Your Stay</>}
+        width="48rem"
+      >
+        <NewEventForm />
+      </FloatingWindow>
     </>
   );
 }

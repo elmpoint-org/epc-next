@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import dayjs from 'dayjs';
 
 import { NumberInput } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
@@ -9,7 +8,8 @@ import { DateInput } from '@mantine/dates';
 import { dayStyles } from '../_util/dayStyles';
 import { useGraphQuery } from '@/query/query';
 import { graphql } from '@/query/graphql';
-import { dateTS } from '../_util/dateUtils';
+import { dateTS, dayjs } from '../_util/dateUtils';
+import { clx } from '@/util/classConcat';
 
 export default function ViewEvents() {
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -53,8 +53,7 @@ export default function ViewEvents() {
     },
   );
 
-  // const events = query.data?.stays;
-  const events: { title: string; author: { name: string } }[] = [];
+  const events = query.data?.stays;
 
   return (
     <>
@@ -87,11 +86,48 @@ export default function ViewEvents() {
         <hr />
 
         {/* events */}
-        <div className="flex flex-col rounded-lg border border-slate-300 p-4">
+        <div className="flex flex-col rounded-lg bg-slate-200 p-4">
           {events?.map((evt, i) => (
-            <div key={i} className="t">
-              <p>{evt.title}</p>
-              <p>{evt.author?.name}</p>
+            <div
+              key={i}
+              className={clx(
+                'rounded-md bg-dwhite p-4 shadow-sm',
+                /* em */ '[&_em]:font-bold [&_em]:not-italic [&_em]:text-slate-600',
+              )}
+            >
+              <p>
+                title: <em>{evt.title}</em>
+              </p>
+              <p>
+                author: <em>{evt.author?.name}</em>
+              </p>
+
+              <p>
+                dates: <em>{showDate(evt.dateStart)}</em> to{' '}
+                <em>{showDate(evt.dateEnd)}</em>
+              </p>
+
+              <div className="t">
+                <h4 className="t">reservations:</h4>
+                <div className="flex flex-col gap-2 p-2">
+                  {evt.reservations.map((res, i) => (
+                    <div key={i} className="flex flex-row items-center gap-2">
+                      <div className="t">{res.name}</div>
+                      <div className="t">-</div>
+                      {res.room &&
+                        ('text' in res.room ? (
+                          <>
+                            <div className="italic">{res.room.text}</div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="t">{res.room.name}</div>
+                          </>
+                        ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           ))}
 
@@ -104,10 +140,7 @@ export default function ViewEvents() {
   );
 }
 
-function showDate(d: Date) {
-  return (
-    <span className="-my-1 rounded-md bg-slate-300 p-1 font-bold">
-      {dayjs(d).format('YYYY-MM-DD')}
-    </span>
-  );
+function showDate(d: Date | number) {
+  const date = d instanceof Date ? dayjs(d) : dayjs.unix(d);
+  return date.utc().format('YYYY-MM-DD');
 }
