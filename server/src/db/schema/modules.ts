@@ -10,6 +10,12 @@ import CMSPageSource from './CMSPage/source';
 import CMSImageModule from './CMSImage/module';
 import CMSImageSource from './CMSImage/source';
 import CMSFileModule from './CMSFile/module';
+import RoomModule from './Room/module';
+import RoomSource from './Room/source';
+import CabinModule from './Cabin/module';
+import CabinSource from './Cabin/source';
+import StayModule from './Stay/module';
+import StaySource from './Stay/source';
 
 // DEFINE SCHEMA
 
@@ -21,6 +27,9 @@ export const modules: Module[] = [
   CMSPageModule,
   CMSImageModule,
   CMSFileModule,
+  RoomModule,
+  CabinModule,
+  StayModule,
 ];
 
 export const sources = () => ({
@@ -30,4 +39,7 @@ export const sources = () => ({
     page: new CMSPageSource(),
     image: new CMSImageSource(),
   },
+  room: new RoomSource(),
+  cabin: new CabinSource(),
+  stay: new StaySource(),
 });

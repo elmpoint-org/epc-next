@@ -9,6 +9,7 @@ import { DBType } from '@@/db/lib/Model';
 import { DBCmsPage } from './source';
 
 import { ResolverContext } from '@@/db/graph';
+import { DBUser } from '../User/source';
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 
 export const getCmsPages = h<M.QueryResolvers['cmsPages']>(
@@ -126,7 +127,7 @@ export const getCmsPageContributors = h<M.CMSPageResolvers['contributors']>(
     // get users by their IDs
     const u = (await sources.user.getMultiple(contributorIds)).filter(
       (c) => !!c
-    );
+    ) as DBType<DBUser>[];
 
     return u;
   }

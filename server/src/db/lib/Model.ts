@@ -9,7 +9,8 @@ const timestamp = () => Math.round(Date.now() / 1000);
 
 // define custom Partial that allows null values
 type Partial<T> = { [P in keyof T]?: T[P] | undefined | null };
-type InitialType<T> = Omit<T, 'id' | 'timestamp'>;
+export type DBPartial<T> = Partial<T>;
+export type InitialType<T> = Omit<T, 'id' | 'timestamp'>;
 export enum QueryOp {
   EQ = '=',
   LT = '<',
@@ -88,7 +89,7 @@ abstract class Model<Type> {
    * @returns array of items
    */
   async getMultiple(ids: string[]) {
-    return this.loader.loadMany(ids) as Promise<DBType<Type>[]>;
+    return this.loader.loadMany(ids) as Promise<(DBType<Type> | undefined)[]>;
   }
 
   /**
@@ -136,7 +137,7 @@ abstract class Model<Type> {
   /**
    * run a query on the database
    * @param sortKey the variable to filter by
-   * @param op a QueryOp operator
+   * @param op a {@link QueryOp} operator
    * @param vals values to compare to
    * @returns an array of matching values
    */
