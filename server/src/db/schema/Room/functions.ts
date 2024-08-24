@@ -8,6 +8,7 @@ import {
   loggedIn,
 } from '@@/db/lib/utilities';
 import { ResolverContext } from '@@/db/graph';
+import { dateTS, queryStaysByDate } from '../Stay/functions';
 
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 
@@ -96,8 +97,48 @@ export const getRoomCabin = h<M.RoomResolvers['cabin']>(
 );
 
 export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
-  async ({ sources }) => {
-    // TODO calculate based on reservations
-    return null;
+  async ({ sources, parent, args: { start, end } }) => {
+    const { id: roomId, noCount, beds } = parent as DBRoom;
+    if (noCount) return null;
+
+    // standarize dates
+    start = dateTS(start);
+    end = dateTS(end);
+    const d1 = 3600 * 24;
+    const days = (end - start) / d1;
+    if (days < 0 || days !== Math.round(days)) throw err('invalid dates');
+
+    // get all reservations in this time frame
+    const stays = await queryStaysByDate(sources, start, end);
+    const reservations = stays
+      .map((s) =>
+        s.reservationIds
+          .filter((r) => r.roomId === roomId)
+          .map(() => ({
+            start: s.dateStart,
+            end: s.dateEnd,
+          }))
+      )
+      .flat();
+
+    // count number of occupants
+    let maxOccupants = 0;
+    do {
+      if (reservations.length < 2) {
+        maxOccupants = reservations.length;
+        break;
+      }
+
+      // day-by-day
+      for (let t = start; t < end; t += d1) {
+        // count the resrvations on this day (t)
+        const count = reservations.filter((r) => {
+          return r.start <= t && r.end > t;
+        }).length;
+        if (count > maxOccupants) maxOccupants = count;
+      }
+    } while (false);
+
+    return beds - maxOccupants;
   }
 );

@@ -52,6 +52,13 @@ export default gql`
     get all stays within specified date range. \`deep\` search will take longer, but returns extremely long events as well.
     """
     stays(start: Int!, end: Int!, deep: Boolean): [Stay!]!
+
+    """
+    **SCOPE: userId**
+
+    get all stays that are in a particular room in a particular date range
+    """
+    staysInRoom(roomId: String!, start: Int!, end: Int!): [Stay!]!
   }
 
   type Mutation {

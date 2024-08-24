@@ -8,6 +8,7 @@ const resolvers: StayModule.Resolvers = {
   Query: {
     stays: f.getStays,
     stay: f.getStay,
+    staysInRoom: f.getStaysInRoom,
   },
   Mutation: {
     stayCreate: f.stayCreate,
