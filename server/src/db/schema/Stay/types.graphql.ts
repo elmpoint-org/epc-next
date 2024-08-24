@@ -12,9 +12,9 @@ export default gql`
     author: User
 
     "date of arrival, a unix seconds timestamp"
-    dateStart: String!
+    dateStart: Int!
     "leave date, a unix seconds timestamp"
-    dateEnd: String!
+    dateEnd: Int!
 
     "the room reservations associated with this stay"
     reservations: [StayReservation!]!
@@ -27,7 +27,7 @@ export default gql`
     "the name of the person(s) staying in the room"
     name: String!
     "the room they're staying in"
-    room: RoomOrCustomRoom!
+    room: RoomOrCustomRoom
   }
 
   union RoomOrCustomRoom = Room | CustomRoom
@@ -49,9 +49,9 @@ export default gql`
     """
     **SCOPE: userId**
 
-    get all stays within specified date range
+    get all stays within specified date range. \`deep\` search will take longer, but returns extremely long events as well.
     """
-    stays(start: String!, end: String!): [Stay]!
+    stays(start: Int!, end: Int!, deep: Boolean): [Stay]!
   }
 
   type Mutation {
@@ -64,8 +64,8 @@ export default gql`
       title: String!
       description: String!
       authorId: ID!
-      dateStart: String!
-      dateEnd: String!
+      dateStart: Int!
+      dateEnd: Int!
       reservations: [StayReservationInput!]!
     ): Stay!
 
@@ -79,8 +79,8 @@ export default gql`
       title: String
       description: String
       authorId: ID
-      dateStart: String
-      dateEnd: String
+      dateStart: Int
+      dateEnd: Int
       reservations: [StayReservationInput!]
     ): Stay!
 
