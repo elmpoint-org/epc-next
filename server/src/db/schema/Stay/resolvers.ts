@@ -22,5 +22,9 @@ const resolvers: StayModule.Resolvers = {
 
     timestamp,
   },
+
+  CustomRoom: {
+    __isTypeOf: f.isCustomRoomType,
+  },
 };
 export default resolvers;

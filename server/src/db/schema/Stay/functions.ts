@@ -9,7 +9,7 @@ import {
 } from '@@/db/lib/utilities';
 import { ResolverContext } from '@@/db/graph';
 import { CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS } from '@@/CONSTANTS';
-import { DBStay } from './source';
+import { DBStay, ScalarRoom } from './source';
 
 import dayjs from 'dayjs';
 import dayjsUTC from 'dayjs/plugin/utc';
@@ -22,6 +22,12 @@ const DAYS_AFTER_SEC = CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS * 3600 * 24;
 export const getStays = h<M.QueryResolvers['stays']>(
   loggedIn(),
   async ({ sources, args: { start, end, deep } }) => {
+    // validate
+    start = dateTS(start);
+    end = dateTS(end);
+    const valid = validateDates(start, end);
+    if (!valid) throw err('INVALID_DATES');
+
     const stays = await queryStaysByDate(
       sources,
       start,
@@ -43,6 +49,12 @@ export const getStay = h<M.QueryResolvers['stay']>(
 export const getStaysInRoom = h<M.QueryResolvers['staysInRoom']>(
   loggedIn(),
   async ({ sources, args: { roomId, start, end } }) => {
+    // validate
+    start = dateTS(start);
+    end = dateTS(end);
+    const valid = validateDates(start, end);
+    if (!valid) throw err('INVALID_DATES');
+
     const stays = await queryStaysByDate(sources, start, end);
     return stays.filter((s) =>
       s.reservationIds.some((r) => r.roomId === roomId)
@@ -56,18 +68,18 @@ export const stayCreate = h<M.MutationResolvers['stayCreate']>(
     // standardize dates
     fields.dateStart = dateTS(fields.dateStart);
     fields.dateEnd = dateTS(fields.dateEnd);
+    const valid = validateDates(fields.dateStart, fields.dateEnd);
+    if (!valid) throw err('INVALID_DATES');
 
     const res = fields.reservations;
     const stay: InitialType<DBStay> = {
       ...fields,
       reservationIds: res.map((r) => {
         if (r.roomId && r.customText) throw err('INVALID_RESERVATION');
-
-        return {
-          ...r,
-          roomId: r.roomId ?? undefined,
-          customText: r.customText ?? undefined,
-        };
+        const res: ScalarRoom = { name: r.name };
+        if (r.roomId) res.roomId = r.roomId;
+        if (r.customText) res.customText = r.customText;
+        return res;
       }),
     };
 
@@ -78,25 +90,36 @@ export const stayCreate = h<M.MutationResolvers['stayCreate']>(
 export const stayUpdate = h<M.MutationResolvers['stayUpdate']>(
   loggedIn(),
   async ({ sources, args: { id, ...updates } }) => {
-    // standardize dates
-    if (updates.dateStart) updates.dateStart = dateTS(updates.dateStart);
-    if (updates.dateEnd) updates.dateEnd = dateTS(updates.dateEnd);
+    // make sure stay exists
+    const stay = await sources.stay.get(id);
+    if (!stay) throw err('STAY_NOT_FOUND');
 
+    // validate dates
+    if (typeof updates.dateStart === 'number')
+      updates.dateStart = dateTS(updates.dateStart);
+    if (typeof updates.dateEnd === 'number')
+      updates.dateEnd = dateTS(updates.dateEnd);
+    const valid = validateDates(
+      updates.dateStart ?? stay.dateStart,
+      updates.dateEnd ?? stay.dateEnd
+    );
+    if (!valid) throw err('INVALID_DATES');
+
+    // update
     const res = updates.reservations;
-    const stay: DBPartial<DBType<DBStay>> = {
+    const newstay: DBPartial<DBType<DBStay>> = {
       ...updates,
       reservationIds: res?.map((r) => {
         if (r.roomId && r.customText) throw err('INVALID_RESERVATION');
 
-        return {
-          ...r,
-          roomId: r.roomId ?? undefined,
-          customText: r.customText ?? undefined,
-        };
+        const res: ScalarRoom = { name: r.name };
+        if (r.roomId) res.roomId = r.roomId;
+        if (r.customText) res.customText = r.customText;
+        return res;
       }),
     };
 
-    return sources.stay.update(id, stay);
+    return sources.stay.update(id, newstay);
   }
 );
 
@@ -129,6 +152,12 @@ export const getStayReservations = h<M.StayResolvers['reservations']>(
   }
 );
 
+export const isCustomRoomType = h<M.CustomRoomResolvers['__isTypeOf']>(
+  ({ parent }) => {
+    return 'text' in parent;
+  }
+);
+
 // -----------------------------
 
 export async function queryStaysByDate(
@@ -153,4 +182,16 @@ export async function queryStaysByDate(
 /** this function reads a unix timestamp as its current date **according to GMT**, and returns a new timestamp at midnight for that day. */
 export function dateTS(ts: number) {
   return dayjs.unix(ts).utc().startOf('date').unix();
+}
+
+/** validate dates.
+ * @returns true if valid.
+ */
+export function validateDates(start: number, end: number) {
+  start = dateTS(start);
+  end = dateTS(end);
+  const d1 = 3600 * 24;
+  const days = (end - start) / d1;
+  if (days < 0 || days !== Math.round(days)) return false;
+  return true;
 }

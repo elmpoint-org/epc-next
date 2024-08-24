@@ -8,7 +8,7 @@ import {
   loggedIn,
 } from '@@/db/lib/utilities';
 import { ResolverContext } from '@@/db/graph';
-import { dateTS, queryStaysByDate } from '../Stay/functions';
+import { dateTS, queryStaysByDate, validateDates } from '../Stay/functions';
 
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 
@@ -112,9 +112,8 @@ export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
     // standarize dates
     start = dateTS(start);
     end = dateTS(end);
-    const d1 = 3600 * 24;
-    const days = (end - start) / d1;
-    if (days < 0 || days !== Math.round(days)) throw err('invalid dates');
+    const valid = validateDates(start, end);
+    if (!valid) throw err('invalid dates');
 
     // get all reservations in this time frame
     const stays = await queryStaysByDate(sources, start, end);
@@ -138,7 +137,7 @@ export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
       }
 
       // day-by-day
-      for (let t = start; t < end; t += d1) {
+      for (let t = start; t < end; t += 3600 * 24) {
         // count the resrvations on this day (t)
         const count = reservations.filter((r) => {
           return r.start <= t && r.end > t;
@@ -150,3 +149,7 @@ export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
     return beds - maxOccupants;
   }
 );
+
+export const isRoomType = h<M.RoomResolvers['__isTypeOf']>(({ parent }) => {
+  return !('text' in parent);
+});

@@ -22,6 +22,7 @@ const resolvers: RoomModule.Resolvers = {
     cabin: f.getRoomCabin,
     availableBeds: f.getRoomAvailableBeds,
 
+    __isTypeOf: f.isRoomType,
     timestamp,
   },
 };
