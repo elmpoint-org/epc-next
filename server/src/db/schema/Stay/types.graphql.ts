@@ -51,7 +51,7 @@ export default gql`
 
     get all stays within specified date range. \`deep\` search will take longer, but returns extremely long events as well.
     """
-    stays(start: Int!, end: Int!, deep: Boolean): [Stay]!
+    stays(start: Int!, end: Int!, deep: Boolean): [Stay!]!
   }
 
   type Mutation {

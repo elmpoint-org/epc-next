@@ -1,13 +1,12 @@
-import A from '@/app/_components/_base/A';
+import CalendarWrapper from './_components/CalendarWrapper';
 
 export default function CalendarPage() {
   return (
     <>
       <div className="container flex flex-1 flex-col gap-4 rounded-lg bg-slate-100 p-6">
-        <h3 className="text-xl">calendar page</h3>
-        <div className="t">
-          <A href="/calendar/new">add your stay</A>
-        </div>
+        <CalendarWrapper />
+
+        <div className="m-4 h-[1000px] rounded-lg bg-slate-200"></div>
       </div>
     </>
   );
