@@ -23,7 +23,7 @@ export const getStays = h<M.QueryResolvers['stays']>(
       'dateEnd',
       !deep ? QueryOp.BETWEEN : QueryOp.GTE,
       start,
-      !deep ? DAYS_AFTER_SEC : undefined
+      !deep ? end + DAYS_AFTER_SEC : undefined
     );
     // remove future events out of range
     const stays = all_stays.filter((s) => s.dateStart <= end);
