@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
 
-import { COST_GUESTS, COST_MEMBERS } from './NewEventForm';
+import { COST_GUESTS, COST_MEMBERS } from './Form';
 import { useFormCtx } from '../state/formCtx';
 
 const DAYS_MAX = 150;

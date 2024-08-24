@@ -10,7 +10,6 @@ import {
 } from '@tabler/icons-react';
 
 import { DatesRange, useFormCtx } from '../state/formCtx';
-import { dayStyles } from '../../_util/dayStyles';
 
 const FormCalendar = () => {
   const { dates, setDates } = useFormCtx();
@@ -59,7 +58,7 @@ const FormCalendar = () => {
         <ActionIcon
           onClick={toggleCal}
           aria-label="toggle calendar"
-          className="mb-1"
+          className="mb-1.5"
           variant="light"
         >
           {isCalOpen ? <IconCircleChevronDown /> : <IconCircleChevronRight />}
@@ -100,7 +99,7 @@ const FormCalendar = () => {
           allowSingleDateInRange={true}
           classNames={{
             levelsGroup: 'justify-center border-x-8 border-slate-200/80 p-4',
-            day: dayStyles,
+            day: 'border-solid data-[weekend]:[&:not([data-selected])]:text-emerald-800/80 data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border-slate-800/50',
           }}
         />
       </Collapse>

@@ -7,7 +7,7 @@ import ActionButton from './ActionButton';
 import RoomSelector from './RoomSelector';
 import { GuestEntry, guestInitial, useFormCtx } from '../state/formCtx';
 
-import { MAX_ROOMS } from './NewEventForm';
+import { MAX_ROOMS } from './Form';
 
 const FormGuestRows = () => {
   const { guests, setGuests } = useFormCtx();
@@ -84,10 +84,10 @@ const FormGuestRows = () => {
         {guests.map((room, i) => (
           <div
             key={i}
-            className="relative flex flex-col items-stretch gap-7 rounded-xl border border-slate-300 p-4 pt-10 @xl:flex-row @xl:items-center @xl:gap-3 @xl:border-0 @xl:px-0 @xl:py-4"
+            className="relative flex flex-col items-stretch gap-7 rounded-xl border border-slate-300 p-4 pt-10 sm:flex-row sm:items-center sm:gap-3 sm:border-0 sm:px-0 sm:py-4"
           >
             {/* number */}
-            <div className="absolute bottom-4 left-5 w-[2ch] select-none p-0.5 text-left text-sm text-slate-500 @xl:static @xl:p-0 @xl:text-right">
+            <div className="absolute bottom-4 left-5 w-[2ch] select-none p-0.5 text-left text-sm text-slate-500 sm:static sm:p-0 sm:text-right">
               {i + 1}
             </div>
             {/* guest name */}
@@ -110,7 +110,7 @@ const FormGuestRows = () => {
               <RoomSelector rowIndex={i} className="-mt-5" />
             </div>
             {/* action buttons */}
-            <div className="mr-3 flex flex-row justify-end gap-2 @xl:justify-normal">
+            <div className="mr-3 flex flex-row justify-end gap-2 sm:justify-normal">
               {/* make primary */}
               <Tooltip label="Make this the primary guest">
                 <ActionButton
@@ -130,9 +130,9 @@ const FormGuestRows = () => {
           </div>
         ))}
         {/* add room button */}
-        <div className="flex flex-row items-center py-2 @xl:py-0">
+        <div className="flex flex-row items-center py-2 sm:py-0">
           <div className="flex flex-1 flex-row items-center gap-3">
-            <div className="w-[2ch] select-none text-right text-sm text-slate-500 @xl:static">
+            <div className="w-[2ch] select-none text-right text-sm text-slate-500 sm:static">
               +
             </div>
             <Button

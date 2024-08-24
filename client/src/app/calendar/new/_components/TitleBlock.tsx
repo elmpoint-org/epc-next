@@ -14,15 +14,12 @@ const TitleBlock = (p: {
 
   return (
     <>
-      <div className="@2xl:px-8 mb-2 mt-6 flex flex-col gap-3 px-0 first:mt-0">
+      <div className="mb-2 mt-6 flex flex-col gap-3 px-0 first:mt-0 md:px-8">
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            toggle();
-          }}
+          onClick={toggle}
           className="my-2 flex flex-row items-center justify-center gap-3 rounded-full bg-slate-200 py-4"
         >
-          <div className="flex size-6 items-center justify-center rounded-full bg-dgreen text-sm font-bold text-dwhite">
+          <div className=" flex size-6 items-center justify-center rounded-full bg-dgreen text-sm font-bold text-dwhite">
             {p.number}
           </div>
           <h3 className="text-xl">{p.title}</h3>

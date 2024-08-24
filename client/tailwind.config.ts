@@ -1,12 +1,10 @@
 import type { Config } from 'tailwindcss';
 import typography from '@tailwindcss/typography';
-import containers from '@tailwindcss/container-queries';
 
 import defaults from 'tailwindcss/defaultTheme';
 import colors from 'tailwindcss/colors';
 
 import { tiptapSelectors } from './src/app/cms/_tiptap/selectors';
-import { calendarSelectors } from './src/app/calendar/_util/selectors';
 
 export const font = ['var(--font-default)', ...defaults.fontFamily.sans];
 
@@ -29,6 +27,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [typography, containers, tiptapSelectors, calendarSelectors],
+  plugins: [typography, tiptapSelectors],
 };
 export default config;

@@ -9,30 +9,21 @@ import RoomNumBox from './RoomNumBox';
 import FormGuestRows from './FormGuestRows';
 import FormEventText from './FormEventText';
 import TitleBlock from './TitleBlock';
-import FormSubmit from './FormSubmit';
-import { useReverseCbTrigger } from '@/util/reverseCb';
 
 export const COST_MEMBERS = 15.0;
 export const COST_GUESTS = 20.0;
 export const MAX_ROOMS = 20;
 
 const NewEventForm = () => {
-  const { prop: submitTrigger, trigger: handleSubmit } = useReverseCbTrigger();
-
   return (
     <>
+      <hr className="t" />
       <FormCtxProvider>
-        <FormSubmit trigger={submitTrigger} />
-        <div className="@md:p-8 m-6 mx-auto mt-0 max-w-full p-4">
+        <div className="m-6 mx-auto max-w-3xl p-4 md:mt-0 md:p-8 lg:mt-6">
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit();
-            }}
+            onSubmit={(e) => e.preventDefault()}
             className="flex flex-col gap-4"
           >
-            <button className="sr-only">submit form</button>
-
             <TitleBlock number={1} title="Choose your dates">
               <p>
                 To begin, select the dates of your visit below. You can select
