@@ -1,6 +1,6 @@
 import { NumberInput } from '@mantine/core';
 
-import { MAX_ROOMS } from './Form';
+import { MAX_ROOMS } from './NewEventForm';
 import { guestInitial, useFormCtx } from '../state/formCtx';
 
 const RoomNumBox = () => {
