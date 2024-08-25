@@ -2,31 +2,15 @@
 
 import { useMemo, useState } from 'react';
 
-import {
-  ActionIcon,
-  Button,
-  Popover,
-  PopoverDropdown,
-  PopoverTarget,
-} from '@mantine/core';
-import { useOs } from '@mantine/hooks';
-import { DatePicker } from '@mantine/dates';
-import { IconArrowLeft, IconArrowRight, IconPlus } from '@tabler/icons-react';
-
-import { dayStyles } from '../_util/dayStyles';
 import { useGraphQuery } from '@/query/query';
 import { graphql } from '@/query/graphql';
 import { ResultOf } from '@graphql-typed-document-node/core';
-import { D1, dateFormat, dateTS, dateTSLocal, dayjs } from '../_util/dateUtils';
+import { dateTS, dateTSLocal, dayjs } from '../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
-import { clamp } from '@/util/math';
-import { useReverseCbTrigger } from '@/util/reverseCb';
-
-import ViewTimeline from './ViewTimeline';
-import FloatingWindow from '@/app/_components/_base/FloatingWindow';
-import NewEventForm from '../new/_components/NewEventForm';
 import { useDefaultDays } from '../_util/defaultDays';
 import { SetState } from '@/util/stateType';
+
+import ViewTimeline from './ViewTimeline';
 import TimelineControls from './TimelineControls';
 
 const EVENTS_QUERY = graphql(`

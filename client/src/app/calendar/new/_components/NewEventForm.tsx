@@ -12,6 +12,8 @@ import FormGuestRows from './FormGuestRows';
 import FormEventText from './FormEventText';
 import TitleBlock from './TitleBlock';
 import FormSubmit from './FormSubmit';
+import { getHotkeyHandler } from '@mantine/hooks';
+import { useTransition } from 'react';
 
 export const COST_MEMBERS = 15.0;
 export const COST_GUESTS = 20.0;
@@ -19,16 +21,19 @@ export const MAX_ROOMS = 20;
 
 const NewEventForm = () => {
   const { prop: submitTrigger, trigger: handleSubmit } = useReverseCbTrigger();
+  const [isLoading, loading] = useTransition();
 
   return (
     <>
       <FormCtxProvider>
-        <FormSubmit trigger={submitTrigger} />
-        <div className="m-6 mx-auto mt-0 max-w-full p-4 @md:p-8">
+        <FormSubmit trigger={submitTrigger} loading={loading} />
+        <div
+          className="m-6 mx-auto mt-0 max-w-full p-4 @md:p-8"
+          onKeyDown={getHotkeyHandler([['mod+Enter', handleSubmit]])}
+        >
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              handleSubmit();
             }}
             className="flex flex-col gap-4"
           >
@@ -93,7 +98,11 @@ const NewEventForm = () => {
             {/* SUBMIT */}
             <div className="flex flex-row">
               <div className="flex-1"></div>
-              <Button type="submit" variant="light">
+              <Button
+                type="submit"
+                variant="light"
+                onClick={() => handleSubmit()}
+              >
                 Submit
               </Button>
             </div>
