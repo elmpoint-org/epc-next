@@ -7,16 +7,26 @@ import {
   PopoverPanel,
 } from '@headlessui/react';
 import { ActionIcon } from '@mantine/core';
-import { IconX } from '@tabler/icons-react';
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconX,
+} from '@tabler/icons-react';
 
 import { clx } from '@/util/classConcat';
 import { clamp } from '@/util/math';
-import { D1, dateDiff, dayjs, showDate } from '../_util/dateUtils';
+import {
+  D1,
+  dateDiff,
+  dateFormat,
+  dateTS,
+  showDate,
+} from '../_util/dateUtils';
 
 import { CalendarProps } from './ViewEvents';
 
 export default function ViewTimeline(props: CalendarProps) {
-  const { events: events_in, days, dates: dateLimits } = props;
+  const { events: events_in, days, dates: dateLimits, updatePeriod } = props;
 
   const dates = useMemo(() => {
     const dates: number[] = [];
@@ -50,27 +60,58 @@ export default function ViewTimeline(props: CalendarProps) {
     [dateLimits, events_in, days],
   );
 
+  const gridTemplateColumns = `repeat(${days * 2}, minmax(0, 1fr))`;
+
   return (
     <>
-      <div className="flex flex-col">
+      <div className="relative flex min-h-96 flex-col">
+        {/* divider lines */}
         <div
-          className="grid grid-flow-row-dense auto-rows-fr gap-2"
-          style={{
-            gridTemplateColumns: `repeat(${days * 2}, minmax(0, 1fr))`,
-            gridTemplateRows: '2.5rem',
-          }}
+          className="absolute inset-0 grid divide-x divide-slate-300 "
+          style={{ gridTemplateColumns }}
         >
-          {/* headers */}
-          {dates.map((date) => (
-            <Fragment key={date}>
-              <div className="col-span-2 flex items-center justify-center rounded-md bg-slate-200 text-sm">
-                {dayjs.unix(date).utc().format('ddd D')}
-              </div>
-            </Fragment>
+          {dates.map((_, i) => (
+            <div key={i} className="col-span-2" />
           ))}
+        </div>
 
-          {/* events */}
+        {/* header */}
+        <div className="z-50 overflow-hidden">
+          <div
+            className="-m-2 mb-2 grid grid-flow-row auto-rows-fr divide-x divide-slate-300 border-b border-slate-300 bg-dwhite p-2 shadow-sm"
+            style={{ gridTemplateColumns }}
+          >
+            {dates.map((date, i) => (
+              <button
+                key={date}
+                onClick={() => {
+                  console.log('setting to', dateFormat(date, 'MM-DD'));
+                  updatePeriod(date);
+                }}
+                className="group col-span-2 flex flex-row items-center justify-center gap-1 p-2 text-sm"
+                style={{
+                  gridColumnStart: `${i * 2 + 1}`,
+                }}
+              >
+                <span className="t">{dateFormat(date, 'ddd')}</span>
+                <span
+                  className="flex size-7 items-center justify-center rounded-full border border-transparent font-bold group-hover:bg-slate-300/50 data-[td]:ml-0.5 data-[td]:bg-emerald-700 data-[td]:text-dwhite group-hover:data-[td]:bg-emerald-800"
+                  data-td={date === dateTS(new Date()) || null}
+                >
+                  {dateFormat(date, 'D')}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* events grid */}
+        <div
+          className="z-40 grid grid-flow-row-dense auto-rows-fr gap-2"
+          style={{ gridTemplateColumns }}
+        >
           {events?.map((evt) => (
+            // single event
             <Popover
               key={evt.id}
               className="flex flex-row truncate"
@@ -78,14 +119,27 @@ export default function ViewTimeline(props: CalendarProps) {
                 gridColumn: `${evt.loc.start} / ${evt.loc.end}`,
               }}
             >
-              <PopoverButton className="flex h-12 flex-1 flex-row items-center justify-center truncate rounded-lg border border-emerald-600 bg-emerald-600/30 p-2">
-                <div className="truncate text-sm">{evt.title}</div>
+              <PopoverButton className="group flex-1 truncate bg-dwhite focus:outline-none">
+                <div className="flex flex-1 flex-row items-center justify-between truncate rounded-lg border border-emerald-600 bg-emerald-600/30 text-emerald-950 group-focus:border-emerald-700">
+                  {evt.loc.start !== 1 ? (
+                    <div />
+                  ) : (
+                    <IconChevronLeft stroke={1} className="size-4" />
+                  )}
+                  {/* event title */}
+                  <div className="truncate p-2 text-sm">{evt.title}</div>
+                  {evt.loc.end !== -1 ? (
+                    <div />
+                  ) : (
+                    <IconChevronRight stroke={1} className="size-4" />
+                  )}
+                </div>
               </PopoverButton>
               <PopoverPanel
                 transition
                 anchor="bottom"
                 className={clx(
-                  'rounded-xl border border-slate-300 bg-dwhite shadow-sm [--anchor-gap:0.5rem]',
+                  'z-[199] m-2 !overflow-hidden rounded-xl border border-slate-300 bg-dwhite shadow-2xl',
                   /* transition */ 'translate-y-0 transition data-[closed]:-translate-y-2 data-[closed]:opacity-0',
                 )}
               >
@@ -99,7 +153,7 @@ export default function ViewTimeline(props: CalendarProps) {
                     <ActionIcon
                       component="div"
                       color="slate"
-                      variant="transparent"
+                      variant="subtle"
                       size="sm"
                     >
                       <IconX />
@@ -143,7 +197,10 @@ export default function ViewTimeline(props: CalendarProps) {
                               </>
                             ) : (
                               <>
-                                <div className="t">{res.room.name}</div>
+                                <div className="t">
+                                  {res.room.cabin && `${res.room.cabin.name}: `}
+                                  {res.room.name}
+                                </div>
                               </>
                             ))}
                         </div>
