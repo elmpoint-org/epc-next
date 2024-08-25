@@ -1,3 +1,6 @@
+import { useMemo } from 'react';
+import { CalendarProps } from '../_components/ViewEvents';
+
 import dayjsRoot from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -35,4 +38,22 @@ export function dateFormat(date: number, format: string) {
 export function dateTSLocal(d: number) {
   const offset = new Date().getTimezoneOffset();
   return dayjs.unix(d).utc().utcOffset(-offset, true).startOf('date').unix();
+}
+
+// ------------------------------------
+// hooks
+
+export function useDatesArray(p: CalendarProps) {
+  const { dates: dateLimits, days } = p;
+
+  const dates = useMemo(() => {
+    const dates: number[] = [];
+    const start = dateLimits.start;
+    for (let i = 0; i < days; i++) {
+      dates.push(start + i * D1);
+    }
+    return dates;
+  }, [dateLimits, days]);
+
+  return dates;
 }

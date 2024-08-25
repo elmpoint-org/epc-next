@@ -8,11 +8,10 @@ export default function CalendarPage() {
         <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
           <CalendarWrapper />
 
-          <div className="m-4 h-[1000px] rounded-lg bg-slate-200"></div>
-
+          {/* <div className="m-4 h-[1000px] rounded-lg bg-slate-200" />
           <SampleMonth />
           <hr />
-          <SampleWeek />
+          <SampleWeek /> */}
         </div>
       </div>
     </>

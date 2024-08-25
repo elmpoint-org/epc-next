@@ -1,23 +1,33 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { ResultOf } from '@graphql-typed-document-node/core';
 
-import { ActionIcon, NumberInput } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
 import {
-  IconArrowLeft,
-  IconArrowRight,
-  IconCalendar,
-} from '@tabler/icons-react';
+  ActionIcon,
+  Button,
+  Popover,
+  PopoverDropdown,
+  PopoverTarget,
+} from '@mantine/core';
+import { useOs } from '@mantine/hooks';
+import { DatePicker } from '@mantine/dates';
+import { IconArrowLeft, IconArrowRight, IconPlus } from '@tabler/icons-react';
 
 import { dayStyles } from '../_util/dayStyles';
 import { useGraphQuery } from '@/query/query';
 import { graphql } from '@/query/graphql';
-import { D1, dateTS, dateTSLocal, dayjs } from '../_util/dateUtils';
+import { ResultOf } from '@graphql-typed-document-node/core';
+import { D1, dateFormat, dateTS, dateTSLocal, dayjs } from '../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
+import { clamp } from '@/util/math';
+import { useReverseCbTrigger } from '@/util/reverseCb';
 
 import ViewTimeline from './ViewTimeline';
+import FloatingWindow from '@/app/_components/_base/FloatingWindow';
+import NewEventForm from '../new/_components/NewEventForm';
+import { useDefaultDays } from '../_util/defaultDays';
+import { SetState } from '@/util/stateType';
+import TimelineControls from './TimelineControls';
 
 const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -50,16 +60,25 @@ const EVENTS_QUERY = graphql(`
 `);
 export type EventType = Inside<ResultOf<typeof EVENTS_QUERY>['stays']>;
 
+// COMPONENT
 export default function ViewEvents() {
   // date picker state
   const [startDate, setStartDate] = useState<Date>(new Date());
-  const [days, setDays] = useState(7);
+  function updatePeriod(d: number) {
+    setStartDate(new Date(dateTSLocal(d) * 1000));
+  }
+
+  // days
+  const defaultDays = useDefaultDays();
+  const [days, setDays] = useState<number | undefined>(defaultDays);
+  const daysWithDefault = days ?? defaultDays;
+
   const endDate = useMemo(
     () =>
       dayjs(startDate)
-        .add(days - 1, 'days')
+        .add(daysWithDefault - 1, 'days')
         .toDate(),
-    [days, startDate],
+    [daysWithDefault, startDate],
   );
   const parsedDates = useMemo(
     () => ({
@@ -73,78 +92,24 @@ export default function ViewEvents() {
   const query = useGraphQuery(EVENTS_QUERY, parsedDates);
   const events = query.data?.stays;
 
-  function updatePeriod(d: number) {
-    setStartDate(new Date(dateTSLocal(d) * 1000));
-  }
-
   const props: CalendarProps = {
     events,
-    days,
+    days: daysWithDefault,
     dates: parsedDates,
     updatePeriod,
+    periodState: {
+      days,
+      setDays,
+      startDate,
+      setStartDate,
+    },
   };
 
   return (
     <>
       <div className="flex flex-col gap-4">
-        {/* control bar */}
-        <div className="flex flex-row items-center justify-between">
-          <div className="flex flex-row gap-2">
-            <DateInput
-              aria-label="start date"
-              firstDayOfWeek={0}
-              classNames={{
-                levelsGroup: 'popover:border-slate-300 popover:shadow-sm',
-                day: dayStyles,
-              }}
-              value={startDate}
-              onChange={(nv) => nv && setStartDate(nv)}
-            />
-            <NumberInput
-              aria-label="days"
-              min={1}
-              max={10}
-              value={days}
-              onChange={(v) => typeof v === 'number' && setDays(v)}
-              className="w-[8ch]"
-            />
-          </div>
-          <div className="flex flex-row gap-2">
-            <ActionIcon
-              aria-label="previous period"
-              onClick={() => updatePeriod(parsedDates.start - D1 * days)}
-              color="slate"
-              variant="light"
-              size="sm"
-            >
-              <IconArrowLeft />
-            </ActionIcon>
-            <ActionIcon
-              aria-label="today"
-              onClick={() => {
-                let today = dayjs.unix(dateTS(new Date())).utc();
-                if (days === 7) today = today.subtract(today.day(), 'days');
-                updatePeriod(today.unix());
-              }}
-              color="slate"
-              variant="light"
-              size="sm"
-            >
-              <IconCalendar />
-            </ActionIcon>
-            <ActionIcon
-              aria-label="previous period"
-              onClick={() => updatePeriod(parsedDates.start + D1 * days)}
-              color="slate"
-              variant="light"
-              size="sm"
-            >
-              <IconArrowRight />
-            </ActionIcon>
-          </div>
-        </div>
-
-        <hr />
+        {/* header bar */}
+        <TimelineControls {...props} />
 
         {/* timeline view */}
         <ViewTimeline {...props} />
@@ -163,4 +128,10 @@ export type CalendarProps = {
     end: number;
   };
   updatePeriod: (d: number) => void;
+  periodState: {
+    days: number | undefined;
+    setDays: SetState<number | undefined>;
+    startDate: Date;
+    setStartDate: SetState<Date>;
+  };
 };
