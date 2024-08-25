@@ -4,7 +4,8 @@ import { useFormCtx } from './formCtx';
 import { dateTS } from '../../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
 import { ResultOf } from '@graphql-typed-document-node/core';
-import { ANY_ROOM, ROOT_CABIN_ID } from '@@/db/schema/Room/CABIN_DATA';
+import { ROOT_CABIN_ID } from '@@/db/schema/Room/CABIN_DATA';
+import { keepPreviousData } from '@tanstack/react-query';
 
 export const QUERY_ROOM_OPTIONS = graphql(`
   query InitialRoomOptions($start: Int, $end: Int) {
@@ -43,7 +44,13 @@ export function useGetRooms() {
   const end = dates[1] && dateTS(dates[1]);
 
   // run query
-  const query = useGraphQuery(QUERY_ROOM_OPTIONS, { start, end });
+  const query = useGraphQuery(
+    QUERY_ROOM_OPTIONS,
+    { start, end },
+    {
+      placeholderData: keepPreviousData,
+    },
+  );
 
   // filter to non-null data
   const cabins = alphabetical(

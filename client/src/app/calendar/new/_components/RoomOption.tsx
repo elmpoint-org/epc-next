@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
+
 import { Combobox, Tooltip } from '@mantine/core';
 import { IconAlt, IconCheck, IconFriends } from '@tabler/icons-react';
 
-import type { Cabin, Room } from '../state/formCtx';
+import { useFormCtx, type Cabin, type Room } from '../state/formCtx';
 import { ANY_ROOM } from '@@/db/schema/Room/CABIN_DATA';
 
 const RoomOption = ({
@@ -11,17 +13,20 @@ const RoomOption = ({
   item: Room | Cabin;
   active: boolean;
 }) => {
-  const aliasTag = item.useAlias && (
-    <div className="">
-      <Tooltip withArrow label={`Alternate name for “${item.name}”`}>
-        <IconAlt
-          size={20}
-          stroke={1.75}
-          className="text-sky-700 group-data-[combobox-selected]:text-inherit"
-        />
-      </Tooltip>
-    </div>
+  const { guests } = useFormCtx();
+
+  // calculate occupancy to include other selected rooms
+  const localOccupants = useMemo(
+    () => guests.filter(({ room: { room } }) => room?.id === item.id).length,
+    [guests, item],
   );
+  let available: number | null = null;
+  if ('beds' in item && item.availableBeds !== null) {
+    available = item.availableBeds - localOccupants;
+    if (active) available++;
+  }
+
+  const aliasTag = <AliasTag isAlias={!!item.useAlias} name={item.name} />;
 
   return (
     <>
@@ -36,12 +41,8 @@ const RoomOption = ({
           // room entry
           <div
             className="group/b flex flex-row"
-            data-open={item.availableBeds === item.beds ? true : null}
-            data-full={
-              item.availableBeds !== null && item.availableBeds < 1
-                ? true
-                : null
-            }
+            data-open={available === item.beds ? true : null}
+            data-full={available !== null && available < 1 ? true : null}
           >
             <div className="flex flex-1 flex-row items-center gap-2">
               {/* room name */}
@@ -59,7 +60,7 @@ const RoomOption = ({
               >
                 (
                 <span className="font-bold text-yellow-700  group-data-[combobox-selected]:!text-inherit group-data-[full]/b:text-red-600 group-data-[open]/b:text-emerald-700">
-                  {item.availableBeds ?? '?'}
+                  {available ?? '?'}
                 </span>
                 /{item.beds})
               </div>
@@ -91,3 +92,21 @@ const RoomOption = ({
   );
 };
 export default RoomOption;
+
+function AliasTag({ isAlias, name }: { isAlias?: boolean; name?: string }) {
+  return (
+    <>
+      {isAlias && (
+        <div className="">
+          <Tooltip withArrow label={`Alternate name for “${name}”`}>
+            <IconAlt
+              size={20}
+              stroke={1.75}
+              className="text-sky-700 group-data-[combobox-selected]:text-inherit"
+            />
+          </Tooltip>
+        </div>
+      )}
+    </>
+  );
+}
