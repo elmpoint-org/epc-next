@@ -13,12 +13,11 @@ import { IconAlertTriangle } from '@tabler/icons-react';
 
 import RoomOption from './RoomOption';
 
-import { cabins, rooms, CUSTOM_ROOM_ID } from '@/sample-data/roomData';
+import { CUSTOM_ROOM_ID } from '@@/db/schema/Room/CABIN_DATA';
 import { Cabin, Room, useFormCtxRoomState } from '../state/formCtx';
+import { useGetRooms } from '../state/getRoomData';
 
 const SEPARATOR = `/`;
-
-const initialOptions = [...cabins, ...rooms.filter((it) => it.cabin === null)];
 
 // COMPONENT
 const RoomSelector = ({
@@ -28,6 +27,8 @@ const RoomSelector = ({
   rowIndex: number;
   className: string;
 }) => {
+  const { query, cabins, rooms, initialOptions } = useGetRooms();
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
@@ -50,7 +51,7 @@ const RoomSelector = ({
     const inputBuffer = search;
     setSearch('');
 
-    // handle custom case
+    // TODO handle custom case
     if (id === 'CUSTOM') {
       updateRoomData({
         cabin: null,
@@ -61,6 +62,8 @@ const RoomSelector = ({
           aliases: [],
           beds: 0,
           availableBeds: 0,
+          noCount: true,
+          forCouples: false,
         },
       });
       combobox.closeDropdown();
@@ -103,7 +106,6 @@ const RoomSelector = ({
         return {
           ...it,
           name: `${c.name} ${SEPARATOR} ${it.name}`,
-          cabin: { ...it.cabin, name: c.name },
         };
       }),
     ];
@@ -136,7 +138,7 @@ const RoomSelector = ({
         return null;
       })
       .filter((it) => it !== null) as (Cabin | Room)[];
-  }, [search, selectedCabin]);
+  }, [cabins, rooms, search, selectedCabin]);
 
   return (
     <>

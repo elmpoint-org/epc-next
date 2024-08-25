@@ -2,6 +2,7 @@ import { Combobox, Tooltip } from '@mantine/core';
 import { IconAlt, IconCheck, IconFriends } from '@tabler/icons-react';
 
 import type { Cabin, Room } from '../state/formCtx';
+import { ANY_ROOM } from '@@/db/schema/Room/CABIN_DATA';
 
 const RoomOption = ({
   item,
@@ -36,11 +37,20 @@ const RoomOption = ({
           <div
             className="group/b flex flex-row"
             data-open={item.availableBeds === item.beds ? true : null}
-            data-full={item.availableBeds < 1 ? true : null}
+            data-full={
+              item.availableBeds !== null && item.availableBeds < 1
+                ? true
+                : null
+            }
           >
             <div className="flex flex-1 flex-row items-center gap-2">
               {/* room name */}
-              <div className="t">{item.useAlias || item.name}</div>
+              {item.name === ANY_ROOM && (
+                <div className="italic">(any available room)</div>
+              )}
+              <div className="hidden first:block">
+                {item.useAlias || item.name}
+              </div>
               {aliasTag}
               {/* room occupancy */}
               <div
@@ -49,7 +59,7 @@ const RoomOption = ({
               >
                 (
                 <span className="font-bold text-yellow-700  group-data-[combobox-selected]:!text-inherit group-data-[full]/b:text-red-600 group-data-[open]/b:text-emerald-700">
-                  {item.availableBeds}
+                  {item.availableBeds ?? '?'}
                 </span>
                 /{item.beds})
               </div>

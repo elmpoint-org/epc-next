@@ -34,13 +34,13 @@ const NewEventForm = () => {
           >
             <button className="sr-only">submit form</button>
 
-            <TitleBlock number={1} title="Choose your dates">
+            {/* <TitleBlock number={1} title="Choose your dates">
               <p>
                 To begin, select the dates of your visit below. You can select
                 dates on the calendar if you wish, or type them directly into
                 the textboxes.
               </p>
-            </TitleBlock>
+            </TitleBlock> */}
 
             {/* DATE ENTRY */}
             <FormCalendar />
@@ -48,7 +48,7 @@ const NewEventForm = () => {
 
             <hr className="t" />
 
-            <TitleBlock number={2} title="Reserve your rooms">
+            {/* <TitleBlock number={2} title="Reserve your rooms">
               <p>
                 Use this section to indicate who is coming with you and find
                 places for them to sleep. Here are a few things to know:
@@ -70,7 +70,7 @@ const NewEventForm = () => {
                   schedulings.
                 </li>
               </ul>
-            </TitleBlock>
+            </TitleBlock> */}
 
             {/* ROOM SELECTION */}
             <RoomNumBox />
@@ -78,14 +78,14 @@ const NewEventForm = () => {
 
             <hr className="t" />
 
-            <TitleBlock number={3} title="Add a message">
+            {/* <TitleBlock number={3} title="Add a message">
               <p>
                 Use this section to edit how your stay will appear on the
                 calendar. I have attempted to guess a title for you, but you can
                 change it to anything you’d like and always return to the
                 default with the button on the right side.
               </p>
-            </TitleBlock>
+            </TitleBlock> */}
 
             {/* EVENT DETAILS */}
             <FormEventText />

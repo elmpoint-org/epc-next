@@ -108,6 +108,7 @@ export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
   async ({ sources, parent, args: { start, end } }) => {
     const { id: roomId, noCount, beds } = parent as DBRoom;
     if (noCount) return null;
+    if (typeof start !== 'number' || typeof end !== 'number') return null;
 
     // standarize dates
     start = dateTS(start);
