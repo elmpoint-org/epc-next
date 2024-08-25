@@ -3,27 +3,37 @@
 import { Button } from '@mantine/core';
 
 import { FormCtxProvider } from '../state/formCtx';
+import { useReverseCbTrigger } from '@/util/reverseCb';
+
 import FormCalendar from './FormCalendar';
 import DateStats from './DateStats';
 import RoomNumBox from './RoomNumBox';
 import FormGuestRows from './FormGuestRows';
 import FormEventText from './FormEventText';
 import TitleBlock from './TitleBlock';
+import FormSubmit from './FormSubmit';
 
 export const COST_MEMBERS = 15.0;
 export const COST_GUESTS = 20.0;
 export const MAX_ROOMS = 20;
 
 const NewEventForm = () => {
+  const { prop: submitTrigger, trigger: handleSubmit } = useReverseCbTrigger();
+
   return (
     <>
-      <hr className="t" />
       <FormCtxProvider>
-        <div className="m-6 mx-auto max-w-3xl p-4 md:mt-0 md:p-8 lg:mt-6">
+        <FormSubmit trigger={submitTrigger} />
+        <div className="m-6 mx-auto mt-0 max-w-full p-4 @md:p-8">
           <form
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
             className="flex flex-col gap-4"
           >
+            <button className="sr-only">submit form</button>
+
             <TitleBlock number={1} title="Choose your dates">
               <p>
                 To begin, select the dates of your visit below. You can select

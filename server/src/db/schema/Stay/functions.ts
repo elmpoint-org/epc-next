@@ -174,7 +174,7 @@ export async function queryStaysByDate(
     !deepSearch ? end + DAYS_AFTER_SEC : undefined
   );
   // remove future events out of range
-  const stays = all_stays.filter((s) => s.dateStart < end);
+  const stays = all_stays.filter((s) => s.dateStart <= end);
 
   return stays;
 }
