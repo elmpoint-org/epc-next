@@ -25,6 +25,7 @@ export default function CalendarWrapper() {
 
       <ViewEvents />
 
+      {/* popups */}
       <FloatingWindow
         triggerOpen={newStay}
         title={<>Add Your Stay</>}

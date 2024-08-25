@@ -1,4 +1,5 @@
 import CalendarWrapper from './_components/CalendarWrapper';
+import { SampleMonth, SampleWeek } from './_components/SampleCal';
 
 export default function CalendarPage() {
   return (
@@ -8,6 +9,10 @@ export default function CalendarPage() {
           <CalendarWrapper />
 
           <div className="m-4 h-[1000px] rounded-lg bg-slate-200"></div>
+
+          <SampleMonth />
+          <hr />
+          <SampleWeek />
         </div>
       </div>
     </>

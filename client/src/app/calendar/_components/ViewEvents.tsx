@@ -8,52 +8,68 @@ import { DateInput } from '@mantine/dates';
 import { dayStyles } from '../_util/dayStyles';
 import { useGraphQuery } from '@/query/query';
 import { graphql } from '@/query/graphql';
-import { dateTS, dayjs } from '../_util/dateUtils';
+import { dateTS, dayjs, showDate } from '../_util/dateUtils';
 import { clx } from '@/util/classConcat';
+import ViewTimeline from './ViewTimeline';
+import { ResultOf } from '@graphql-typed-document-node/core';
+import { Inside } from '@/util/inferTypes';
 
-export default function ViewEvents() {
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [days, setDays] = useState(7);
-
-  const endDate = useMemo(
-    () => dayjs(startDate).add(days, 'days').toDate(),
-    [days, startDate],
-  );
-
-  const query = useGraphQuery(
-    graphql(`
-      query Stays($start: Int!, $end: Int!) {
-        stays(start: $start, end: $end) {
-          id
-          title
-          description
-          author {
-            id
+const EVENTS_QUERY = graphql(`
+  query Stays($start: Int!, $end: Int!) {
+    stays(start: $start, end: $end) {
+      id
+      title
+      description
+      author {
+        id
+        name
+      }
+      dateStart
+      dateEnd
+      reservations {
+        name
+        room {
+          ... on Room {
             name
           }
-          dateStart
-          dateEnd
-          reservations {
-            name
-            room {
-              ... on Room {
-                name
-              }
-              ... on CustomRoom {
-                text
-              }
-            }
+          ... on CustomRoom {
+            text
           }
         }
       }
-    `),
-    {
+    }
+  }
+`);
+export type EventType = Inside<ResultOf<typeof EVENTS_QUERY>['stays']>;
+
+export default function ViewEvents() {
+  // date picker state
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [days, setDays] = useState(7);
+  const endDate = useMemo(
+    () =>
+      dayjs(startDate)
+        .add(days - 1, 'days')
+        .toDate(),
+    [days, startDate],
+  );
+  const parsedDates = useMemo(
+    () => ({
       start: dateTS(startDate),
       end: dateTS(endDate),
-    },
+    }),
+    [endDate, startDate],
   );
 
+  // get calendar events
+  const query = useGraphQuery(EVENTS_QUERY, parsedDates);
   const events = query.data?.stays;
+
+  const props: CalendarProps = {
+    events,
+    days,
+    dates: parsedDates,
+  };
 
   return (
     <>
@@ -73,6 +89,7 @@ export default function ViewEvents() {
           <NumberInput
             label="days"
             min={1}
+            max={7}
             value={days}
             onChange={(v) => typeof v === 'number' && setDays(v)}
             className="w-[8ch]"
@@ -80,12 +97,18 @@ export default function ViewEvents() {
         </div>
 
         <span>
-          showing from {showDate(startDate)} to {showDate(endDate)}
+          showing from {showDate(parsedDates.start)} to{' '}
+          {showDate(parsedDates.end)}
         </span>
 
         <hr />
 
-        {/* events */}
+        {/* timeline view */}
+        <ViewTimeline {...props} />
+
+        <hr />
+
+        {/* events list */}
         <div className="flex flex-col rounded-lg bg-slate-200 p-4">
           {events?.map((evt, i) => (
             <div
@@ -140,7 +163,11 @@ export default function ViewEvents() {
   );
 }
 
-function showDate(d: Date | number) {
-  const date = d instanceof Date ? dayjs(d) : dayjs.unix(d);
-  return date.utc().format('YYYY-MM-DD');
-}
+export type CalendarProps = {
+  events: EventType[] | undefined;
+  days: number;
+  dates: {
+    start: number;
+    end: number;
+  };
+};
