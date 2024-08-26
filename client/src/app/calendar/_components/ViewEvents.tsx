@@ -10,8 +10,9 @@ import { Inside } from '@/util/inferTypes';
 import { useDefaultDays } from '../_util/defaultDays';
 import { SetState } from '@/util/stateType';
 
-import ViewTimeline from './ViewTimeline';
+import Timeline from './Timeline';
 import TimelineControls from './TimelineControls';
+import { createCallbackCtx } from '@/app/_ctx/callback';
 
 const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -44,6 +45,10 @@ const EVENTS_QUERY = graphql(`
 `);
 export type EventType = Inside<ResultOf<typeof EVENTS_QUERY>['stays']>;
 
+const { Provider: InvalidateProvider, useHook: useInvalidate } =
+  createCallbackCtx();
+export { useInvalidate };
+
 // COMPONENT
 export default function ViewEvents() {
   // date picker state
@@ -75,6 +80,9 @@ export default function ViewEvents() {
   // get calendar events
   const query = useGraphQuery(EVENTS_QUERY, parsedDates);
   const events = query.data?.stays;
+  function invalidate() {
+    query.refetch();
+  }
 
   const props: CalendarProps = {
     events,
@@ -91,15 +99,17 @@ export default function ViewEvents() {
 
   return (
     <>
-      <div className="flex flex-col gap-4">
-        {/* header bar */}
-        <TimelineControls {...props} />
+      <InvalidateProvider cb={invalidate}>
+        <div className="flex flex-col gap-4">
+          {/* header bar */}
+          <TimelineControls {...props} />
 
-        {/* timeline view */}
-        <ViewTimeline {...props} />
+          {/* timeline view */}
+          <Timeline {...props} />
 
-        <hr />
-      </div>
+          <hr />
+        </div>
+      </InvalidateProvider>
     </>
   );
 }

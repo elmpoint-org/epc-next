@@ -14,6 +14,7 @@ import TitleBlock from './TitleBlock';
 import FormSubmit from './FormSubmit';
 import { getHotkeyHandler } from '@mantine/hooks';
 import { useTransition } from 'react';
+import { useLoadState } from '@/app/_ctx/transition';
 
 export const COST_MEMBERS = 15.0;
 export const COST_GUESTS = 20.0;
@@ -21,12 +22,13 @@ export const MAX_ROOMS = 20;
 
 const NewEventForm = () => {
   const { prop: submitTrigger, trigger: handleSubmit } = useReverseCbTrigger();
-  const [isLoading, loading] = useTransition();
+
+  const [isLoading] = useLoadState();
 
   return (
     <>
       <FormCtxProvider>
-        <FormSubmit trigger={submitTrigger} loading={loading} />
+        <FormSubmit trigger={submitTrigger} />
         <div
           className="m-6 mx-auto mt-0 max-w-full p-4 @md:p-8"
           onKeyDown={getHotkeyHandler([['mod+Enter', handleSubmit]])}
@@ -102,6 +104,7 @@ const NewEventForm = () => {
                 type="submit"
                 variant="light"
                 onClick={() => handleSubmit()}
+                loading={isLoading ?? false}
               >
                 Submit
               </Button>

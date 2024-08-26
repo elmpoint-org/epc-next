@@ -5,7 +5,7 @@ import { gridCols } from '../_util/grid';
 import TimelineHeader from './TimelineHeader';
 import TimelineEvent from './TimelineEvent';
 
-export default function ViewTimeline(props: CalendarProps) {
+export default function Timeline(props: CalendarProps) {
   const { events, days } = props;
 
   // ctx hooks

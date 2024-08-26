@@ -11,9 +11,9 @@ export const dayjs = dayjsRoot;
 /** one day in seconds */
 export const D1 = 24 * 3600;
 
-export function dateTS(d: Date | number, keepTimezone: boolean = true) {
+export function dateTS(d: Date | number, keepCurrentTime: boolean = true) {
   const day = d instanceof Date ? dayjs(d) : dayjs.unix(d);
-  return day.utc(keepTimezone).startOf('date').unix();
+  return day.utc(keepCurrentTime).startOf('date').unix();
 }
 
 export function showDate(d: Date | number) {
