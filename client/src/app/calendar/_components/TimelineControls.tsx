@@ -14,10 +14,11 @@ import { CalendarProps } from './ViewEvents';
 import { dayStyles } from '../_util/dayStyles';
 import { D1, dateFormat, dateTS, dayjs } from '../_util/dateUtils';
 import { clamp } from '@/util/math';
-import FloatingWindow from '@/app/_components/_base/FloatingWindow';
-import NewEventForm from '../new/_components/NewEventForm';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
+
+import FloatingWindow from '@/app/_components/_base/FloatingWindow';
+import NewEventForm from '../new/_components/NewEventForm';
 
 export default function TimelineControls(props: CalendarProps) {
   const {

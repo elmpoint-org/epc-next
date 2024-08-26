@@ -15,7 +15,8 @@ const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 export const getCabins = h<M.QueryResolvers['cabins']>(
   loggedIn(),
   async ({ sources }) => {
-    return sources.cabin.getAll();
+    const cabins = await sources.cabin.getAll();
+    return cabins.filter((c) => c.id !== ROOT_CABIN_ID);
   }
 );
 

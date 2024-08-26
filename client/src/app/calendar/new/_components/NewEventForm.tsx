@@ -12,6 +12,9 @@ import FormGuestRows from './FormGuestRows';
 import FormEventText from './FormEventText';
 import TitleBlock from './TitleBlock';
 import FormSubmit from './FormSubmit';
+import { getHotkeyHandler } from '@mantine/hooks';
+import { useTransition } from 'react';
+import { useLoadState } from '@/app/_ctx/transition';
 
 export const COST_MEMBERS = 15.0;
 export const COST_GUESTS = 20.0;
@@ -20,27 +23,31 @@ export const MAX_ROOMS = 20;
 const NewEventForm = () => {
   const { prop: submitTrigger, trigger: handleSubmit } = useReverseCbTrigger();
 
+  const [isLoading] = useLoadState();
+
   return (
     <>
       <FormCtxProvider>
         <FormSubmit trigger={submitTrigger} />
-        <div className="m-6 mx-auto mt-0 max-w-full p-4 @md:p-8">
+        <div
+          className="m-6 mx-auto mt-0 max-w-full p-4 @md:p-8"
+          onKeyDown={getHotkeyHandler([['mod+Enter', handleSubmit]])}
+        >
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              handleSubmit();
             }}
             className="flex flex-col gap-4"
           >
             <button className="sr-only">submit form</button>
 
-            <TitleBlock number={1} title="Choose your dates">
+            {/* <TitleBlock number={1} title="Choose your dates">
               <p>
                 To begin, select the dates of your visit below. You can select
                 dates on the calendar if you wish, or type them directly into
                 the textboxes.
               </p>
-            </TitleBlock>
+            </TitleBlock> */}
 
             {/* DATE ENTRY */}
             <FormCalendar />
@@ -48,7 +55,7 @@ const NewEventForm = () => {
 
             <hr className="t" />
 
-            <TitleBlock number={2} title="Reserve your rooms">
+            {/* <TitleBlock number={2} title="Reserve your rooms">
               <p>
                 Use this section to indicate who is coming with you and find
                 places for them to sleep. Here are a few things to know:
@@ -70,7 +77,7 @@ const NewEventForm = () => {
                   schedulings.
                 </li>
               </ul>
-            </TitleBlock>
+            </TitleBlock> */}
 
             {/* ROOM SELECTION */}
             <RoomNumBox />
@@ -78,14 +85,14 @@ const NewEventForm = () => {
 
             <hr className="t" />
 
-            <TitleBlock number={3} title="Add a message">
+            {/* <TitleBlock number={3} title="Add a message">
               <p>
                 Use this section to edit how your stay will appear on the
                 calendar. I have attempted to guess a title for you, but you can
                 change it to anything you’d like and always return to the
                 default with the button on the right side.
               </p>
-            </TitleBlock>
+            </TitleBlock> */}
 
             {/* EVENT DETAILS */}
             <FormEventText />
@@ -93,7 +100,12 @@ const NewEventForm = () => {
             {/* SUBMIT */}
             <div className="flex flex-row">
               <div className="flex-1"></div>
-              <Button type="submit" variant="light">
+              <Button
+                type="submit"
+                variant="light"
+                onClick={() => handleSubmit()}
+                loading={isLoading ?? false}
+              >
                 Submit
               </Button>
             </div>

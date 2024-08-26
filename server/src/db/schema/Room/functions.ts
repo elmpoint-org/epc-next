@@ -108,6 +108,7 @@ export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
   async ({ sources, parent, args: { start, end } }) => {
     const { id: roomId, noCount, beds } = parent as DBRoom;
     if (noCount) return null;
+    if (typeof start !== 'number' || typeof end !== 'number') return null;
 
     // standarize dates
     start = dateTS(start);
@@ -131,13 +132,12 @@ export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
     // count number of occupants
     let maxOccupants = 0;
     do {
-      if (reservations.length < 2) {
-        maxOccupants = reservations.length;
-        break;
-      }
+      if (!reservations.length) break;
+
+      const D1 = 3600 * 24; // 1 day in seconds
 
       // day-by-day
-      for (let t = start; t < end; t += 3600 * 24) {
+      for (let t = start; t < end; t += D1) {
         // count the resrvations on this day (t)
         const count = reservations.filter((r) => {
           return r.start <= t && r.end > t;

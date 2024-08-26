@@ -3,27 +3,10 @@
 import { createContext, useContext, useState } from 'react';
 
 import type { SetState } from '@/util/stateType';
+import { Room as RoomRoot, Cabin as CabinRoot } from './getRoomData';
 
-export interface Cabin {
-  id: string;
-  name: string;
-  aliases: string[];
-  useAlias?: number;
-
-  rooms?: Room[];
-}
-export interface Room {
-  id: string;
-  cabin: Partial<Cabin> | null;
-  name: string;
-  aliases: string[];
-  useAlias?: string;
-
-  beds: number;
-  availableBeds: number;
-  forCouples?: boolean;
-  noCount?: boolean; // don't count bedrooms
-}
+export type Cabin = CabinRoot;
+export type Room = RoomRoot;
 
 export type GuestEntry = {
   name: string;

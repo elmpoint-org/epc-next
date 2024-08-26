@@ -2,32 +2,17 @@
 
 import { useMemo, useState } from 'react';
 
-import {
-  ActionIcon,
-  Button,
-  Popover,
-  PopoverDropdown,
-  PopoverTarget,
-} from '@mantine/core';
-import { useOs } from '@mantine/hooks';
-import { DatePicker } from '@mantine/dates';
-import { IconArrowLeft, IconArrowRight, IconPlus } from '@tabler/icons-react';
-
-import { dayStyles } from '../_util/dayStyles';
 import { useGraphQuery } from '@/query/query';
 import { graphql } from '@/query/graphql';
 import { ResultOf } from '@graphql-typed-document-node/core';
-import { D1, dateFormat, dateTS, dateTSLocal, dayjs } from '../_util/dateUtils';
+import { dateTS, dateTSLocal, dayjs } from '../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
-import { clamp } from '@/util/math';
-import { useReverseCbTrigger } from '@/util/reverseCb';
-
-import ViewTimeline from './ViewTimeline';
-import FloatingWindow from '@/app/_components/_base/FloatingWindow';
-import NewEventForm from '../new/_components/NewEventForm';
 import { useDefaultDays } from '../_util/defaultDays';
 import { SetState } from '@/util/stateType';
+
+import Timeline from './Timeline';
 import TimelineControls from './TimelineControls';
+import { createCallbackCtx } from '@/app/_ctx/callback';
 
 const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -60,6 +45,10 @@ const EVENTS_QUERY = graphql(`
 `);
 export type EventType = Inside<ResultOf<typeof EVENTS_QUERY>['stays']>;
 
+const { Provider: InvalidateProvider, useHook: useInvalidate } =
+  createCallbackCtx();
+export { useInvalidate };
+
 // COMPONENT
 export default function ViewEvents() {
   // date picker state
@@ -91,6 +80,9 @@ export default function ViewEvents() {
   // get calendar events
   const query = useGraphQuery(EVENTS_QUERY, parsedDates);
   const events = query.data?.stays;
+  function invalidate() {
+    query.refetch();
+  }
 
   const props: CalendarProps = {
     events,
@@ -107,15 +99,17 @@ export default function ViewEvents() {
 
   return (
     <>
-      <div className="flex flex-col gap-4">
-        {/* header bar */}
-        <TimelineControls {...props} />
+      <InvalidateProvider cb={invalidate}>
+        <div className="flex flex-col gap-4">
+          {/* header bar */}
+          <TimelineControls {...props} />
 
-        {/* timeline view */}
-        <ViewTimeline {...props} />
+          {/* timeline view */}
+          <Timeline {...props} />
 
-        <hr />
-      </div>
+          <hr />
+        </div>
+      </InvalidateProvider>
     </>
   );
 }
