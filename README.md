@@ -6,7 +6,7 @@ This repository contains the codebase for the updated Elm Point website. The mos
 
 - The [beta site](https://one.elmpoint.xyz/) can be found here.
 - See the [Overall Progress board](https://github.com/orgs/elmpoint-org/projects/3?pane=info) for most recent project status.
-- See the [Issue Tracker](https://github.com/elmpoint-org/epc-next/issues?q=is%3Aissue+sort%3Aupdated-desc) for the highest technical detail and most up-to-date progress (and to submit bugs).
+- See the [Issue Tracker](https://github.com/elmpoint-org/epc-next/issues?q=sort%3Aupdated-desc+) for the highest technical detail and most up-to-date progress (and to submit bugs).
 - General discussion, feature suggestions, or open-ended questions can be added to the [discussions board](https://github.com/elmpoint-org/epc-next/discussions).
 
 ## Contributing
