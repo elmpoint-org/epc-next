@@ -8,12 +8,11 @@ import { clmx, clx } from '@/util/classConcat';
 import { useIsHere } from './isHere';
 
 import NavLink from './NavLink';
+import { useNavLinkScopeCheck } from './isAllowed';
 
-export default function NavLinkDropdown({
-  text,
-  icon: Icon,
-  links,
-}: NavDropdownType) {
+export default function NavLinkDropdown(item: NavDropdownType) {
+  const { text, icon: Icon, links } = item;
+
   const [isOpen, { toggle, close, open }] = useDisclosure();
 
   const iconProps: IconTypeProps = {
@@ -22,6 +21,10 @@ export default function NavLinkDropdown({
   };
 
   useIsHere(links, (h) => (h ? open() : close()));
+
+  // scope check
+  const show = useNavLinkScopeCheck(item);
+  if (!show) return null;
 
   return (
     <>

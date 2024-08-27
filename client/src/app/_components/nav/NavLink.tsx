@@ -4,21 +4,20 @@ import { clmx } from '@/util/classConcat';
 
 import { useIsHere } from './isHere';
 import { NavLinkType } from './navTypes';
+import { useNavLinkScopeCheck } from './isAllowed';
 
 type NavLinkProps = NavLinkType & {
   variant?: 'LIGHT';
 } & Partial<Parameters<typeof Link>[0]>;
 
-const NavLink = ({
-  href,
-  icon: Icon,
-  text,
-  variant,
-  exact,
-  className,
-  ...props
-}: NavLinkProps) => {
+const NavLink = (item: NavLinkProps) => {
+  const { href, icon: Icon, text, variant, exact, className, ...props } = item;
+
   const isHere = useIsHere([{ href }], undefined, exact);
+
+  // scope check
+  const show = useNavLinkScopeCheck(item);
+  if (!show) return null;
 
   return (
     <Link
