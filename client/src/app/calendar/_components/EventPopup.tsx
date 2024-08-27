@@ -51,20 +51,17 @@ export default function EventPopup({ event }: { event: EventType }) {
         </div>
 
         {/* event details */}
-        <div
-          className={clx(
-            'flex flex-col gap-2 p-6',
-            /* em */ '[&_em]:not-italic',
-          )}
-        >
+        <div className="flex flex-col gap-2 p-6">
+          {/* title */}
           <h3 className="mb-4 text-xl">{event.title}</h3>
+
           <div className="grid grid-cols-[min-content_1fr] gap-5">
             {/* dates */}
             <IconRow icon={IconClock}>
               <div className="flex flex-row gap-2">
-                <em>{dateFormat(event.dateStart, 'ddd. MMMM D')}</em>
+                <span>{dateFormat(event.dateStart, 'ddd. MMMM D')}</span>
                 <span className="text-slate-400">–</span>
-                <em>{dateFormat(event.dateEnd, 'ddd. MMMM D')}</em>
+                <span>{dateFormat(event.dateEnd, 'ddd. MMMM D')}</span>
               </div>
             </IconRow>
 
@@ -84,11 +81,16 @@ export default function EventPopup({ event }: { event: EventType }) {
                   .map((r, i) => (
                     <div
                       key={i}
-                      className="grid grid-cols-[min-content_1fr] gap-2 rounded-lg border border-slate-300 p-4"
+                      className="grid grid-cols-[min-content_1fr] gap-x-3 gap-y-2 rounded-lg border border-slate-300 p-4"
                     >
                       {/* person's name */}
                       <IconUser stroke={1.5} className="size-4 self-center" />
-                      <span>{r.name}</span>
+                      <span>
+                        {r.name}
+                        {!r.name.length && (
+                          <span className="italic">no name</span>
+                        )}
+                      </span>
 
                       {/* room name */}
                       <div />
