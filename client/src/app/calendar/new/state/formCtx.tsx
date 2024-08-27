@@ -35,6 +35,7 @@ export type FormCtx = {
   setGuests: SetState<GuestEntry[]>;
   eventText: EventText;
   setEventText: SetState<EventText>;
+  updateId: string | null;
 };
 export const FormCtx = createContext<FormCtx>({
   dates: [null, null],
@@ -43,16 +44,30 @@ export const FormCtx = createContext<FormCtx>({
   setGuests: () => {},
   eventText: eventTextInitial(),
   setEventText: () => {},
+  updateId: null,
 });
+
+export type InitialStayValue = {
+  id: string;
+  dates: DatesRange;
+  guests: GuestEntry[];
+  eventText: EventText;
+};
 
 export const FormCtxProvider = ({
   children,
+  initial,
 }: {
   children: React.ReactNode;
+  initial?: InitialStayValue;
 }) => {
-  const [dates, setDates] = useState<DatesRange>([null, null]);
-  const [guests, setGuests] = useState([guestInitial()]);
-  const [eventText, setEventText] = useState(eventTextInitial());
+  const [dates, setDates] = useState<DatesRange>(
+    initial?.dates ?? [null, null],
+  );
+  const [guests, setGuests] = useState(initial?.guests ?? [guestInitial()]);
+  const [eventText, setEventText] = useState(
+    initial?.eventText ?? eventTextInitial(),
+  );
 
   return (
     <>
@@ -64,6 +79,7 @@ export const FormCtxProvider = ({
           setGuests,
           eventText,
           setEventText,
+          updateId: initial?.id ?? null,
         }}
       >
         {/*  */}

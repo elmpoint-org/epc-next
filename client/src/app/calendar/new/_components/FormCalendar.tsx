@@ -17,10 +17,12 @@ const FormCalendar = () => {
 
   const [isCalOpen, { toggle: toggleCal }] = useDisclosure(true);
 
-  const [tdates, setTdates] = useState(['', '']);
-
   const parseDate = (d: Date | null) =>
     (d && dayjs(d).format('MMM D, YYYY')) ?? '';
+
+  const [tdates, setTdates] = useState(
+    dates.length ? [parseDate(dates[0]), parseDate(dates[1])] : ['', ''],
+  );
 
   const handleDatePick = (nv: typeof dates) => {
     setDates(nv);
@@ -41,7 +43,7 @@ const FormCalendar = () => {
       }
     };
   const prettify = (id: 0 | 1) => () => {
-    let temp: DatesRange = dates;
+    let temp = dates;
     // reorder dates if necessary
     if ((temp[0]?.valueOf() ?? 0) > (temp[1]?.valueOf() ?? 0)) {
       temp = [temp[1], temp[0]];

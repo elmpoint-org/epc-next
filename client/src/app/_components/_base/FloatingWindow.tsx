@@ -22,7 +22,7 @@ import {
   type useReverseCbTrigger,
 } from '@/util/reverseCb';
 import { clx } from '@/util/classConcat';
-import { LoadStateProvider } from '@/app/_ctx/transition';
+import { TransitionProvider } from '@/app/_ctx/transition';
 import { createCallbackCtx } from '@/app/_ctx/callback';
 
 const { Provider: CloseProvider, useHook: useCloseFloatingWindow } =
@@ -67,7 +67,7 @@ export default function FloatingWindow({
   return (
     <>
       <CloseProvider cb={() => close()}>
-        <LoadStateProvider transition={transition}>
+        <TransitionProvider transition={transition}>
           <Dialog open={isOpen} onClose={safeClose}>
             {/* frame */}
             <div
@@ -174,7 +174,7 @@ export default function FloatingWindow({
               </motion.div>
             </div>
           </Dialog>
-        </LoadStateProvider>
+        </TransitionProvider>
       </CloseProvider>
     </>
   );

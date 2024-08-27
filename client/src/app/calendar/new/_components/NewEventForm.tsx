@@ -2,7 +2,7 @@
 
 import { Button } from '@mantine/core';
 
-import { FormCtxProvider } from '../state/formCtx';
+import { FormCtxProvider, InitialStayValue } from '../state/formCtx';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 
 import FormCalendar from './FormCalendar';
@@ -13,21 +13,21 @@ import FormEventText from './FormEventText';
 import TitleBlock from './TitleBlock';
 import FormSubmit from './FormSubmit';
 import { getHotkeyHandler } from '@mantine/hooks';
-import { useTransition } from 'react';
-import { useLoadState } from '@/app/_ctx/transition';
+import { usePassedTransition } from '@/app/_ctx/transition';
+import FormDelete from './FormDelete';
 
 export const COST_MEMBERS = 15.0;
 export const COST_GUESTS = 20.0;
 export const MAX_ROOMS = 20;
 
-const NewEventForm = () => {
+const NewEventForm = ({ initial }: { initial?: InitialStayValue }) => {
   const { prop: submitTrigger, trigger: handleSubmit } = useReverseCbTrigger();
 
-  const [isLoading] = useLoadState();
+  const [isLoading] = usePassedTransition();
 
   return (
     <>
-      <FormCtxProvider>
+      <FormCtxProvider initial={initial}>
         <FormSubmit trigger={submitTrigger} />
         <div
           className="m-6 mx-auto mt-0 max-w-full p-4 @md:p-8"
@@ -98,8 +98,9 @@ const NewEventForm = () => {
             <FormEventText />
 
             {/* SUBMIT */}
-            <div className="flex flex-row">
-              <div className="flex-1"></div>
+            <div className="flex flex-row justify-between">
+              <FormDelete />
+
               <Button
                 type="submit"
                 variant="light"

@@ -25,6 +25,7 @@ import { useReverseCbTrigger } from '@/util/reverseCb';
 import FloatingWindow from '@/app/_components/_base/FloatingWindow';
 import NewEventForm from '../new/_components/NewEventForm';
 import { Transition } from '@headlessui/react';
+import EventEditWindow from './EventEditWindow';
 
 export default function TimelineControls(props: CalendarProps) {
   const {
@@ -149,13 +150,7 @@ export default function TimelineControls(props: CalendarProps) {
           </ActionIcon>
 
           {/* popups */}
-          <FloatingWindow
-            triggerOpen={newStay}
-            title={<>Add Your Stay</>}
-            width="48rem"
-          >
-            <NewEventForm />
-          </FloatingWindow>
+          <EventEditWindow trigger={newStay} />
         </div>
       </div>
     </>

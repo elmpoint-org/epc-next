@@ -9,11 +9,11 @@ import {
 export type TransitionType = [boolean | null, TransitionStartFunction | null];
 
 const loadCtx = createContext<TransitionType>([null, null]);
-export function useLoadState() {
+export function usePassedTransition() {
   return useContext(loadCtx);
 }
 
-export function LoadStateProvider({
+export function TransitionProvider({
   children,
   transition: passedTransition,
 }: { transition?: ReturnType<typeof useTransition> } & Children) {

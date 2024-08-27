@@ -13,7 +13,7 @@ import { IconAlertTriangle } from '@tabler/icons-react';
 
 import RoomOption from './RoomOption';
 
-import { CUSTOM_ROOM_ID } from '@@/db/schema/Room/CABIN_DATA';
+import { CUSTOM_ROOM_OBJ, CUSTOM_ROOM_ID } from '@@/db/schema/Room/CABIN_DATA';
 import { Cabin, Room, useFormCtxRoomState } from '../state/formCtx';
 import { useGetRooms } from '../state/getRoomData';
 
@@ -55,16 +55,7 @@ const RoomSelector = ({
     if (id === 'CUSTOM') {
       updateRoomData({
         cabin: null,
-        room: {
-          id: CUSTOM_ROOM_ID,
-          name: inputBuffer,
-          cabin: null,
-          aliases: [],
-          beds: 0,
-          availableBeds: 0,
-          noCount: true,
-          forCouples: false,
-        },
+        room: CUSTOM_ROOM_OBJ(inputBuffer),
       });
       combobox.closeDropdown();
       return;
@@ -139,6 +130,8 @@ const RoomSelector = ({
       })
       .filter((it) => it !== null) as (Cabin | Room)[];
   }, [cabins, rooms, search, selectedCabin]);
+
+  // console.log('rendering combobox', rowIndex, 'with room', selectedRoom);
 
   return (
     <>

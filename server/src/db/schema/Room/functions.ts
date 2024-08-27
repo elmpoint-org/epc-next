@@ -26,6 +26,14 @@ export const getRoom = h<M.QueryResolvers['room']>(
   }
 );
 
+export const getRoomsById = h<M.QueryResolvers['roomsById']>(
+  loggedIn(),
+  async ({ sources, args: { ids } }) => {
+    const rooms = await sources.room.getMultiple(ids);
+    return rooms.map((it) => it ?? null);
+  }
+);
+
 export const getRoomsNoCabin = h<M.QueryResolvers['roomsNoCabin']>(
   loggedIn(),
   async ({ sources }) => {

@@ -30,6 +30,7 @@ const EVENTS_QUERY = graphql(`
         name
         room {
           ... on Room {
+            id
             name
             cabin {
               name

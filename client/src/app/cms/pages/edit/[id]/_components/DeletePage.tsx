@@ -15,7 +15,7 @@ import type { EditFormProps } from './PageEditForm';
 export default function DeletePage({ pageId }: EditFormProps) {
   const router = useRouter();
 
-  async function confirmLogout() {
+  async function confirmDelete() {
     const yes = await confirmDeleteModal();
     if (yes) deletePage();
   }
@@ -52,7 +52,7 @@ export default function DeletePage({ pageId }: EditFormProps) {
     <>
       <div className="mt-36 flex flex-col justify-center gap-4 border-t border-slate-200 py-4 sm:flex-row sm:items-center">
         <Button
-          onClick={confirmLogout}
+          onClick={confirmDelete}
           loading={isLoading}
           color="red"
           className={clx(

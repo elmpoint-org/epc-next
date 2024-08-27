@@ -46,6 +46,13 @@ export default gql`
     """
     **SCOPE: userId**
 
+    get multiple rooms by their IDs
+    """
+    roomsById(ids: [ID!]!): [Room]!
+
+    """
+    **SCOPE: userId**
+
     get all "root" rooms with no cabin
     """
     roomsNoCabin: [Room]!
