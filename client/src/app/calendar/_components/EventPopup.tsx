@@ -93,7 +93,17 @@ export default function EventPopup({ event }: { event: EventType }) {
         >
           <div className="flex flex-col gap-2 p-6">
             {/* title */}
-            <h3 className="mb-4 text-xl">{event.title}</h3>
+            <div className="flex flex-row">
+              <h3 className="mb-4 flex-1 text-xl">{event.title}</h3>
+              <div
+                className="size-6 rounded-full bg-slate-300 bg-contain data-[h]:hidden"
+                data-h={!event.author || null}
+                title={`created by ${event.author?.name}`}
+                style={{
+                  backgroundImage: `url(${event.author?.avatarUrl})`,
+                }}
+              />
+            </div>
 
             <div className="grid grid-cols-[min-content_1fr] gap-5">
               {/* dates */}

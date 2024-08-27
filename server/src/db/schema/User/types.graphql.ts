@@ -12,6 +12,8 @@ export default gql`
     name: String
     "the user's first name"
     firstName: String
+    "gravatar avatar URL"
+    avatarUrl: String
 
     # __ AUTH DATA __
     "scope defines a user's permissions."

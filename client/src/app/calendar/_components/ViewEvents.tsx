@@ -23,6 +23,7 @@ const EVENTS_QUERY = graphql(`
       author {
         id
         name
+        avatarUrl
       }
       dateStart
       dateEnd
