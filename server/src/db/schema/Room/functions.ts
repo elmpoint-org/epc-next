@@ -113,7 +113,7 @@ export const getRoomCabin = h<M.RoomResolvers['cabin']>(
 );
 
 export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
-  async ({ sources, parent, args: { start, end } }) => {
+  async ({ sources, parent, args: { start, end, ignoreStayId } }) => {
     const { id: roomId, noCount, beds } = parent as DBRoom;
     if (noCount) return null;
     if (typeof start !== 'number' || typeof end !== 'number') return null;
@@ -129,7 +129,7 @@ export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
     const reservations = stays
       .map((s) =>
         s.reservationIds
-          .filter((r) => r.roomId === roomId)
+          .filter((r) => r.roomId === roomId && s.id !== ignoreStayId)
           .map(() => ({
             start: s.dateStart,
             end: s.dateEnd,

@@ -40,7 +40,7 @@ export default function EventEditWindow({
       const { data, errors } = await graphAuth(
         graphql(
           `
-            query RoomsById($ids: [ID!]!, $start: Int, $end: Int) {
+            query RoomsById($ids: [ID!]!, $start: Int, $end: Int, $ignore: ID) {
               roomsById(ids: $ids) {
                 ...StayRoomData
               }

@@ -25,7 +25,7 @@ export const ROOM_FRAGMENT = graphql(
       name
       aliases
       beds
-      availableBeds(start: $start, end: $end)
+      availableBeds(start: $start, end: $end, ignoreStayId: $ignore)
       forCouples
       noCount
     }
@@ -35,7 +35,7 @@ export const ROOM_FRAGMENT = graphql(
 
 export const QUERY_ROOM_OPTIONS = graphql(
   `
-    query InitialRoomOptions($start: Int, $end: Int) {
+    query InitialRoomOptions($start: Int, $end: Int, $ignore: ID) {
       cabins {
         ...StayCabinData
       }
@@ -59,7 +59,7 @@ export type Room = Inside<ResultOf<typeof QUERY_ROOM_OPTIONS>['rooms']> & {
 // HOOKS
 
 /** getrooms uses the form context provider to get dates. */
-export function useGetRooms() {
+export function useGetRooms(updateId?: string) {
   // get dates range for availability
   const { dates } = useFormCtx();
   const start = dates[0] && dateTS(dates[0]);
@@ -68,7 +68,7 @@ export function useGetRooms() {
   // run query
   const query = useGraphQuery(
     QUERY_ROOM_OPTIONS,
-    { start, end },
+    { start, end, ignore: updateId },
     {
       placeholderData: keepPreviousData,
     },
