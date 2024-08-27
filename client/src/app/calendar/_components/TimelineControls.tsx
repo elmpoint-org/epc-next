@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   ActionIcon,
@@ -28,8 +28,6 @@ import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 
-import FloatingWindow from '@/app/_components/_base/FloatingWindow';
-import NewEventForm from '../new/_components/NewEventForm';
 import { Transition } from '@headlessui/react';
 import EventEditWindow from './EventEditWindow';
 
@@ -45,6 +43,11 @@ export default function TimelineControls(props: CalendarProps) {
 
   const defaultDays = useDefaultDays();
   const daysWithDefault = days ?? defaultDays;
+
+  const [dateShown, setDateShown] = useState(new Date());
+  useEffect(() => {
+    setDateShown(startDate);
+  }, [startDate]);
 
   // new stay prompt
   const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
@@ -69,6 +72,8 @@ export default function TimelineControls(props: CalendarProps) {
             <PopoverDropdown>
               <DatePicker
                 value={startDate}
+                date={dateShown}
+                onDateChange={setDateShown}
                 onChange={(nv) => {
                   if (!nv) return;
                   setStartDate(nv);
