@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
 import { CalendarLevel, DatePicker } from '@mantine/dates';
@@ -15,10 +15,14 @@ import { dayStyles } from '../../_util/dayStyles';
 const FormCalendar = () => {
   const { dates, setDates, showDate } = useFormCtx();
 
-  const [isCalOpen, { toggle: toggleCal }] = useDisclosure(true);
+  // calendar visual state
+  const [isCalOpen, cal] = useDisclosure(true);
+  const [firstDatePick, setFirstDatePick] = useState(false);
   const [dateShown, setDateShown] = useState(
     showDate ?? dates?.[0] ?? new Date(),
   );
+
+  // calendar text state
 
   const parseDate = (d: Date | null) =>
     (d && dayjs(d).format('MMM D, YYYY')) ?? '';
@@ -27,9 +31,15 @@ const FormCalendar = () => {
     dates.length ? [parseDate(dates[0]), parseDate(dates[1])] : ['', ''],
   );
 
+  // functions
+
   const handleDatePick = (nv: typeof dates) => {
     setDates(nv);
     setTdates(nv.map((it) => parseDate(it)));
+    if (nv[0] && nv[1] && !firstDatePick) {
+      cal.close();
+      setFirstDatePick(true);
+    }
   };
 
   const updateTdate =
@@ -62,7 +72,7 @@ const FormCalendar = () => {
     <>
       <div className="flex flex-row items-end gap-2">
         <ActionIcon
-          onClick={toggleCal}
+          onClick={cal.toggle}
           aria-label="toggle calendar"
           className="mb-1"
           variant="light"

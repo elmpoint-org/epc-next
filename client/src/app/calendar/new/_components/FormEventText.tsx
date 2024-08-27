@@ -1,15 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ActionIcon, TextInput, Textarea, Tooltip } from '@mantine/core';
 import { IconRestore } from '@tabler/icons-react';
 
 import { useFormCtx } from '../state/formCtx';
+import { useDebouncedValue } from '@mantine/hooks';
+
+const NAME_GUESS_DEBOUNCE_MS = 120;
 
 const FormEventText = () => {
   const { guests, eventText, setEventText } = useFormCtx();
 
   // title guessing
-  const eventNameGuess = useMemo(() => {
+  const dbv = useDebouncedValue(() => {
+    if (!guests.length) return '';
+
     const count = guests.slice(1).reduce((total, { name: guest }) => {
       const m = guest.match(/(?:(.+), )*(.+)(?:,? and | & | \+ )(.+)/);
       let n = guest.length ? 1 : 0;
@@ -17,7 +22,8 @@ const FormEventText = () => {
       return total + n;
     }, 1);
     return `${guests[0].name}${count > 1 ? ` + ${count - 1}` : ``}`;
-  }, [guests]);
+  }, NAME_GUESS_DEBOUNCE_MS);
+  const eventNameGuess = dbv[0] as any as string;
 
   // title textbox management
   const [isDefaultTitle, setIsDefaultTitle] = useState(!eventText.title.length);
