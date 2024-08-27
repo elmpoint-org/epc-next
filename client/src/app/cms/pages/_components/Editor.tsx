@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from 'react';
 
 import { Link, RichTextEditor } from '@mantine/tiptap';
-import { useEditor } from '@tiptap/react';
+import { AnyExtension, useEditor } from '@tiptap/react';
 
 import { STATIC_EXTENSIONS } from '../../_tiptap/staticExtensions';
 import { FileHandler } from '../../_tiptap/fileHandler/fileHandler';
@@ -53,7 +53,7 @@ export default function TextEditor({
   const editor = useEditor({
     extensions: [
       ...STATIC_EXTENSIONS,
-      Link,
+      Link as AnyExtension,
       FileHandler,
       Placeholder.configure({ placeholder: 'Start writing...' }),
       RegisterPageData(pageId),
