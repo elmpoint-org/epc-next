@@ -36,6 +36,7 @@ export type FormCtx = {
   eventText: EventText;
   setEventText: SetState<EventText>;
   updateId: string | null;
+  showDate?: Date;
 };
 export const FormCtx = createContext<FormCtx>({
   dates: [null, null],
@@ -57,9 +58,11 @@ export type InitialStayValue = {
 export const FormCtxProvider = ({
   children,
   initial,
+  showDate,
 }: {
   children: React.ReactNode;
   initial?: InitialStayValue;
+  showDate?: Date;
 }) => {
   const [dates, setDates] = useState<DatesRange>(
     initial?.dates ?? [null, null],
@@ -80,6 +83,7 @@ export const FormCtxProvider = ({
           eventText,
           setEventText,
           updateId: initial?.id ?? null,
+          showDate,
         }}
       >
         {/*  */}

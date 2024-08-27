@@ -20,14 +20,20 @@ export const COST_MEMBERS = 15.0;
 export const COST_GUESTS = 20.0;
 export const MAX_ROOMS = 20;
 
-const NewEventForm = ({ initial }: { initial?: InitialStayValue }) => {
+const NewEventForm = ({
+  initial,
+  showDate,
+}: {
+  initial?: InitialStayValue;
+  showDate?: Date;
+}) => {
   const { prop: submitTrigger, trigger: handleSubmit } = useReverseCbTrigger();
 
   const [isLoading] = usePassedTransition();
 
   return (
     <>
-      <FormCtxProvider initial={initial}>
+      <FormCtxProvider initial={initial} showDate={showDate}>
         <FormSubmit trigger={submitTrigger} />
         <div
           className="m-6 mx-auto mt-0 max-w-full p-4 @md:p-8"

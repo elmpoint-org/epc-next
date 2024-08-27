@@ -17,7 +17,13 @@ import {
 
 import { CalendarProps } from './ViewEvents';
 import { dayStyles } from '../_util/dayStyles';
-import { D1, dateFormat, dateTS, dayjs } from '../_util/dateUtils';
+import {
+  D1,
+  dateFormat,
+  dateStartOfWeek,
+  dateTS,
+  dateTSLocal,
+} from '../_util/dateUtils';
 import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
@@ -92,9 +98,10 @@ export default function TimelineControls(props: CalendarProps) {
               variant="subtle"
               color="slate"
               onClick={() => {
-                let today = dayjs.unix(dateTS(new Date())).utc();
-                if (days === 7) today = today.subtract(today.day(), 'days');
-                updatePeriod(today.unix());
+                let today = dateTS(new Date());
+                if (daysWithDefault === 7)
+                  today = dateStartOfWeek(today, false);
+                updatePeriod(today);
               }}
             >
               Today
@@ -127,6 +134,7 @@ export default function TimelineControls(props: CalendarProps) {
             <input
               type="text"
               className="w-10 rounded-lg border border-transparent bg-transparent p-1 text-right hover:bg-slate-200 focus:border-slate-400 focus:bg-slate-200 focus:outline-none"
+              placeholder={'' + daysWithDefault}
               value={days}
               onChange={({ currentTarget: { value: v } }) => {
                 if (!v.length) setDays(undefined);
@@ -150,7 +158,10 @@ export default function TimelineControls(props: CalendarProps) {
           </ActionIcon>
 
           {/* popups */}
-          <EventEditWindow trigger={newStay} />
+          <EventEditWindow
+            trigger={newStay}
+            showDate={new Date(dateTSLocal(dates.start) * 1000)}
+          />
         </div>
       </div>
     </>

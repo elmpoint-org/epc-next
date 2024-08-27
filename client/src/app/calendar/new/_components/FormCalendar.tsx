@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import dayjs from 'dayjs';
 
-import { DatePicker } from '@mantine/dates';
+import { CalendarLevel, DatePicker } from '@mantine/dates';
 import { ActionIcon, Collapse, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
@@ -9,13 +9,16 @@ import {
   IconCircleChevronRight,
 } from '@tabler/icons-react';
 
-import { DatesRange, useFormCtx } from '../state/formCtx';
+import { useFormCtx } from '../state/formCtx';
 import { dayStyles } from '../../_util/dayStyles';
 
 const FormCalendar = () => {
-  const { dates, setDates } = useFormCtx();
+  const { dates, setDates, showDate } = useFormCtx();
 
   const [isCalOpen, { toggle: toggleCal }] = useDisclosure(true);
+  const [dateShown, setDateShown] = useState(
+    showDate ?? dates?.[0] ?? new Date(),
+  );
 
   const parseDate = (d: Date | null) =>
     (d && dayjs(d).format('MMM D, YYYY')) ?? '';
@@ -97,6 +100,8 @@ const FormCalendar = () => {
         <DatePicker
           type="range"
           value={dates}
+          date={dateShown}
+          onDateChange={setDateShown}
           onChange={handleDatePick}
           firstDayOfWeek={0}
           allowSingleDateInRange={true}

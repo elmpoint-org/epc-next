@@ -11,9 +11,9 @@ export const dayjs = dayjsRoot;
 /** one day in seconds */
 export const D1 = 24 * 3600;
 
-export function dateTS(d: Date | number, keepCurrentTime: boolean = true) {
+export function dateTS(d: Date | number, isInputNotUTC: boolean = true) {
   const day = d instanceof Date ? dayjs(d) : dayjs.unix(d);
-  return day.utc(keepCurrentTime).startOf('date').unix();
+  return day.utc(isInputNotUTC).startOf('date').unix();
 }
 
 export function showDate(d: Date | number) {
@@ -26,6 +26,12 @@ export function dateDiff(a: number, b: number) {
   const diff = (a - b) / D1;
   if (Math.round(diff) !== diff) console.error(new Error('bad timestamps'));
   return Math.round(diff);
+}
+
+export function dateStartOfWeek(d: number, isInputNotUTC: boolean = true) {
+  let selectedDay = dayjs.unix(dateTS(d, isInputNotUTC)).utc();
+  selectedDay = selectedDay.subtract(selectedDay.day(), 'days');
+  return selectedDay.unix();
 }
 
 /** format a date.

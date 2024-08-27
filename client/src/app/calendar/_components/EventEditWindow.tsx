@@ -20,9 +20,11 @@ import NewEventForm from '../new/_components/NewEventForm';
 export default function EventEditWindow({
   trigger,
   event,
+  showDate,
 }: {
   trigger: ReverseCbProp;
   event?: EventType;
+  showDate?: Date;
 }) {
   // window open trigger
   const { prop: windowProp, trigger: openWindow } = useReverseCbTrigger();
@@ -114,7 +116,7 @@ export default function EventEditWindow({
         title={event ? <>Edit Stay</> : <>Add Your Stay</>}
         width="48rem"
       >
-        <NewEventForm initial={formValue ?? undefined} />
+        <NewEventForm initial={formValue ?? undefined} showDate={showDate} />
       </FloatingWindow>
     </>
   );
