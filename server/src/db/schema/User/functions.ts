@@ -20,6 +20,7 @@ import {
 } from '@passwordlessdev/passwordless-nodejs';
 import { AxiosError } from 'axios';
 import { prepEmail } from '@@/util/textTransform';
+import { createHash } from 'node:crypto';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -179,6 +180,17 @@ export const getUserCredentials = h<UserResolvers['credentials']>(
     if (!scopeDiff(scope, 'ADMIN') && userId !== id) throw scopeError();
 
     return (await passwordless.listCredentials(id)).map(parseCredential);
+  }
+);
+
+export const getUserAvatarUrl = h<UserResolvers['avatarUrl']>(
+  ({ parent: { email } }) => {
+    const hash = createHash('sha256')
+      .update(email.trim().toLowerCase())
+      .digest('hex');
+    const url = `https://gravatar.com/avatar/${hash}?s=256&d=https%3A%2F%2Fone.elmpoint.xyz%2Fmp.png`;
+
+    return url;
   }
 );
 

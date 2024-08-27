@@ -21,6 +21,7 @@ const resolvers: UserModule.Resolvers = {
   },
   User: {
     credentials: f.getUserCredentials,
+    avatarUrl: f.getUserAvatarUrl,
 
     timestamp,
   },

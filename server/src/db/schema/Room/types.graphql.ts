@@ -15,8 +15,8 @@ export default gql`
     cabin: Cabin
     "the number of beds in the room"
     beds: Int!
-    "the number of currently unreserved beds in this room. provide a unix timestamp for a start and end date."
-    availableBeds(start: Int, end: Int): Int
+    "the number of currently unreserved beds in this room. provide a unix timestamp for a start and end date. use \`ignoreStayId\` to ignore one stay in calculation, such as while editing a stay."
+    availableBeds(start: Int, end: Int, ignoreStayId: ID): Int
 
     "does this room have a bed big enough for two people"
     forCouples: Boolean

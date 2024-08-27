@@ -1,11 +1,17 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useGraphQuery } from '@/query/query';
 import { graphql } from '@/query/graphql';
 import { ResultOf } from '@graphql-typed-document-node/core';
-import { dateTS, dateTSLocal, dayjs } from '../_util/dateUtils';
+import {
+  dateStartOfWeek,
+  dateTS,
+  dateTSLocal,
+  dayjs,
+} from '../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
 import { useDefaultDays } from '../_util/defaultDays';
 import { SetState } from '@/util/stateType';
@@ -23,6 +29,7 @@ const EVENTS_QUERY = graphql(`
       author {
         id
         name
+        avatarUrl
       }
       dateStart
       dateEnd
@@ -50,18 +57,50 @@ const { Provider: InvalidateProvider, useHook: useInvalidate } =
   createCallbackCtx();
 export { useInvalidate };
 
+/** query parameters */
+export type QP = 'date' | 'days';
+
 // COMPONENT
 export default function ViewEvents() {
+  const sq = useSearchParams();
+  const router = useRouter();
+
+  // days
+  const defaultDays = useDefaultDays();
+  const days = useMemo(() => {
+    const num = parseInt(sq.get('days' as QP) ?? '');
+    if (!Number.isFinite(num)) return undefined;
+    return num;
+  }, [sq]);
+  const daysWithDefault = days ?? defaultDays;
+  function setDays(d: typeof days) {
+    updateQuery('days', d ?? '');
+  }
+
   // date picker state
-  const [startDate, setStartDate] = useState<Date>(new Date());
+  const startDate = useMemo(() => {
+    const num = parseInt(sq.get('date' as QP) ?? '');
+    let startDateNum = Number.isFinite(num) ? num : null;
+    if (startDateNum === null) {
+      if (daysWithDefault !== 7) return new Date();
+      startDateNum = dateStartOfWeek(dateTS(new Date()));
+    }
+    return new Date(dateTSLocal(startDateNum) * 1000);
+  }, [daysWithDefault, sq]);
+  function setStartDate(d: typeof startDate) {
+    updateQuery('date', dateTS(d));
+  }
   function updatePeriod(d: number) {
     setStartDate(new Date(dateTSLocal(d) * 1000));
   }
 
-  // days
-  const defaultDays = useDefaultDays();
-  const [days, setDays] = useState<number | undefined>(defaultDays);
-  const daysWithDefault = days ?? defaultDays;
+  function updateQuery(key: QP, val: string | number) {
+    const query = new URLSearchParams(sq);
+    if (days) query.set('days' as QP, '' + days);
+    query.set('date' as QP, '' + dateTS(startDate));
+    query.set(key, '' + val);
+    router.push('?' + query.toString(), { scroll: false });
+  }
 
   const endDate = useMemo(
     () =>
@@ -93,9 +132,9 @@ export default function ViewEvents() {
     updatePeriod,
     periodState: {
       days,
-      setDays,
       startDate,
       setStartDate,
+      setDays,
     },
   };
 
@@ -127,8 +166,8 @@ export type CalendarProps = {
   updatePeriod: (d: number) => void;
   periodState: {
     days: number | undefined;
-    setDays: SetState<number | undefined>;
+    setDays: (d: number | undefined) => void;
     startDate: Date;
-    setStartDate: SetState<Date>;
+    setStartDate: (d: Date) => void;
   };
 };

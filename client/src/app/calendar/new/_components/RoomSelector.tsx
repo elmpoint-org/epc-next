@@ -14,7 +14,7 @@ import { IconAlertTriangle } from '@tabler/icons-react';
 import RoomOption from './RoomOption';
 
 import { CUSTOM_ROOM_OBJ, CUSTOM_ROOM_ID } from '@@/db/schema/Room/CABIN_DATA';
-import { Cabin, Room, useFormCtxRoomState } from '../state/formCtx';
+import { Cabin, Room, useFormCtx, useFormCtxRoomState } from '../state/formCtx';
 import { useGetRooms } from '../state/getRoomData';
 
 const SEPARATOR = `/`;
@@ -27,7 +27,8 @@ const RoomSelector = ({
   rowIndex: number;
   className: string;
 }) => {
-  const { query, cabins, rooms, initialOptions } = useGetRooms();
+  const { updateId } = useFormCtx();
+  const { cabins, rooms, initialOptions } = useGetRooms(updateId ?? undefined);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),

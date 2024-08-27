@@ -23,7 +23,6 @@ const RoomOption = ({
   let available: number | null = null;
   if ('beds' in item && item.availableBeds !== null) {
     available = item.availableBeds - localOccupants;
-    // if (active) available++;
   }
 
   const aliasTag = <AliasTag isAlias={!!item.useAlias} name={item.name} />;

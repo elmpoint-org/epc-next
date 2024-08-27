@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { cache } from 'react';
 import { cookies } from 'next/headers';
 
@@ -18,12 +17,13 @@ const GET_USER_FROM_AUTH = graphql(`
       firstName
       email
       scope
+      avatarUrl
     }
   }
 `);
 export type AuthUser = NonNullable<
   ResultOf<typeof GET_USER_FROM_AUTH>['userFromAuth']
-> & { avatarUrl?: string };
+>;
 
 export async function getUser() {
   // get stored auth token
@@ -58,15 +58,6 @@ export async function UserProvider({ children }: Children) {
   if (user === false) {
     user = null;
     removeToken = true;
-  }
-
-  // insert avatar url
-  if (user) {
-    const hash = createHash('sha256')
-      .update(user.email.trim().toLowerCase())
-      .digest('hex');
-    (user as AuthUser).avatarUrl =
-      `https://gravatar.com/avatar/${hash}?d=mp&s=256`;
   }
 
   return (

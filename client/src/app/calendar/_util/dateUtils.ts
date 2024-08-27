@@ -11,9 +11,9 @@ export const dayjs = dayjsRoot;
 /** one day in seconds */
 export const D1 = 24 * 3600;
 
-export function dateTS(d: Date | number, keepCurrentTime: boolean = true) {
+export function dateTS(d: Date | number, isInputNotUTC: boolean = true) {
   const day = d instanceof Date ? dayjs(d) : dayjs.unix(d);
-  return day.utc(keepCurrentTime).startOf('date').unix();
+  return day.utc(isInputNotUTC).startOf('date').unix();
 }
 
 export function showDate(d: Date | number) {
@@ -28,6 +28,12 @@ export function dateDiff(a: number, b: number) {
   return Math.round(diff);
 }
 
+export function dateStartOfWeek(d: number, isInputNotUTC: boolean = true) {
+  let selectedDay = dayjs.unix(dateTS(d, isInputNotUTC)).utc();
+  selectedDay = selectedDay.subtract(selectedDay.day(), 'days');
+  return selectedDay.unix();
+}
+
 /** format a date.
  *  @see https://day.js.org/docs/en/display/format
  */
@@ -37,8 +43,8 @@ export function dateFormat(date: number, format: string) {
 
 /** go from a date timestamp to a local timestamp. */
 export function dateTSLocal(d: number) {
-  const offset = new Date().getTimezoneOffset();
-  return dayjs.unix(d).utc().utcOffset(-offset, true).startOf('date').unix();
+  const datestring = dateFormat(d, 'YYYY-MM-DD');
+  return dayjs(datestring, 'YYYY-MM-DD').unix();
 }
 
 // ------------------------------------

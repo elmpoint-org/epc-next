@@ -84,10 +84,10 @@ const FormGuestRows = () => {
         {guests.map((room, i) => (
           <div
             key={i}
-            className="relative flex flex-col items-stretch gap-7 rounded-xl border border-slate-300 p-4 pt-10 @xl:flex-row @xl:items-center @xl:gap-3 @xl:border-0 @xl:px-0 @xl:py-4"
+            className="relative flex flex-col items-stretch gap-7 rounded-xl border border-slate-300 p-4 pt-10 @xl:flex-row @xl:items-end @xl:gap-3 @xl:border-0 @xl:px-0 @xl:py-4"
           >
             {/* number */}
-            <div className="absolute bottom-4 left-5 w-[2ch] select-none p-0.5 text-left text-sm text-slate-500 @xl:static @xl:p-0 @xl:text-right">
+            <div className="absolute bottom-4 left-5 w-[2ch] select-none p-0.5 text-left text-sm text-slate-500 @xl:static @xl:p-0 @xl:py-2.5 @xl:text-right">
               {i + 1}
             </div>
             {/* guest name */}
@@ -106,11 +106,11 @@ const FormGuestRows = () => {
             />
 
             {/* room select */}
-            <div className="relative flex-1">
+            <div className="relative flex-1 @xl:max-w-[50%]">
               <RoomSelector rowIndex={i} className="-mt-5" />
             </div>
             {/* action buttons */}
-            <div className="mr-3 flex flex-row justify-end gap-2 @xl:justify-normal">
+            <div className="mr-3 flex flex-row justify-end gap-2 @xl:h-10 @xl:items-center @xl:justify-normal">
               {/* make primary */}
               <Tooltip label="Make this the primary guest">
                 <ActionButton
