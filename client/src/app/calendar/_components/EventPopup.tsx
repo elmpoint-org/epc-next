@@ -88,6 +88,7 @@ export default function EventPopup({ event }: { event: EventType }) {
         <ScrollArea
           classNames={{
             root: 'flex flex-col',
+            scrollbar: 'm-1',
           }}
         >
           <div className="flex flex-col gap-2 p-6">
@@ -98,9 +99,9 @@ export default function EventPopup({ event }: { event: EventType }) {
               {/* dates */}
               <IconRow icon={IconClock}>
                 <div className="flex flex-row gap-2">
-                  <span>{dateFormat(event.dateStart, 'ddd. MMMM D')}</span>
+                  <span>{dateFormat(event.dateStart, 'dddd, MMM D')}</span>
                   <span className="text-slate-400">–</span>
-                  <span>{dateFormat(event.dateEnd, 'ddd. MMMM D')}</span>
+                  <span>{dateFormat(event.dateEnd, 'dddd, MMM D')}</span>
                 </div>
               </IconRow>
 
@@ -109,7 +110,14 @@ export default function EventPopup({ event }: { event: EventType }) {
                 icon={IconAlignJustified}
                 show={!!event.description.length}
               >
-                <div>{event.description}</div>
+                <div>
+                  {event.description.split('\n').map((line) => (
+                    <>
+                      {line}
+                      <br className="last:hidden" />
+                    </>
+                  ))}
+                </div>
               </IconRow>
 
               {/* room reservations */}
