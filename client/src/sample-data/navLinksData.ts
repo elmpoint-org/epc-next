@@ -3,7 +3,6 @@ import type { DeepNavLinks } from '@/app/_components/nav/navTypes';
 import {
   IconBoxMargin,
   IconCalendar,
-  IconCalendarPlus,
   IconClick,
   IconEyeQuestion,
   IconFolders,
@@ -15,25 +14,13 @@ export const navLinks: DeepNavLinks = [
   { href: '/', text: 'Home', icon: IconHome2, exact: true },
   {
     text: 'Calendar',
+    href: '/calendar',
     icon: IconCalendar,
-    links: [
-      {
-        text: 'View Calendar',
-        href: '/calendar',
-        icon: IconCalendar,
-        exact: true,
-      },
-      {
-        text: 'Add Stay',
-        href: '/calendar/new',
-        icon: IconCalendarPlus,
-      },
-      { text: '' },
-      // ...
-    ],
   },
+  { href: '/pages/links', text: 'Updates & Links', icon: IconClick },
   {
     text: 'CMS',
+    scope: ['EDIT'],
     icon: IconBoxMargin,
     links: [
       { href: '/cms/pages', text: 'Pages', icon: IconNotebook },
@@ -45,11 +32,11 @@ export const navLinks: DeepNavLinks = [
     text: 'Reference Pages',
     icon: IconEyeQuestion,
     links: [
-      { href: '/pages/links', text: 'Updates & Links', icon: IconClick },
       {
         text: 'Camp How-tos',
         href: '/pages/instructions',
       },
+      { text: '' },
       // ...
     ],
   },
