@@ -30,6 +30,7 @@ const EVENTS_QUERY = graphql(`
         name
         room {
           ... on Room {
+            id
             name
             cabin {
               name
@@ -86,6 +87,7 @@ export default function ViewEvents() {
 
   const props: CalendarProps = {
     events,
+    isLoading: query.isFetching,
     days: daysWithDefault,
     dates: parsedDates,
     updatePeriod,
@@ -116,6 +118,7 @@ export default function ViewEvents() {
 
 export type CalendarProps = {
   events: EventType[] | undefined;
+  isLoading: boolean;
   days: number;
   dates: {
     start: number;

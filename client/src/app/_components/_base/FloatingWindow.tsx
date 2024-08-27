@@ -22,7 +22,7 @@ import {
   type useReverseCbTrigger,
 } from '@/util/reverseCb';
 import { clx } from '@/util/classConcat';
-import { LoadStateProvider } from '@/app/_ctx/transition';
+import { TransitionProvider } from '@/app/_ctx/transition';
 import { createCallbackCtx } from '@/app/_ctx/callback';
 
 const { Provider: CloseProvider, useHook: useCloseFloatingWindow } =
@@ -67,7 +67,7 @@ export default function FloatingWindow({
   return (
     <>
       <CloseProvider cb={() => close()}>
-        <LoadStateProvider transition={transition}>
+        <TransitionProvider transition={transition}>
           <Dialog open={isOpen} onClose={safeClose}>
             {/* frame */}
             <div
@@ -81,7 +81,7 @@ export default function FloatingWindow({
               {/* panel */}
               <motion.div
                 layout
-                className="flex h-full max-w-screen-sm flex-col justify-end group-data-[m]:!w-96"
+                className="flex h-full flex-col justify-end group-data-[m]:!w-96"
                 style={{
                   width: width ?? '48rem',
                 }}
@@ -95,7 +95,7 @@ export default function FloatingWindow({
                 >
                   {/* HEADER */}
                   <div
-                    className="group flex flex-row items-center justify-between border-b border-slate-300 bg-slate-50 p-2 group-data-[m]:border-none"
+                    className="group flex flex-row items-center justify-between border-b border-slate-300 p-2 group-data-[m]:border-none"
                     onClick={() => {
                       if (minimized) setMinimized(false);
                     }}
@@ -174,7 +174,7 @@ export default function FloatingWindow({
               </motion.div>
             </div>
           </Dialog>
-        </LoadStateProvider>
+        </TransitionProvider>
       </CloseProvider>
     </>
   );

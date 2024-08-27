@@ -4,21 +4,23 @@ import { useFormCtx } from './formCtx';
 import { dateTS } from '../../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
 import { ResultOf } from '@graphql-typed-document-node/core';
-import { ROOT_CABIN_ID } from '@@/db/schema/Room/CABIN_DATA';
 import { keepPreviousData } from '@tanstack/react-query';
 
-export const QUERY_ROOM_OPTIONS = graphql(`
-  query InitialRoomOptions($start: Int, $end: Int) {
-    cabins {
-      id
-      name
-      aliases
-    }
-    rooms {
+// QUERIES
+
+export const CABIN_FRAGMENT = graphql(`
+  fragment StayCabinData on Cabin @_unmask {
+    id
+    name
+    aliases
+  }
+`);
+export const ROOM_FRAGMENT = graphql(
+  `
+    fragment StayRoomData on Room @_unmask {
       id
       cabin {
-        id
-        name
+        ...StayCabinData
       }
       name
       aliases
@@ -27,14 +29,34 @@ export const QUERY_ROOM_OPTIONS = graphql(`
       forCouples
       noCount
     }
-  }
-`);
+  `,
+  [CABIN_FRAGMENT],
+);
+
+export const QUERY_ROOM_OPTIONS = graphql(
+  `
+    query InitialRoomOptions($start: Int, $end: Int) {
+      cabins {
+        ...StayCabinData
+      }
+      rooms {
+        ...StayRoomData
+      }
+    }
+  `,
+  [CABIN_FRAGMENT, ROOM_FRAGMENT],
+);
+
+// TYPES
+
 export type Cabin = Inside<ResultOf<typeof QUERY_ROOM_OPTIONS>['cabins']> & {
   useAlias?: number;
 };
 export type Room = Inside<ResultOf<typeof QUERY_ROOM_OPTIONS>['rooms']> & {
   useAlias?: number;
 };
+
+// HOOKS
 
 /** getrooms uses the form context provider to get dates. */
 export function useGetRooms() {
@@ -63,7 +85,7 @@ export function useGetRooms() {
 
   const initialOptions: (Cabin | Room)[] = [
     ...cabins,
-    ...rooms.filter((it) => it.cabin?.id === ROOT_CABIN_ID),
+    ...rooms.filter((it) => it.cabin === null),
   ];
   return { initialOptions, rooms, cabins, query };
 }

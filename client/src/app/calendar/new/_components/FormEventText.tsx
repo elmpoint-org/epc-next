@@ -20,7 +20,7 @@ const FormEventText = () => {
   }, [guests]);
 
   // title textbox management
-  const [isDefaultTitle, setIsDefaultTitle] = useState(true);
+  const [isDefaultTitle, setIsDefaultTitle] = useState(!eventText.title.length);
   useEffect(() => {
     if (!isDefaultTitle) return;
     setEventText((o) => ({ ...o, title: eventNameGuess }));

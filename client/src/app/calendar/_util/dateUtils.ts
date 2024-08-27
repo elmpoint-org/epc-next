@@ -35,6 +35,7 @@ export function dateFormat(date: number, format: string) {
   return dayjs.unix(date).utc().format(format);
 }
 
+/** go from a date timestamp to a local timestamp. */
 export function dateTSLocal(d: number) {
   const offset = new Date().getTimezoneOffset();
   return dayjs.unix(d).utc().utcOffset(-offset, true).startOf('date').unix();

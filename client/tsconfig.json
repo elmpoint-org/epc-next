@@ -20,7 +20,8 @@
         "name": "@0no-co/graphqlsp",
         "schema": "http://localhost:3000/gql",
         "tadaOutputLocation": "./graphql-schema.d.ts",
-        "trackFieldUsage": false
+        "trackFieldUsage": false,
+        "shouldCheckForColocatedFragments": false
       }
     ],
     "paths": {

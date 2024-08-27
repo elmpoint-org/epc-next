@@ -8,7 +8,12 @@ import {
   PopoverTarget,
 } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
-import { IconArrowLeft, IconArrowRight, IconPlus } from '@tabler/icons-react';
+import {
+  IconArrowLeft,
+  IconArrowRight,
+  IconLoader2,
+  IconPlus,
+} from '@tabler/icons-react';
 
 import { CalendarProps } from './ViewEvents';
 import { dayStyles } from '../_util/dayStyles';
@@ -19,9 +24,12 @@ import { useReverseCbTrigger } from '@/util/reverseCb';
 
 import FloatingWindow from '@/app/_components/_base/FloatingWindow';
 import NewEventForm from '../new/_components/NewEventForm';
+import { Transition } from '@headlessui/react';
+import EventEditWindow from './EventEditWindow';
 
 export default function TimelineControls(props: CalendarProps) {
   const {
+    isLoading,
     updatePeriod,
     dates,
     periodState: { days, setDays, startDate, setStartDate },
@@ -38,6 +46,7 @@ export default function TimelineControls(props: CalendarProps) {
   return (
     <>
       <div className="flex flex-row flex-wrap items-center justify-between gap-y-4">
+        {/* LEFT GROUP */}
         <div className="flex w-full flex-row items-center justify-between sm:w-auto">
           {/* date picker */}
           <Popover opened={datePickerOpen} onChange={setDatePickerOpen}>
@@ -99,9 +108,20 @@ export default function TimelineControls(props: CalendarProps) {
               <IconArrowRight />
             </ActionIcon>
           </div>
+
+          {/* desktop loader */}
+          <div className="hidden sm:block">
+            <Loader show={isLoading} />
+          </div>
         </div>
 
-        <div className="flex w-full flex-row items-center justify-end gap-4 border-t border-slate-300 pt-2 sm:w-auto sm:border-transparent sm:pt-0">
+        {/* RIGHT GROUP */}
+        <div className="flex w-full flex-row items-center justify-end gap-4 border-t border-slate-300 pt-3 sm:w-auto sm:border-transparent sm:pt-0">
+          {/* mobile loader */}
+          <div className="flex flex-1 flex-row px-2 sm:hidden">
+            <Loader show={isLoading} />
+          </div>
+
           {/* number of days to show */}
           <div className="flex flex-row items-center gap-1">
             <input
@@ -130,15 +150,19 @@ export default function TimelineControls(props: CalendarProps) {
           </ActionIcon>
 
           {/* popups */}
-          <FloatingWindow
-            triggerOpen={newStay}
-            title={<>Add Your Stay</>}
-            width="48rem"
-          >
-            <NewEventForm />
-          </FloatingWindow>
+          <EventEditWindow trigger={newStay} />
         </div>
       </div>
     </>
+  );
+}
+
+function Loader({ show }: { show: boolean }) {
+  return (
+    <Transition show={show}>
+      <div className="flex translate-x-0 items-center justify-center transition duration-150 data-[closed]:opacity-0">
+        <IconLoader2 className="animate-spin text-slate-500" />
+      </div>
+    </Transition>
   );
 }

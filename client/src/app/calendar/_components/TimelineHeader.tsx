@@ -19,11 +19,11 @@ export default function TimelineHeader(props: CalendarProps) {
             <button
               key={date}
               onClick={() => updatePeriod(date)}
-              className="group col-span-2 flex flex-row items-center justify-center gap-1 p-2 text-sm"
+              className="group col-span-2 flex flex-col items-center justify-center gap-1 p-2 text-sm sm:flex-row"
             >
-              <span className="t">{dateFormat(date, 'ddd')}</span>
+              <span className="uppercase">{dateFormat(date, 'ddd')}</span>
               <span
-                className="flex size-7 items-center justify-center rounded-full border border-transparent font-bold group-hover:bg-slate-300/50 data-[td]:ml-0.5 data-[td]:bg-emerald-700 data-[td]:text-dwhite group-hover:data-[td]:bg-emerald-800"
+                className="flex size-7 items-center justify-center rounded-full font-bold group-hover:bg-slate-300/50 data-[td]:ml-0.5 data-[td]:bg-emerald-700 data-[td]:text-dwhite group-hover:data-[td]:bg-emerald-800"
                 data-td={date === dateTS(new Date()) || null}
               >
                 {dateFormat(date, 'D')}
