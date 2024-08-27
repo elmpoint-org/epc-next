@@ -63,7 +63,7 @@ export function useGetRooms() {
 
   const initialOptions: (Cabin | Room)[] = [
     ...cabins,
-    ...rooms.filter((it) => it.cabin?.id === ROOT_CABIN_ID),
+    ...rooms.filter((it) => it.cabin === null),
   ];
   return { initialOptions, rooms, cabins, query };
 }

@@ -28,7 +28,7 @@ export default function EventPopup({ event }: { event: EventType }) {
           padding: '0.5rem',
         }}
         className={clx(
-          'z-[199] w-96 rounded-xl border border-slate-300 bg-dwhite shadow-2xl',
+          'z-[199] w-96 rounded-xl border border-slate-300 bg-dwhite shadow-2xl min-h-fit',
           /* transition */ 'translate-y-0 transition data-[closed]:-translate-y-2 data-[closed]:opacity-0',
         )}
       >
@@ -100,9 +100,11 @@ export default function EventPopup({ event }: { event: EventType }) {
                           <div className="italic">{r.room.text}</div>
                         ) : (
                           <div className="flex flex-row gap-1">
-                            <span className="font-bold text-slate-600">
-                              {r.room?.cabin?.name ?? null}
-                            </span>
+                            {r.room?.cabin && (
+                              <span className="font-bold text-slate-600">
+                                {r.room.cabin.name}
+                              </span>
+                            )}
                             <span className="first:hidden">&bull;</span>
                             <span>{r.room?.name}</span>
                           </div>
