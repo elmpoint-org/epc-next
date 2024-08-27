@@ -41,7 +41,7 @@ export default function TimelineEvent({
         }}
       >
         <PopoverButton className="group flex-1 truncate bg-dwhite focus:outline-none">
-          <div className="flex flex-1 flex-row items-center justify-between truncate rounded-lg border border-emerald-600 bg-emerald-600/30 text-emerald-950 group-focus:border-emerald-700">
+          <div className="flex flex-1 flex-row items-center justify-between truncate rounded-lg border border-emerald-600 bg-emerald-600/30 text-emerald-950 ring-inset ring-emerald-600 group-focus:ring-1">
             {loc.start !== 1 ? (
               <div />
             ) : (
