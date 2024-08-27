@@ -135,7 +135,7 @@ export default function TimelineControls(props: CalendarProps) {
               type="text"
               className="w-10 rounded-lg border border-transparent bg-transparent p-1 text-right hover:bg-slate-200 focus:border-slate-400 focus:bg-slate-200 focus:outline-none"
               placeholder={'' + daysWithDefault}
-              value={days}
+              value={days ?? ''}
               onChange={({ currentTarget: { value: v } }) => {
                 if (!v.length) setDays(undefined);
                 const d = parseInt((v.match(/[\d\.]/g) || ['']).join(''));
