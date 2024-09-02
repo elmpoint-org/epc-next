@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useGraphQuery } from '@/query/query';
@@ -14,11 +14,11 @@ import {
 } from '../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
 import { useDefaultDays } from '../_util/defaultDays';
-import { SetState } from '@/util/stateType';
+import { createCallbackCtx } from '@/app/_ctx/callback';
 
 import Timeline from './Timeline';
 import TimelineControls from './TimelineControls';
-import { createCallbackCtx } from '@/app/_ctx/callback';
+import { useCalendarControls } from '../_util/controls';
 
 const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -124,6 +124,7 @@ export default function ViewEvents() {
     query.refetch();
   }
 
+  // CALENDAR PROPS
   const props: CalendarProps = {
     events,
     isLoading: query.isFetching,
@@ -137,6 +138,41 @@ export default function ViewEvents() {
       setDays,
     },
   };
+
+  // KEYBOARD SHORTCUTS
+  const actions = useCalendarControls(props);
+  useEffect(() => {
+    const dom = window.document;
+    if (!dom) return;
+    const cb = (e: KeyboardEvent) => {
+      // make sure user isn't typing
+      const target = e.target as HTMLElement;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target?.isContentEditable
+      )
+        return;
+
+      // handle keyboard shortcuts
+      switch (e.code) {
+        case 'KeyP':
+          actions.last();
+          break;
+        case 'KeyN':
+          actions.next();
+          break;
+        case 'KeyT':
+          actions.today();
+          break;
+      }
+    };
+
+    // attach event listener
+    dom.addEventListener('keydown', cb);
+    return () => dom.removeEventListener('keydown', cb);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

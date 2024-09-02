@@ -17,16 +17,11 @@ import {
 
 import { CalendarProps } from './ViewEvents';
 import { dayStyles } from '../_util/dayStyles';
-import {
-  D1,
-  dateFormat,
-  dateStartOfWeek,
-  dateTS,
-  dateTSLocal,
-} from '../_util/dateUtils';
+import { dateFormat, dateTSLocal } from '../_util/dateUtils';
 import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
+import { useCalendarControls } from '../_util/controls';
 
 import { Transition } from '@headlessui/react';
 import EventEditWindow from './EventEditWindow';
@@ -34,7 +29,6 @@ import EventEditWindow from './EventEditWindow';
 export default function TimelineControls(props: CalendarProps) {
   const {
     isLoading,
-    updatePeriod,
     dates,
     periodState: { days, setDays, startDate, setStartDate },
   } = props;
@@ -48,6 +42,8 @@ export default function TimelineControls(props: CalendarProps) {
   useEffect(() => {
     setDateShown(startDate);
   }, [startDate]);
+
+  const actions = useCalendarControls(props);
 
   // new stay prompt
   const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
@@ -92,7 +88,7 @@ export default function TimelineControls(props: CalendarProps) {
           <div className="flex flex-row items-center gap-1 px-4">
             <ActionIcon
               aria-label="previous period"
-              onClick={() => updatePeriod(dates.start - D1 * daysWithDefault)}
+              onClick={actions.last}
               color="slate"
               variant="subtle"
             >
@@ -102,18 +98,13 @@ export default function TimelineControls(props: CalendarProps) {
               size="compact-md"
               variant="subtle"
               color="slate"
-              onClick={() => {
-                let today = dateTS(new Date());
-                if (daysWithDefault === 7)
-                  today = dateStartOfWeek(today, false);
-                updatePeriod(today);
-              }}
+              onClick={actions.today}
             >
               Today
             </Button>
             <ActionIcon
-              aria-label="previous period"
-              onClick={() => updatePeriod(dates.start + D1 * daysWithDefault)}
+              aria-label="next period"
+              onClick={actions.next}
               color="slate"
               variant="subtle"
             >
