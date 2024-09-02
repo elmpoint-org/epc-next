@@ -108,10 +108,22 @@ export default function EventPopup({ event }: { event: EventType }) {
             <div className="grid grid-cols-[min-content_1fr] gap-5">
               {/* dates */}
               <IconRow icon={IconClock}>
-                <div className="flex flex-row gap-2">
-                  <span>{dateFormat(event.dateStart, 'dddd, MMM D')}</span>
+                <div className="flex flex-row gap-2 text-center leading-snug">
+                  <span>
+                    <span>{dateFormat(event.dateStart, 'dddd')}</span>
+                    <span>, </span>
+                    <span className="whitespace-nowrap">
+                      {dateFormat(event.dateStart, 'MMM D')}
+                    </span>
+                  </span>
                   <span className="text-slate-400">–</span>
-                  <span>{dateFormat(event.dateEnd, 'dddd, MMM D')}</span>
+                  <span>
+                    <span>{dateFormat(event.dateEnd, 'dddd')}</span>
+                    <span>, </span>
+                    <span className="whitespace-nowrap">
+                      {dateFormat(event.dateEnd, 'MMM D')}
+                    </span>
+                  </span>
                 </div>
               </IconRow>
 
