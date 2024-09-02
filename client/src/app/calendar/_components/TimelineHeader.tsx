@@ -3,7 +3,7 @@ import { dateFormat, dateTS, useDatesArray } from '../_util/dateUtils';
 import { gridCols } from '../_util/grid';
 import { Children } from '@/util/propTypes';
 
-export default function TimelineHeader(props: CalendarProps) {
+export default function TimelineHeader({ ...props }: CalendarProps) {
   const { days, updatePeriod } = props;
 
   const gridTemplateColumns = gridCols(days);
@@ -44,8 +44,9 @@ export function TimelineHeaderFrame({
         style={{ maxWidth: placeholderWidth }}
       >
         <div
-          className="-m-2 mb-2 grid flex-1 grid-flow-row auto-rows-fr divide-x divide-slate-300 border-b border-slate-300 bg-dwhite p-2 shadow-sm"
+          className="-m-2 mb-2 grid flex-1 grid-flow-row auto-rows-fr divide-x divide-slate-300 border-b border-slate-300 bg-dwhite p-2 shadow-sm after:border-r after:border-slate-400 after:data-[nd]:hidden"
           style={{ gridTemplateColumns: cols }}
+          data-nd={children || null} // don't show right divider
         >
           {children}
         </div>

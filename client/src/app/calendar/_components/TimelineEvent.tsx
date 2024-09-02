@@ -11,8 +11,9 @@ import EventPopup from './EventPopup';
 
 export default function TimelineEvent({
   event,
+  highlightRoom,
   ...props
-}: { event: EventType } & CalendarProps) {
+}: { event: EventType; highlightRoom?: string } & CalendarProps) {
   const { dates: dateLimits, days } = props;
 
   // calculate grid coordinates
@@ -32,6 +33,26 @@ export default function TimelineEvent({
     };
   }, [dateLimits, event, days]);
 
+  const resText = useMemo(() => {
+    if (!highlightRoom) return null;
+    if (event.reservations.length <= 1) return null;
+
+    const matches = event.reservations.filter(
+      (r) => r.room && 'id' in r.room && r.room.id === highlightRoom,
+    );
+    if (!matches.length) return null;
+    let inside = '';
+    if (matches.length === 1) inside = matches[0].name;
+    else inside = `${matches.length}+ people`;
+
+    return (
+      <>
+        <span>{inside} </span>
+        <span className="text-emerald-800">({event.title})</span>
+      </>
+    );
+  }, [event.reservations, event.title, highlightRoom]);
+
   return (
     <>
       <Popover
@@ -48,7 +69,7 @@ export default function TimelineEvent({
               <IconChevronLeft stroke={1} className="size-4" />
             )}
             {/* event title */}
-            <div className="truncate p-2 text-sm">{event.title}</div>
+            <div className="truncate p-2 text-sm">{resText ?? event.title}</div>
             {loc.end !== -1 ? (
               <div />
             ) : (
@@ -56,7 +77,7 @@ export default function TimelineEvent({
             )}
           </div>
         </PopoverButton>
-        <EventPopup event={event} />
+        <EventPopup event={event} highlightRoom={highlightRoom} />
       </Popover>
     </>
   );

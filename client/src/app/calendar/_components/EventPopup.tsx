@@ -24,7 +24,13 @@ import EventEditWindow from './EventEditWindow';
 /**
  * place EventPopup inside a headlessui {@link Popover} element for functionality.
  */
-export default function EventPopup({ event }: { event: EventType }) {
+export default function EventPopup({
+  event,
+  highlightRoom,
+}: {
+  event: EventType;
+  highlightRoom?: string;
+}) {
   // stay editor setup
   const { prop: triggerEditStay, trigger: runEditStay } = useReverseCbTrigger();
   const transition = useTransition();
@@ -150,7 +156,13 @@ export default function EventPopup({ event }: { event: EventType }) {
                     .map((r, i) => (
                       <div
                         key={i}
-                        className="grid grid-cols-[min-content_1fr] gap-x-3 gap-y-2 rounded-lg border border-slate-300 p-4"
+                        className="group grid grid-cols-[min-content_1fr] gap-x-3 gap-y-2 rounded-lg border border-slate-300 p-4"
+                        data-h={
+                          (r.room &&
+                            'id' in r.room &&
+                            r.room.id === highlightRoom) ||
+                          null
+                        }
                       >
                         {/* person's name */}
                         <IconUser stroke={1.5} className="size-4 self-center" />
@@ -163,14 +175,13 @@ export default function EventPopup({ event }: { event: EventType }) {
 
                         {/* room name */}
                         <div />
-
                         <div className="text-sm">
                           {'text' in r.room! ? (
                             <div className="italic">{r.room.text}</div>
                           ) : (
-                            <div className="flex flex-row gap-1">
+                            <div className="-mx-2 -my-1 flex max-w-fit flex-row gap-1 rounded-md px-2 py-1 group-data-[h]:bg-emerald-300 group-data-[h]:text-emerald-950">
                               {r.room?.cabin && (
-                                <span className="font-bold text-slate-600">
+                                <span className="font-bold text-slate-600 group-data-[h]:text-emerald-900">
                                   {r.room.cabin.name}
                                 </span>
                               )}

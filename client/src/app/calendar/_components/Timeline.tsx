@@ -1,9 +1,9 @@
-import { ForwardedRef, forwardRef, useMemo } from 'react';
+import { ForwardedRef, Fragment, useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { ActionIcon } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
-import { Transition } from '@headlessui/react';
 
 import { useDatesArray } from '../_util/dateUtils';
 import { CalendarProps } from './ViewEvents';
@@ -22,13 +22,31 @@ export default function Timeline(props: CalendarProps) {
   const dates = useDatesArray(props);
   const gridTemplateColumns = gridCols(days);
 
-  const byRoom = false;
-  const roomsWidth = byRoom ? '14rem' : '0';
+  // get byRoom option
+  const sq = useSearchParams();
+  const router = useRouter();
+  const SQ_BYROOM = 'rooms';
+  const displayByRoom = useMemo(() => {
+    const str = sq.get(SQ_BYROOM);
+    return str === 'true' || str === '1';
+  }, [sq]);
+  function setDisplayByRoom(nv: boolean) {
+    const query = new URLSearchParams(sq);
+    query.set(SQ_BYROOM, nv ? '1' : '0');
+    router.push('?' + query.toString(), { scroll: false });
+  }
 
+  // prep cabin sidebar
   const { initialOptions: rootCabins } = useGetRooms();
+  const sidebarWidth = displayByRoom ? '14rem' : '0';
 
   return (
     <>
+      {/* // TODO delete */}
+      <div className="flex flex-row">
+        <button onClick={() => setDisplayByRoom(!displayByRoom)}>toggle</button>
+      </div>
+
       <div className="flex flex-row gap-4">
         {/* events area */}
         <div className="flex flex-1 flex-col gap-2">
@@ -37,7 +55,7 @@ export default function Timeline(props: CalendarProps) {
             {/* divider lines */}
             <div
               className="absolute inset-0 grid divide-x divide-slate-300"
-              style={{ gridTemplateColumns, left: roomsWidth }}
+              style={{ gridTemplateColumns, left: sidebarWidth }}
             >
               {dates.map((_, i) => (
                 <div key={i} className="col-span-2" />
@@ -46,50 +64,49 @@ export default function Timeline(props: CalendarProps) {
 
             {/* header */}
             <div className="z-50 flex flex-row">
-              <TimelineHeaderFrame placeholderWidth={roomsWidth} />
+              <TimelineHeaderFrame placeholderWidth={sidebarWidth} />
               <TimelineHeader {...props} />
             </div>
 
             {/* events grid */}
             <div className="z-40 flex flex-col">
               {/* show by room */}
-              {byRoom &&
+              {displayByRoom &&
                 rootCabins.map((rc) => (
-                  <RoomRow
+                  <RoomEventsRow
                     key={rc.id}
                     roomOrCabin={rc}
-                    width={roomsWidth}
+                    width={sidebarWidth}
                     {...props}
                   />
                 ))}
               {/* show disorganized */}
-              {!byRoom && <EventsRow {...props} />}
+              {!displayByRoom && <EventsRow {...props} />}
             </div>
           </div>
-          {!byRoom && <hr className="border-slate-300" />}
+          {!displayByRoom && <hr className="border-slate-300" />}
         </div>
       </div>
     </>
   );
 }
 
-type RoomRowProps = {
+function RoomEventsRow({
+  roomOrCabin,
+  width,
+  fr,
+  ...props
+}: {
   roomOrCabin: Room | Cabin;
   width?: string;
   fr?: ForwardedRef<HTMLDivElement>;
-} & CalendarProps;
-function RoomRow({ roomOrCabin, width, fr, ...props }: RoomRowProps) {
+} & CalendarProps) {
   const cr = roomOrCabin;
   const isCabin = !('beds' in cr);
 
   const { rooms } = useGetRooms();
 
-  const [isOpen, { toggle }] = useDisclosure();
-
-  const RoomRowFR = forwardRef<HTMLDivElement, RoomRowProps>((props, fr) => (
-    <RoomRow {...props} fr={fr} />
-  ));
-  RoomRowFR.displayName = 'RoomRowFR';
+  const [isOpen, { toggle }] = useDisclosure(true);
 
   if (roomOrCabin.name === ANY_ROOM) return null;
 
@@ -98,18 +115,18 @@ function RoomRow({ roomOrCabin, width, fr, ...props }: RoomRowProps) {
       <div
         ref={fr}
         className={clx(
-          'flex flex-row border-y border-dashed border-slate-300/75 *:p-2',
+          'group flex flex-row border-dashed border-slate-300/75 *:p-2',
           'transition data-[closed]:opacity-0',
         )}
       >
         {/* title section */}
         <div
-          className="border-r border-slate-400 *:h-[2.375rem]"
+          className="border-r border-t border-r-slate-400 border-t-slate-300/75 [border-top-style:dashed] *:h-[2.375rem] group-first:border-t-transparent"
           style={{ width }}
         >
           {isCabin ? (
             // CABIN TITLE
-            <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-row items-center gap-2" onClick={toggle}>
               <ActionIcon
                 size="sm"
                 color="slate"
@@ -133,7 +150,7 @@ function RoomRow({ roomOrCabin, width, fr, ...props }: RoomRowProps) {
         </div>
 
         {/* events */}
-        <div className="flex-1">
+        <div className="flex-1 border-t border-dashed border-slate-300/75 group-first:border-transparent">
           {!isCabin && <EventsRow roomId={cr.id} {...props} />}
         </div>
       </div>
@@ -143,11 +160,11 @@ function RoomRow({ roomOrCabin, width, fr, ...props }: RoomRowProps) {
         rooms
           .filter((r) => r.cabin?.id === cr.id)
           .map((r) => (
-            <Transition key={r.id} show={isOpen}>
-              <div className="t">
-                <RoomRowFR roomOrCabin={r} width={width} {...props} />
-              </div>
-            </Transition>
+            <Fragment key={r.id}>
+              {isOpen && (
+                <RoomEventsRow roomOrCabin={r} width={width} {...props} />
+              )}
+            </Fragment>
           ))}
     </>
   );
@@ -174,7 +191,12 @@ function EventsRow({ roomId, ...props }: { roomId?: string } & CalendarProps) {
         style={{ gridTemplateColumns }}
       >
         {events?.map((event) => (
-          <TimelineEvent key={event.id} event={event} {...props} />
+          <TimelineEvent
+            key={event.id}
+            event={event}
+            highlightRoom={roomId}
+            {...props}
+          />
         ))}
       </div>
     </>
