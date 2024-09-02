@@ -147,8 +147,6 @@ export default function ViewEvents() {
 
           {/* timeline view */}
           <Timeline {...props} />
-
-          <hr />
         </div>
       </InvalidateProvider>
     </>

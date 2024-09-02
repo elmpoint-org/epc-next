@@ -50,6 +50,7 @@ export function dateTSLocal(d: number) {
 // ------------------------------------
 // hooks
 
+/** get an array of all dates between startdate and enddate */
 export function useDatesArray(p: CalendarProps) {
   const { dates: dateLimits, days } = p;
 

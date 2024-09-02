@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@mantine/core';
+import { Button, Kbd } from '@mantine/core';
 
 import { FormCtxProvider, InitialStayValue } from '../state/formCtx';
 import { useReverseCbTrigger } from '@/util/reverseCb';
@@ -15,6 +15,7 @@ import FormSubmit from './FormSubmit';
 import { getHotkeyHandler } from '@mantine/hooks';
 import { usePassedTransition } from '@/app/_ctx/transition';
 import FormDelete from './FormDelete';
+import { useKeyboardKeys } from '@/util/keyboardKeys';
 
 export const COST_MEMBERS = 15.0;
 export const COST_GUESTS = 20.0;
@@ -30,6 +31,8 @@ const NewEventForm = ({
   const { prop: submitTrigger, trigger: handleSubmit } = useReverseCbTrigger();
 
   const [isLoading] = usePassedTransition();
+
+  const keyType = useKeyboardKeys();
 
   return (
     <>
@@ -105,16 +108,27 @@ const NewEventForm = ({
 
             {/* SUBMIT */}
             <div className="flex flex-row justify-between">
+              {/* delete */}
               <FormDelete />
 
-              <Button
-                type="submit"
-                variant="light"
-                onClick={() => handleSubmit()}
-                loading={isLoading ?? false}
-              >
-                Submit
-              </Button>
+              {/* submit */}
+              <div className="flex flex-row items-center gap-4">
+                {keyType !== 'MOBILE' && (
+                  <div className="text-slate-600">
+                    <Kbd>{keyType === 'MAC' ? `Cmd` : `Ctrl`}</Kbd>
+                    <span> + </span>
+                    <Kbd>Enter</Kbd> to submit
+                  </div>
+                )}
+                <Button
+                  type="submit"
+                  variant="light"
+                  onClick={() => handleSubmit()}
+                  loading={isLoading ?? false}
+                >
+                  Submit
+                </Button>
+              </div>
             </div>
           </form>
         </div>

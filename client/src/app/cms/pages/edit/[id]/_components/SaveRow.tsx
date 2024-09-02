@@ -1,9 +1,7 @@
-import { useMemo } from 'react';
-
 import { Button, Kbd } from '@mantine/core';
-import { useOs } from '@mantine/hooks';
 
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
+import { useKeyboardKeys } from '@/util/keyboardKeys';
 
 export type SaveState = 'UNSAVED' | 'SAVED' | 'SAVING' | 'TYPING';
 
@@ -16,12 +14,7 @@ export default function SaveRow({
 }) {
   const isSkeleton = useSkeleton();
 
-  const os = useOs();
-  const keys = useMemo<'MOBILE' | 'MAC' | 'STANDARD'>(() => {
-    if (os === 'macos') return 'MAC';
-    if (os === 'android' || os === 'ios') return 'MOBILE';
-    return 'STANDARD';
-  }, [os]);
+  const keys = useKeyboardKeys();
 
   const BUTTON_TEXT = <>Save</>;
 

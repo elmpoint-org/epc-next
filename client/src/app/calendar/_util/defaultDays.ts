@@ -1,13 +1,17 @@
 'use client';
 
-import { useOs } from '@mantine/hooks';
 import { useMemo } from 'react';
 
+import { useWindowSize } from '@uidotdev/usehooks';
+import { breakpoints } from '@/util/breakpoints';
+
 export function useDefaultDays() {
-  const os = useOs();
+  const size = useWindowSize();
+
   const defaultDays = useMemo(() => {
-    if (os === 'android' || os === 'ios') return 3;
-    return 7;
-  }, [os]);
+    if (!size.width) return 7;
+    if (size.width >= breakpoints('sm')) return 7;
+    else return 4;
+  }, [size.width]);
   return defaultDays;
 }
