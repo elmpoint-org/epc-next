@@ -26,7 +26,7 @@ export default gql`
 
     get all cabins
     """
-    cabins: [Cabin]!
+    cabins: [Cabin!]!
 
     """
     **SCOPE: userId**
