@@ -1,4 +1,4 @@
-import { useTransition } from 'react';
+import { Fragment, useTransition } from 'react';
 
 import { CloseButton, PopoverPanel, type Popover } from '@headlessui/react';
 import { ActionIcon, ScrollArea } from '@mantine/core';
@@ -121,11 +121,11 @@ export default function EventPopup({ event }: { event: EventType }) {
                 show={!!event.description.length}
               >
                 <div>
-                  {event.description.split('\n').map((line) => (
-                    <>
+                  {event.description.split('\n').map((line, i) => (
+                    <Fragment key={i}>
                       {line}
                       <br className="last:hidden" />
-                    </>
+                    </Fragment>
                   ))}
                 </div>
               </IconRow>

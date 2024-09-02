@@ -17,7 +17,7 @@ const FormCalendar = () => {
 
   // calendar visual state
   const [isCalOpen, cal] = useDisclosure(true);
-  const [firstDatePick, setFirstDatePick] = useState(false);
+  const [closeNextTime, setCloseNextTime] = useState(false);
   const [dateShown, setDateShown] = useState(
     showDate ?? dates?.[0] ?? new Date(),
   );
@@ -34,12 +34,19 @@ const FormCalendar = () => {
   // functions
 
   const handleDatePick = (nv: typeof dates) => {
+    // check if date picker had been blank before this
+    const wasBlank = !tdates[0].length && !tdates[1].length;
+
+    // set values
     setDates(nv);
     setTdates(nv.map((it) => parseDate(it)));
-    if (nv[0] && nv[1] && !firstDatePick) {
+
+    // close date picker if necessary
+    if (nv[0] && nv[1] && closeNextTime) {
       cal.close();
-      setFirstDatePick(true);
+      setCloseNextTime(false);
     }
+    if (wasBlank) setCloseNextTime(true);
   };
 
   const updateTdate =
@@ -58,7 +65,10 @@ const FormCalendar = () => {
   const prettify = (id: 0 | 1) => () => {
     let temp = dates;
     // reorder dates if necessary
-    if ((temp[0]?.valueOf() ?? 0) > (temp[1]?.valueOf() ?? 0)) {
+    if (
+      (temp[0]?.valueOf() ?? 0) >
+      (temp[1]?.valueOf() ?? Number.MAX_SAFE_INTEGER)
+    ) {
       temp = [temp[1], temp[0]];
       setDates(temp);
       setTdates(temp.map((it) => parseDate(it)));
@@ -66,6 +76,9 @@ const FormCalendar = () => {
       // otherwise just format the text
       setTdates((o) => ({ ...o, [id]: parseDate(dates[id]) }));
     }
+
+    // refocus selected dates
+    if (temp[0]) setDateShown(temp[0]);
   };
 
   return (

@@ -17,7 +17,7 @@ export default function Timeline(props: CalendarProps) {
       <div className="flex flex-row gap-4">
         {/* events area */}
         <div className="flex flex-1 flex-col gap-2">
-          <div className="border-t border-slate-300" />
+          <hr className="border-slate-300" />
           <div className="relative flex min-h-96 flex-col">
             {/* divider lines */}
             <div
@@ -42,8 +42,7 @@ export default function Timeline(props: CalendarProps) {
               ))}
             </div>
           </div>
-
-          <hr className="mt-2" />
+          <hr className="border-slate-300" />
         </div>
       </div>
     </>
