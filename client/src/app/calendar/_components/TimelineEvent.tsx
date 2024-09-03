@@ -8,18 +8,46 @@ import { clamp } from '@/util/math';
 
 import { CalendarProps, EventType } from './ViewEvents';
 import EventPopup from './EventPopup';
+import { clmx, clx } from '@/util/classConcat';
+
+const EVENT_COLORS = {
+  DEFAULT: {
+    main: clx(
+      'border-emerald-600 bg-emerald-600/30 text-emerald-950 ring-emerald-600',
+    ),
+    specialty: clx('text-emerald-800'),
+  },
+  GRAY: {
+    main: clx('border-slate-500/50 bg-slate-300/50 ring-slate-300'),
+    specialty: clx('text-slate-800'),
+  },
+} satisfies Record<string, { main: string; specialty: string }>;
 
 export default function TimelineEvent({
   event,
+  theme,
   highlightRoom,
+  placeholder,
+  onOpen,
   ...props
-}: { event: EventType; highlightRoom?: string } & CalendarProps) {
+}: {
+  event: EventType;
+  theme?: keyof typeof EVENT_COLORS;
+  highlightRoom?: string;
+  placeholder?: EventPlaceholder;
+  onOpen?: () => void;
+} & CalendarProps) {
   const { dates: dateLimits, days } = props;
+
+  const css = theme ? EVENT_COLORS[theme] : EVENT_COLORS.DEFAULT;
 
   // calculate grid coordinates
   const loc = useMemo(() => {
-    const fromStart = dateDiff(event.dateStart, dateLimits.start);
-    const fromEnd = dateDiff(event.dateEnd, dateLimits.end);
+    const fromStart = dateDiff(
+      placeholder?.start ?? event.dateStart,
+      dateLimits.start,
+    );
+    const fromEnd = dateDiff(placeholder?.end ?? event.dateEnd, dateLimits.end);
 
     const start = clamp((fromStart + 1) * 2, 1, days * 2);
     const end = clamp((fromEnd - 1) * 2, -days * 2, -1);
@@ -31,9 +59,15 @@ export default function TimelineEvent({
       end,
       length,
     };
-  }, [dateLimits, event, days]);
+  }, [placeholder, event, dateLimits, days]);
 
+  // override button text
   const resText = useMemo(() => {
+    if (placeholder?.combined)
+      return (
+        <span className={clmx('font-bold', css.specialty)}>(multiple)</span>
+      );
+
     if (!highlightRoom) return null;
     if (event.reservations.length <= 1) return null;
 
@@ -48,10 +82,24 @@ export default function TimelineEvent({
     return (
       <>
         <span>{inside} </span>
-        <span className="text-emerald-800">({event.title})</span>
+        <span className={clmx(css.specialty)}>({event.title})</span>
       </>
     );
-  }, [event.reservations, event.title, highlightRoom]);
+  }, [
+    css.specialty,
+    event.reservations,
+    event.title,
+    highlightRoom,
+    placeholder?.combined,
+  ]);
+
+  // show arrows
+  const arrLeft =
+    loc.start === 1 ||
+    (placeholder?.eventId ? event.dateStart < placeholder.start : false);
+  const arrRight =
+    loc.end === -1 ||
+    (placeholder?.eventId ? event.dateEnd > placeholder.end : false);
 
   return (
     <>
@@ -61,24 +109,44 @@ export default function TimelineEvent({
           gridColumn: `${loc.start} / ${loc.end}`,
         }}
       >
-        <PopoverButton className="group flex-1 truncate bg-dwhite focus:outline-none">
-          <div className="flex flex-1 flex-row items-center justify-between truncate rounded-lg border border-emerald-600 bg-emerald-600/30 text-emerald-950 ring-inset ring-emerald-600 group-focus:ring-1">
-            {loc.start !== 1 ? (
-              <div />
-            ) : (
+        <PopoverButton className="group flex-1 truncate bg-[--row-color] focus:outline-none">
+          <div
+            className={clmx(
+              'flex flex-1 flex-row items-center justify-between truncate rounded-lg border   ring-inset  group-focus:ring-1',
+              css.main,
+            )}
+            onClick={(e) => {
+              if (placeholder?.combined) {
+                e.preventDefault();
+                onOpen?.();
+              }
+            }}
+          >
+            {arrLeft ? (
               <IconChevronLeft stroke={1} className="size-4" />
+            ) : (
+              <div />
             )}
             {/* event title */}
             <div className="truncate p-2 text-sm">{resText ?? event.title}</div>
-            {loc.end !== -1 ? (
-              <div />
-            ) : (
+            {arrRight ? (
               <IconChevronRight stroke={1} className="size-4" />
+            ) : (
+              <div />
             )}
           </div>
         </PopoverButton>
-        <EventPopup event={event} highlightRoom={highlightRoom} />
+        {!placeholder?.combined && (
+          <EventPopup event={event} highlightRoom={highlightRoom} />
+        )}
       </Popover>
     </>
   );
 }
+
+export type EventPlaceholder = {
+  eventId?: string;
+  combined?: boolean;
+  start: number;
+  end: number;
+};

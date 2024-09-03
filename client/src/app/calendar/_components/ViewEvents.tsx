@@ -40,6 +40,7 @@ const EVENTS_QUERY = graphql(`
             id
             name
             cabin {
+              id
               name
             }
           }
@@ -144,6 +145,10 @@ export default function ViewEvents() {
   useEffect(() => {
     const dom = window.document;
     if (!dom) return;
+
+    const withModifiers = (e: KeyboardEvent) =>
+      e.ctrlKey || e.shiftKey || e.altKey || e.metaKey;
+
     const cb = (e: KeyboardEvent) => {
       // make sure user isn't typing
       const target = e.target as HTMLElement;
@@ -157,12 +162,15 @@ export default function ViewEvents() {
       // handle keyboard shortcuts
       switch (e.code) {
         case 'KeyP':
+          if (withModifiers(e)) break;
           actions.last();
           break;
         case 'KeyN':
+          if (withModifiers(e)) break;
           actions.next();
           break;
         case 'KeyT':
+          if (withModifiers(e)) break;
           actions.today();
           break;
       }
@@ -171,13 +179,12 @@ export default function ViewEvents() {
     // attach event listener
     dom.addEventListener('keydown', cb);
     return () => dom.removeEventListener('keydown', cb);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [actions]);
 
   return (
     <>
       <InvalidateProvider cb={invalidate}>
-        <div className="flex flex-col gap-4">
+        <div className="relative flex flex-col gap-4">
           {/* header bar */}
           <TimelineControls {...props} />
 

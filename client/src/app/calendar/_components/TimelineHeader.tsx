@@ -16,7 +16,7 @@ export default function TimelineHeader({ ...props }: CalendarProps) {
           <button
             key={date}
             onClick={() => updatePeriod(date)}
-            className="group col-span-2 flex flex-col items-center justify-center gap-1 p-2 text-sm sm:flex-row"
+            className="group col-span-2 flex flex-col items-center justify-center gap-1 p-2 text-sm md:flex-row"
           >
             <span className="uppercase">{dateFormat(date, 'ddd')}</span>
             <span

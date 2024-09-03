@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 
 import { useWindowSize } from '@uidotdev/usehooks';
-import { breakpoints } from '@/util/breakpoints';
+import { breakpoints } from '@/util/tailwindVars';
 
 export function useDefaultDays() {
   const size = useWindowSize();
