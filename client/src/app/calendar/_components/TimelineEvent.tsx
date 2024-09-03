@@ -8,20 +8,8 @@ import { clamp } from '@/util/math';
 
 import { CalendarProps, EventType } from './ViewEvents';
 import EventPopup from './EventPopup';
-import { clmx, clx } from '@/util/classConcat';
-
-const EVENT_COLORS = {
-  DEFAULT: {
-    main: clx(
-      'border-emerald-600 bg-emerald-600/30 text-emerald-950 ring-emerald-600',
-    ),
-    specialty: clx('text-emerald-800'),
-  },
-  GRAY: {
-    main: clx('border-slate-500/50 bg-slate-300/50 ring-slate-300'),
-    specialty: clx('text-slate-800'),
-  },
-} satisfies Record<string, { main: string; specialty: string }>;
+import { clmx } from '@/util/classConcat';
+import { CABIN_COLORS, CabinColor, getCabinColor } from '../_util/cabinColors';
 
 export default function TimelineEvent({
   event,
@@ -32,14 +20,31 @@ export default function TimelineEvent({
   ...props
 }: {
   event: EventType;
-  theme?: keyof typeof EVENT_COLORS;
+  theme?: CabinColor;
   highlightRoom?: string;
   placeholder?: EventPlaceholder;
   onOpen?: () => void;
 } & CalendarProps) {
   const { dates: dateLimits, days } = props;
 
-  const css = theme ? EVENT_COLORS[theme] : EVENT_COLORS.DEFAULT;
+  // get correct color scheme
+  const css = useMemo(() => {
+    const parse = (s?: CabinColor) =>
+      CABIN_COLORS[s ?? 'DEFAULT'] ?? CABIN_COLORS.DEFAULT;
+
+    if (theme) return parse(theme);
+
+    if (event.reservations.length) {
+      const r = event.reservations[0];
+      if (r.room && 'id' in r.room) {
+        let c = getCabinColor(r.room.id);
+        if (c) return parse(c);
+        c = getCabinColor(r.room.cabin?.id);
+        if (c) return parse(c);
+      }
+    }
+    return parse();
+  }, [event.reservations, theme]);
 
   // calculate grid coordinates
   const loc = useMemo(() => {
@@ -49,10 +54,15 @@ export default function TimelineEvent({
     );
     const fromEnd = dateDiff(placeholder?.end ?? event.dateEnd, dateLimits.end);
 
-    const start = clamp((fromStart + 1) * 2, 1, days * 2);
-    const end = clamp((fromEnd - 1) * 2, -days * 2, -1);
-
+    let start = clamp((fromStart + 1) * 2, 1, days * 2);
+    let end = clamp((fromEnd - 1) * 2, -days * 2, -1);
     const length = days * 2 + end + 2 - start;
+
+    // correct for single days
+    if (length === 0) {
+      start--;
+      end++;
+    }
 
     return {
       start,
@@ -65,7 +75,9 @@ export default function TimelineEvent({
   const resText = useMemo(() => {
     if (placeholder?.combined)
       return (
-        <span className={clmx('font-bold', css.specialty)}>(multiple)</span>
+        <span className={clmx('font-bold', css.specialty)}>
+          {placeholder.combined}+ people
+        </span>
       );
 
     if (!highlightRoom) return null;
@@ -146,7 +158,7 @@ export default function TimelineEvent({
 
 export type EventPlaceholder = {
   eventId?: string;
-  combined?: boolean;
+  combined?: number;
   start: number;
   end: number;
 };

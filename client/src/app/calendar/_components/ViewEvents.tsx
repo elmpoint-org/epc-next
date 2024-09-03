@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useGraphQuery } from '@/query/query';
@@ -125,6 +125,9 @@ export default function ViewEvents() {
     query.refetch();
   }
 
+  // room collapse state
+  const [roomCollapse, setRoomCollapse] = useState<RoomCollapse>('CLOSED');
+
   // CALENDAR PROPS
   const props: CalendarProps = {
     events,
@@ -137,6 +140,10 @@ export default function ViewEvents() {
       startDate,
       setStartDate,
       setDays,
+    },
+    roomCollapse: {
+      state: roomCollapse,
+      set: setRoomCollapse,
     },
   };
 
@@ -211,4 +218,9 @@ export type CalendarProps = {
     startDate: Date;
     setStartDate: (d: Date) => void;
   };
+  roomCollapse: {
+    state: RoomCollapse;
+    set: (s: RoomCollapse) => void;
+  };
 };
+export type RoomCollapse = 'OPEN' | 'CLOSED' | 'MIXED';

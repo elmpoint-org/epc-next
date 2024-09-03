@@ -27,7 +27,7 @@ const Shell = ({ children }: Children) => {
         <Navbar navState={navState} />
 
         <AppShell.Main className="ml-0 flex flex-col bg-slate-200 p-4 pt-12 lg:ml-[300px]">
-          <div className="container mx-auto flex print:!max-w-none flex-1 flex-col">
+          <div className="container mx-auto flex flex-1 flex-col print:!max-w-none">
             {children}
           </div>
         </AppShell.Main>

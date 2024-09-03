@@ -1,11 +1,10 @@
-import { ForwardedRef, Fragment, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Fragment, useMemo, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { ActionIcon } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
-import { breakpoints, theme } from '@/util/tailwindVars';
+import { theme } from '@/util/tailwindVars';
+import { LayoutGroup, motion } from 'framer-motion';
 
 import { D1, useDatesArray } from '../_util/dateUtils';
 import { CalendarProps } from './ViewEvents';
@@ -15,7 +14,8 @@ import { ANY_ROOM } from '@@/db/schema/Room/CABIN_DATA';
 
 import TimelineHeader, { TimelineHeaderFrame } from './TimelineHeader';
 import TimelineEvent, { EventPlaceholder } from './TimelineEvent';
-import { useWindowSize } from '@uidotdev/usehooks';
+import RoomSwatch from './RoomSwatch';
+import { useDisplayByRooms } from '../_util/displayByRooms';
 
 export default function Timeline(props: CalendarProps) {
   const { days } = props;
@@ -25,20 +25,7 @@ export default function Timeline(props: CalendarProps) {
   const gridTemplateColumns = gridCols(days);
 
   // get byRoom option
-  const windowSize = useWindowSize();
-  const sq = useSearchParams();
-  const router = useRouter();
-  const SQ_BYROOM = 'rooms';
-  const displayByRoom = useMemo(() => {
-    if (windowSize.width && windowSize.width < breakpoints('sm')) return false;
-    const str = sq.get(SQ_BYROOM);
-    return str === 'true' || str === '1';
-  }, [sq, windowSize.width]);
-  function setDisplayByRoom(nv: boolean) {
-    const query = new URLSearchParams(sq);
-    query.set(SQ_BYROOM, nv ? '1' : '0');
-    router.push('?' + query.toString(), { scroll: false });
-  }
+  const [displayByRoom] = useDisplayByRooms();
 
   // prep cabin sidebar
   const { initialOptions: rootCabins } = useGetRooms();
@@ -46,54 +33,69 @@ export default function Timeline(props: CalendarProps) {
 
   return (
     <>
-      {/* // TODO delete */}
-      <div className="absolute inset-x-0 -top-2 hidden flex-row justify-center sm:flex">
-        <button onClick={() => setDisplayByRoom(!displayByRoom)}>view</button>
-      </div>
-
-      <div className="flex flex-row gap-4">
+      <div
+        className="group/tm flex flex-row gap-4"
+        data-d={displayByRoom || null}
+      >
         {/* events area */}
         <div className="flex flex-1 flex-col gap-2">
           <hr className="border-slate-300" />
-          <div className="relative flex min-h-96 flex-col">
-            {/* divider lines */}
-            <div
-              className="absolute inset-0 grid divide-x divide-slate-300"
-              style={{ gridTemplateColumns, left: sidebarWidth }}
-            >
-              {dates.map((_, i) => (
-                <div key={i} className="col-span-2" />
-              ))}
-            </div>
-
-            {/* header */}
-            <div className="sticky top-2 z-50 flex flex-row after:absolute after:inset-x-0 after:-top-2 after:h-2 after:bg-dwhite">
-              <TimelineHeaderFrame placeholderWidth={sidebarWidth} />
-              <TimelineHeader {...props} />
-            </div>
-
-            {/* events grid */}
-            <div
-              className="z-40 flex flex-col"
-              style={
-                { '--row-color': theme.colors.dwhite } as React.CSSProperties
-              }
-            >
-              {/* show by room */}
-              {displayByRoom &&
-                rootCabins.map((rc) => (
-                  <RoomEventsRow
-                    key={rc.id}
-                    roomOrCabin={rc}
-                    width={sidebarWidth}
-                    {...props}
-                  />
+          <LayoutGroup>
+            <div className="relative flex min-h-96 flex-col">
+              {/* divider lines */}
+              <div
+                className="absolute inset-0 -mx-1 grid divide-x divide-slate-300 group-data-[d]/tm:ml-1"
+                style={{ gridTemplateColumns, left: sidebarWidth }}
+              >
+                {dates.map((_, i) => (
+                  <div key={i} className="col-span-2" />
                 ))}
-              {/* show disorganized */}
-              {!displayByRoom && <EventsGrid {...props} />}
+              </div>
+
+              {/* header */}
+              <div className="sticky top-2 z-50 flex flex-row after:absolute after:inset-x-0 after:-top-2 after:h-2 after:bg-dwhite">
+                <TimelineHeaderFrame placeholderWidth={sidebarWidth} />
+                {displayByRoom && (
+                  <TimelineHeaderFrame placeholderWidth="0.5rem" noDivider />
+                )}
+                <TimelineHeader {...props} />
+              </div>
+
+              {/* events grid */}
+              <div
+                className="z-40 flex flex-col"
+                style={
+                  { '--row-color': theme.colors.dwhite } as React.CSSProperties
+                }
+              >
+                {/* show by room */}
+                {displayByRoom && (
+                  <>
+                    {/* room rows */}
+                    {rootCabins.map((rc) => (
+                      <RoomEventsRow
+                        key={rc.id}
+                        roomOrCabin={rc}
+                        width={sidebarWidth}
+                        {...props}
+                      />
+                    ))}
+
+                    {/* no room  */}
+                    <RoomEventsRow
+                      roomOrCabin={null}
+                      width={sidebarWidth}
+                      {...props}
+                    />
+                  </>
+                )}
+                {/* show disorganized */}
+                {!displayByRoom && <EventsGrid {...props} />}
+              </div>
             </div>
-          </div>
-          {!displayByRoom && <hr className="border-slate-300" />}
+          </LayoutGroup>
+
+          <hr className="border-slate-300" />
         </div>
       </div>
     </>
@@ -103,81 +105,118 @@ export default function Timeline(props: CalendarProps) {
 function RoomEventsRow({
   roomOrCabin,
   width,
-  fr,
   ...props
 }: {
-  roomOrCabin: Room | Cabin;
+  roomOrCabin: Room | Cabin | null;
   width?: string;
-  fr?: ForwardedRef<HTMLDivElement>;
 } & CalendarProps) {
+  const { roomCollapse } = props;
+  const [localOpen, setLocalOpen] = useState(false);
+  const isOpen = useMemo(() => {
+    if (roomCollapse.state === 'OPEN') {
+      setLocalOpen(true);
+      return true;
+    }
+    if (roomCollapse.state === 'CLOSED') {
+      setLocalOpen(false);
+      return false;
+    }
+    return localOpen;
+  }, [localOpen, roomCollapse.state]);
+  function open() {
+    roomCollapse.set('MIXED');
+    setLocalOpen(true);
+  }
+  function toggle() {
+    roomCollapse.set('MIXED');
+    setLocalOpen((s) => !s);
+  }
+
   const cr = roomOrCabin;
 
   const { rooms } = useGetRooms();
 
-  const [isOpen, { toggle, open }] = useDisclosure();
-  const isCabin = !('beds' in cr);
-  const isRootRoom = 'beds' in cr && cr.cabin === null;
+  const isCabin = cr && !('beds' in cr);
+  const isRootRoom = cr && 'beds' in cr && cr.cabin === null;
 
   // offset for collapsed cabins
   const namesOffset = useMemo(() => Math.random() * 32, []);
 
   return (
     <>
-      <div
-        ref={fr}
-        className="_data-[r]:bg-slate-200/25 group flex flex-row *:p-2"
+      <motion.div
+        layout
+        className="group flex flex-row gap-2"
         style={
-          isCabin || isRootRoom
+          isCabin || isRootRoom || cr === null
             ? ({
                 '--row-color': '#eef2f7',
               } as React.CSSProperties)
             : undefined
         }
-        data-c={isCabin || isRootRoom || null}
-        data-r={(!isCabin && !isRootRoom) || null}
+        data-c={isCabin || isRootRoom || cr === null || null}
+        data-r={(!isCabin && !isRootRoom && cr !== null) || null}
       >
         {/* title section */}
-        <div
-          className="border-r border-t border-r-slate-400 border-t-slate-300/75 [border-top-style:dashed] *:h-[2.375rem] group-first:!border-t-transparent group-data-[c]:border-t-slate-400"
-          style={{ width }}
-        >
-          {isCabin ? (
-            // CABIN TITLE
-            <div
-              className="flex cursor-pointer flex-row items-center gap-2 group-hover:font-bold"
-              onClick={toggle}
-            >
-              <ActionIcon
-                size="sm"
-                color="slate"
-                variant="subtle"
+        <div className="flex flex-row gap-2" style={{ width }}>
+          <div className="flex-1 border-t border-dashed border-slate-300/60 p-2 *:h-[2.375rem] group-first:!border-transparent group-data-[c]:border-solid group-data-[c]:border-slate-300">
+            {isCabin ? (
+              // CABIN TITLE
+              <div
+                className="flex cursor-pointer flex-row items-center gap-2 group-hover:font-bold"
                 onClick={toggle}
               >
-                {isOpen ? <IconChevronDown /> : <IconChevronRight />}
-              </ActionIcon>
-              <div className="">{cr.name}</div>
-            </div>
-          ) : (
-            // ROOM TITLE
-            <div
-              className="flex flex-row items-center rounded-md transition duration-200 group-hover:font-bold"
-              data-hb={!isRootRoom || null} // hover bg
-            >
-              <div
-                className="mr-4 flex w-8 flex-row items-center data-[r]:hidden"
-                data-r={!cr.cabin || null}
-              />
-              <div className="flex-1">
-                {cr.name !== ANY_ROOM ? cr.name : <em>(no room)</em>}
+                <ActionIcon
+                  size="sm"
+                  color="slate"
+                  variant="subtle"
+                  onClick={toggle}
+                >
+                  {isOpen ? <IconChevronDown /> : <IconChevronRight />}
+                </ActionIcon>
+                <div className="flex flex-row items-center gap-2">
+                  <RoomSwatch cabinOrRoomId={cr.id} />
+                  <span>{cr.name}</span>
+                </div>
               </div>
-            </div>
-          )}
+            ) : (
+              // ROOM TITLE
+              <div
+                className="flex flex-row items-center rounded-md transition duration-200 group-hover:font-bold"
+                data-hb={!isRootRoom || null} // hover bg
+              >
+                <div
+                  className="mr-4 flex w-8 flex-row items-center data-[r]:hidden"
+                  data-r={!isCabin || null}
+                />
+                <div className="flex flex-1 flex-row items-center gap-2">
+                  <RoomSwatch cabinOrRoomId={cr?.id} />
+                  <span>
+                    {cr?.name !== ANY_ROOM ? (
+                      cr?.name ?? (
+                        <span className="text-sm !font-normal">
+                          No room data
+                        </span>
+                      )
+                    ) : (
+                      <em>no room</em>
+                    )}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* right divider */}
+          <div className="flex-shrink-0 border-r border-slate-400" />
         </div>
 
         {/* events */}
-        <div className="flex flex-1 flex-row border-t border-dashed border-slate-300/75 group-first:!border-transparent group-data-[c]:border-slate-400 group-data-[r]:bg-slate-200/25">
+        <div className="flex flex-1 flex-row border-t border-dashed border-slate-300/60 py-2 group-first:!border-transparent group-data-[c]:border-solid group-data-[c]:border-slate-300 group-data-[r]:bg-slate-200/25">
           {/* show events in room */}
-          {!isCabin && <EventsGrid roomId={cr.id} {...props} />}
+          {!isCabin && (
+            <EventsGrid roomId={cr?.id} noRoom={cr === null} {...props} />
+          )}
 
           {/* show collapsed events in cabin */}
           {isCabin && !isOpen && (
@@ -188,24 +227,26 @@ function RoomEventsRow({
           {isCabin && isOpen && (
             <div className="relative flex-1">
               <div
-                className="absolute inset-0 flex select-none flex-row items-center gap-8 overflow-hidden px-4 text-sm text-slate-400 md:gap-24 xl:gap-48 xl:px-12"
+                className="absolute inset-0 -inset-y-2 flex select-none flex-row items-center gap-8 overflow-hidden bg-dwhite/80 px-4 text-sm text-slate-400 md:gap-24 xl:gap-48 xl:px-12"
                 style={{ marginLeft: `${namesOffset}px` }}
               >
                 {Array(12)
                   .fill(0)
                   .map((_, i) => (
-                    <div
+                    <motion.div
+                      layout
+                      animate={{ opacity: 1 }}
                       key={i}
-                      className="-mx-1 whitespace-nowrap bg-dwhite/90 px-1 py-0.5"
+                      className="-mx-1 whitespace-nowrap px-1 opacity-0"
                     >
                       {cr.name}
-                    </div>
+                    </motion.div>
                   ))}
               </div>
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* child rooms */}
       {isCabin &&
@@ -225,12 +266,25 @@ function RoomEventsRow({
 function EventsGrid({
   roomId,
   cabinId,
+  noRoom,
   onOpen,
   ...props
-}: { roomId?: string; cabinId?: string; onOpen?: () => void } & CalendarProps) {
+}: {
+  roomId?: string;
+  cabinId?: string;
+  noRoom?: boolean;
+  onOpen?: () => void;
+} & CalendarProps) {
   const { events: events_in, days, dates } = props;
 
   const events = useMemo(() => {
+    // filter for norooms if requested
+    if (noRoom)
+      return events_in?.filter(
+        (evt) =>
+          !evt.reservations.filter((r) => r.room && 'id' in r.room).length,
+      );
+
     // filter for cabin overview
     if (cabinId)
       return events_in?.filter((evt) =>
@@ -246,7 +300,7 @@ function EventsGrid({
         (r) => r.room && 'id' in r.room && r.room.id === roomId,
       ),
     );
-  }, [cabinId, events_in, roomId]);
+  }, [cabinId, events_in, noRoom, roomId]);
 
   // COLLAPSED PLACEHOLDERS
   const cabinPlaceholders = useMemo(() => {
@@ -270,6 +324,7 @@ function EventsGrid({
       } else {
         if (last && last?.combined && last.end === t) {
           last.end = t + D1;
+          if (last.combined < matches.length) last.combined = matches.length;
           continue;
         }
       }
@@ -277,15 +332,13 @@ function EventsGrid({
       // OTHERWISE, make new entry
       placeholders.push({
         eventId: matches.length === 1 ? matches[0].id : undefined,
-        combined: matches.length > 1,
+        combined: matches.length > 1 ? matches.length : 0,
         start:
           !placeholders.length && t === dates.start && matches[0]?.dateStart < t
             ? t - D1
             : t,
         end:
-          t + D1 === dates.end && matches[0]?.dateEnd > t + D1
-            ? t + 2 * D1
-            : t + D1,
+          t === dates.end && matches[0]?.dateEnd > t + D1 ? t + 2 * D1 : t + D1,
       });
     }
 
@@ -316,7 +369,7 @@ function EventsGrid({
                 key={i}
                 placeholder={p}
                 onOpen={onOpen}
-                theme={p.combined ? 'GRAY' : undefined}
+                theme={p.combined ? 'NATIVE' : undefined}
                 event={
                   (p.eventId?.length &&
                     events?.find((it) => it.id === p.eventId)) || {

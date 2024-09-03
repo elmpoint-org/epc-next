@@ -67,6 +67,10 @@ export const cabinDelete = h<M.MutationResolvers['cabinDelete']>(
     const cabin = sources.cabin.get(id);
     if (!cabin) throw err('CABIN_NOT_FOUND');
 
+    // delete all rooms in cabin
+    const rooms = await sources.room.findBy('cabinId', id);
+    await sources.room.deleteMultiple(rooms.map((r) => r.id));
+
     return sources.cabin.delete(id);
   }
 );
