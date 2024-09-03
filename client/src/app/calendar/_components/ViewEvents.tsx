@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useGraphQuery } from '@/query/query';
@@ -14,11 +14,11 @@ import {
 } from '../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
 import { useDefaultDays } from '../_util/defaultDays';
-import { SetState } from '@/util/stateType';
+import { createCallbackCtx } from '@/app/_ctx/callback';
 
 import Timeline from './Timeline';
 import TimelineControls from './TimelineControls';
-import { createCallbackCtx } from '@/app/_ctx/callback';
+import { useCalendarControls } from '../_util/controls';
 
 const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -40,6 +40,7 @@ const EVENTS_QUERY = graphql(`
             id
             name
             cabin {
+              id
               name
             }
           }
@@ -124,6 +125,10 @@ export default function ViewEvents() {
     query.refetch();
   }
 
+  // room collapse state
+  const [roomCollapse, setRoomCollapse] = useState<RoomCollapse>('CLOSED');
+
+  // CALENDAR PROPS
   const props: CalendarProps = {
     events,
     isLoading: query.isFetching,
@@ -136,19 +141,62 @@ export default function ViewEvents() {
       setStartDate,
       setDays,
     },
+    roomCollapse: {
+      state: roomCollapse,
+      set: setRoomCollapse,
+    },
   };
+
+  // KEYBOARD SHORTCUTS
+  const actions = useCalendarControls(props);
+  useEffect(() => {
+    const dom = window.document;
+    if (!dom) return;
+
+    const withModifiers = (e: KeyboardEvent) =>
+      e.ctrlKey || e.shiftKey || e.altKey || e.metaKey;
+
+    const cb = (e: KeyboardEvent) => {
+      // make sure user isn't typing
+      const target = e.target as HTMLElement;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target?.isContentEditable
+      )
+        return;
+
+      // handle keyboard shortcuts
+      switch (e.code) {
+        case 'KeyP':
+          if (withModifiers(e)) break;
+          actions.last();
+          break;
+        case 'KeyN':
+          if (withModifiers(e)) break;
+          actions.next();
+          break;
+        case 'KeyT':
+          if (withModifiers(e)) break;
+          actions.today();
+          break;
+      }
+    };
+
+    // attach event listener
+    dom.addEventListener('keydown', cb);
+    return () => dom.removeEventListener('keydown', cb);
+  }, [actions]);
 
   return (
     <>
       <InvalidateProvider cb={invalidate}>
-        <div className="flex flex-col gap-4">
+        <div className="relative flex flex-col gap-4">
           {/* header bar */}
           <TimelineControls {...props} />
 
           {/* timeline view */}
           <Timeline {...props} />
-
-          <hr />
         </div>
       </InvalidateProvider>
     </>
@@ -170,4 +218,9 @@ export type CalendarProps = {
     startDate: Date;
     setStartDate: (d: Date) => void;
   };
+  roomCollapse: {
+    state: RoomCollapse;
+    set: (s: RoomCollapse) => void;
+  };
 };
+export type RoomCollapse = 'OPEN' | 'CLOSED' | 'MIXED';

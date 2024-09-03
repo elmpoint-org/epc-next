@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 import {
   ActionIcon,
@@ -11,32 +11,32 @@ import { DatePicker } from '@mantine/dates';
 import {
   IconArrowLeft,
   IconArrowRight,
+  IconLayoutNavbarCollapseFilled,
+  IconLayoutNavbarExpandFilled,
   IconLoader2,
   IconPlus,
+  IconTable,
+  IconTableFilled,
 } from '@tabler/icons-react';
 
 import { CalendarProps } from './ViewEvents';
 import { dayStyles } from '../_util/dayStyles';
-import {
-  D1,
-  dateFormat,
-  dateStartOfWeek,
-  dateTS,
-  dateTSLocal,
-} from '../_util/dateUtils';
+import { dateFormat, dateTSLocal } from '../_util/dateUtils';
 import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
+import { useCalendarControls } from '../_util/controls';
 
 import { Transition } from '@headlessui/react';
 import EventEditWindow from './EventEditWindow';
+import { useDisplayByRooms } from '../_util/displayByRooms';
 
 export default function TimelineControls(props: CalendarProps) {
   const {
     isLoading,
-    updatePeriod,
     dates,
     periodState: { days, setDays, startDate, setStartDate },
+    roomCollapse,
   } = props;
 
   const [datePickerOpen, setDatePickerOpen] = useState(false);
@@ -48,6 +48,14 @@ export default function TimelineControls(props: CalendarProps) {
   useEffect(() => {
     setDateShown(startDate);
   }, [startDate]);
+
+  const actions = useCalendarControls(props);
+
+  const [isRoomLoading, roomLoading] = useTransition();
+  const [displayByRoom, setDisplayByRoom] = useDisplayByRooms();
+  function updateByRoom(nv: boolean) {
+    roomLoading(async () => setDisplayByRoom(nv));
+  }
 
   // new stay prompt
   const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
@@ -92,7 +100,7 @@ export default function TimelineControls(props: CalendarProps) {
           <div className="flex flex-row items-center gap-1 px-4">
             <ActionIcon
               aria-label="previous period"
-              onClick={() => updatePeriod(dates.start - D1 * daysWithDefault)}
+              onClick={actions.last}
               color="slate"
               variant="subtle"
             >
@@ -102,18 +110,13 @@ export default function TimelineControls(props: CalendarProps) {
               size="compact-md"
               variant="subtle"
               color="slate"
-              onClick={() => {
-                let today = dateTS(new Date());
-                if (daysWithDefault === 7)
-                  today = dateStartOfWeek(today, false);
-                updatePeriod(today);
-              }}
+              onClick={actions.today}
             >
               Today
             </Button>
             <ActionIcon
-              aria-label="previous period"
-              onClick={() => updatePeriod(dates.start + D1 * daysWithDefault)}
+              aria-label="next period"
+              onClick={actions.next}
               color="slate"
               variant="subtle"
             >
@@ -148,6 +151,34 @@ export default function TimelineControls(props: CalendarProps) {
               }}
             />
             <span>days</span>
+          </div>
+
+          <div className="self-stretch border-l border-slate-300"></div>
+
+          {/* rooms controls */}
+          <div className="flex flex-row items-center gap-2">
+            <ActionIcon
+              variant={displayByRoom ? 'light' : 'subtle'}
+              color={displayByRoom ? 'emerald' : 'slate'}
+              loading={isRoomLoading}
+              onClick={() => updateByRoom(!displayByRoom)}
+            >
+              {displayByRoom ? <IconTableFilled /> : <IconTable />}
+            </ActionIcon>
+            <ActionIcon
+              variant="subtle"
+              color="slate"
+              onClick={() => roomCollapse.set('CLOSED')}
+            >
+              <IconLayoutNavbarCollapseFilled />
+            </ActionIcon>
+            <ActionIcon
+              variant="subtle"
+              color="slate"
+              onClick={() => roomCollapse.set('OPEN')}
+            >
+              <IconLayoutNavbarExpandFilled />
+            </ActionIcon>
           </div>
 
           <div className="self-stretch border-l border-slate-300"></div>

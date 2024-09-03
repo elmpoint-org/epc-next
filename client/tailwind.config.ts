@@ -10,7 +10,7 @@ import { calendarSelectors } from './src/app/calendar/_util/selectors';
 
 export const font = ['var(--font-default)', ...defaults.fontFamily.sans];
 
-const config: Config = {
+const config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -30,5 +30,5 @@ const config: Config = {
     },
   },
   plugins: [typography, containers, tiptapSelectors, calendarSelectors],
-};
+} satisfies Config;
 export default config;

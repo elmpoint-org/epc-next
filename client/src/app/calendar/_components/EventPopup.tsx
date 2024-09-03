@@ -1,4 +1,4 @@
-import { useTransition } from 'react';
+import { Fragment, useTransition } from 'react';
 
 import { CloseButton, PopoverPanel, type Popover } from '@headlessui/react';
 import { ActionIcon, ScrollArea } from '@mantine/core';
@@ -11,7 +11,7 @@ import {
   IconX,
 } from '@tabler/icons-react';
 
-import { clx } from '@/util/classConcat';
+import { clmx, clx } from '@/util/classConcat';
 import { dateFormat } from '../_util/dateUtils';
 import { EventType } from './ViewEvents';
 import { IconType } from '@/util/iconType';
@@ -20,11 +20,19 @@ import { useReverseCbTrigger } from '@/util/reverseCb';
 import { TransitionProvider } from '@/app/_ctx/transition';
 
 import EventEditWindow from './EventEditWindow';
+import RoomSwatch from './RoomSwatch';
+import { getCabinColorObject } from '../_util/cabinColors';
 
 /**
  * place EventPopup inside a headlessui {@link Popover} element for functionality.
  */
-export default function EventPopup({ event }: { event: EventType }) {
+export default function EventPopup({
+  event,
+  highlightRoom,
+}: {
+  event: EventType;
+  highlightRoom?: string;
+}) {
   // stay editor setup
   const { prop: triggerEditStay, trigger: runEditStay } = useReverseCbTrigger();
   const transition = useTransition();
@@ -108,10 +116,22 @@ export default function EventPopup({ event }: { event: EventType }) {
             <div className="grid grid-cols-[min-content_1fr] gap-5">
               {/* dates */}
               <IconRow icon={IconClock}>
-                <div className="flex flex-row gap-2">
-                  <span>{dateFormat(event.dateStart, 'dddd, MMM D')}</span>
+                <div className="flex flex-row gap-2 text-center leading-snug">
+                  <span>
+                    <span>{dateFormat(event.dateStart, 'dddd')}</span>
+                    <span>, </span>
+                    <span className="whitespace-nowrap">
+                      {dateFormat(event.dateStart, 'MMM D')}
+                    </span>
+                  </span>
                   <span className="text-slate-400">–</span>
-                  <span>{dateFormat(event.dateEnd, 'dddd, MMM D')}</span>
+                  <span>
+                    <span>{dateFormat(event.dateEnd, 'dddd')}</span>
+                    <span>, </span>
+                    <span className="whitespace-nowrap">
+                      {dateFormat(event.dateEnd, 'MMM D')}
+                    </span>
+                  </span>
                 </div>
               </IconRow>
 
@@ -121,11 +141,11 @@ export default function EventPopup({ event }: { event: EventType }) {
                 show={!!event.description.length}
               >
                 <div>
-                  {event.description.split('\n').map((line) => (
-                    <>
+                  {event.description.split('\n').map((line, i) => (
+                    <Fragment key={i}>
                       {line}
                       <br className="last:hidden" />
-                    </>
+                    </Fragment>
                   ))}
                 </div>
               </IconRow>
@@ -135,40 +155,69 @@ export default function EventPopup({ event }: { event: EventType }) {
                 <div className="flex flex-col gap-2">
                   {event.reservations
                     .filter((r) => r.room)
-                    .map((r, i) => (
-                      <div
-                        key={i}
-                        className="grid grid-cols-[min-content_1fr] gap-x-3 gap-y-2 rounded-lg border border-slate-300 p-4"
-                      >
-                        {/* person's name */}
-                        <IconUser stroke={1.5} className="size-4 self-center" />
-                        <span>
-                          {r.name}
-                          {!r.name.length && (
-                            <span className="italic">no name</span>
-                          )}
-                        </span>
+                    .map((r, i) => {
+                      const highlighted =
+                        r.room && 'id' in r.room && r.room.id === highlightRoom;
+                      const rcId =
+                        r.room && 'id' in r.room
+                          ? r.room?.cabin?.id ?? r.room?.id
+                          : undefined;
+                      const css = getCabinColorObject(rcId);
 
-                        {/* room name */}
-                        <div />
+                      return (
+                        <div
+                          key={i}
+                          className="group grid grid-cols-[min-content_1fr] gap-x-3 gap-y-2 rounded-lg border border-slate-300 p-4"
+                          data-h={highlighted || null}
+                        >
+                          {/* person's name */}
+                          <IconUser
+                            stroke={1.5}
+                            className="size-4 self-center"
+                          />
+                          <span>
+                            {r.name}
+                            {!r.name.length && (
+                              <span className="italic">no name</span>
+                            )}
+                          </span>
 
-                        <div className="text-sm">
-                          {'text' in r.room! ? (
-                            <div className="italic">{r.room.text}</div>
-                          ) : (
-                            <div className="flex flex-row gap-1">
-                              {r.room?.cabin && (
-                                <span className="font-bold text-slate-600">
-                                  {r.room.cabin.name}
-                                </span>
-                              )}
-                              <span className="first:hidden">&bull;</span>
-                              <span>{r.room?.name}</span>
-                            </div>
-                          )}
+                          {/* room name */}
+                          <div />
+                          <div className="text-sm">
+                            {'text' in r.room! ? (
+                              <div className="italic">{r.room.text}</div>
+                            ) : (
+                              <div
+                                className={clmx(
+                                  '-mx-2 -my-1 flex max-w-fit flex-row items-center gap-1 rounded-md border border-transparent px-2 py-1',
+                                  highlighted && css?.selected,
+                                )}
+                              >
+                                <RoomSwatch
+                                  cabinOrRoomId={rcId}
+                                  className="mr-1"
+                                />
+                                {r.room?.cabin && (
+                                  <>
+                                    <span
+                                      className={clmx(
+                                        'font-bold text-slate-600',
+                                        highlighted && css?.specialty,
+                                      )}
+                                    >
+                                      {r.room.cabin.name}
+                                    </span>
+                                    <span>&bull;</span>
+                                  </>
+                                )}
+                                <span>{r.room?.name}</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                 </div>
               </IconRow>
             </div>

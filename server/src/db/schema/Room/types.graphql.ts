@@ -34,7 +34,7 @@ export default gql`
 
     get all rooms
     """
-    rooms: [Room]!
+    rooms: [Room!]!
 
     """
     **SCOPE: userId**
