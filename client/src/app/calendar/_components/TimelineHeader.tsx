@@ -41,7 +41,7 @@ export function TimelineHeaderFrame({
     <>
       <div
         className="flex flex-1 flex-row overflow-hidden"
-        style={{ maxWidth: placeholderWidth }}
+        style={{ maxWidth: placeholderWidth, minWidth: placeholderWidth }}
       >
         <div
           className="-m-2 mb-2 grid flex-1 grid-flow-row auto-rows-fr divide-x divide-slate-300 border-b border-slate-300 bg-dwhite p-2 shadow-sm after:border-r after:border-slate-400 after:data-[nd]:hidden"

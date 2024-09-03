@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { ActionIcon } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
-import { theme } from '@/util/tailwindVars';
+import { breakpoints, theme } from '@/util/tailwindVars';
 
 import { D1, useDatesArray } from '../_util/dateUtils';
 import { CalendarProps } from './ViewEvents';
@@ -15,6 +15,7 @@ import { ANY_ROOM } from '@@/db/schema/Room/CABIN_DATA';
 
 import TimelineHeader, { TimelineHeaderFrame } from './TimelineHeader';
 import TimelineEvent, { EventPlaceholder } from './TimelineEvent';
+import { useWindowSize } from '@uidotdev/usehooks';
 
 export default function Timeline(props: CalendarProps) {
   const { days } = props;
@@ -24,13 +25,15 @@ export default function Timeline(props: CalendarProps) {
   const gridTemplateColumns = gridCols(days);
 
   // get byRoom option
+  const windowSize = useWindowSize();
   const sq = useSearchParams();
   const router = useRouter();
   const SQ_BYROOM = 'rooms';
   const displayByRoom = useMemo(() => {
+    if (windowSize.width && windowSize.width < breakpoints('sm')) return false;
     const str = sq.get(SQ_BYROOM);
     return str === 'true' || str === '1';
-  }, [sq]);
+  }, [sq, windowSize.width]);
   function setDisplayByRoom(nv: boolean) {
     const query = new URLSearchParams(sq);
     query.set(SQ_BYROOM, nv ? '1' : '0');
@@ -44,7 +47,7 @@ export default function Timeline(props: CalendarProps) {
   return (
     <>
       {/* // TODO delete */}
-      <div className="absolute inset-x-0 -top-2 flex flex-row justify-center">
+      <div className="absolute inset-x-0 -top-2 hidden flex-row justify-center sm:flex">
         <button onClick={() => setDisplayByRoom(!displayByRoom)}>view</button>
       </div>
 
