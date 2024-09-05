@@ -5,6 +5,7 @@ import { dateTS } from '../../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
 import { ResultOf } from '@graphql-typed-document-node/core';
 import { keepPreviousData } from '@tanstack/react-query';
+import { sortAlphabetical } from '@/util/sort';
 
 // QUERIES
 
@@ -75,12 +76,14 @@ export function useGetRooms(updateId?: string) {
   );
 
   // filter to non-null data
-  const cabins = alphabetical(
+  const cabins = sortAlphabetical(
     (query.data?.cabins ?? []).filter((it): it is Cabin => it !== null),
+    (o) => o.name,
   );
 
-  const rooms = alphabetical(
+  const rooms = sortAlphabetical(
     (query.data?.rooms ?? []).filter((it): it is Room => it !== null),
+    (o) => o.name,
   );
 
   const initialOptions: (Cabin | Room)[] = [
@@ -88,13 +91,4 @@ export function useGetRooms(updateId?: string) {
     ...rooms.filter((it) => it.cabin === null),
   ];
   return { initialOptions, rooms, cabins, query };
-}
-
-type SortInput = { name: string; [key: string]: unknown };
-function alphabetical<T extends SortInput[]>(arr: T) {
-  return arr.sort((a, b) => {
-    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-    return 0;
-  });
 }
