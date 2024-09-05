@@ -6,3 +6,9 @@ export type SharedValues<T, U> = {
 type SharedKeys<T, U> = {
   [K in keyof T & keyof U]: T[K] extends U[K] ? K : never;
 }[keyof T & keyof U];
+
+export type ExtractLiterals<T> = T extends string
+  ? string extends T
+    ? never
+    : T
+  : never;
