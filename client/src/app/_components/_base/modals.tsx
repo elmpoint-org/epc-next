@@ -1,13 +1,13 @@
 'use client';
 
-import { DefaultMantineColor } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import { ExtendedMantineColors } from '@/theme/mantine';
 
 import { clx } from '@/util/classConcat';
 
 export type ModalProps = {
   /** button color */
-  color?: DefaultMantineColor;
+  color?: ExtendedMantineColors;
   /** modal title */
   title?: React.ReactNode;
   /** only customize the inner prose */

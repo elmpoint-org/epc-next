@@ -1,6 +1,14 @@
 import { MantineThemeOverride } from '@mantine/core';
 import { amber, emerald, red, slate } from 'tailwindcss/colors';
 
+export type NewColors =
+  | 'black'
+  | 'white'
+  // ----------
+  | 'emerald'
+  | 'slate'
+  | 'amber';
+
 export const colors: MantineThemeOverride = {
   colors: {
     // generic colors

@@ -4,13 +4,16 @@ import { ResultOf } from '@graphql-typed-document-node/core';
 
 import { IconDoor, IconHomePlus } from '@tabler/icons-react';
 
-import { graphql } from '@/query/graphql';
+import { graphAuth, graphql } from '@/query/graphql';
 import { useGraphQuery } from '@/query/query';
 import { Inside } from '@/util/inferTypes';
 import { UseQueryResult } from '@tanstack/react-query';
 
 import RoomCabinPanel from './RoomCabinPanel';
 import CardButton from '@/app/_components/_base/CardButton';
+import { useCallback, useTransition } from 'react';
+import { err } from '../_functions/errors';
+import { ROOT_CABIN_ID } from '@@/db/schema/Room/CABIN_DATA';
 
 const ROOM_FRAGMENT = graphql(`
   fragment RoomData on Room @_unmask {
@@ -50,9 +53,9 @@ export type CMSRoom = Inside<CMSCabin['rooms']> & {};
 
 export default function CabinsList() {
   const query = useGraphQuery(CABINS_QUERY);
-  function refetch() {
-    query.refetch();
-  }
+  const refetch = useCallback(async () => {
+    await query.refetch();
+  }, [query]);
 
   const cabins = query.data?.cabins;
   const rootRooms = query.data?.roomsNoCabin;
@@ -61,6 +64,53 @@ export default function CabinsList() {
     query,
     refetch,
   };
+
+  const [isLoadingNC, loadingNC] = useTransition();
+  const newCabin = useCallback(() => {
+    loadingNC(async () => {
+      const { data, errors } = await graphAuth(
+        graphql(`
+          mutation CabinCreate($name: String!, $aliases: [String!]!) {
+            cabinCreate(name: $name, aliases: $aliases) {
+              id
+            }
+          }
+        `),
+        { name: '', aliases: [] },
+      );
+      if (errors || !data?.cabinCreate) return err(errors?.[0].code ?? errors);
+      await refetch();
+    });
+  }, [refetch]);
+
+  const [isLoadingNR, loadingNR] = useTransition();
+  const newRootRoom = useCallback(() => {
+    loadingNR(async () => {
+      const { data, errors } = await graphAuth(
+        graphql(`
+          mutation RoomCreate(
+            $name: String!
+            $aliases: [String!]!
+            $cabinId: String!
+            $beds: Int!
+          ) {
+            roomCreate(
+              name: $name
+              aliases: $aliases
+              cabinId: $cabinId
+              beds: $beds
+            ) {
+              id
+            }
+          }
+        `),
+        { name: '', aliases: [], beds: 0, cabinId: ROOT_CABIN_ID },
+      );
+      if (errors || !data?.roomCreate) return err(errors?.[0].code ?? errors);
+
+      await refetch();
+    });
+  }, [refetch]);
 
   return (
     <>
@@ -79,12 +129,16 @@ export default function CabinsList() {
             <CardButton
               className="flex-1 rounded-sm rounded-t-lg"
               icon={IconHomePlus}
+              onClick={newCabin}
+              loading={isLoadingNC}
             >
               Add a cabin
             </CardButton>
             <CardButton
               className="flex-1 rounded-sm rounded-b-lg"
               icon={IconDoor}
+              onClick={newRootRoom}
+              loading={isLoadingNR}
             >
               Add a root room
             </CardButton>
@@ -111,5 +165,5 @@ export default function CabinsList() {
 
 export type CabinRoomProps = {
   query: UseQueryResult<ResultOf<typeof CABINS_QUERY>>;
-  refetch: () => void;
+  refetch: () => Promise<void>;
 };

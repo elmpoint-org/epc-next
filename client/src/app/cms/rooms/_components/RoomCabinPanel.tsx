@@ -2,6 +2,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   useTransition,
 } from 'react';
@@ -16,53 +17,64 @@ import {
 import {
   ActionIcon,
   Button,
-  CloseButton,
   HoverCard,
   HoverCardDropdown,
   HoverCardTarget,
   NumberInput,
   ScrollArea,
-  Switch,
-  SwitchProps,
-  TextInput,
   Tooltip,
 } from '@mantine/core';
-import {
-  IconBed,
-  IconChevronRight,
-  IconPlus,
-  IconRestore,
-} from '@tabler/icons-react';
+import { IconBed, IconChevronRight, IconRestore } from '@tabler/icons-react';
 
 import { CMSCabin, CMSRoom, CabinRoomProps } from './CabinsList';
 import { alphabetical } from '@/util/sort';
 import { SharedValues } from '@/util/inferTypes';
 import { clx } from '@/util/classConcat';
 import { ANY_ROOM } from '@@/db/schema/Room/CABIN_DATA';
-import { SetState } from '@/util/stateType';
+import { graphAuth, graphql } from '@/query/graphql';
+import { confirmModal } from '@/app/_components/_base/modals';
+import { err } from '../_functions/errors';
 
 import RoomSwatch from '@/app/calendar/_components/RoomSwatch';
 import A from '@/app/_components/_base/A';
 import Details from './Details';
-import { graphAuth, graphql } from '@/query/graphql';
-import { notifications } from '@mantine/notifications';
-import { prettyError } from '@/util/prettyErrors';
+import NameInput from './NameInput';
+import OptionSwitch from './OptionSwitch';
+import PlusButton from './PlusButton';
+
+const NEW_RING_DELAY_MS = 6000;
 
 // COMPONENT
-export default function RoomCabinPanel<
-  RC extends CMSCabin | CMSRoom = CMSCabin,
->({
+export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
   cabinOrRoom: serverObject,
   ...props
-}: { cabinOrRoom: RC } & CabinRoomProps) {
-  const { refetch, query } = props;
+}: {
+  cabinOrRoom: RC;
+} & CabinRoomProps) {
+  const { refetch } = props;
 
-  const [rc, setRc] = useState(serverObject);
+  const [rc, setRc] = useState<RC & {}>(serverObject);
 
   const isCabin = 'rooms' in rc;
 
-  // form update function
+  const dom = useRef<HTMLDivElement | null>(null);
 
+  // scroll on mount if component is new
+  const [newRing, setNewRing] = useState(
+    !serverObject.name.length &&
+      ('rooms' in serverObject || !serverObject.cabin),
+  );
+  useEffect(() => {
+    let tm: ReturnType<typeof setTimeout>;
+    if (newRing) {
+      dom.current?.scrollIntoView({ behavior: 'smooth' });
+      tm = setTimeout(() => setNewRing(false), NEW_RING_DELAY_MS);
+    }
+    return () => clearTimeout(tm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // form update function
   /** common values of cabinOrRoom */
   type RCCommon = SharedValues<CMSCabin, CMSRoom>;
   type FormUpdateType = <T = RCCommon>(
@@ -80,13 +92,13 @@ export default function RoomCabinPanel<
 
   const [isLoading, loading] = useTransition();
   const state = useMemo<'SAVED' | 'UNSAVED' | 'LOADING'>(() => {
-    if (isLoading || query.isFetching) return 'LOADING';
+    if (isLoading) return 'LOADING';
     if (!fdeq(rc, serverObject)) return 'UNSAVED';
     return 'SAVED';
-  }, [isLoading, query.isFetching, rc, serverObject]);
+  }, [isLoading, rc, serverObject]);
 
   useEffect(() => {
-    if (!fdeq(serverObject, rc)) setRc(serverObject);
+    if (serverObject && !fdeq(serverObject, rc)) setRc(serverObject);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverObject]);
 
@@ -94,6 +106,7 @@ export default function RoomCabinPanel<
   const handleSubmit = useCallback(() => {
     loading(async () => {
       if (!rc) return;
+      if (!rc.name.length) return err('MISSING_NAME');
 
       if (isCabin) {
         // cabin update
@@ -149,21 +162,80 @@ export default function RoomCabinPanel<
         if (errors || !data?.roomUpdate) return err(errors?.[0].code ?? errors);
       }
 
-      refetch();
+      await refetch();
     });
+  }, [isCabin, rc, refetch]);
 
-    function err(message: unknown, log?: unknown) {
-      console.log(message);
-      notifications.show({
-        color: 'red',
-        message: prettyError(
-          {
-            __DEFAULT: 'An error occurred.',
-          },
-          (s) => `Unknown error: ${s}`,
-        )(message),
-      });
-    }
+  // new room
+  const [isLoadingNR, loadingNR] = useTransition();
+  const newRoom = useCallback(() => {
+    loadingNR(async () => {
+      const { data, errors } = await graphAuth(
+        graphql(`
+          mutation RoomCreate(
+            $name: String!
+            $aliases: [String!]!
+            $cabinId: String!
+            $beds: Int!
+          ) {
+            roomCreate(
+              name: $name
+              aliases: $aliases
+              cabinId: $cabinId
+              beds: $beds
+            ) {
+              id
+            }
+          }
+        `),
+        { name: '', aliases: [], beds: 0, cabinId: rc.id },
+      );
+      if (errors || !data?.roomCreate) return err(errors?.[0].code ?? errors);
+
+      await refetch();
+    });
+  }, [rc.id, refetch]);
+
+  // delete cabin
+  const handleDelete = useCallback(async () => {
+    const yes = await confirmDeleteModal(isCabin);
+    if (!yes) return;
+    if (!confirm('Are you really sure?')) return;
+
+    loading(async () => {
+      if (!rc) return;
+
+      if (isCabin) {
+        // cabin delete
+        const { data, errors } = await graphAuth(
+          graphql(`
+            mutation CabinDelete($id: ID!) {
+              cabinDelete(id: $id) {
+                id
+              }
+            }
+          `),
+          { id: rc.id },
+        );
+        if (errors || !data?.cabinDelete)
+          return err(errors?.[0].code ?? errors);
+      } else {
+        // room delete
+        const { data, errors } = await graphAuth(
+          graphql(`
+            mutation RoomDelete($id: ID!) {
+              roomDelete(id: $id) {
+                id
+              }
+            }
+          `),
+          { id: rc.id },
+        );
+        if (errors || !data?.roomDelete) return err(errors?.[0].code ?? errors);
+      }
+
+      await refetch();
+    });
   }, [isCabin, rc, refetch]);
 
   return (
@@ -176,7 +248,16 @@ export default function RoomCabinPanel<
           handleSubmit();
         }}
       >
-        <div className="flex h-full max-w-[32rem] flex-col gap-2 rounded-md border border-slate-300 bg-dwhite p-6 shadow-sm">
+        <div
+          className={clx(
+            'relative flex h-full max-w-[32rem] flex-col gap-2 rounded-md border border-slate-300 bg-dwhite p-6 shadow-sm',
+            /* new ring */ 'ring-transparent ring-offset-2 transition data-[r]:ring-4 data-[r]:ring-emerald-600',
+          )}
+          data-r={newRing || null}
+        >
+          {/* scroll target */}
+          <div className="absolute inset-x-0 top-0" ref={dom} />
+
           {/* title bar */}
           <div className="flex flex-row items-center justify-between">
             {/* cabin name */}
@@ -208,7 +289,9 @@ export default function RoomCabinPanel<
                 </HoverCardDropdown>
               </HoverCard>
               {/* text */}
-              <h3 className="text-lg">{serverObject.name || 'Cabin'}</h3>
+              <h3 className="text-lg">
+                {serverObject.name || (isCabin ? 'New Cabin' : 'New Room')}
+              </h3>
             </div>
 
             {/* form action buttons */}
@@ -238,13 +321,12 @@ export default function RoomCabinPanel<
           {/* cabin details */}
           <div className="flex flex-col gap-4 py-2">
             {/* name */}
-            <TextInput
-              label="Cabin Name"
-              placeholder="Cabin's name"
+            <NameInput
+              label={isCabin ? 'Cabin Name' : 'Room Name'}
+              placeholder="Enter a name"
               value={rc.name}
-              onChange={({ currentTarget: { value: v } }) =>
-                updateForm({ name: v })
-              }
+              onUpdate={(nv) => updateForm({ name: nv })}
+              onDelete={handleDelete}
             />
 
             {/* ANY room warning */}
@@ -256,41 +338,27 @@ export default function RoomCabinPanel<
             )}
 
             {/* nicknames (aliases) */}
-            <Details
-              summary={<>Nicknames ({rc.aliases.length})</>}
-              // open={isCabin}
-            >
+            <Details summary={<>Nicknames ({rc.aliases.length})</>}>
               {rc.aliases.map((name, i) => (
-                <TextInput
+                <NameInput
                   key={i}
                   value={name}
                   aria-label="alias name"
                   placeholder="Nickname"
-                  onChange={({ currentTarget: { value: v } }) =>
-                    updateForm({ aliases: rc.aliases.with(i, v) })
+                  onUpdate={(nv) =>
+                    updateForm({ aliases: rc.aliases.with(i, nv) })
                   }
-                  rightSection={
-                    <CloseButton
-                      onClick={() => {
-                        if (name.length)
-                          updateForm({ aliases: rc.aliases.with(i, '') });
-                        else
-                          updateForm(({ aliases: a }) => {
-                            const aliases = [...a];
-                            aliases.splice(i, 1);
-                            return { aliases };
-                          });
-                      }}
-                    />
+                  onDelete={() =>
+                    updateForm(({ aliases: a }) => {
+                      const aliases = [...a];
+                      aliases.splice(i, 1);
+                      return { aliases };
+                    })
                   }
                 />
               ))}
 
-              <Button
-                size="compact"
-                justify="center"
-                variant="light"
-                leftSection={<IconPlus className="size-4" />}
+              <PlusButton
                 onClick={() =>
                   updateForm(({ aliases: a }) => {
                     const aliases = [...a];
@@ -300,7 +368,7 @@ export default function RoomCabinPanel<
                 }
               >
                 Add nickname
-              </Button>
+              </PlusButton>
             </Details>
 
             {!isCabin && (
@@ -343,48 +411,53 @@ export default function RoomCabinPanel<
             )}
 
             {/* rooms */}
-            {'rooms' in serverObject && (
+            {isCabin && (
               <Details summary={<>Rooms</>} open>
                 <PopoverGroup className="flex flex-col gap-2">
-                  {serverObject.rooms
-                    .filter((r): r is CMSRoom => !!r)
-                    .sort(alphabetical((c) => c.name))
-                    .map((room) => (
-                      <Popover key={room.id} className="flex flex-col">
-                        <PopoverButton className="group flex flex-row items-center gap-4 rounded-md border border-slate-300 px-4 py-2 text-left text-sm hover:border-slate-600">
-                          <IconBed
-                            className="size-6 text-slate-400"
-                            stroke={1.5}
-                          />
-                          <div className="flex-1">{room.name}</div>
-                          <IconChevronRight className="size-4 text-slate-400 group-hover:text-slate-600" />
-                        </PopoverButton>
+                  {'rooms' in serverObject &&
+                    serverObject.rooms
+                      .filter((r): r is CMSRoom => !!r)
+                      .sort(alphabetical((c) => c.name))
+                      .map((room) => (
+                        <Popover key={room.id} className="flex flex-col">
+                          <PopoverButton className="group flex flex-row items-center gap-4 rounded-md border border-slate-300 px-4 py-2 text-left text-sm hover:border-slate-600">
+                            <IconBed
+                              className="size-6 text-slate-400"
+                              stroke={1.5}
+                            />
+                            <div className="flex-1">{room.name}</div>
+                            <IconChevronRight className="size-4 text-slate-400 group-hover:text-slate-600" />
+                          </PopoverButton>
 
-                        <PopoverPanel
-                          anchor={{
-                            to: 'bottom',
-                            gap: '0.75rem',
-                            padding: '1rem',
-                          }}
-                          transition
-                          className={clx(
-                            'z-[199] flex min-w-[20rem] flex-col !overflow-hidden rounded-md shadow-lg sm:min-w-[24rem]',
-                            /* transition */ 'translate-y-0 transition data-[closed]:-translate-y-2 data-[closed]:opacity-0',
-                          )}
-                        >
-                          <ScrollArea
-                            classNames={{
-                              root: 'flex flex-col',
-                              scrollbar: 'm-0.5',
+                          <PopoverPanel
+                            anchor={{
+                              to: 'bottom',
+                              gap: '0.75rem',
+                              padding: '1rem',
                             }}
+                            transition
+                            className={clx(
+                              'z-[199] flex min-w-[20rem] flex-col !overflow-hidden rounded-md shadow-lg sm:min-w-[24rem]',
+                              /* transition */ 'translate-y-0 transition data-[closed]:-translate-y-2 data-[closed]:opacity-0',
+                            )}
                           >
-                            <div className="t">
-                              <RoomCabinPanel cabinOrRoom={room} {...props} />
-                            </div>
-                          </ScrollArea>
-                        </PopoverPanel>
-                      </Popover>
-                    ))}
+                            <ScrollArea
+                              classNames={{
+                                root: 'flex flex-col',
+                                scrollbar: 'm-0.5',
+                              }}
+                            >
+                              <div className="t">
+                                <RoomCabinPanel cabinOrRoom={room} {...props} />
+                              </div>
+                            </ScrollArea>
+                          </PopoverPanel>
+                        </Popover>
+                      ))}
+
+                  <PlusButton loading={isLoadingNR} onClick={newRoom}>
+                    Add a room
+                  </PlusButton>
                 </PopoverGroup>
               </Details>
             )}
@@ -395,33 +468,28 @@ export default function RoomCabinPanel<
   );
 }
 
-function OptionSwitch({ ...props }: SwitchProps) {
-  return (
-    <>
-      <Switch
-        {...props}
-        classNames={{
-          input: 'peer',
-          track:
-            '[.peer:not(:checked)~&]:border-slate-300 [.peer:not(:checked)~&]:bg-slate-300',
-          thumb: 'border-0',
-          body: 'items-center',
-        }}
-      />
-    </>
-  );
+function confirmDeleteModal(isCabin: boolean) {
+  return confirmModal({
+    color: 'red',
+    title: `Delete ${isCabin ? 'Cabin' : 'Room'}?`,
+    body: (
+      <>
+        <p>
+          Are you certain you want to <b>permanently delete</b> this entire{' '}
+          {!isCabin ? 'room' : 'cabin and all rooms inside it'}?
+        </p>
+
+        <p>
+          <span className="text-red-800">
+            Any calendar reservations that reference this{' '}
+            {isCabin ? 'cabin' : 'room'} will be removed.
+          </span>{' '}
+          (The events will remain, but their inner reservations may be lost
+          forever.)
+        </p>
+      </>
+    ),
+  });
 }
 
-function useObjectUpdate<T>() {
-  function useHook<K extends T>(setStateFunction: SetState<K>) {
-    return useCallback(
-      (updates: Partial<T> | ((c: T) => Partial<T>)) =>
-        setStateFunction((c) => ({
-          ...c,
-          ...(typeof updates === 'function' ? updates(c) : updates),
-        })),
-      [setStateFunction],
-    );
-  }
-  return useHook;
-}
+// -------------------------------------------
