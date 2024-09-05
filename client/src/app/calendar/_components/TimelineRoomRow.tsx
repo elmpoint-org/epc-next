@@ -112,7 +112,7 @@ export default function TimelineRoomRow({
                         </span>
                       )
                     ) : (
-                      <em>no room</em>
+                      <em>any room</em>
                     )}
                   </span>
                 </div>

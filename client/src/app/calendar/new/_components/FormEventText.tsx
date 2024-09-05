@@ -39,7 +39,7 @@ const FormEventText = () => {
 
   return (
     <>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row items-end gap-2">
         <TextInput
           label="Calendar Event Name"
           description="This is how your stay will appear to people checking the calendar."
@@ -47,7 +47,7 @@ const FormEventText = () => {
           onChange={handleTitleChange}
           className="flex-1"
         />
-        <div className="my-1.5 flex flex-col justify-end">
+        <div className="flex-flex-row flex h-[2.25rem] items-center">
           <Tooltip label="Return to auto-generated title">
             <ActionIcon
               disabled={isDefaultTitle}
