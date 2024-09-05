@@ -76,10 +76,14 @@ export default function TimelineRoomRow({
                 onClick={toggle}
               >
                 <ActionIcon
+                  aria-label="toggle expand cabin"
                   size="sm"
                   color="slate"
                   variant="subtle"
-                  onClick={toggle}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggle();
+                  }}
                 >
                   {isOpen ? <IconChevronDown /> : <IconChevronRight />}
                 </ActionIcon>
