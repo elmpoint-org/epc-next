@@ -165,6 +165,7 @@ export default function TimelineControls(props: CalendarProps) {
                 <div className="mr-0 flex flex-col items-center transition-all duration-300 data-[closed]:-mr-9 data-[closed]:opacity-0">
                   <Tooltip label="Expand all cabins">
                     <ActionIcon
+                      aria-label="expand cabins"
                       variant="subtle"
                       color="slate"
                       onClick={() => roomCollapse.set('OPEN')}
@@ -180,6 +181,7 @@ export default function TimelineControls(props: CalendarProps) {
                 <div className="mr-0 flex flex-col items-center transition-all duration-300 data-[closed]:-mr-9 data-[closed]:opacity-0">
                   <Tooltip label="Collapse all cabins">
                     <ActionIcon
+                      aria-label="collapse cabins"
                       variant="subtle"
                       color="slate"
                       onClick={() => roomCollapse.set('CLOSED')}
@@ -193,7 +195,8 @@ export default function TimelineControls(props: CalendarProps) {
 
             <Tooltip label={`${displayByRoom ? 'Hide' : 'Show'} rooms table`}>
               <ActionIcon
-                variant={displayByRoom ? 'light' : 'subtle'}
+                aria-label="toggle rooms table"
+                variant={displayByRoom ? 'filled' : 'subtle'}
                 color={displayByRoom ? 'emerald' : 'slate'}
                 className="ml-1"
                 loading={isRoomLoading}
