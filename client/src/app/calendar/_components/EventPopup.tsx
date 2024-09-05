@@ -1,7 +1,12 @@
 import { Fragment, useTransition } from 'react';
 
 import { CloseButton, PopoverPanel, type Popover } from '@headlessui/react';
-import { ActionIcon, ScrollArea } from '@mantine/core';
+import {
+  ActionIcon,
+  HoverCard,
+  HoverCardTarget,
+  ScrollArea,
+} from '@mantine/core';
 import {
   IconAlignJustified,
   IconBed,
@@ -22,6 +27,8 @@ import { TransitionProvider } from '@/app/_ctx/transition';
 import EventEditWindow from './EventEditWindow';
 import RoomSwatch from './RoomSwatch';
 import { getCabinColorObject } from '../_util/cabinColors';
+import Image from 'next/image';
+import { HoverCardDropdown } from '@mantine/core';
 
 /**
  * place EventPopup inside a headlessui {@link Popover} element for functionality.
@@ -103,14 +110,30 @@ export default function EventPopup({
             {/* title */}
             <div className="flex flex-row">
               <h3 className="mb-4 flex-1 text-xl">{event.title}</h3>
-              <div
-                className="size-6 rounded-full bg-slate-300 bg-contain data-[h]:hidden"
-                data-h={!event.author || null}
-                title={`created by ${event.author?.name}`}
-                style={{
-                  backgroundImage: `url(${event.author?.avatarUrl})`,
-                }}
-              />
+
+              {/* author avatar */}
+              {event.author?.avatarUrl && (
+                <HoverCard position="top">
+                  <HoverCardTarget>
+                    <Image
+                      src={event.author.avatarUrl}
+                      alt={`${event.author.name} profile picture`}
+                      width={24}
+                      height={24}
+                      className="h-[24px] rounded-full bg-slate-300"
+                      draggable={false}
+                    />
+                  </HoverCardTarget>
+                  <HoverCardDropdown
+                    classNames={{
+                      dropdown:
+                        'border-none bg-slate-900 px-[10px] py-[5px] text-sm text-dwhite',
+                    }}
+                  >
+                    <div>Created by {event.author.name}</div>
+                  </HoverCardDropdown>
+                </HoverCard>
+              )}
             </div>
 
             <div className="grid grid-cols-[min-content_1fr] gap-5">

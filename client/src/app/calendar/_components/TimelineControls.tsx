@@ -3,9 +3,11 @@ import { useEffect, useState, useTransition } from 'react';
 import {
   ActionIcon,
   Button,
+  Collapse,
   Popover,
   PopoverDropdown,
   PopoverTarget,
+  Tooltip,
 } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import {
@@ -27,7 +29,7 @@ import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 import { useCalendarControls } from '../_util/controls';
 
-import { Transition } from '@headlessui/react';
+import { Transition, TransitionChild } from '@headlessui/react';
 import EventEditWindow from './EventEditWindow';
 import { useDisplayByRooms } from '../_util/displayByRooms';
 
@@ -157,28 +159,49 @@ export default function TimelineControls(props: CalendarProps) {
 
           {/* rooms controls */}
           <div className="flex flex-row items-center gap-2">
-            <ActionIcon
-              variant={displayByRoom ? 'light' : 'subtle'}
-              color={displayByRoom ? 'emerald' : 'slate'}
-              loading={isRoomLoading}
-              onClick={() => updateByRoom(!displayByRoom)}
-            >
-              {displayByRoom ? <IconTableFilled /> : <IconTable />}
-            </ActionIcon>
-            <ActionIcon
-              variant="subtle"
-              color="slate"
-              onClick={() => roomCollapse.set('CLOSED')}
-            >
-              <IconLayoutNavbarCollapseFilled />
-            </ActionIcon>
-            <ActionIcon
-              variant="subtle"
-              color="slate"
-              onClick={() => roomCollapse.set('OPEN')}
-            >
-              <IconLayoutNavbarExpandFilled />
-            </ActionIcon>
+            <Transition show={displayByRoom}>
+              {/* expand button */}
+              <TransitionChild>
+                <div className="mr-0 flex flex-col items-center transition-all duration-300 data-[closed]:-mr-9 data-[closed]:opacity-0">
+                  <Tooltip label="Expand all cabins">
+                    <ActionIcon
+                      variant="subtle"
+                      color="slate"
+                      onClick={() => roomCollapse.set('OPEN')}
+                    >
+                      <IconLayoutNavbarExpandFilled />
+                    </ActionIcon>
+                  </Tooltip>
+                </div>
+              </TransitionChild>
+
+              {/* collapse button */}
+              <TransitionChild>
+                <div className="mr-0 flex flex-col items-center transition-all duration-300 data-[closed]:-mr-9 data-[closed]:opacity-0">
+                  <Tooltip label="Collapse all cabins">
+                    <ActionIcon
+                      variant="subtle"
+                      color="slate"
+                      onClick={() => roomCollapse.set('CLOSED')}
+                    >
+                      <IconLayoutNavbarCollapseFilled />
+                    </ActionIcon>
+                  </Tooltip>
+                </div>
+              </TransitionChild>
+            </Transition>
+
+            <Tooltip label={`${displayByRoom ? 'Hide' : 'Show'} rooms table`}>
+              <ActionIcon
+                variant={displayByRoom ? 'light' : 'subtle'}
+                color={displayByRoom ? 'emerald' : 'slate'}
+                className="ml-1"
+                loading={isRoomLoading}
+                onClick={() => updateByRoom(!displayByRoom)}
+              >
+                <IconTable />
+              </ActionIcon>
+            </Tooltip>
           </div>
 
           <div className="self-stretch border-l border-slate-300"></div>
