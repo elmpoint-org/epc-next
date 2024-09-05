@@ -55,7 +55,7 @@ export default gql`
 
     get all "root" rooms with no cabin
     """
-    roomsNoCabin: [Room]!
+    roomsNoCabin: [Room!]!
 
     """
     **SCOPE: userId**
