@@ -1,9 +1,9 @@
 import { useEffect, useState, useTransition } from 'react';
 
+import { Transition, TransitionChild } from '@headlessui/react';
 import {
   ActionIcon,
   Button,
-  Collapse,
   Popover,
   PopoverDropdown,
   PopoverTarget,
@@ -18,7 +18,6 @@ import {
   IconLoader2,
   IconPlus,
   IconTable,
-  IconTableFilled,
 } from '@tabler/icons-react';
 
 import { CalendarProps } from './ViewEvents';
@@ -28,10 +27,9 @@ import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 import { useCalendarControls } from '../_util/controls';
-
-import { Transition, TransitionChild } from '@headlessui/react';
-import EventEditWindow from './EventEditWindow';
 import { useDisplayByRooms } from '../_util/displayByRooms';
+
+import EventEditWindow from './EventEditWindow';
 
 export default function TimelineControls(props: CalendarProps) {
   const {
@@ -198,8 +196,9 @@ export default function TimelineControls(props: CalendarProps) {
                 aria-label="toggle rooms table"
                 variant={displayByRoom ? 'filled' : 'subtle'}
                 color={displayByRoom ? 'emerald' : 'slate'}
-                className="ml-1"
+                className="data-[on]:ml-1"
                 loading={isRoomLoading}
+                data-on={displayByRoom}
                 onClick={() => updateByRoom(!displayByRoom)}
               >
                 <IconTable />
@@ -210,14 +209,16 @@ export default function TimelineControls(props: CalendarProps) {
           <div className="self-stretch border-l border-slate-300"></div>
 
           {/* new stay button */}
-          <ActionIcon
-            aria-label="add new stay"
-            color="slate"
-            variant="light"
-            onClick={openNewStay}
-          >
-            <IconPlus />
-          </ActionIcon>
+          <Tooltip label="Add new stay">
+            <ActionIcon
+              aria-label="add new stay"
+              color="slate"
+              variant="light"
+              onClick={openNewStay}
+            >
+              <IconPlus />
+            </ActionIcon>
+          </Tooltip>
 
           {/* popups */}
           <EventEditWindow

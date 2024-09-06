@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 
 import { CalendarLevel, DatePicker } from '@mantine/dates';
@@ -31,56 +31,69 @@ const FormCalendar = () => {
     dates.length ? [parseDate(dates[0]), parseDate(dates[1])] : ['', ''],
   );
 
-  // functions
+  // FUNCTIONS
 
-  const handleDatePick = (nv: typeof dates) => {
-    // check if date picker had been blank before this
-    const wasBlank = !tdates[0].length && !tdates[1].length;
+  // handle UI date picker
+  const handleDatePick = useCallback(
+    (nv: typeof dates) => {
+      // check if date picker had been blank before this
+      const wasBlank = !tdates[0].length && !tdates[1].length;
 
-    // set values
-    setDates(nv);
-    setTdates(nv.map((it) => parseDate(it)));
+      // set values
+      setDates(nv);
+      setTdates(nv.map((it) => parseDate(it)));
 
-    // close date picker if necessary
-    if (nv[0] && nv[1] && closeNextTime) {
-      cal.close();
-      setCloseNextTime(false);
-    }
-    if (wasBlank) setCloseNextTime(true);
-  };
-
-  const updateTdate =
-    (id: 0 | 1) =>
-    ({ currentTarget: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-      setTdates((o) => ({ ...o, [id]: value }));
-      const nd = dayjs(value);
-      if (nd.isValid()) {
-        const dd = [...dates];
-        dd[id] = nd.toDate();
-        setDates(dd as any);
-      } else {
-        console.log('invalid', value);
+      // close date picker if necessary
+      if (nv[0] && nv[1] && closeNextTime) {
+        cal.close();
+        setCloseNextTime(false);
       }
-    };
-  const prettify = (id: 0 | 1) => () => {
-    let temp = dates;
-    // reorder dates if necessary
-    if (
-      (temp[0]?.valueOf() ?? 0) >
-      (temp[1]?.valueOf() ?? Number.MAX_SAFE_INTEGER)
-    ) {
-      temp = [temp[1], temp[0]];
-      setDates(temp);
-      setTdates(temp.map((it) => parseDate(it)));
-    } else {
-      // otherwise just format the text
-      setTdates((o) => ({ ...o, [id]: parseDate(dates[id]) }));
-    }
+      if (wasBlank) setCloseNextTime(true);
+    },
+    [cal, closeNextTime, setDates, tdates],
+  );
 
-    // refocus selected dates
-    if (temp[0]) setDateShown(temp[0]);
-  };
+  // update date text fields
+  const updateTdate = useCallback(
+    (id: 0 | 1) =>
+      ({ currentTarget: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+        setTdates((o) => ({ ...o, [id]: value }));
+        const nd = dayjs(value);
+        if (nd.isValid()) {
+          const dd = [...dates];
+          dd[id] = nd.toDate();
+          setDates(dd as any);
+        } else {
+          console.log('invalid', value);
+        }
+      },
+    [dates, setDates],
+  );
 
+  // get correct date formatting
+  const prettify = useCallback(
+    (id: 0 | 1) => () => {
+      let temp = dates;
+      // reorder dates if necessary
+      if (
+        (temp[0]?.valueOf() ?? 0) >
+        (temp[1]?.valueOf() ?? Number.MAX_SAFE_INTEGER)
+      ) {
+        temp = [temp[1], temp[0]];
+        setDates(temp);
+        setTdates(temp.map((it) => parseDate(it)));
+      } else {
+        // otherwise just format the text
+        setTdates((o) => ({ ...o, [id]: parseDate(dates[id]) }));
+      }
+
+      // refocus selected dates
+      if (temp[0]) setDateShown(temp[0]);
+    },
+    [dates, setDates],
+  );
+
+  // RENDER
   return (
     <>
       <div className="flex flex-row items-end gap-2">

@@ -6,7 +6,7 @@ import { IconRestore } from '@tabler/icons-react';
 import { useFormCtx } from '../state/formCtx';
 import { useDebouncedValue } from '@mantine/hooks';
 
-const NAME_GUESS_DEBOUNCE_MS = 120;
+const NAME_GUESS_DEBOUNCE_MS = 50;
 
 const FormEventText = () => {
   const { guests, eventText, setEventText } = useFormCtx();

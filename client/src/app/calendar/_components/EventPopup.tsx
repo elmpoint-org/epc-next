@@ -127,7 +127,7 @@ export default function EventPopup({
                   <HoverCardDropdown
                     classNames={{
                       dropdown:
-                        'border-none bg-slate-900 px-[10px] py-[5px] text-sm text-dwhite',
+                        'select-none border-none bg-slate-900 px-[10px] py-[5px] text-sm text-dwhite',
                     }}
                   >
                     <div>Created by {event.author.name}</div>
