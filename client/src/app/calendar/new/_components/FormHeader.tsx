@@ -49,7 +49,7 @@ export default function FormHeader() {
                   icon={IconSeparatorVertical}
                   onClick={() => runAction('SPLIT')}
                 >
-                  Split
+                  Split&hellip;
                 </Option>
                 <Option icon={IconFiles} onClick={() => runAction('DUPLICATE')}>
                   Duplicate
@@ -58,7 +58,7 @@ export default function FormHeader() {
 
               <div className="py-1">
                 <Option icon={IconTrash} onClick={() => runAction('DELETE')}>
-                  Delete
+                  Delete&hellip;
                 </Option>
               </div>
 
