@@ -15,11 +15,12 @@ import {
 import { Inside } from '@/util/inferTypes';
 import { useDefaultDays } from '../_util/defaultDays';
 import { createCallbackCtx } from '@/app/_ctx/callback';
+import { useCalendarControls } from '../_util/controls';
+import { useDisplayByRooms } from '../_util/displayByRooms';
+import { SetState } from '@/util/stateType';
 
 import Timeline from './Timeline';
 import TimelineControls from './TimelineControls';
-import { useCalendarControls } from '../_util/controls';
-import { useDisplayByRooms } from '../_util/displayByRooms';
 
 const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -128,6 +129,7 @@ export default function ViewEvents() {
 
   // room collapse state
   const [roomCollapse, setRoomCollapse] = useState<RoomCollapse>('CLOSED');
+  const fullCollapse = useState(true);
   const _dbr = useDisplayByRooms();
   const toggleDisplayByRoom = useCallback(() => _dbr[1](!_dbr[0]), [_dbr]);
 
@@ -147,6 +149,7 @@ export default function ViewEvents() {
     roomCollapse: {
       state: roomCollapse,
       set: setRoomCollapse,
+      full: fullCollapse,
     },
   };
 
@@ -228,6 +231,7 @@ export type CalendarProps = {
   roomCollapse: {
     state: RoomCollapse;
     set: (s: RoomCollapse) => void;
+    full: [boolean, SetState<boolean>];
   };
 };
 export type RoomCollapse = 'OPEN' | 'CLOSED' | 'MIXED';

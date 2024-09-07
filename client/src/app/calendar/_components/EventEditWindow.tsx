@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 
 import {
   ReverseCbProp,
@@ -15,7 +15,8 @@ import { dateTSLocal } from '../_util/dateUtils';
 import { CUSTOM_ROOM_OBJ } from '@@/db/schema/Room/CABIN_DATA';
 
 import FloatingWindow from '@/app/_components/_base/FloatingWindow';
-import NewEventForm from '../new/_components/NewEventForm';
+
+const NewEventForm = lazy(() => import('../new/_components/NewEventForm'));
 
 export default function EventEditWindow({
   trigger,

@@ -1,3 +1,5 @@
+import { lazy } from 'react';
+
 import { theme } from '@/util/tailwindVars';
 import { LayoutGroup } from 'framer-motion';
 
@@ -8,8 +10,9 @@ import { useGetRooms } from '../new/state/getRoomData';
 import { useDisplayByRooms } from '../_util/displayByRooms';
 
 import TimelineHeader, { TimelineHeaderFrame } from './TimelineHeader';
-import TimelineRoomRow from './TimelineRoomRow';
-import TimelineEventsGrid from './TimelineEventsGrid';
+
+const TimelineRoomRow = lazy(() => import('./TimelineRoomRow'));
+const TimelineEventsGrid = lazy(() => import('./TimelineEventsGrid'));
 
 export default function Timeline(props: CalendarProps) {
   const { days } = props;

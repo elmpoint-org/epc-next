@@ -19,7 +19,14 @@ export default function TimelineEventsGrid({
   noRoom?: boolean;
   onOpen?: () => void;
 } & CalendarProps) {
-  const { events: events_in, days, dates } = props;
+  const {
+    events: events_in,
+    days,
+    dates,
+    roomCollapse: {
+      full: [fullCollapse],
+    },
+  } = props;
 
   const events = useMemo(() => {
     // filter for norooms if requested
@@ -97,7 +104,7 @@ export default function TimelineEventsGrid({
         className="grid flex-1 grid-flow-row-dense auto-rows-fr gap-2"
         style={{ gridTemplateColumns }}
       >
-        {!cabinId
+        {!cabinId || !fullCollapse
           ? events?.map((event) => (
               // regular events
               <TimelineEvent
