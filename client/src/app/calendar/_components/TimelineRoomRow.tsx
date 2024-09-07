@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, lazy, useMemo, useState } from 'react';
 
 import { ActionIcon } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
@@ -9,7 +9,8 @@ import { Cabin, Room, useGetRooms } from '../new/state/getRoomData';
 import { ANY_ROOM } from '@@/db/schema/Room/CABIN_DATA';
 
 import RoomSwatch from './RoomSwatch';
-import TimelineEventsGrid from './TimelineEventsGrid';
+
+const TimelineEventsGrid = lazy(() => import('./TimelineEventsGrid'));
 
 export default function TimelineRoomRow({
   roomOrCabin,
@@ -68,7 +69,7 @@ export default function TimelineRoomRow({
       >
         {/* title section */}
         <div className="flex flex-row gap-2" style={{ width }}>
-          <div className="flex-1 border-t border-dashed border-slate-300/60 p-2 *:h-[2.375rem] group-first:!border-transparent group-data-[c]:border-solid group-data-[c]:border-slate-300">
+          <div className="flex-1 border-t border-dashed border-slate-300/60 p-2 *:h-[1.875rem] group-first:!border-transparent group-data-[c]:border-solid group-data-[c]:border-slate-300">
             {isCabin ? (
               // CABIN TITLE
               <div

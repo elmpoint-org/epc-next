@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { lazy, useMemo } from 'react';
 
 import { Popover, PopoverButton } from '@headlessui/react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
@@ -7,9 +7,10 @@ import { dateDiff } from '../_util/dateUtils';
 import { clamp } from '@/util/math';
 
 import { CalendarProps, EventType } from './ViewEvents';
-import EventPopup from './EventPopup';
 import { clmx } from '@/util/classConcat';
 import { CABIN_COLORS, CabinColor, getCabinColor } from '../_util/cabinColors';
+
+const EventPopup = lazy(() => import('./EventPopup'));
 
 export default function TimelineEvent({
   event,
@@ -116,7 +117,7 @@ export default function TimelineEvent({
   return (
     <>
       <Popover
-        className="flex flex-row truncate"
+        className="flex flex-row items-center truncate"
         style={{
           gridColumn: `${loc.start} / ${loc.end}`,
         }}
@@ -124,7 +125,7 @@ export default function TimelineEvent({
         <PopoverButton className="group flex-1 truncate bg-[--row-color] focus:outline-none">
           <div
             className={clmx(
-              'flex flex-1 flex-row items-center justify-between truncate rounded-lg border   ring-inset  group-focus:ring-1',
+              'flex flex-1 flex-row items-center justify-between truncate rounded-lg border ring-inset group-focus:ring-1',
               css.main,
             )}
             onClick={(e) => {
@@ -135,14 +136,16 @@ export default function TimelineEvent({
             }}
           >
             {arrLeft ? (
-              <IconChevronLeft stroke={1} className="size-4" />
+              <IconChevronLeft stroke={1} className="size-4 flex-shrink-0" />
             ) : (
               <div />
             )}
             {/* event title */}
-            <div className="truncate p-2 text-sm">{resText ?? event.title}</div>
+            <div className="truncate p-1 text-sm md:px-2">
+              {resText ?? event.title}
+            </div>
             {arrRight ? (
-              <IconChevronRight stroke={1} className="size-4" />
+              <IconChevronRight stroke={1} className="size-4 flex-shrink-0" />
             ) : (
               <div />
             )}

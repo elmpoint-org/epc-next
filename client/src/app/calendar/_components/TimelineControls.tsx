@@ -3,6 +3,7 @@ import { useEffect, useState, useTransition } from 'react';
 import { Transition, TransitionChild } from '@headlessui/react';
 import {
   ActionIcon,
+  ActionIconProps,
   Button,
   Popover,
   PopoverDropdown,
@@ -13,10 +14,16 @@ import { DatePicker } from '@mantine/dates';
 import {
   IconArrowLeft,
   IconArrowRight,
+  IconCircleDotted,
+  IconLayoutCards,
   IconLayoutNavbarCollapseFilled,
   IconLayoutNavbarExpandFilled,
+  IconLibraryMinus,
+  IconLibraryPlus,
   IconLoader2,
   IconPlus,
+  IconStackPop,
+  IconStackPush,
   IconTable,
 } from '@tabler/icons-react';
 
@@ -31,13 +38,21 @@ import { useDisplayByRooms } from '../_util/displayByRooms';
 
 import EventEditWindow from './EventEditWindow';
 import DKbd from '@/app/_components/_base/DKbd';
+import { Children } from '@/util/propTypes';
+import { IconType } from '@/util/iconType';
+
+const DAYS_MIN = 1;
+const DAYS_MAX = 14;
 
 export default function TimelineControls(props: CalendarProps) {
   const {
     isLoading,
     dates,
     periodState: { days, setDays, startDate, setStartDate },
-    roomCollapse,
+    roomCollapse: {
+      full: [fullCollapse, setFullCollapse],
+      ...roomCollapse
+    },
   } = props;
 
   const [datePickerOpen, setDatePickerOpen] = useState(false);
@@ -174,7 +189,7 @@ export default function TimelineControls(props: CalendarProps) {
               onChange={({ currentTarget: { value: v } }) => {
                 if (!v.length) setDays(undefined);
                 const d = parseInt((v.match(/[\d\.]/g) || ['']).join(''));
-                if (Number.isFinite(d)) setDays(clamp(d, 1, 10));
+                if (Number.isFinite(d)) setDays(clamp(d, DAYS_MIN, DAYS_MAX));
               }}
             />
             <span>days</span>
@@ -185,37 +200,33 @@ export default function TimelineControls(props: CalendarProps) {
           {/* rooms controls */}
           <div className="flex flex-row items-center gap-2">
             <Transition show={displayByRoom}>
-              {/* expand button */}
-              <TransitionChild>
-                <div className="mr-0 flex flex-col items-center transition-all duration-300 data-[closed]:-mr-9 data-[closed]:opacity-0">
-                  <Tooltip label="Expand all cabins">
-                    <ActionIcon
-                      aria-label="expand cabins"
-                      variant="subtle"
-                      color="slate"
-                      onClick={() => roomCollapse.set('OPEN')}
-                    >
-                      <IconLayoutNavbarExpandFilled />
-                    </ActionIcon>
-                  </Tooltip>
-                </div>
-              </TransitionChild>
-
               {/* collapse button */}
-              <TransitionChild>
-                <div className="mr-0 flex flex-col items-center transition-all duration-300 data-[closed]:-mr-9 data-[closed]:opacity-0">
-                  <Tooltip label="Collapse all cabins">
-                    <ActionIcon
-                      aria-label="collapse cabins"
-                      variant="subtle"
-                      color="slate"
-                      onClick={() => roomCollapse.set('CLOSED')}
-                    >
-                      <IconLayoutNavbarCollapseFilled />
-                    </ActionIcon>
-                  </Tooltip>
-                </div>
-              </TransitionChild>
+              <TableOption
+                label="Collapse all cabins"
+                icon={IconLibraryMinus}
+                onClick={() => {
+                  if (roomCollapse.state === 'CLOSED') setFullCollapse(true);
+                  roomCollapse.set('CLOSED');
+                }}
+              />
+
+              {/* expand button */}
+              <TableOption
+                label="Expand all cabins"
+                icon={IconLibraryPlus}
+                onClick={() => roomCollapse.set('OPEN')}
+              />
+
+              {/* full collapse */}
+              <TableOption
+                label={
+                  fullCollapse
+                    ? 'Show multiple per cabin'
+                    : 'Fully collapse cabins'
+                }
+                icon={fullCollapse ? IconStackPop : IconStackPush}
+                onClick={() => setFullCollapse((v) => !v)}
+              />
             </Transition>
 
             <Tooltip
@@ -231,7 +242,7 @@ export default function TimelineControls(props: CalendarProps) {
                 color={displayByRoom ? 'emerald' : 'slate'}
                 className="data-[on]:ml-1"
                 loading={isRoomLoading}
-                data-on={displayByRoom}
+                data-on={displayByRoom || null}
                 onClick={() => updateByRoom(!displayByRoom)}
               >
                 <IconTable />
@@ -271,5 +282,29 @@ function Loader({ show }: { show: boolean }) {
         <IconLoader2 className="animate-spin text-slate-500" />
       </div>
     </Transition>
+  );
+}
+
+function TableOption({
+  icon: Icon,
+  label,
+  ...props
+}: { icon: IconType; label: string } & ActionIconProps &
+  React.ComponentPropsWithoutRef<'button'>) {
+  return (
+    <TransitionChild>
+      <div className="mr-0 flex flex-col items-center transition-all duration-300 data-[closed]:-mr-9 data-[closed]:opacity-0">
+        <Tooltip label={label}>
+          <ActionIcon
+            aria-label={label}
+            variant="subtle"
+            color="slate"
+            {...props}
+          >
+            <Icon stroke={1.75} />
+          </ActionIcon>
+        </Tooltip>
+      </div>
+    </TransitionChild>
   );
 }

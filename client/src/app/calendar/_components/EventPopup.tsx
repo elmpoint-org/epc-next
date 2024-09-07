@@ -1,9 +1,11 @@
-import { Fragment, useTransition } from 'react';
+import { Fragment, lazy, useTransition } from 'react';
+import Image from 'next/image';
 
 import { CloseButton, PopoverPanel, type Popover } from '@headlessui/react';
 import {
   ActionIcon,
   HoverCard,
+  HoverCardDropdown,
   HoverCardTarget,
   ScrollArea,
 } from '@mantine/core';
@@ -23,12 +25,10 @@ import { IconType } from '@/util/iconType';
 import { Children } from '@/util/propTypes';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 import { TransitionProvider } from '@/app/_ctx/transition';
-
-import EventEditWindow from './EventEditWindow';
-import RoomSwatch from './RoomSwatch';
 import { getCabinColorObject } from '../_util/cabinColors';
-import Image from 'next/image';
-import { HoverCardDropdown } from '@mantine/core';
+
+import RoomSwatch from './RoomSwatch';
+const EventEditWindow = lazy(() => import('./EventEditWindow'));
 
 /**
  * place EventPopup inside a headlessui {@link Popover} element for functionality.
