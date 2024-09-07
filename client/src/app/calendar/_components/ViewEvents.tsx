@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useGraphQuery } from '@/query/query';
@@ -19,6 +19,7 @@ import { createCallbackCtx } from '@/app/_ctx/callback';
 import Timeline from './Timeline';
 import TimelineControls from './TimelineControls';
 import { useCalendarControls } from '../_util/controls';
+import { useDisplayByRooms } from '../_util/displayByRooms';
 
 const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -127,6 +128,8 @@ export default function ViewEvents() {
 
   // room collapse state
   const [roomCollapse, setRoomCollapse] = useState<RoomCollapse>('CLOSED');
+  const _dbr = useDisplayByRooms();
+  const toggleDisplayByRoom = useCallback(() => _dbr[1](!_dbr[0]), [_dbr]);
 
   // CALENDAR PROPS
   const props: CalendarProps = {
@@ -180,13 +183,17 @@ export default function ViewEvents() {
           if (withModifiers(e)) break;
           actions.today();
           break;
+        case 'KeyR':
+          if (withModifiers(e)) break;
+          toggleDisplayByRoom();
+          break;
       }
     };
 
     // attach event listener
     dom.addEventListener('keydown', cb);
     return () => dom.removeEventListener('keydown', cb);
-  }, [actions]);
+  }, [actions, toggleDisplayByRoom]);
 
   return (
     <>

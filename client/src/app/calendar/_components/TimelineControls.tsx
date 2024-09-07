@@ -30,6 +30,7 @@ import { useCalendarControls } from '../_util/controls';
 import { useDisplayByRooms } from '../_util/displayByRooms';
 
 import EventEditWindow from './EventEditWindow';
+import DKbd from '@/app/_components/_base/DKbd';
 
 export default function TimelineControls(props: CalendarProps) {
   const {
@@ -68,14 +69,16 @@ export default function TimelineControls(props: CalendarProps) {
           {/* date picker */}
           <Popover opened={datePickerOpen} onChange={setDatePickerOpen}>
             <PopoverTarget>
-              <button
-                className="rounded-md px-1 hover:bg-slate-200"
-                onClick={() => setDatePickerOpen(true)}
-              >
-                <h3 className="min-w-20 text-xl">
-                  {dateFormat(dates.start, `MMM 'YY`)}
-                </h3>
-              </button>
+              <Tooltip label="Jump to specific date">
+                <button
+                  className="rounded-md px-1 hover:bg-slate-200"
+                  onClick={() => setDatePickerOpen(true)}
+                >
+                  <h3 className="min-w-20 text-xl">
+                    {dateFormat(dates.start, `MMM 'YY`)}
+                  </h3>
+                </button>
+              </Tooltip>
             </PopoverTarget>
             <PopoverDropdown>
               <DatePicker
@@ -98,30 +101,54 @@ export default function TimelineControls(props: CalendarProps) {
 
           {/* period controls */}
           <div className="flex flex-row items-center gap-1 px-4">
-            <ActionIcon
-              aria-label="previous period"
-              onClick={actions.last}
-              color="slate"
-              variant="subtle"
+            <Tooltip
+              label={
+                <>
+                  Previous period <DKbd>p</DKbd>
+                </>
+              }
             >
-              <IconArrowLeft />
-            </ActionIcon>
-            <Button
-              size="compact-md"
-              variant="subtle"
-              color="slate"
-              onClick={actions.today}
+              <ActionIcon
+                aria-label="previous period"
+                onClick={actions.last}
+                color="slate"
+                variant="subtle"
+              >
+                <IconArrowLeft />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip
+              label={
+                <>
+                  Jump to today <DKbd>t</DKbd>
+                </>
+              }
             >
-              Today
-            </Button>
-            <ActionIcon
-              aria-label="next period"
-              onClick={actions.next}
-              color="slate"
-              variant="subtle"
+              <Button
+                size="compact-md"
+                variant="subtle"
+                color="slate"
+                onClick={actions.today}
+              >
+                Today
+              </Button>
+            </Tooltip>
+            <Tooltip
+              label={
+                <>
+                  Next period <DKbd>n</DKbd>
+                </>
+              }
             >
-              <IconArrowRight />
-            </ActionIcon>
+              <ActionIcon
+                aria-label="next period"
+                onClick={actions.next}
+                color="slate"
+                variant="subtle"
+              >
+                <IconArrowRight />
+              </ActionIcon>
+            </Tooltip>
           </div>
 
           {/* desktop loader */}
@@ -191,7 +218,13 @@ export default function TimelineControls(props: CalendarProps) {
               </TransitionChild>
             </Transition>
 
-            <Tooltip label={`${displayByRoom ? 'Hide' : 'Show'} rooms table`}>
+            <Tooltip
+              label={
+                <>
+                  {displayByRoom ? 'Hide' : 'Show'} rooms table <DKbd>r</DKbd>
+                </>
+              }
+            >
               <ActionIcon
                 aria-label="toggle rooms table"
                 variant={displayByRoom ? 'filled' : 'subtle'}
