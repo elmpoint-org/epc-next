@@ -14,6 +14,7 @@ const resolvers: StayModule.Resolvers = {
     stayCreate: f.stayCreate,
     stayUpdate: f.stayUpdate,
     stayDelete: f.stayDelete,
+    staySplit: f.staySplit,
   },
 
   Stay: {

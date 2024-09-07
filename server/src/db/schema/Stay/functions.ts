@@ -11,6 +11,7 @@ import { ResolverContext } from '@@/db/graph';
 import { CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS } from '@@/CONSTANTS';
 import { DBStay, ScalarRoom } from './source';
 
+import { randomUUID as uuid } from 'node:crypto';
 import dayjs from 'dayjs';
 import dayjsUTC from 'dayjs/plugin/utc';
 dayjs.extend(dayjsUTC);
@@ -130,6 +131,33 @@ export const stayDelete = h<M.MutationResolvers['stayDelete']>(
   }
 );
 
+export const staySplit = h<M.MutationResolvers['staySplit']>(
+  async ({ sources, args: { id, date } }) => {
+    const stayToSplit = await sources.stay.get(id);
+    if (!stayToSplit) throw err('STAY_NOT_FOUND');
+
+    // validate date
+    if (typeof date === 'number') date = dateTS(date);
+    const valid = validateDates(stayToSplit.dateStart, date);
+    if (!valid) throw err('INVALID_DATE');
+
+    // create new stay
+    const newStay: DBStay = {
+      ...stayToSplit,
+      dateStart: date,
+      id: uuid(),
+    };
+
+    // run updates
+    const outs = await Promise.all([
+      sources.stay.update(id, { dateEnd: date }),
+      sources.stay.create(newStay),
+    ]);
+
+    return outs[1];
+  }
+);
+
 export const getStayAuthor = h<M.StayResolvers['author']>(
   async ({ sources, parent }) => {
     const { authorId } = parent as DBStay;
@@ -192,6 +220,6 @@ export function validateDates(start: number, end: number) {
   end = dateTS(end);
   const d1 = 3600 * 24;
   const days = (end - start) / d1;
-  if (days < 0 || days !== Math.round(days)) return false;
+  if (days < 0) return false;
   return true;
 }

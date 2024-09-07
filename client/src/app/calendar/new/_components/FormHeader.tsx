@@ -45,7 +45,12 @@ export default function FormHeader() {
               )}
             >
               <div className="py-1">
-                <Option icon={IconSeparatorVertical}>Split</Option>
+                <Option
+                  icon={IconSeparatorVertical}
+                  onClick={() => runAction('SPLIT')}
+                >
+                  Split
+                </Option>
                 <Option icon={IconFiles} onClick={() => runAction('DUPLICATE')}>
                   Duplicate
                 </Option>

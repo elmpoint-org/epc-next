@@ -1,6 +1,7 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import { notifications } from '@mantine/notifications';
+import { DatePickerInput } from '@mantine/dates';
 
 import { useFormCtx } from '../state/formCtx';
 import { confirmModal } from '@/app/_components/_base/modals';
@@ -11,9 +12,10 @@ import { usePassedTransition } from '@/app/_ctx/transition';
 import { useUser } from '@/app/_ctx/user/context';
 import { SharedValues } from '@/util/inferTypes';
 import { VariablesOf } from '@graphql-typed-document-node/core';
-import { dateTS } from '../../_util/dateUtils';
+import { D1, TStoDate, dateTS } from '../../_util/dateUtils';
 import { CUSTOM_ROOM_ID } from '@@/db/schema/Room/CABIN_DATA';
 import { prettyError } from '@/util/prettyErrors';
+import { dayStyles } from '../../_util/dayStyles';
 
 export const UPDATE_STAY_QUERY = graphql(`
   mutation StayUpdate(
@@ -131,6 +133,35 @@ export function useFormActions() {
     });
   }, [closeDialog, getStayObject, invalidate, loading, user]);
 
+  // split
+  const splitModal = useSplitModal();
+  const handleSplit = useCallback(async () => {
+    if (!updateId?.length) return;
+    const stay = getStayObject();
+    if (!stay) return;
+
+    // get split date
+    const nd = await splitModal(stay.dateStart, stay.dateEnd);
+    if (nd === null) return;
+
+    loading?.(async () => {
+      const { data, errors } = await graphAuth(
+        graphql(`
+          mutation StaySplit($id: ID!, $date: Int!) {
+            staySplit(id: $id, date: $date) {
+              id
+            }
+          }
+        `),
+        { id: updateId, date: nd },
+      );
+      if (errors || !data?.staySplit) return err(errors?.[0].code ?? errors);
+
+      invalidate?.();
+      closeDialog?.();
+    });
+  }, [closeDialog, getStayObject, invalidate, loading, splitModal, updateId]);
+
   // delete
   const handleDelete = useCallback(async () => {
     if (!updateId?.length) return;
@@ -167,9 +198,10 @@ export function useFormActions() {
     (action: ActionType) => {
       if (action === 'SUBMIT') return handleSubmit();
       if (action === 'DUPLICATE') return handleDuplicate();
+      if (action === 'SPLIT') return handleSplit();
       if (action === 'DELETE') return handleDelete();
     },
-    [handleDelete, handleDuplicate, handleSubmit],
+    [handleDelete, handleDuplicate, handleSplit, handleSubmit],
   );
   return run;
 }
@@ -239,4 +271,72 @@ export function err(message: unknown) {
       (s) => `Unknown error code: ${s}`,
     )(message),
   });
+}
+
+function useSplitModal() {
+  const runModal = useCallback(async (dateStart: number, dateEnd: number) => {
+    let date: Date | null = null;
+
+    const yes = await confirmModal({
+      title: 'Split Event',
+      body: (
+        <>
+          <p>
+            This operation splits the selected event into two events around a
+            specified date.
+          </p>
+          <p>Choose the date where you want to split the event.</p>
+
+          <div className="not-prose">
+            <DateSplitPicker
+              {...{ dateStart, dateEnd }}
+              onChange={(v) => (date = v)}
+            />
+          </div>
+        </>
+      ),
+      buttons: {
+        cancel: 'Cancel',
+        confirm: 'Split',
+      },
+    });
+
+    if (!yes || !date) return null;
+
+    return dateTS(date);
+  }, []);
+
+  return runModal;
+}
+
+function DateSplitPicker(props: {
+  dateStart: number;
+  dateEnd: number;
+  onChange?: (nv: Date | null) => void;
+}) {
+  const { dateStart, dateEnd, onChange } = props;
+
+  const [date, setDate] = useState<Date | null>(null);
+  const [dateShown, setDateShown] = useState<Date>(TStoDate(dateStart));
+
+  return (
+    <DatePickerInput
+      aria-label="date to split event"
+      placeholder="Click to choose date"
+      value={date}
+      onChange={(v) => {
+        setDate(v);
+        onChange?.(v);
+      }}
+      date={dateShown}
+      onDateChange={setDateShown}
+      minDate={TStoDate(dateStart + D1)}
+      maxDate={TStoDate(dateEnd - D1)}
+      firstDayOfWeek={0}
+      classNames={{
+        levelsGroup: 'popover:border-slate-300 popover:shadow-sm',
+        day: dayStyles,
+      }}
+    />
+  );
 }
