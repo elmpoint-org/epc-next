@@ -97,6 +97,13 @@ export default gql`
     delete an existing stay. if the user isn't the author, the author should be notified.
     """
     stayDelete(id: ID!): Stay!
+
+    """
+    **SCOPE: userId**
+
+    split an existing stay in two around a date. returns the **newly created stay**--the original stay will be shortened to end on the specified date, and a new date will be created starting on that date.
+    """
+    staySplit(id: ID!, date: Int!): Stay!
   }
 
   "a room reservation for the stay. you must provide EITHER a roomId or customText."

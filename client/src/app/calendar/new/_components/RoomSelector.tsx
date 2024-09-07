@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   Anchor,
@@ -43,46 +43,52 @@ const RoomSelector = ({
     setSelectedRoom,
   } = useFormCtxRoomState(rowIndex);
 
+  // handle search
+  const [search, setSearch] = useState('');
+
   const initialize = () => {
     setSearch('');
     updateRoomData({ room: null, cabin: null });
   };
 
-  const handleSelect = (id: string | 'CUSTOM') => {
-    const inputBuffer = search;
-    setSearch('');
+  const handleSelect = useCallback(
+    (id: string | 'CUSTOM') => {
+      const inputBuffer = search;
+      setSearch('');
 
-    // TODO handle custom case
-    if (id === 'CUSTOM') {
-      updateRoomData({
-        cabin: null,
-        room: CUSTOM_ROOM_OBJ(inputBuffer),
-      });
-      combobox.closeDropdown();
-      return;
-    }
+      // TODO handle custom case
+      if (id === 'CUSTOM') {
+        updateRoomData({
+          cabin: null,
+          room: CUSTOM_ROOM_OBJ(inputBuffer),
+        });
+        combobox.closeDropdown();
+        return;
+      }
 
-    const cabin = cabins.find((it) => it.id === id);
-    if (cabin) {
-      updateRoomData({
-        room: null,
-        cabin,
-      });
-      return;
-    }
-    const room = rooms.find((it) => it.id === id);
-    if (room) {
-      setSelectedRoom(room);
-      if (room.cabin?.id && room.cabin.id !== selectedCabin?.id)
-        setSelectedCabin(cabins.find((it) => it.id === room.cabin?.id) ?? null);
-      combobox.closeDropdown();
-    }
-  };
+      const cabin = cabins.find((it) => it.id === id);
+      if (cabin) {
+        updateRoomData({
+          room: null,
+          cabin,
+        });
+        return;
+      }
+      const room = rooms.find((it) => it.id === id);
+      if (room) {
+        setSelectedRoom(room);
+        if (room.cabin?.id && room.cabin.id !== selectedCabin?.id)
+          setSelectedCabin(
+            cabins.find((it) => it.id === room.cabin?.id) ?? null,
+          );
+        combobox.closeDropdown();
+      }
+    },
+    // prettier-ignore
+    [cabins, combobox, rooms, search, selectedCabin?.id, setSelectedCabin, setSelectedRoom, updateRoomData],
+  );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => combobox.updateSelectedOptionIndex(), [selectedCabin]);
-
-  // handle search
-  const [search, setSearch] = useState('');
 
   const isIncomplete = useMemo(
     () => search.length || (selectedCabin && !selectedRoom),
@@ -131,8 +137,6 @@ const RoomSelector = ({
       })
       .filter((it) => it !== null) as (Cabin | Room)[];
   }, [cabins, rooms, search, selectedCabin]);
-
-  // console.log('rendering combobox', rowIndex, 'with room', selectedRoom);
 
   return (
     <>

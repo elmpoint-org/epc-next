@@ -11,8 +11,8 @@ export const dayjs = dayjsRoot;
 /** one day in seconds */
 export const D1 = 24 * 3600;
 
-/** convert to date timestamp. 
- * 
+/** convert to date timestamp.
+ *
  * **By default, `isInputNotUTC` is true**, meaning the date from your current timezone will be taken. set to `false` to take the date at UTC time. */
 export function dateTS(d: Date | number, isInputNotUTC: boolean = true) {
   const day = d instanceof Date ? dayjs(d) : dayjs.unix(d);
@@ -48,6 +48,11 @@ export function dateFormat(date: number, format: string) {
 export function dateTSLocal(d: number) {
   const datestring = dateFormat(d, 'YYYY-MM-DD');
   return dayjs(datestring, 'YYYY-MM-DD').unix();
+}
+
+/** go from a date timestamp to a JS Date object. */
+export function TStoDate(d: number) {
+  return new Date(dateTSLocal(d) * 1000);
 }
 
 // ------------------------------------

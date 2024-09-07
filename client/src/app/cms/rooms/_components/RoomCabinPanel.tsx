@@ -338,7 +338,7 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
             )}
 
             {/* nicknames (aliases) */}
-            <Details summary={<>Nicknames ({rc.aliases.length})</>}>
+            <Details summary={<>Nicknames ({rc.aliases.length})</>} open>
               {rc.aliases.map((name, i) => (
                 <NameInput
                   key={i}
@@ -420,7 +420,7 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
                       .sort(alphabetical((c) => c.name))
                       .map((room) => (
                         <Popover key={room.id} className="flex flex-col">
-                          <PopoverButton className="group flex flex-row items-center gap-4 rounded-md border border-slate-300 px-4 py-2 text-left text-sm hover:border-slate-600">
+                          <PopoverButton className="group flex flex-row items-center gap-4 rounded-md border border-slate-300 px-4 py-2 text-left text-sm hover:border-slate-600 focus:outline-emerald-700">
                             <IconBed
                               className="size-6 text-slate-400"
                               stroke={1.5}

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { Button, TextInput, Tooltip } from '@mantine/core';
 import { IconArrowBarToUp, IconTrash } from '@tabler/icons-react';
@@ -12,32 +12,35 @@ import { MAX_ROOMS } from './NewEventForm';
 const FormGuestRows = () => {
   const { guests, setGuests } = useFormCtx();
 
-  const updateRoom = (
-    i: number,
-    action: 'CREATE' | 'UPDATE' | 'MAKE_PRIMARY' | 'DELETE',
-    updates?: Partial<GuestEntry> | null,
-  ) => {
-    const nr = [...guests];
+  const updateRoom = useCallback(
+    (
+      i: number,
+      action: 'CREATE' | 'UPDATE' | 'MAKE_PRIMARY' | 'DELETE',
+      updates?: Partial<GuestEntry> | null,
+    ) => {
+      const nr = [...guests];
 
-    switch (action) {
-      case 'CREATE':
-        nr[i] = { ...guestInitial() };
-        break;
-      case 'UPDATE':
-        nr[i] = { ...nr[i], ...updates };
-        break;
-      case 'MAKE_PRIMARY':
-        const [el] = nr.splice(i, 1);
-        nr.unshift(el);
-        break;
-      case 'DELETE':
-        nr.splice(i, 1);
-        break;
-    }
-    if (!nr.length) nr.push(guestInitial());
+      switch (action) {
+        case 'CREATE':
+          nr[i] = { ...guestInitial() };
+          break;
+        case 'UPDATE':
+          nr[i] = { ...nr[i], ...updates };
+          break;
+        case 'MAKE_PRIMARY':
+          const [el] = nr.splice(i, 1);
+          nr.unshift(el);
+          break;
+        case 'DELETE':
+          nr.splice(i, 1);
+          break;
+      }
+      if (!nr.length) nr.push(guestInitial());
 
-    setGuests(nr);
-  };
+      setGuests(nr);
+    },
+    [guests, setGuests],
+  );
 
   // handle keyboard shortcuts
   const domRef = useRef<HTMLDivElement>(null);

@@ -114,7 +114,7 @@ export default function CabinsList() {
 
   return (
     <>
-      <div className="flex-1 columns-1 gap-4 space-y-4 md:columns-2 md:py-4">
+      <div className="flex-1 columns-1 gap-4 space-y-4 md:columns-2 md:py-4 2xl:columns-3">
         {/* cabins */}
         {cabins?.map((cabin) => (
           <RoomCabinPanel key={cabin.id} cabinOrRoom={cabin} {...props} />
@@ -127,7 +127,7 @@ export default function CabinsList() {
         {cabins && (
           <div className="flex h-full break-inside-avoid flex-col gap-2">
             <CardButton
-              className="flex-1 rounded-sm rounded-t-lg"
+              className="min-h-36 flex-1 rounded-sm rounded-t-lg"
               icon={IconHomePlus}
               onClick={newCabin}
               loading={isLoadingNC}
@@ -135,7 +135,7 @@ export default function CabinsList() {
               Add a cabin
             </CardButton>
             <CardButton
-              className="flex-1 rounded-sm rounded-b-lg"
+              className="min-h-36 flex-1 rounded-sm rounded-b-lg"
               icon={IconDoor}
               onClick={newRootRoom}
               loading={isLoadingNR}
@@ -154,7 +154,7 @@ export default function CabinsList() {
                 key={i}
                 className="animate-pulse break-inside-avoid rounded-md bg-slate-200 shadow-sm"
                 style={{
-                  height: `calc(16rem + ${i % 2 ? '' : '-'}${16 + i * 4}px)`,
+                  height: `calc(20rem + ${i % 2 ? '' : '-'}${64 + i * 4}px)`,
                 }}
               />
             ))}

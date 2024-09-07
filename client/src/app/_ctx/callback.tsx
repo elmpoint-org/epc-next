@@ -2,6 +2,28 @@ import { Children } from '@/util/propTypes';
 import { useContext } from 'react';
 import { createContext } from 'react';
 
+/**
+ * create a simple callback function that can be passed in context.
+ *
+ * @example
+ * // parent.tsx
+ * const {
+ *   Provider: MyFunctionProvider,
+ *   useHook: useMyFunction,
+ * } = createCallbackCtx();
+ * export { useMyFunction };
+ *
+ * // ParentComponent
+ * return (
+ *   <MyFunctionProvider cb={handleMyFunction}>
+ *     <ChildComponent />
+ *   </MyFunctionProvider>
+ * );
+ *
+ * // ChildComponent
+ * const runMyFunction = useMyFunction();
+ * runMyFunction();
+ */
 export function createCallbackCtx<
   CbType extends (...p: any[]) => any = () => void,
 >() {
