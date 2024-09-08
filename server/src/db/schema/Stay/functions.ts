@@ -223,3 +223,8 @@ export function validateDates(start: number, end: number) {
   if (days < 0) return false;
   return true;
 }
+
+/** get dayjs object for a TS datestamp. */
+export function dateTSObject(ts: number) {
+  return dayjs.unix(ts).utc();
+}

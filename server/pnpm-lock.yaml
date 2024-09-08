@@ -74,6 +74,9 @@ importers:
       graphql-yoga:
         specifier: ^5.3.1
         version: 5.3.1(graphql@16.8.1)
+      ical.js:
+        specifier: ^2.0.1
+        version: 2.0.1
       jose:
         specifier: ^5.4.0
         version: 5.4.0
@@ -2818,9 +2821,6 @@ packages:
   dataloader@2.2.2:
     resolution: {integrity: sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==}
 
-  dayjs@1.11.11:
-    resolution: {integrity: sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==}
-
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
@@ -3618,6 +3618,9 @@ packages:
   human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
+
+  ical.js@2.0.1:
+    resolution: {integrity: sha512-uYYb1CwTXbd9NP/xTtgQZ5ivv6bpUjQu9VM98s3X78L3XRu00uJW5ZtmnLwyxhztpf5fSiRyDpFW7ZNCePlaPw==}
 
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -10613,8 +10616,6 @@ snapshots:
 
   dataloader@2.2.2: {}
 
-  dayjs@1.11.11: {}
-
   dayjs@1.11.13: {}
 
   de-indent@1.0.2: {}
@@ -11667,6 +11668,8 @@ snapshots:
   human-signals@2.1.0: {}
 
   human-signals@5.0.0: {}
+
+  ical.js@2.0.1: {}
 
   iconv-lite@0.4.24:
     dependencies:
@@ -13215,7 +13218,7 @@ snapshots:
       ci-info: 3.9.0
       cli-progress-footer: 2.3.3
       d: 1.0.2
-      dayjs: 1.11.11
+      dayjs: 1.11.13
       decompress: 4.2.1
       dotenv: 16.4.5
       dotenv-expand: 10.0.0

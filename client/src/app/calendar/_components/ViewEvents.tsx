@@ -122,7 +122,10 @@ export default function ViewEvents() {
 
   // get calendar events
   const query = useGraphQuery(EVENTS_QUERY, parsedDates);
-  const events = query.data?.stays;
+  const events = useMemo(
+    () => query.data?.stays.sort((a, b) => a.dateStart - b.dateStart),
+    [query.data?.stays],
+  );
   function invalidate() {
     query.refetch();
   }
