@@ -59,6 +59,13 @@ export default gql`
     get all stays that are in a particular room in a particular date range
     """
     staysInRoom(roomId: String!, start: Int!, end: Int!): [Stay!]!
+
+    """
+     **SCOPE: ADMIN**
+
+    get the most recent update timestamp after the provided time.
+    """
+    stayMostRecentTimestamp(after: Int!): Int!
   }
 
   type Mutation {

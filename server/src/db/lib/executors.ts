@@ -59,7 +59,7 @@ export const createExecutors = <
       schema: modulesApp.schema,
       document,
       variableValues,
-      contextValue: context(p.secureScope),
+      contextValue: context(p.secureScope, 'INTERNAL'),
     });
 
   const graph = <TResult, TVariables>(

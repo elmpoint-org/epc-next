@@ -55,7 +55,7 @@ const RoomOption = ({
               {/* room occupancy */}
               <div
                 className="text-nowrap text-slate-600 data-[hide]:hidden group-data-[combobox-selected]:text-dwhite"
-                data-hide={item.noCount}
+                data-hide={item.noCount || null}
               >
                 (
                 <span className="font-bold text-yellow-700  group-data-[combobox-selected]:!text-inherit group-data-[full]/b:text-red-600 group-data-[open]/b:text-emerald-700">

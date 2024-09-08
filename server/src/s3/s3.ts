@@ -54,6 +54,26 @@ export async function getS3UploadUrl({
   return { data: url };
 }
 
+export async function uploadS3File(
+  fp: FilePath,
+  options?: Partial<PutObjectCommandInput>
+) {
+  return s3
+    .send(
+      new PutObjectCommand({
+        StorageClass: 'INTELLIGENT_TIERING',
+        Bucket: fp.bucket,
+        Key: fp.path,
+        ...options,
+      })
+    )
+    .then(() => true)
+    .catch((error) => {
+      console.log(error);
+      return false;
+    });
+}
+
 export async function getSignedS3Url(
   uri: string,
   expiresSec?: number
@@ -101,6 +121,22 @@ export function parseS3Uri(uri: string) {
 }
 export function getS3Uri(fp: FilePath) {
   return `s3://${fp.bucket}/${fp.path}`;
+}
+
+export async function getS3File(fp: FilePath) {
+  try {
+    const { Body } = await s3.send(
+      new GetObjectCommand({
+        Bucket: fp.bucket,
+        Key: fp.path,
+      })
+    );
+    if (!Body) return null;
+    return await Body.transformToByteArray();
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 /** checks file type and, if valid, returns MIME type and standard file extension */

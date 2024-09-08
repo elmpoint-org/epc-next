@@ -9,6 +9,7 @@ const resolvers: StayModule.Resolvers = {
     stays: f.getStays,
     stay: f.getStay,
     staysInRoom: f.getStaysInRoom,
+    stayMostRecentTimestamp: f.getStayMostRecentTimestamp,
   },
   Mutation: {
     stayCreate: f.stayCreate,

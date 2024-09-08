@@ -330,7 +330,7 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
             />
 
             {/* ANY room warning */}
-            {!isCabin && rc.name === ANY_ROOM && (
+            {!isCabin && serverObject.name === ANY_ROOM && (
               <div className="max-w-[24rem] rounded-md border border-amber-600/90 bg-amber-300/30 p-4 text-sm text-amber-900">
                 Rooms marked “{ANY_ROOM}” have special instructions in the
                 calendar system, which won’t work if you change this name.

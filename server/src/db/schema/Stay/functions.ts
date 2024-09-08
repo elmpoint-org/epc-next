@@ -63,6 +63,28 @@ export const getStaysInRoom = h<M.QueryResolvers['staysInRoom']>(
   }
 );
 
+export const getStayMostRecentTimestamp = h<
+  M.QueryResolvers['stayMostRecentTimestamp']
+>(async ({ sources, args: { after } }) => {
+  const REQ_LIMIT = 25;
+
+  // get {number} of items updated after the specified time
+  const found = await sources.stay.query(
+    'tupdated',
+    QueryOp.GT,
+    after,
+    REQ_LIMIT
+  );
+
+  // if none, assume provided TS is current
+  if (!found.length) return after;
+
+  // otherwise find most recent timestamp
+  const recent = found.sort((a, b) => b.tupdated - a.tupdated)[0].tupdated;
+
+  return recent;
+});
+
 export const stayCreate = h<M.MutationResolvers['stayCreate']>(
   loggedIn(),
   async ({ sources, args: fields }) => {
@@ -222,4 +244,9 @@ export function validateDates(start: number, end: number) {
   const days = (end - start) / d1;
   if (days < 0) return false;
   return true;
+}
+
+/** get dayjs object for a TS datestamp. */
+export function dateTSObject(ts: number) {
+  return dayjs.unix(ts).utc();
 }
