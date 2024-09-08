@@ -4,7 +4,7 @@ import { expressErr } from '@@/util/err';
 
 import { graphHTTP } from './db/graph';
 import api from './api/api';
-import ics from './ics';
+import ics from './ics/ics';
 
 if (process.env.IS_OFFLINE) {
   import('dotenv/config');

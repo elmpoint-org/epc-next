@@ -139,21 +139,31 @@ abstract class Model<Type> {
    * @param sortKey the variable to filter by
    * @param op a {@link QueryOp} operator
    * @param vals values to compare to
+   * @param limit number of items to return, if needed
    * @returns an array of matching values
    */
   async query<T extends QueryOp>(
     sortKey: keyof DBType<Type>,
     op: T,
     ...vals: T extends QueryOp.BETWEEN
-      ? [startVal: unknown, endVal: unknown]
-      : [val: unknown]
+      ? [startVal: unknown, endVal: unknown, limit?: number]
+      : [val: unknown, limit?: number]
   ) {
+    // get limit if needed
+    const len = op === QueryOp.BETWEEN ? 2 : 1;
+    let limit;
+    if (vals[len]) {
+      limit = vals[len];
+      vals.splice(len, 1);
+    }
+
     return (await db.queryCompare(this.table, {
       index: `type-${sortKey as string}`,
       query: {
         primaryKey: ['type', this.type],
         sortKey: [sortKey, op, ...vals],
       },
+      limit,
     })) as DBType<Type>[];
   }
 

@@ -16,6 +16,8 @@ import CabinModule from './Cabin/module';
 import CabinSource from './Cabin/source';
 import StayModule from './Stay/module';
 import StaySource from './Stay/source';
+import StayTokenModule from './StayToken/module';
+import StayTokenSource from './StayToken/source';
 
 // DEFINE SCHEMA
 
@@ -30,6 +32,7 @@ export const modules: Module[] = [
   RoomModule,
   CabinModule,
   StayModule,
+  StayTokenModule,
 ];
 
 export const sources = () => ({
@@ -42,4 +45,5 @@ export const sources = () => ({
   room: new RoomSource(),
   cabin: new CabinSource(),
   stay: new StaySource(),
+  stayToken: new StayTokenSource(),
 });

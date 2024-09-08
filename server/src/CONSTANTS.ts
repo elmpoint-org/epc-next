@@ -18,3 +18,9 @@ export const DEFAULT_MAX_FILES_LIST_LIMIT = 100;
 
 /** the maximum number of days after a specified search range to look for matching calendar events. if an event is longer than this number of days, the query will miss it. */
 export const CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS = 270;
+
+/** the length of newly generated tokens for ical authentication */
+export const STAY_TOKEN_CHAR_LENGTH = 96;
+
+/** number of days before webcals are forcibly revalidated */
+export const WEBCAL_STALE_TIME = 7 * 86400; // (#) days

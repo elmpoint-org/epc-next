@@ -125,7 +125,7 @@ methods.query = async (TableName, { query, index, include: include_ }) => {
  * [see the list of valid operands](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html#DDB-Query-request-KeyConditionExpression)
  *
  * @param {*} TableName
- * @param {*} options { index, query }
+ * @param {*} options { index, query, limit?{number} }
  * @returns items[]
  * @example
  *
@@ -148,6 +148,7 @@ methods.queryCompare = async (
       primaryKey: [primaryKey, primaryKeyValue],
       sortKey: [sortKey, operand, ...values],
     },
+    limit,
   }
 ) => {
   const names = [primaryKey, sortKey].reduce(
@@ -173,6 +174,7 @@ methods.queryCompare = async (
       `${n[1]} ${operand} ${v.slice(1).join(' AND ')}`,
   };
   if (index) params.IndexName = index;
+  if (limit) params.Limit = limit;
 
   return (await db.send(new QueryCommand(params))).Items;
 };
