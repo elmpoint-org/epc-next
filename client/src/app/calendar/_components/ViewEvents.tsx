@@ -21,6 +21,7 @@ import { SetState } from '@/util/stateType';
 
 import Timeline from './Timeline';
 import TimelineControls from './TimelineControls';
+import Agenda from './Agenda';
 
 const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -210,6 +211,9 @@ export default function ViewEvents() {
 
           {/* timeline view */}
           <Timeline {...props} />
+
+          {/* agenda view */}
+          <Agenda {...props} />
         </div>
       </InvalidateProvider>
     </>
@@ -218,13 +222,13 @@ export default function ViewEvents() {
 
 export type CalendarProps = {
   events: EventType[] | undefined;
+  updatePeriod: (d: number) => void;
   isLoading: boolean;
   days: number;
   dates: {
     start: number;
     end: number;
   };
-  updatePeriod: (d: number) => void;
   periodState: {
     days: number | undefined;
     setDays: (d: number | undefined) => void;
