@@ -8,7 +8,13 @@ import { clamp } from '@/util/math';
 
 import { CalendarProps, EventType } from './ViewEvents';
 import { clmx } from '@/util/classConcat';
-import { CABIN_COLORS, CabinColor, getCabinColor } from '../_util/cabinColors';
+import {
+  CABIN_COLORS,
+  CabinColor,
+  getCabinColor,
+  getCabinColorObject,
+  useEventColorId,
+} from '../_util/cabinColors';
 
 const EventPopup = lazy(() => import('./EventPopup'));
 
@@ -29,23 +35,10 @@ export default function TimelineEvent({
   const { dates: dateLimits, days } = props;
 
   // get correct color scheme
-  const css = useMemo(() => {
-    const parse = (s?: CabinColor) =>
-      CABIN_COLORS[s ?? 'DEFAULT'] ?? CABIN_COLORS.DEFAULT;
-
-    if (theme) return parse(theme);
-
-    if (event.reservations.length) {
-      const r = event.reservations[0];
-      if (r.room && 'id' in r.room) {
-        let c = getCabinColor(r.room.id);
-        if (c) return parse(c);
-        c = getCabinColor(r.room.cabin?.id);
-        if (c) return parse(c);
-      }
-    }
-    return parse();
-  }, [event.reservations, theme]);
+  const parse = (s?: CabinColor) =>
+    CABIN_COLORS[s ?? 'DEFAULT'] ?? CABIN_COLORS.DEFAULT;
+  const colorId = useEventColorId(event);
+  const css = theme ? parse(theme) : getCabinColorObject(colorId, true);
 
   // calculate grid coordinates
   const loc = useMemo(() => {

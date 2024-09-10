@@ -21,3 +21,5 @@ export type PageArrayOptParams = {
 export type Key = {
   key?: React.Key;
 };
+
+export type ComponentProps<T extends (...args: any) => any> = Parameters<T>[0];

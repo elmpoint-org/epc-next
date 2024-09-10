@@ -56,7 +56,6 @@ const RoomSelector = ({
       const inputBuffer = search;
       setSearch('');
 
-      // TODO handle custom case
       if (id === 'CUSTOM') {
         updateRoomData({
           cabin: null,

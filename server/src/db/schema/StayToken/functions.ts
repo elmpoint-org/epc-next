@@ -72,8 +72,7 @@ export const stayTokenDelete = h<M.MutationResolvers['stayTokenDelete']>(
 
 export const getStayTokenUser = h<M.StayTokenResolvers['user']>(
   async ({ sources, parent }) => {
-    const { id } = parent as DBStayToken;
-
-    return sources.user.get(id);
+    const { userId } = parent as DBStayToken;
+    return sources.user.get(userId);
   }
 );

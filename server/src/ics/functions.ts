@@ -167,7 +167,7 @@ function roomText(room: ICSRoom) {
 }
 
 function getICALTime(ts: number) {
-  const d = dateTSObject(ts);
+  const d = dateTSObject(ts).add(1, 'day');
   return new ical.Time({
     isDate: true,
     year: d.year(),

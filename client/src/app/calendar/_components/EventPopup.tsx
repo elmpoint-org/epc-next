@@ -36,9 +36,11 @@ const EventEditWindow = lazy(() => import('./EventEditWindow'));
 export default function EventPopup({
   event,
   highlightRoom,
+  to: placement,
 }: {
   event: EventType;
   highlightRoom?: string;
+  to?: Placement;
 }) {
   // stay editor setup
   const { prop: triggerEditStay, trigger: runEditStay } = useReverseCbTrigger();
@@ -50,7 +52,7 @@ export default function EventPopup({
       <PopoverPanel
         transition
         anchor={{
-          to: 'bottom',
+          to: placement ?? 'bottom',
           gap: '0.5rem',
           padding: '0.5rem',
         }}
@@ -267,3 +269,7 @@ function IconRow(props: { icon: IconType; show?: boolean } & Children) {
       </>
     );
 }
+
+type AnchorProps = Parameters<typeof PopoverPanel>[0]['anchor'] & {};
+type StrOnly<T> = T extends string ? T : never;
+type Placement = StrOnly<AnchorProps>;

@@ -14,7 +14,7 @@ export const UserCtxProvider = ({
 }: { user: AuthUser | null; removeToken?: boolean } & Children) => {
   // remove invalid tokens
   useEffect(() => {
-    if (removeToken && !user) removeStoredToken();
+    // if (removeToken && !user) removeStoredToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

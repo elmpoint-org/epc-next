@@ -1,4 +1,6 @@
 import { clx } from '@/util/classConcat';
+import { EventType } from '../_components/ViewEvents';
+import { useMemo } from 'react';
 
 const COLOR_MAP: Record<string, CabinColor> = {
   '574ce1ab-6aa6-4ea5-a082-683125b417a7': 'RED', // ide cabin
@@ -8,20 +10,6 @@ const COLOR_MAP: Record<string, CabinColor> = {
   '649d65b6-9a50-491f-b0f2-8a0e22ee6275': 'PINK', // gay's cabin
   '662357e8-953b-4a7b-844d-003c317860c8': 'BLUE', // day tripper
 };
-
-export function getCabinColor(id?: string): CabinColor | undefined {
-  if (!id) return;
-  return COLOR_MAP[id];
-}
-
-export function getCabinColorObject(id?: string, withDefault?: boolean) {
-  let key = getCabinColor(id);
-  if (!key) {
-    if (withDefault) key = 'DEFAULT';
-    else return;
-  }
-  return CABIN_COLORS[key];
-}
 
 export const CABIN_COLORS = {
   DEFAULT: {
@@ -82,8 +70,43 @@ export const CABIN_COLORS = {
     selected: clx('border-slate-600 bg-slate-300/20 text-slate-900'),
     swatch: clx('bg-slate-600'),
   },
-} satisfies Record<
-  string,
-  { main: string; specialty: string; swatch: string; selected: string }
->;
+} satisfies Record<string, CabinColorObject>;
+export type CabinColorObject = {
+  main: string;
+  specialty: string;
+  swatch: string;
+  selected: string;
+};
 export type CabinColor = keyof typeof CABIN_COLORS;
+
+export function getCabinColor(id?: string): CabinColor | undefined {
+  if (!id) return;
+  return COLOR_MAP[id];
+}
+
+export function getCabinColorObject<WD extends boolean | undefined>(
+  id?: string,
+  withDefault?: WD,
+): WD extends true ? CabinColorObject : CabinColorObject | undefined {
+  let key = getCabinColor(id);
+  if (!key) {
+    if (withDefault) key = 'DEFAULT';
+    else return undefined as any;
+  }
+  return CABIN_COLORS[key];
+}
+
+export function useEventColorId(event: EventType) {
+  const id = useMemo(() => {
+    if (event.reservations.length) {
+      const r = event.reservations[0];
+      if (r.room && 'id' in r.room) {
+        let c = getCabinColor(r.room.id);
+        if (c) return r.room.id;
+        c = getCabinColor(r.room.cabin?.id);
+        if (c) return r.room.cabin?.id;
+      }
+    }
+  }, [event.reservations]);
+  return id;
+}
