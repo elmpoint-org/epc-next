@@ -6,8 +6,14 @@ import A from './_components/_base/A';
 import LogoPanel from './_components/_base/LogoPanel';
 import LinkBlock from './_components/home/LinkBlock';
 
+import AgendaToday from './_components/home/AgendaToday';
+import { getUser } from './_ctx/user/provider';
+
 export default async function HomePage() {
   const links = homeLinks; // TODO should be db
+
+  const user = await getUser();
+  const loggedIn = !!user;
 
   return (
     <>
@@ -62,6 +68,8 @@ export default async function HomePage() {
                 Have a suggestion? Found a bug?
               </a>
             </div>
+
+            {loggedIn && <AgendaToday />}
           </div>
         </div>
       </div>

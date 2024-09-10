@@ -22,6 +22,7 @@ import {
   IconLibraryPlus,
   IconLoader2,
   IconPlus,
+  IconSortAscendingShapes,
   IconStackPop,
   IconStackPush,
   IconTable,
@@ -34,7 +35,7 @@ import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 import { useCalendarControls } from '../_util/controls';
-import { useDisplayByRooms } from '../_util/displayByRooms';
+import { useCalendarView, useDisplayByRooms } from '../_util/displayByRooms';
 
 import EventEditWindow from './EventEditWindow';
 import DKbd from '@/app/_components/_base/DKbd';
@@ -72,6 +73,8 @@ export default function TimelineControls(props: CalendarProps) {
   function updateByRoom(nv: boolean) {
     roomLoading(async () => setDisplayByRoom(nv));
   }
+
+  const [view, setView] = useCalendarView();
 
   // new stay prompt
   const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
@@ -198,7 +201,10 @@ export default function TimelineControls(props: CalendarProps) {
           <div className="self-stretch border-l border-slate-300"></div>
 
           {/* rooms controls */}
-          <div className="flex flex-row items-center gap-2">
+          <div
+            className="flex flex-row items-center gap-2 data-[h]:hidden"
+            data-h={view !== 'TIMELINE' || null}
+          >
             <Transition show={displayByRoom}>
               {/* collapse button */}
               <TableOption
@@ -249,6 +255,19 @@ export default function TimelineControls(props: CalendarProps) {
               </ActionIcon>
             </Tooltip>
           </div>
+
+          {/* view type */}
+          <Tooltip label="Change view">
+            <ActionIcon
+              variant="subtle"
+              color="slate"
+              onClick={() =>
+                setView(view === 'TIMELINE' ? 'AGENDA' : 'TIMELINE')
+              }
+            >
+              <IconSortAscendingShapes />
+            </ActionIcon>
+          </Tooltip>
 
           <div className="self-stretch border-l border-slate-300"></div>
 

@@ -16,14 +16,14 @@ import { Inside } from '@/util/inferTypes';
 import { useDefaultDays } from '../_util/defaultDays';
 import { createCallbackCtx } from '@/app/_ctx/callback';
 import { useCalendarControls } from '../_util/controls';
-import { useDisplayByRooms } from '../_util/displayByRooms';
+import { useCalendarView, useDisplayByRooms } from '../_util/displayByRooms';
 import { SetState } from '@/util/stateType';
 
 import Timeline from './Timeline';
 import TimelineControls from './TimelineControls';
 import Agenda from './Agenda';
 
-const EVENTS_QUERY = graphql(`
+export const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
     stays(start: $start, end: $end) {
       id
@@ -57,9 +57,8 @@ const EVENTS_QUERY = graphql(`
 `);
 export type EventType = Inside<ResultOf<typeof EVENTS_QUERY>['stays']>;
 
-const { Provider: InvalidateProvider, useHook: useInvalidate } =
+export const { Provider: InvalidateProvider, useHook: useInvalidate } =
   createCallbackCtx();
-export { useInvalidate };
 
 /** query parameters */
 export type QP = 'date' | 'days';
@@ -137,6 +136,9 @@ export default function ViewEvents() {
   const _dbr = useDisplayByRooms();
   const toggleDisplayByRoom = useCallback(() => _dbr[1](!_dbr[0]), [_dbr]);
 
+  // calendar view
+  const [view] = useCalendarView();
+
   // CALENDAR PROPS
   const props: CalendarProps = {
     events,
@@ -210,10 +212,10 @@ export default function ViewEvents() {
           <TimelineControls {...props} />
 
           {/* timeline view */}
-          <Timeline {...props} />
+          {view === 'TIMELINE' && <Timeline {...props} />}
 
           {/* agenda view */}
-          <Agenda {...props} />
+          {view === 'AGENDA' && <Agenda {...props} />}
         </div>
       </InvalidateProvider>
     </>
