@@ -32,13 +32,11 @@ import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 import { useCalendarControls } from '../_util/controls';
 import { useCalendarView, useDisplayByRooms } from '../_util/displayByRooms';
+import { IconType } from '@/util/iconType';
+import { CALENDAR_DAYS_MAX, CALENDAR_DAYS_MIN } from '@/CONSTANTS';
 
 import EventEditWindow from './EventEditWindow';
 import DKbd from '@/app/_components/_base/DKbd';
-import { IconType } from '@/util/iconType';
-
-const DAYS_MIN = 1;
-const DAYS_MAX = 14;
 
 export default function Controls(props: CalendarProps) {
   const {
@@ -187,7 +185,8 @@ export default function Controls(props: CalendarProps) {
               onChange={({ currentTarget: { value: v } }) => {
                 if (!v.length) setDays(undefined);
                 const d = parseInt((v.match(/[\d\.]/g) || ['']).join(''));
-                if (Number.isFinite(d)) setDays(clamp(d, DAYS_MIN, DAYS_MAX));
+                if (Number.isFinite(d))
+                  setDays(clamp(d, CALENDAR_DAYS_MIN, CALENDAR_DAYS_MAX));
               }}
             />
             <span>days</span>

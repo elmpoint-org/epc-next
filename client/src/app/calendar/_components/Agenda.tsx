@@ -194,17 +194,14 @@ function UnchangedEvents({
       </div>
 
       {/* unchanged events */}
-      <Transition show={isOpen}>
-        {events.map((event) => (
-          <TransitionChild key={event.id}>
-            <div className="col-span-full mt-0 grid grid-cols-subgrid duration-200 data-[closed]:-mt-8 data-[closed]:opacity-0">
-              <StatusIcon status="DOT" />
-              <AgendaEvent event={event} />
-            </div>
-          </TransitionChild>
-        ))}
-        <></>
-      </Transition>
+      {events.map((event) => (
+        <Transition key={event.id} show={isOpen}>
+          <div className="col-span-full mt-0 grid grid-cols-subgrid duration-200 data-[closed]:-mt-8 data-[closed]:opacity-0">
+            <StatusIcon status="DOT" />
+            <AgendaEvent event={event} />
+          </div>
+        </Transition>
+      ))}
     </>
   );
 }
