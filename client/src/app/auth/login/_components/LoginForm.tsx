@@ -63,7 +63,13 @@ export default function LoginForm() {
         await magicLinkFn.mutateAsync({ email, redirect: redirectTo });
         notifications.show({
           title: 'Login link sent',
-          message: 'Check your email!',
+          message: (
+            <>
+              Check your email!
+              <br />
+              (You might need to check your spam filter.)
+            </>
+          ),
         });
         setEmail('');
       } catch (e) {

@@ -15,9 +15,12 @@ export default function LogoutAction() {
 
   // notice when the user object disappears
   const user = useUser();
-  const router = useRouter();
   useEffect(() => {
-    if (!user) router.push('/');
+    if (!user) {
+      if (window) {
+        window.location.href = '/';
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 

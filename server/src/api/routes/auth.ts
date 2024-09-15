@@ -38,6 +38,7 @@ export const sendMagicLink = t.procedure
           userFromEmail(email: $email) {
             id
             email
+            firstName
           }
         }
       `),
@@ -51,6 +52,7 @@ export const sendMagicLink = t.procedure
     await passwordlessSendMagicLink({
       userId: u.id,
       email: u.email,
+      firstName: u.firstName ?? undefined,
       redirect,
     }).catch((e) => {
       throw err('BAD_REQUEST', 'MAGIC_LINK_FAILED', e);

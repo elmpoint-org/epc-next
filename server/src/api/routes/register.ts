@@ -4,8 +4,8 @@ import { err, t } from '../trpc';
 import { graph } from '@@/db/graph';
 import { graphql } from '@@/db/lib/utilities';
 import { signReferralToken, signToken } from '@@/auth/sign';
-import { sendRegistrationEmail } from '@@/email/send';
 import { verifyReferralToken } from '@@/auth/verify';
+import { emails } from '@@/email';
 
 export const checkReferral = t.procedure
   .input(z.object({ email: z.string() }))
@@ -32,9 +32,8 @@ export const checkReferral = t.procedure
     });
 
     // send email
-    await sendRegistrationEmail(parsedEmail, token).catch((e) => {
-      throw err('INTERNAL_SERVER_ERROR', 'FAILED_TO_SEND_EMAIL', e);
-    });
+    const success = await emails.emailRegistration(parsedEmail, { token });
+    if (!success) throw err('INTERNAL_SERVER_ERROR', 'EMAIL_SEND_FAILED');
   });
 
 export const verifyToken = t.procedure
