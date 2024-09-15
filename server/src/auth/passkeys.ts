@@ -1,4 +1,5 @@
 import { EMAIL_LOGIN_EXPIRE } from '@@/CONSTANTS';
+import { emails } from '@@/email';
 import { isDev, siteDomain } from '@@/util/dev';
 import { PasswordlessClient } from '@passwordlessdev/passwordless-nodejs';
 import axios from 'axios';
@@ -14,6 +15,7 @@ export const passwordless = new PasswordlessClient(PASSWORDLESS_SECRET!, {
 export async function passwordlessSendMagicLink(p: {
   email: string;
   userId: string;
+  firstName?: string;
   redirect?: string;
 }) {
   const params = {
@@ -27,22 +29,25 @@ export async function passwordlessSendMagicLink(p: {
     timeToLive: EMAIL_LOGIN_EXPIRE,
   };
 
-  if (isDev) {
-    // generate fake login email for dev environments
-    const { data } = await axios.post(
+  // get validation token
+  const { data } = await axios
+    .post(
       PASSWORDLESS_API + '/signin/generate-token',
       { userId: params.userId },
       { headers: { ApiSecret: PASSWORDLESS_SECRET } }
-    );
-    const out = {
-      ...params,
-      urlTemplate: undefined,
-      url: params.urlTemplate.replace('$TOKEN', data?.token),
-    };
-    console.log('MAGIC LINK EMAIL\n', out);
-    return;
-  }
+    )
+    .catch(() => ({ data: null }));
+  if (!data?.token) throw new Error();
 
+  const url = params.urlTemplate.replace('$TOKEN', data.token);
+
+  const success = await emails.emailLogin(p.email, {
+    url,
+    firstName: p.firstName,
+  });
+  if (success) return;
+
+  // use passwordless as a fallback sender
   await axios.post(PASSWORDLESS_API + '/magic-links/send', params, {
     headers: { ApiSecret: PASSWORDLESS_SECRET },
   });

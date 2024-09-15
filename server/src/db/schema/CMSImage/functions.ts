@@ -11,14 +11,7 @@ import type { DBCmsImage } from './source';
 import type { DBType } from '@@/db/lib/Model';
 
 import { BUCKET, PATH, checkImageType } from '@@/s3/images';
-import {
-  deleteS3File,
-  doesFileExist,
-  getS3Uri,
-  getSignedS3Url,
-  getS3UploadUrl,
-  parseS3Uri,
-} from '@@/s3/s3';
+import { s3 } from '@@/s3';
 
 import { randomUUID as uuid } from 'node:crypto';
 
@@ -83,7 +76,7 @@ export const cmsImageUpload = h<M.MutationResolvers['cmsImageUpload']>(
       bucket: BUCKET,
       path: PATH + `${id}.${imageType.ext}`,
     };
-    const uri = getS3Uri(fp);
+    const uri = s3.getUri(fp);
     const name = fileName.trim().match(/(.*)\.[^\.]+$/)?.[1];
 
     // create DB entry
@@ -104,7 +97,7 @@ export const cmsImageUpload = h<M.MutationResolvers['cmsImageUpload']>(
       });
 
     // presign upload url
-    const { data, error } = await getS3UploadUrl(fp);
+    const { data, error } = await s3.getUploadUrl(fp);
     if (error || !data) throw err('PRESIGN_FAILED');
 
     return { id, url: data };
@@ -119,9 +112,9 @@ export const cmsImageConfirm = h<M.MutationResolvers['cmsImageConfirm']>(
     if (!img) throw err('INVALID_ID');
 
     // check to make sure the file exists
-    const fp = parseS3Uri(img.uri);
+    const fp = s3.parseUri(img.uri);
     if (!fp) throw err('INVALID_URI');
-    const exists = await doesFileExist(fp).catch((err) => {
+    const exists = await s3.doesFileExist(fp).catch((err) => {
       throw err('FAILED_TO_CONFIRM', err);
     });
     if (!exists) throw err('FILE_NOT_FOUND');
@@ -159,10 +152,10 @@ export const cmsImageDelete = h<M.MutationResolvers['cmsImageDelete']>(
     const img = await sources.cms.image.get(id);
     if (!img) throw err('IMAGE_NOT_FOUND');
 
-    const fp = parseS3Uri(img.uri);
+    const fp = s3.parseUri(img.uri);
     if (!fp) throw err('INVALID_URI');
 
-    await deleteS3File(fp).catch((error) => {
+    await s3.deleteFile(fp).catch((error) => {
       throw err('FAILED_TO_DELETE', undefined, error);
     });
 
@@ -180,9 +173,9 @@ export const cmsImageDeleteMultiple = h<
     // attempt to delete images as well
     await Promise.all(
       imgs.map(async (img) => {
-        const fp = parseS3Uri(img?.uri ?? '');
+        const fp = s3.parseUri(img?.uri ?? '');
         if (!fp) return;
-        await deleteS3File(fp).catch((error) => {
+        await s3.deleteFile(fp).catch((error) => {
           throw err('FAILED_TO_DELETE', undefined, error);
         });
       })
@@ -201,9 +194,9 @@ export const cmsImageDeleteUnconfirmed = h<
   // attempt to delete images as well
   await Promise.all(
     images.map(async (img) => {
-      const fp = parseS3Uri(img.uri);
+      const fp = s3.parseUri(img.uri);
       if (!fp) throw err('INVALID_URI');
-      await deleteS3File(fp).catch((error) => {
+      await s3.deleteFile(fp).catch((error) => {
         throw err('FAILED_TO_DELETE', undefined, error);
       });
     })
@@ -237,7 +230,7 @@ export const getCmsImageConfirmed = h<M.CMSImageResolvers['confirmed']>(
 
 export const getCmsImageUrl = h<M.CMSImageResolvers['url']>(
   async ({ parent: { uri } }) => {
-    const url = await getSignedS3Url(uri);
+    const url = await s3.getSignedUrl(uri);
     if (!url) throw err('FAILED_TO_SIGN_URL');
 
     return url;

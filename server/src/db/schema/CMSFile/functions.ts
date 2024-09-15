@@ -8,19 +8,9 @@ import {
   handle as h,
   loggedIn,
 } from '@@/db/lib/utilities';
-import {
-  createS3Folder,
-  deleteS3File,
-  deleteS3Folder,
-  doesFileExist,
-  getS3UploadUrl,
-  getS3Uri,
-  getSignedS3Url,
-  listS3Files,
-  moveS3File,
-} from '@@/s3/s3';
 
 import { BUCKET } from '@@/s3/files';
+import { s3 } from '@@/s3';
 
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 
@@ -34,7 +24,7 @@ export const getCmsFiles = h<M.QueryResolvers['cmsFiles']>(
     }
 
     // get files list
-    const resp = await listS3Files(BUCKET, root ?? undefined, {
+    const resp = await s3.listFiles(BUCKET, root ?? undefined, {
       max: max ?? DEFAULT_MAX_FILES_LIST_LIMIT,
       start: startAfter ?? undefined,
     });
@@ -57,7 +47,7 @@ export const getCmsFiles = h<M.QueryResolvers['cmsFiles']>(
 export const getCmsFilePresign = h<M.QueryResolvers['cmsFilePresign']>(
   loggedIn(),
   async ({ args: { path } }) => {
-    return getSignedS3Url({ bucket: BUCKET, path });
+    return s3.getSignedUrl({ bucket: BUCKET, path });
   }
 );
 
@@ -79,17 +69,19 @@ export const cmsFileUpload = h<M.MutationResolvers['cmsFileUpload']>(
     };
 
     // presign upload url
-    const { data, error } = await getS3UploadUrl(fp);
+    const { data, error } = await s3.getUploadUrl(fp);
     if (error || !data) throw err('PRESIGN_FAILED');
 
     // create folder if it doesn't already exist
-    const folder_exists = await doesFileExist({
-      bucket: BUCKET,
-      path: root,
-    }).catch(() => null);
-    if (folder_exists === false) await createS3Folder(BUCKET, root);
+    const folder_exists = await s3
+      .doesFileExist({
+        bucket: BUCKET,
+        path: root,
+      })
+      .catch(() => null);
+    if (folder_exists === false) await s3.createFolder(BUCKET, root);
 
-    return { uri: getS3Uri(fp), url: data };
+    return { uri: s3.getUri(fp), url: data };
   }
 );
 
@@ -103,7 +95,7 @@ export const cmsFileCreateFolder = h<
     if (!root.match(/^\w/)) throw err('BAD_FOLDER_NAME');
     if (!root.match(/\/$/)) throw err('ROOT_FOLDER_MISSING_TRAILING_SLASH');
 
-    await createS3Folder(BUCKET, root).catch((e) => {
+    await s3.createFolder(BUCKET, root).catch((e) => {
       throw err('S3_ERROR', undefined, e);
     });
 
@@ -117,12 +109,13 @@ export const cmsFileMove = h<M.MutationResolvers['cmsFileMove']>(
     let finished = 0;
     await Promise.all(
       changes.map(async ({ path, newPath }) => {
-        await moveS3File({
-          bucket: BUCKET,
-          path,
-          newPath,
-          deleteOld: copy !== undefined ? !copy : true,
-        })
+        await s3
+          .moveFile({
+            bucket: BUCKET,
+            path,
+            newPath,
+            deleteOld: copy !== undefined ? !copy : true,
+          })
           .then(() => finished++)
           .catch((e) => {
             err('', undefined, e);
@@ -141,10 +134,10 @@ export const cmsFileDelete = h<M.MutationResolvers['cmsFileDelete']>(
       paths.map(async (path) => {
         path = path.trim();
         if (path.at(-1) === '/') {
-          const { errors } = await deleteS3Folder({ bucket: BUCKET, path });
+          const { errors } = await s3.deleteFolder({ bucket: BUCKET, path });
           if (errors.length) throw err('FAILED_ITEMS', JSON.stringify(errors));
         } else {
-          await deleteS3File({ bucket: BUCKET, path }).catch(() => {});
+          await s3.deleteFile({ bucket: BUCKET, path }).catch(() => {});
         }
       })
     );

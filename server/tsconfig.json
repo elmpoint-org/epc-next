@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "moduleResolution": "Bundler",
     "incremental": true,
+    "jsx": "react-jsx",
     "paths": {
       "@@/*": ["./src/*"],
       "graphql-modules": ["./node_modules/graphql-modules/index.d.ts"]

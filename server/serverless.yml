@@ -26,6 +26,7 @@ provider:
     USER_AUTH_SECRET: ${ssm:/epc--user-auth-secret}
     PASSWORDLESS_SECRET: ${ssm:/epc--passwordless-secret}
     BREVO_API_KEY: ${ssm:/epc--brevo-api-key}
+    RESEND_API_KEY: ${ssm:/epc--resend-api-key}
 
 functions:
   api:

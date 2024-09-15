@@ -4,13 +4,8 @@ import { graph } from '@@/db/graph';
 import { graphql } from '@@/db/lib/utilities';
 
 import { WEBCAL_STALE_TIME } from '@@/CONSTANTS';
-import {
-  Buckets,
-  deleteS3File,
-  getS3File,
-  listS3Files,
-  uploadS3File,
-} from '@@/s3/s3';
+import { s3 } from '@@/s3';
+import { Buckets } from '@@/s3/s3';
 
 const BUCKET = Buckets.RESOURCE_BUCKET;
 const PATH = 'ics/';
@@ -42,7 +37,7 @@ export async function getStaysMostRecent(after: number) {
 }
 
 export async function getCacheTimestamp() {
-  const files = await listS3Files(BUCKET, PATH);
+  const files = await s3.listFiles(BUCKET, PATH);
   if (!files?.data?.length) return null;
 
   const recent = files.data
@@ -56,7 +51,7 @@ export async function getCacheTimestamp() {
 }
 
 export async function retrieveCache(ts: number) {
-  const data = await getS3File({
+  const data = await s3.getFile({
     bucket: BUCKET,
     path: PATH + `${ts}.ics`,
   });
@@ -73,7 +68,7 @@ export async function retrieveCache(ts: number) {
 export async function updateCache(createdTS: number, newFile: string) {
   const lastCache = await getCacheTimestamp();
 
-  const success = await uploadS3File(
+  const success = await s3.uploadFile(
     {
       bucket: BUCKET,
       path: PATH + `${createdTS}.ics`,
@@ -86,7 +81,7 @@ export async function updateCache(createdTS: number, newFile: string) {
   }
 
   if (lastCache) {
-    deleteS3File({
+    s3.deleteFile({
       bucket: BUCKET,
       path: PATH + `${lastCache}.ics`,
     }).catch(() => {});

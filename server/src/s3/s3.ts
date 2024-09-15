@@ -35,7 +35,7 @@ type GetUploadUrlProps = {
   // type:
   expiresSec?: number;
 };
-export async function getS3UploadUrl({
+export async function getUploadUrl({
   bucket,
   path,
   expiresSec,
@@ -54,7 +54,7 @@ export async function getS3UploadUrl({
   return { data: url };
 }
 
-export async function uploadS3File(
+export async function uploadFile(
   fp: FilePath,
   options?: Partial<PutObjectCommandInput>
 ) {
@@ -74,22 +74,19 @@ export async function uploadS3File(
     });
 }
 
-export async function getSignedS3Url(
+export async function getSignedUrl(
   uri: string,
   expiresSec?: number
 ): Promise<string | null>;
-export async function getSignedS3Url(
+export async function getSignedUrl(
   filePath: FilePath,
   expiresSec?: number
 ): Promise<string | null>;
-export async function getSignedS3Url(
-  p: string | FilePath,
-  expiresSec?: number
-) {
+export async function getSignedUrl(p: string | FilePath, expiresSec?: number) {
   let fp: FilePath;
   if (typeof p === 'string') {
     // parse S3 URI if needed
-    const parsed = parseS3Uri(p);
+    const parsed = parseUri(p);
     if (!parsed) return null;
     fp = parsed;
   } else fp = p;
@@ -111,7 +108,7 @@ function presignFile(fp: FilePath, expiresSec?: number) {
   );
 }
 
-export function parseS3Uri(uri: string) {
+export function parseUri(uri: string) {
   const m = uri?.match(/^s3:\/\/([^\/]+)\/(.+)$/);
   if (!m) return null;
   return {
@@ -119,11 +116,11 @@ export function parseS3Uri(uri: string) {
     path: m[2],
   } as FilePath;
 }
-export function getS3Uri(fp: FilePath) {
+export function getUri(fp: FilePath) {
   return `s3://${fp.bucket}/${fp.path}`;
 }
 
-export async function getS3File(fp: FilePath) {
+export async function getFile(fp: FilePath) {
   try {
     const { Body } = await s3.send(
       new GetObjectCommand({
@@ -171,7 +168,7 @@ export async function doesFileExist(fp: FilePath) {
  * delete a file
  * @throws usually an {@link S3ServiceException}
  */
-export async function deleteS3File(fp: FilePath) {
+export async function deleteFile(fp: FilePath) {
   await s3.send(
     new DeleteObjectCommand({
       Bucket: fp.bucket,
@@ -180,7 +177,7 @@ export async function deleteS3File(fp: FilePath) {
   );
 }
 
-export async function deleteS3Folder(fp: FilePath) {
+export async function deleteFolder(fp: FilePath) {
   let deleted = 0; // number of files deleted
   const errors: { key: string; code: string }[] = [];
 
@@ -223,7 +220,7 @@ export async function deleteS3Folder(fp: FilePath) {
   return { deleted, errors };
 }
 
-export async function listS3Files(
+export async function listFiles(
   bucket: Buckets,
   folder?: string,
   paged?: {
@@ -259,7 +256,7 @@ export async function listS3Files(
  * move or copy (or rename) a file
  * @throws usually an {@link S3ServiceException}
  */
-export async function moveS3File({
+export async function moveFile({
   bucket,
   path,
   newPath,
@@ -290,7 +287,7 @@ export async function moveS3File({
  * create a new empty folder object.
  * @throws usually an {@link S3ServiceException}
  */
-export async function createS3Folder(bucket: Buckets, folder: string) {
+export async function createFolder(bucket: Buckets, folder: string) {
   await s3.send(
     new PutObjectCommand({
       Bucket: bucket,
