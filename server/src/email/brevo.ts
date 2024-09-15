@@ -3,7 +3,6 @@ import {
   SendSmtpEmailSender,
   TransactionalEmailsApi,
 } from '@getbrevo/brevo';
-import { Senders } from './senders';
 
 const { BREVO_API_KEY } = process.env;
 
@@ -12,20 +11,17 @@ brevo.setApiKey(0, BREVO_API_KEY as string);
 
 const sender: SendSmtpEmailSender = {
   name: 'Elm Point',
-  email: Senders.DEFAULT,
+  email: 'noreply@elmpoint.xyz',
 };
 
-export async function sendRawEmail({
-  to,
-  subject,
-  html,
-  text,
-}: {
+export async function sendRawEmail(props: {
   to: string | string[];
   subject: string;
   html: string;
   text: string;
 }) {
+  const { to, subject, html, text } = props;
+
   const email = new SendSmtpEmail();
   email.sender = sender;
   email.to = Array.isArray(to)

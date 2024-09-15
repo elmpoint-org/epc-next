@@ -22,7 +22,7 @@ export async function emailRegistration(
   );
 }
 
-const SUBJECT = 'Verify your email address - Elm Point';
+const SUBJECT = 'Verify your email address';
 function Content({ url }: { url: string }) {
   return (
     <Wrapper

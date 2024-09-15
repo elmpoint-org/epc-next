@@ -15,10 +15,12 @@ export async function send(
 
   const { error } = await resend.emails.send({
     ...props,
+    text: props.text ?? (await render(<>{props.react}</>, { plainText: true })),
   });
   if (error) {
     if (error.name.includes('invalid') || error.name.includes('missing'))
       return false;
+
     // run fallback if requested
     if (!options?.fallback) return false;
     return brevoFallback(props.to, props.subject, props.react);

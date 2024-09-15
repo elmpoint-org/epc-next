@@ -2,7 +2,7 @@
   "name": "epc-next__server",
   "private": true,
   "scripts": {
-    "dev": "nodemon --exec \"sls offline start\"",
+    "dev": "nodemon --exec \"sls offline start\" -e js,mjs,cjs,json,tsx",
     "push": "sls deploy",
     "gql:gen": "graphql-codegen -c ./src/db/codegen.ts",
     "postinstall": "pnpm run gql:gen"

@@ -27,9 +27,9 @@ export const Wrapper = forwardRef<HTMLHtmlElement, WrapperProps>(
     <Html ref={ref}>
       <Tailwind>
         <Head />
-        <Body className="font-sans px-2 sm:pt-6 bg-slate-200 overflow-x-hidden">
+        <Body className="font-sans px-2 sm:pt-6 bg-slate-50 overflow-x-hidden">
           <Container className="mx-auto w-full max-w-[384px]">
-            <div className="relative space-y-4 border border-solid border-slate-300 bg-slate-100 p-6 rounded-xl">
+            <div className="relative space-y-4 border border-solid border-slate-300 shadow-sm p-6 rounded-xl">
               <Section>
                 <Img
                   src="https://one.elmpoint.xyz/epc-email-logo.png"
@@ -45,9 +45,8 @@ export const Wrapper = forwardRef<HTMLHtmlElement, WrapperProps>(
 
               {children}
             </div>
-
-            {footer}
           </Container>
+          {footer}
         </Body>
       </Tailwind>
     </Html>
@@ -67,7 +66,10 @@ export const Footer = forwardRef<HTMLDivElement, Children & ClassNames>(
   ({ children, className }, ref) => (
     <div
       ref={ref}
-      className={clx('text-sm text-center p-4 text-slate-600', className)}
+      className={clx(
+        'text-sm max-w-screen-lg mx-auto break-all text-center p-4 text-slate-600',
+        className
+      )}
     >
       {children}
     </div>
