@@ -24,7 +24,7 @@
   /* COMPONENT STYLES */
 
   & img {
-    @apply max-w-full rounded-lg ring-dgreen ring-offset-2 data-[align=center]:mx-auto data-[align=right]:ml-auto pmg-selected:ring-2;
+    @apply h-auto max-w-full rounded-lg bg-slate-200 ring-dgreen ring-offset-2 data-[align=center]:mx-auto data-[align=right]:ml-auto pmg-selected:ring-2;
   }
 
   & div[data-youtube-video] {

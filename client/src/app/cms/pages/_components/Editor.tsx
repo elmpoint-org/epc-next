@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useMemo } from 'react';
 
 import { Link, RichTextEditor } from '@mantine/tiptap';
@@ -59,6 +57,7 @@ export default function TextEditor({
       RegisterPageData(pageId),
     ],
     content: parsedContent ?? undefined,
+    immediatelyRender: false,
 
     onUpdate({ editor }) {
       debounce(() => updateForm({ content: JSON.stringify(editor.getJSON()) }));

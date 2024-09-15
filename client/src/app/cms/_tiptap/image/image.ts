@@ -19,6 +19,7 @@ declare module '@tiptap/core' {
         atts: {
           src: string;
           imgWidth: number;
+          imgHeight: number;
         },
       ) => ReturnType;
       setImageBlockWidth: (percent: number) => ReturnType;
@@ -29,6 +30,7 @@ export type ImageTypeAtts = {
   src: string;
   percent: string;
   imgWidth: string;
+  imgHeight: string;
   textAlign: TextAlignEnum;
 };
 
@@ -57,6 +59,11 @@ export const Image = ImageRoot.extend({
         data: 'data-img-width',
         default: '',
       }),
+      imgHeight: att({
+        att: 'imgHeight',
+        data: 'data-img-height',
+        default: '',
+      }),
       textAlign: att({
         att: 'textAlign',
         data: 'data-align',
@@ -69,14 +76,20 @@ export const Image = ImageRoot.extend({
     // calculate width
     const atts = node.attrs as Atts;
     let percent = parseInt(atts.percent);
-    let img = parseInt(atts.imgWidth);
     if (!Number.isFinite(percent)) percent = 100;
-    if (!Number.isFinite(img)) img = DEFAULT_IMAGE_WIDTH;
-    const px = Math.round((percent / 100) * img);
+
+    let width = parseInt(atts.imgWidth);
+    if (!Number.isFinite(width)) width = DEFAULT_IMAGE_WIDTH;
+    let height = parseInt(atts.imgHeight);
+    if (!Number.isFinite(height)) height = 0;
+
+    const px = Math.round((percent / 100) * width);
 
     return [
       'img',
       mergeAttributes(HTMLAttributes, this.options.HTMLAttributes, {
+        width,
+        height,
         style: `width: ${px}px`,
       }),
     ];
@@ -85,13 +98,14 @@ export const Image = ImageRoot.extend({
   addCommands() {
     return {
       setImageBlockAt:
-        (pos, { src, imgWidth }) =>
+        (pos, { src, imgWidth, imgHeight }) =>
         ({ commands }) =>
           commands.insertContentAt(pos, {
             type: ImageTypeName,
             attrs: {
               src,
               imgWidth: '' + imgWidth,
+              imgHeight: '' + imgHeight,
             } as Partial<Atts>,
           }),
       setImageBlockWidth:
