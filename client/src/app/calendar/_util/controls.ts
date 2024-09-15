@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { CalendarProps } from '../_components/ViewEvents';
+import { CalendarProps } from '../_components/Calendar';
 import { useDefaultDays } from './defaultDays';
 import { D1, dateStartOfWeek, dateTS } from './dateUtils';
 

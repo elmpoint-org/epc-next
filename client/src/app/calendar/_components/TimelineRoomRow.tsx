@@ -4,7 +4,7 @@ import { ActionIcon } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 
-import { CalendarProps } from './ViewEvents';
+import { CalendarProps } from './Calendar';
 import { Cabin, Room, useGetRooms } from '../new/state/getRoomData';
 import { ANY_ROOM } from '@@/db/schema/Room/CABIN_DATA';
 

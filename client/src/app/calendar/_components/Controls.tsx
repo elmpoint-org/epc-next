@@ -14,10 +14,6 @@ import { DatePicker } from '@mantine/dates';
 import {
   IconArrowLeft,
   IconArrowRight,
-  IconCircleDotted,
-  IconLayoutCards,
-  IconLayoutNavbarCollapseFilled,
-  IconLayoutNavbarExpandFilled,
   IconLibraryMinus,
   IconLibraryPlus,
   IconLoader2,
@@ -28,7 +24,7 @@ import {
   IconTable,
 } from '@tabler/icons-react';
 
-import { CalendarProps } from './ViewEvents';
+import { CalendarProps } from './Calendar';
 import { dayStyles } from '../_util/dayStyles';
 import { dateFormat, dateTSLocal } from '../_util/dateUtils';
 import { clamp } from '@/util/math';
@@ -39,13 +35,12 @@ import { useCalendarView, useDisplayByRooms } from '../_util/displayByRooms';
 
 import EventEditWindow from './EventEditWindow';
 import DKbd from '@/app/_components/_base/DKbd';
-import { Children } from '@/util/propTypes';
 import { IconType } from '@/util/iconType';
 
 const DAYS_MIN = 1;
 const DAYS_MAX = 14;
 
-export default function TimelineControls(props: CalendarProps) {
+export default function Controls(props: CalendarProps) {
   const {
     isLoading,
     dates,
@@ -74,7 +69,7 @@ export default function TimelineControls(props: CalendarProps) {
     roomLoading(async () => setDisplayByRoom(nv));
   }
 
-  const [view, setView] = useCalendarView();
+  const [view, , nextView] = useCalendarView();
 
   // new stay prompt
   const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
@@ -261,9 +256,7 @@ export default function TimelineControls(props: CalendarProps) {
             <ActionIcon
               variant="subtle"
               color="slate"
-              onClick={() =>
-                setView(view === 'TIMELINE' ? 'AGENDA' : 'TIMELINE')
-              }
+              onClick={() => nextView()}
             >
               <IconSortAscendingShapes />
             </ActionIcon>

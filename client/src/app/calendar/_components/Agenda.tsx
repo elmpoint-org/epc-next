@@ -27,7 +27,7 @@ import {
   dateFormat,
   useDatesArray,
 } from '../_util/dateUtils';
-import { CalendarProps, EventType } from './ViewEvents';
+import { CalendarProps, EventType } from './Calendar';
 import { clmx, clx } from '@/util/classConcat';
 import { IconTypeProps } from '@/util/iconType';
 import { alphabetical } from '@/util/sort';

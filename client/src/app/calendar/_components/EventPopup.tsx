@@ -20,7 +20,7 @@ import {
 
 import { clmx, clx } from '@/util/classConcat';
 import { dateFormat } from '../_util/dateUtils';
-import { EventType } from './ViewEvents';
+import { EventType } from './Calendar';
 import { IconType } from '@/util/iconType';
 import { Children } from '@/util/propTypes';
 import { useReverseCbTrigger } from '@/util/reverseCb';

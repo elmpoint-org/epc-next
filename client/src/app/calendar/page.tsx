@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
-import CalendarWrapper from './_components/CalendarWrapper';
 
+import Calendar from './_components/Calendar';
 import { SampleMonth } from './_components/SampleCal';
 
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export default function CalendarPage() {
     <>
       <div className="flex-1 rounded-lg bg-slate-100">
         <div className="mx-auto flex min-h-dvh flex-col gap-4 p-6">
-          <CalendarWrapper />
+          <Calendar />
 
           {/* <div className="m-4 h-[1000px] rounded-lg bg-slate-200" />
           <SampleMonth /> */}

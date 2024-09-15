@@ -1,4 +1,4 @@
-import { CalendarProps } from './ViewEvents';
+import { CalendarProps } from './Calendar';
 import { dateFormat, dateTS, useDatesArray } from '../_util/dateUtils';
 import { gridCols } from '../_util/grid';
 import { Children } from '@/util/propTypes';

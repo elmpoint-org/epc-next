@@ -6,7 +6,7 @@ import { DatePickerInput } from '@mantine/dates';
 import { useFormCtx } from '../state/formCtx';
 import { confirmModal } from '@/app/_components/_base/modals';
 import { graphAuth, graphql } from '@/query/graphql';
-import { useInvalidate } from '../../_components/ViewEvents';
+import { useInvalidate } from '../../_components/Calendar';
 import { useCloseFloatingWindow } from '@/app/_components/_base/FloatingWindow';
 import { usePassedTransition } from '@/app/_ctx/transition';
 import { useUser } from '@/app/_ctx/user/context';

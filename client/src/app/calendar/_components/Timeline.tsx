@@ -4,7 +4,7 @@ import { theme } from '@/util/tailwindVars';
 import { LayoutGroup } from 'framer-motion';
 
 import { useDatesArray } from '../_util/dateUtils';
-import { CalendarProps } from './ViewEvents';
+import { CalendarProps } from './Calendar';
 import { gridCols } from '../_util/grid';
 import { useGetRooms } from '../new/state/getRoomData';
 import { useDisplayByRooms } from '../_util/displayByRooms';
