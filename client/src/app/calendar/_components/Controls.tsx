@@ -14,10 +14,6 @@ import { DatePicker } from '@mantine/dates';
 import {
   IconArrowLeft,
   IconArrowRight,
-  IconCircleDotted,
-  IconLayoutCards,
-  IconLayoutNavbarCollapseFilled,
-  IconLayoutNavbarExpandFilled,
   IconLibraryMinus,
   IconLibraryPlus,
   IconLoader2,
@@ -28,7 +24,7 @@ import {
   IconTable,
 } from '@tabler/icons-react';
 
-import { CalendarProps } from './ViewEvents';
+import { CalendarProps } from './Calendar';
 import { dayStyles } from '../_util/dayStyles';
 import { dateFormat, dateTSLocal } from '../_util/dateUtils';
 import { clamp } from '@/util/math';
@@ -36,16 +32,13 @@ import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 import { useCalendarControls } from '../_util/controls';
 import { useCalendarView, useDisplayByRooms } from '../_util/displayByRooms';
+import { IconType } from '@/util/iconType';
+import { CALENDAR_DAYS_MAX, CALENDAR_DAYS_MIN } from '@/CONSTANTS';
 
 import EventEditWindow from './EventEditWindow';
 import DKbd from '@/app/_components/_base/DKbd';
-import { Children } from '@/util/propTypes';
-import { IconType } from '@/util/iconType';
 
-const DAYS_MIN = 1;
-const DAYS_MAX = 14;
-
-export default function TimelineControls(props: CalendarProps) {
+export default function Controls(props: CalendarProps) {
   const {
     isLoading,
     dates,
@@ -74,7 +67,7 @@ export default function TimelineControls(props: CalendarProps) {
     roomLoading(async () => setDisplayByRoom(nv));
   }
 
-  const [view, setView] = useCalendarView();
+  const [view, , nextView] = useCalendarView();
 
   // new stay prompt
   const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
@@ -192,7 +185,8 @@ export default function TimelineControls(props: CalendarProps) {
               onChange={({ currentTarget: { value: v } }) => {
                 if (!v.length) setDays(undefined);
                 const d = parseInt((v.match(/[\d\.]/g) || ['']).join(''));
-                if (Number.isFinite(d)) setDays(clamp(d, DAYS_MIN, DAYS_MAX));
+                if (Number.isFinite(d))
+                  setDays(clamp(d, CALENDAR_DAYS_MIN, CALENDAR_DAYS_MAX));
               }}
             />
             <span>days</span>
@@ -261,9 +255,7 @@ export default function TimelineControls(props: CalendarProps) {
             <ActionIcon
               variant="subtle"
               color="slate"
-              onClick={() =>
-                setView(view === 'TIMELINE' ? 'AGENDA' : 'TIMELINE')
-              }
+              onClick={() => nextView()}
             >
               <IconSortAscendingShapes />
             </ActionIcon>

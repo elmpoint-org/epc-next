@@ -6,7 +6,7 @@ import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { dateDiff } from '../_util/dateUtils';
 import { clamp } from '@/util/math';
 
-import { CalendarProps, EventType } from './ViewEvents';
+import { CalendarProps, EventType } from './Calendar';
 import { clmx } from '@/util/classConcat';
 import {
   CABIN_COLORS,

@@ -7,7 +7,7 @@ import {
 } from '@/util/reverseCb';
 import { usePassedTransition } from '@/app/_ctx/transition';
 import { graphAuth, graphql } from '@/query/graphql';
-import { EventType } from './ViewEvents';
+import { EventType } from './Calendar';
 import { ROOM_FRAGMENT } from '../new/state/getRoomData';
 import { notifications } from '@mantine/notifications';
 import { InitialStayValue } from '../new/state/formCtx';

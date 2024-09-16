@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CalendarProps } from '../_components/ViewEvents';
+import { CalendarProps } from '../_components/Calendar';
 
 import dayjsRoot from 'dayjs';
 import utc from 'dayjs/plugin/utc';

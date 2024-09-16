@@ -1,3 +1,5 @@
+'use client';
+
 import { Children } from '@/util/propTypes';
 import {
   TransitionStartFunction,

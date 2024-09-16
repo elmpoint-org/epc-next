@@ -1,5 +1,5 @@
 import { clx } from '@/util/classConcat';
-import { EventType } from '../_components/ViewEvents';
+import { EventType } from '../_components/Calendar';
 import { useMemo } from 'react';
 
 const COLOR_MAP: Record<string, CabinColor> = {

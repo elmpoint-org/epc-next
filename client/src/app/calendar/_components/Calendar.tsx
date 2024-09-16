@@ -20,7 +20,7 @@ import { useCalendarView, useDisplayByRooms } from '../_util/displayByRooms';
 import { SetState } from '@/util/stateType';
 
 import Timeline from './Timeline';
-import TimelineControls from './TimelineControls';
+import Controls from './Controls';
 import Agenda from './Agenda';
 
 export const EVENTS_QUERY = graphql(`
@@ -64,7 +64,7 @@ export const { Provider: InvalidateProvider, useHook: useInvalidate } =
 export type QP = 'date' | 'days';
 
 // COMPONENT
-export default function ViewEvents() {
+export default function Calendar() {
   const sq = useSearchParams();
   const router = useRouter();
 
@@ -209,7 +209,7 @@ export default function ViewEvents() {
       <InvalidateProvider cb={invalidate}>
         <div className="relative flex flex-col gap-4">
           {/* header bar */}
-          <TimelineControls {...props} />
+          <Controls {...props} />
 
           {/* timeline view */}
           {view === 'TIMELINE' && <Timeline {...props} />}

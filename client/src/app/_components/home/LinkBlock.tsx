@@ -10,16 +10,9 @@ import {
 } from '@tabler/icons-react';
 import { clx } from '@/util/classConcat';
 
-export default function LinkBlock({
-  id,
-  name,
-  url,
-  description,
-  flags,
-}: HomeLink) {
+export default function LinkBlock({ name, url, description, flags }: HomeLink) {
   const content = (
     <div
-      data-id={id}
       data-h={flags.highlight || null}
       className={clx(
         'group flex h-full flex-col gap-2 rounded-lg border border-slate-300 p-5 hover:border-slate-800 hover:bg-black/5',

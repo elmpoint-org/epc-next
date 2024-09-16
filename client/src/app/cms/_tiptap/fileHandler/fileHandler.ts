@@ -39,7 +39,7 @@ function handleFiles(editor: FileHandlerEditor, files: File[], pos?: number) {
     const { id: pageId } = getPageData(editor);
 
     // upload image and determine image width
-    const [{ url, error }, width] = await Promise.all([
+    const [{ url, error }, { width, height }] = await Promise.all([
       uploadImage(file, pageId)
         .then((r) => ({ url: r, error: null }))
         .catch((c) => {
@@ -48,26 +48,32 @@ function handleFiles(editor: FileHandlerEditor, files: File[], pos?: number) {
           else o = 'UPLOAD_ERROR';
           return { error: o, url: null };
         }),
-      getImageWidth(file),
+      getImageSize(file),
     ]);
     if (error || !url) return err(error);
 
     // create an image block
     let cmd = editor.chain();
-    cmd = cmd.setImageBlockAt(pos, { src: url, imgWidth: width });
+    cmd = cmd.setImageBlockAt(pos, {
+      src: url,
+      imgWidth: width,
+      imgHeight: height,
+    });
     cmd = cmd.focus();
     cmd.run();
   });
 }
 
-async function getImageWidth(file: File) {
-  return new Promise<number>((resolve) => {
+async function getImageSize(file: File) {
+  return new Promise<{ width: number; height: number }>((resolve) => {
     const src = URL.createObjectURL(file);
     const img = new Image();
     img.onload = () => {
-      const w = 0 + img.width;
+      const width = 0 + img.width;
+      const height = 0 + img.height;
       URL.revokeObjectURL(src);
-      resolve(w);
+      console.log(width, 'x', height);
+      resolve({ width, height });
     };
     img.src = src;
   });

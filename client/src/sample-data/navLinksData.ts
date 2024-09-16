@@ -5,8 +5,8 @@ import {
   IconCalendar,
   IconClick,
   IconDoor,
-  IconEyeQuestion,
   IconFolders,
+  IconHelp,
   IconHome2,
   IconNotebook,
 } from '@tabler/icons-react';
@@ -20,6 +20,16 @@ export const navLinks: DeepNavLinks = [
   },
   { href: '/pages/links', text: 'Updates & Links', icon: IconClick },
   {
+    text: 'Site Help',
+    icon: IconHelp,
+    links: [
+      { href: '/pages/help', text: 'Help Home', icon: IconHelp },
+      { text: '' },
+      { text: '' },
+      { text: '' },
+    ],
+  },
+  {
     text: 'CMS',
     scope: ['EDIT'],
     icon: IconBoxMargin,
@@ -27,18 +37,6 @@ export const navLinks: DeepNavLinks = [
       { href: '/cms/pages', text: 'Pages', icon: IconNotebook },
       { href: '/cms/files', text: 'File Manager', icon: IconFolders },
       { href: '/cms/rooms', text: 'Rooms & Cabins', icon: IconDoor },
-    ],
-  },
-  {
-    text: 'Reference Pages',
-    icon: IconEyeQuestion,
-    links: [
-      {
-        text: 'Camp How-tos',
-        href: '/pages/instructions',
-      },
-      { text: '' },
-      // ...
     ],
   },
 ];

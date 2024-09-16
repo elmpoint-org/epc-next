@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { D1 } from '../_util/dateUtils';
-import { CalendarProps } from './ViewEvents';
+import { CalendarProps } from './Calendar';
 import { gridCols } from '../_util/grid';
 
 import TimelineEvent, { EventPlaceholder } from './TimelineEvent';

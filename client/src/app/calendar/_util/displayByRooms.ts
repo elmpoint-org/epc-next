@@ -47,5 +47,11 @@ export function useCalendarView() {
     router.push('?' + query.toString(), { scroll: false });
   }
 
-  return [state, set] as const;
+  function next() {
+    const index = allViews.indexOf(state);
+    const nextIndex = (index + 1) % allViews.length;
+    set(allViews[nextIndex]);
+  }
+
+  return [state, set, next] as const;
 }

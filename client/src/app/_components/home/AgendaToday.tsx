@@ -8,7 +8,7 @@ import { useGraphQuery } from '@/query/query';
 import {
   EVENTS_QUERY,
   InvalidateProvider,
-} from '@/app/calendar/_components/ViewEvents';
+} from '@/app/calendar/_components/Calendar';
 import { dateTS } from '@/app/calendar/_util/dateUtils';
 
 const Agenda = lazy(() => import('@/app/calendar/_components/Agenda'));
@@ -20,7 +20,7 @@ export default function AgendaToday() {
   const query = useGraphQuery(EVENTS_QUERY, dates);
 
   return (
-    <div className="min-h-48">
+    <div className="min-h-48 px-2.5">
       {/* loader */}
       {query.isPending && (
         <div className="flex flex-row items-center justify-center">

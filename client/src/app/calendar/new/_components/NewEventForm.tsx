@@ -44,6 +44,7 @@ const NewEventForm = ({
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              e.stopPropagation();
             }}
             className="flex flex-col gap-4"
           >
@@ -78,7 +79,6 @@ const NewEventForm = ({
                   </div>
                 )}
                 <Button
-                  type="submit"
                   variant="light"
                   onClick={() => handleSubmit()}
                   loading={isLoading ?? false}
