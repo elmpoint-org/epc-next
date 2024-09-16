@@ -1,10 +1,10 @@
-import { Fragment, createElement } from 'react';
 import { CreateEmailOptions, Resend } from 'resend';
 import { render } from '@react-email/components';
 
 import { Senders } from './senders';
 import { isDev } from '@@/util/dev';
 import { brevo } from '.';
+import { el } from './components/getElement';
 
 const resend = new Resend(process.env.RESEND_API_KEY ?? 'DEVELOPMENT');
 
@@ -58,8 +58,4 @@ async function catchTF(cb: (...p: any[]) => any): Promise<boolean> {
   } catch (_) {
     return false;
   }
-}
-
-function el(content: React.ReactNode) {
-  return createElement(Fragment, {}, content);
 }
