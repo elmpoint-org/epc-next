@@ -115,7 +115,7 @@ async function makeICS() {
     event.uid = `${stay.id}@elmpoint.org`;
     event.summary = stay.title;
     event.startDate = getICALTime(stay.dateStart);
-    event.endDate = getICALTime(stay.dateEnd);
+    event.endDate = getICALTime(stay.dateEnd, /* plusOne = */ true);
     event.description = stay.description + autoDescription(stay);
     if (stay.reservations.length && stay.reservations[0].room) {
       const room = stay.reservations[0].room;
@@ -166,8 +166,9 @@ function roomText(room: ICSRoom) {
     : `${room?.text}`;
 }
 
-function getICALTime(ts: number) {
-  const d = dateTSObject(ts).add(1, 'day');
+function getICALTime(ts: number, plusOne?: boolean) {
+  let d = dateTSObject(ts);
+  if (plusOne) d = d.add(1, 'day');
   return new ical.Time({
     isDate: true,
     year: d.year(),

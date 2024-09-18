@@ -1,6 +1,6 @@
 import { EMAIL_LOGIN_EXPIRE } from '@@/CONSTANTS';
 import { emails } from '@@/email';
-import { isDev, siteDomain } from '@@/util/dev';
+import { siteDomain } from '@@/util/dev';
 import { PasswordlessClient } from '@passwordlessdev/passwordless-nodejs';
 import axios from 'axios';
 import qs from 'qs';
@@ -33,10 +33,10 @@ export async function passwordlessSendMagicLink(p: {
   const { data } = await axios
     .post(
       PASSWORDLESS_API + '/signin/generate-token',
-      { userId: params.userId },
+      { userId: params.userId, timeToLive: EMAIL_LOGIN_EXPIRE },
       { headers: { ApiSecret: PASSWORDLESS_SECRET } }
     )
-    .catch(() => ({ data: null }));
+    .catch((e) => ({ data: console.log(new Error(e)) }));
   if (!data?.token) throw new Error();
 
   const url = params.urlTemplate.replace('$TOKEN', data.token);
