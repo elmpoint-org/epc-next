@@ -24,6 +24,10 @@ import Timeline from './Timeline';
 import Controls from './Controls';
 import Agenda from './Agenda';
 import Overview, { OVERVIEW_NUM_WEEKS } from './Overview';
+import {
+  GlobalKeyboardHandler,
+  useGlobalKeyboardShortcuts,
+} from '@/app/_ctx/globalKeyboard';
 
 export const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -176,48 +180,30 @@ export default function Calendar() {
 
   // KEYBOARD SHORTCUTS
   const actions = useCalendarControls(props);
-  useEffect(() => {
-    const dom = window.document;
-    if (!dom) return;
-
-    const withModifiers = (e: KeyboardEvent) =>
-      e.ctrlKey || e.shiftKey || e.altKey || e.metaKey;
-
-    const cb = (e: KeyboardEvent) => {
-      // make sure user isn't typing
-      const target = e.target as HTMLElement;
-      if (
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLTextAreaElement ||
-        target?.isContentEditable
-      )
-        return;
-
-      // handle keyboard shortcuts
+  const keyboardHandler = useCallback<GlobalKeyboardHandler>(
+    (e, { withModifiers }) => {
       switch (e.code) {
         case 'KeyP':
-          if (withModifiers(e)) break;
+          if (withModifiers) break;
           actions.last();
           break;
         case 'KeyN':
-          if (withModifiers(e)) break;
+          if (withModifiers) break;
           actions.next();
           break;
         case 'KeyT':
-          if (withModifiers(e)) break;
+          if (withModifiers) break;
           actions.today();
           break;
         case 'KeyR':
-          if (withModifiers(e)) break;
+          if (withModifiers) break;
           toggleDisplayByRoom();
           break;
       }
-    };
-
-    // attach event listener
-    dom.addEventListener('keydown', cb);
-    return () => dom.removeEventListener('keydown', cb);
-  }, [actions, toggleDisplayByRoom]);
+    },
+    [actions, toggleDisplayByRoom],
+  );
+  useGlobalKeyboardShortcuts(keyboardHandler);
 
   return (
     <>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ScrollArea, Button } from '@mantine/core';
 import {
@@ -9,7 +9,7 @@ import {
   IconLoader2,
 } from '@tabler/icons-react';
 
-import { dateFormat, dateTS, dateTSObject } from '../_util/dateUtils';
+import { D1, dateFormat, dateTS, dateTSObject } from '../_util/dateUtils';
 import type { CalendarProps, EventType } from './Calendar';
 import { useEventsByDay } from '../_util/eventsByDay';
 import { clmx, clx } from '@/util/classConcat';
@@ -20,6 +20,10 @@ import { alphabetical } from '@/util/sort';
 import TimelineHeader from './TimelineHeader';
 import TimelineEvent from './TimelineEvent';
 import RoomSwatch from './RoomSwatch';
+import {
+  GlobalKeyboardHandler,
+  useGlobalKeyboardShortcuts,
+} from '@/app/_ctx/globalKeyboard';
 
 // date settings that lead to a Sun-Sat week for header values
 const WEEK_HEADER = {
@@ -82,6 +86,42 @@ export default function Overview({ ...props }: CalendarProps) {
   }, [events, selectedDate]);
 
   const { showWeekOf } = useCalendarControls(props);
+
+  const keyboardHandler = useCallback<GlobalKeyboardHandler>(
+    (e, { withModifiers }) => {
+      if (withModifiers) return;
+
+      const modifyDate = (days: number) => {
+        let d = selectedDate;
+        if (!d) d = 0;
+        d = d + days * D1;
+        if (d < queryDates.start) d = queryDates.start;
+        if (d >= queryDates.end) d = queryDates.end - D1;
+        setSelectedDate(d);
+      };
+
+      switch (e.code) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          modifyDate(-1);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          modifyDate(1);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          modifyDate(7);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          modifyDate(-7);
+          break;
+      }
+    },
+    [queryDates.end, queryDates.start, selectedDate],
+  );
+  useGlobalKeyboardShortcuts(keyboardHandler);
 
   return (
     <>
