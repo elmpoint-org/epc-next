@@ -50,7 +50,6 @@ import {
 export default function Controls(props: CalendarProps) {
   const {
     isLoading,
-    dates,
     selectedDate,
     periodState: { days, setDays, startDate, setStartDate },
     roomCollapse: {
@@ -332,7 +331,7 @@ export default function Controls(props: CalendarProps) {
           {/* popups */}
           <EventEditWindow
             trigger={newStay}
-            showDate={new Date(dateTSLocal(dates.start) * 1000)}
+            showDate={new Date(dateTSLocal(selectedDate) * 1000)}
           />
         </div>
       </div>
