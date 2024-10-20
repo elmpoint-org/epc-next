@@ -31,7 +31,7 @@ import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 import { useCalendarControls } from '../_util/controls';
-import { useCalendarView, useDisplayByRooms } from '../_util/displayByRooms';
+import { useCalendarView, useDisplayByRooms } from '../_util/queryStates';
 import { IconType } from '@/util/iconType';
 import { CALENDAR_DAYS_MAX, CALENDAR_DAYS_MIN } from '@/CONSTANTS';
 

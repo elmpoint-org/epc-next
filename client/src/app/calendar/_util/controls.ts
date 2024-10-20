@@ -1,15 +1,18 @@
 import { useCallback } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import { CalendarProps } from '../_components/Calendar';
+import { CalendarProps, QP } from '../_components/Calendar';
 import { useDefaultDays } from './defaultDays';
 import { D1, dateStartOfWeek, dateTS, dateTSObject } from './dateUtils';
-import { useCalendarView } from './displayByRooms';
+import { ViewType, useCalendarView } from './queryStates';
 
 export function useCalendarControls(props: CalendarProps) {
   const { updatePeriod, days, selectedDate } = props;
 
-  const [view] = useCalendarView();
+  const sq = useSearchParams();
+  const router = useRouter();
 
+  const [view] = useCalendarView();
   const defaultDays = useDefaultDays();
   const daysWithDefault = days ?? defaultDays;
 
@@ -35,5 +38,19 @@ export function useCalendarControls(props: CalendarProps) {
     updatePeriod(today);
   }, [daysWithDefault, updatePeriod]);
 
-  return { last, next, today };
+  const showWeekOf = useCallback(
+    (date: number) => {
+      const ds = dateTSObject(date).startOf('week').unix();
+
+      const url = new URLSearchParams(sq);
+      url.set('date' satisfies QP, '' + ds);
+      url.set('days' satisfies QP, '' + 7);
+      url.set('view' satisfies QP, 'TIMELINE' satisfies ViewType);
+
+      router.push('?' + url.toString());
+    },
+    [router, sq],
+  );
+
+  return { last, next, today, showWeekOf };
 }

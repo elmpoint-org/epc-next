@@ -16,11 +16,12 @@ import {
   IconPoint,
 } from '@tabler/icons-react';
 
-import { UseDatesArrayProps, dateFormat } from '../_util/dateUtils';
+import { dateFormat } from '../_util/dateUtils';
+import { UseDatesArrayProps } from '../_util/datesArray';
 import { CalendarProps, EventType } from './Calendar';
 import { clmx, clx } from '@/util/classConcat';
 import { IconTypeProps } from '@/util/iconType';
-import { useEventColorId } from '../_util/cabinColors';
+import { useEventColorId } from '../_util/cabinColorHooks';
 import { useEventsByDay } from '../_util/eventsByDay';
 
 import EventPopup from './EventPopup';

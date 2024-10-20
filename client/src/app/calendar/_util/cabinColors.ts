@@ -1,6 +1,4 @@
 import { clx } from '@/util/classConcat';
-import { EventType } from '../_components/Calendar';
-import { useMemo } from 'react';
 
 const COLOR_MAP: Record<string, CabinColor> = {
   '574ce1ab-6aa6-4ea5-a082-683125b417a7': 'RED', // ide cabin
@@ -94,38 +92,4 @@ export function getCabinColorObject<WD extends boolean | undefined>(
     else return undefined as any;
   }
   return CABIN_COLORS[key];
-}
-
-export function useEventColorIds(events: EventType[]) {
-  const ids = useMemo(() => {
-    const out: Record<string, string | undefined> = {};
-
-    for (const event of events) {
-      if (event.reservations.length) {
-        const r = event.reservations[0];
-        if (r.room && 'id' in r.room) {
-          let c = getCabinColor(r.room.id);
-          if (c) {
-            out[event.id] = r.room.id;
-            continue;
-          }
-          c = getCabinColor(r.room.cabin?.id);
-          if (c) {
-            out[event.id] = r.room.cabin?.id;
-            continue;
-          }
-        }
-      }
-
-      out[event.id] = undefined;
-    }
-
-    return out;
-  }, [events]);
-  return ids;
-}
-
-export function useEventColorId(event: EventType) {
-  const ids = useEventColorIds([event]);
-  return ids[event.id];
 }

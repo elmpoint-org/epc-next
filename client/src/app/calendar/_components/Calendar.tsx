@@ -17,7 +17,7 @@ import { Inside } from '@/util/inferTypes';
 import { useDefaultDays } from '../_util/defaultDays';
 import { createCallbackCtx } from '@/app/_ctx/callback';
 import { useCalendarControls } from '../_util/controls';
-import { useCalendarView, useDisplayByRooms } from '../_util/displayByRooms';
+import { useCalendarView, useDisplayByRooms } from '../_util/queryStates';
 import { SetState } from '@/util/stateType';
 
 import Timeline from './Timeline';
@@ -63,7 +63,7 @@ export const { Provider: InvalidateProvider, useHook: useInvalidate } =
   createCallbackCtx();
 
 /** query parameters */
-export type QP = 'date' | 'days';
+export type QP = 'date' | 'days' | 'rooms' | 'view';
 
 // COMPONENT
 export default function Calendar() {
@@ -77,7 +77,7 @@ export default function Calendar() {
   const defaultDays = useDefaultDays();
   const days = useMemo(() => {
     if (view === 'OVERVIEW') return 31;
-    const num = parseInt(sq.get('days' as QP) ?? '');
+    const num = parseInt(sq.get('days' satisfies QP) ?? '');
     if (!Number.isFinite(num)) return undefined;
     return num;
   }, [sq, view]);
@@ -88,7 +88,7 @@ export default function Calendar() {
 
   // date picker state
   const startDate = useMemo(() => {
-    const num = parseInt(sq.get('date' as QP) ?? '');
+    const num = parseInt(sq.get('date' satisfies QP) ?? '');
     let startDateNum = Number.isFinite(num) ? num : null;
     if (startDateNum === null) {
       if (daysWithDefault !== 7) return new Date();
@@ -107,8 +107,8 @@ export default function Calendar() {
 
   function updateQuery(key: QP, val: string | number) {
     const query = new URLSearchParams(sq);
-    if (days && view !== 'OVERVIEW') query.set('days' as QP, '' + days);
-    query.set('date' as QP, '' + dateTS(startDate));
+    if (days && view !== 'OVERVIEW') query.set('days' satisfies QP, '' + days);
+    query.set('date' satisfies QP, '' + dateTS(startDate));
     query.set(key, '' + val);
     router.push('?' + query.toString(), { scroll: false });
   }

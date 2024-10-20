@@ -2,19 +2,20 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { ScrollArea } from '@mantine/core';
-import { IconLoader2 } from '@tabler/icons-react';
+import { ScrollArea, Button } from '@mantine/core';
+import { IconChevronRight, IconLoader2 } from '@tabler/icons-react';
 
 import { dateFormat, dateTS, dateTSObject } from '../_util/dateUtils';
-import { CalendarProps, EventType } from './Calendar';
+import type { CalendarProps, EventType } from './Calendar';
 import { useEventsByDay } from '../_util/eventsByDay';
 import { clmx, clx } from '@/util/classConcat';
-import { useEventColorId, useEventColorIds } from '../_util/cabinColors';
+import { useEventColorId, useEventColorIds } from '../_util/cabinColorHooks';
 import { alphabetical } from '@/util/sort';
 
 import TimelineHeader from './TimelineHeader';
 import TimelineEvent from './TimelineEvent';
 import RoomSwatch from './RoomSwatch';
+import { useCalendarControls } from '../_util/controls';
 
 // date settings that lead to a Sun-Sat week for header values
 const WEEK_HEADER = {
@@ -75,6 +76,8 @@ export default function Overview({ ...props }: CalendarProps) {
         event.dateStart <= selectedDate && event.dateEnd >= selectedDate,
     );
   }, [events, selectedDate]);
+
+  const { showWeekOf } = useCalendarControls(props);
 
   return (
     <>
@@ -161,7 +164,7 @@ export default function Overview({ ...props }: CalendarProps) {
                   offsetScrollbars="y"
                   scrollbarSize="0.75rem"
                   classNames={{
-                    root: '-mr-4',
+                    root: '-mr-4 flex-1',
                     scrollbar: 'mr-0.5 !bg-transparent',
                     viewport: 'pr-4',
                   }}
@@ -192,6 +195,15 @@ export default function Overview({ ...props }: CalendarProps) {
                     </div>
                   )}
                 </ScrollArea>
+
+                <Button
+                  variant="light"
+                  className="space-x-2"
+                  onClick={() => showWeekOf(selectedDate)}
+                >
+                  <span>Show full week</span>
+                  <IconChevronRight className="mt-0.5 inline size-4" />
+                </Button>
               </div>
             )}
 

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { CalendarProps, EventType } from '../_components/Calendar';
 import { alphabetical } from '@/util/sort';
-import { UseDatesArrayProps, useDatesArray } from './dateUtils';
+import { UseDatesArrayProps, useDatesArray } from './datesArray';
 
 export type EventsByDay = {
   date: number;

@@ -12,8 +12,8 @@ import {
   CABIN_COLORS,
   CabinColor,
   getCabinColorObject,
-  useEventColorId,
 } from '../_util/cabinColors';
+import { useEventColorId } from '../_util/cabinColorHooks';
 
 const EventPopup = lazy(() => import('./EventPopup'));
 
