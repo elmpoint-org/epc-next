@@ -6,7 +6,12 @@ import { useDefaultDays } from './defaultDays';
 import { D1, dateStartOfWeek, dateTS, dateTSObject } from './dateUtils';
 import { ViewType, useCalendarView } from './queryStates';
 
-export function useCalendarControls(props: CalendarProps) {
+export type CalendarControlsProps = Pick<
+  CalendarProps,
+  'updatePeriod' | 'days' | 'selectedDate'
+>;
+
+export function useCalendarControls(props: CalendarControlsProps) {
   const { updatePeriod, days, selectedDate } = props;
 
   const sq = useSearchParams();
