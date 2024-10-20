@@ -10,6 +10,7 @@ import {
   dateStartOfWeek,
   dateTS,
   dateTSLocal,
+  dateTSObject,
   dayjs,
 } from '../_util/dateUtils';
 import { Inside } from '@/util/inferTypes';
@@ -22,6 +23,7 @@ import { SetState } from '@/util/stateType';
 import Timeline from './Timeline';
 import Controls from './Controls';
 import Agenda from './Agenda';
+import Overview, { OVERVIEW_NUM_WEEKS } from './Overview';
 
 export const EVENTS_QUERY = graphql(`
   query Stays($start: Int!, $end: Int!) {
@@ -68,13 +70,17 @@ export default function Calendar() {
   const sq = useSearchParams();
   const router = useRouter();
 
+  // calendar view
+  const [view] = useCalendarView();
+
   // days
   const defaultDays = useDefaultDays();
   const days = useMemo(() => {
+    if (view === 'OVERVIEW') return 31;
     const num = parseInt(sq.get('days' as QP) ?? '');
     if (!Number.isFinite(num)) return undefined;
     return num;
-  }, [sq]);
+  }, [sq, view]);
   const daysWithDefault = days ?? defaultDays;
   function setDays(d: typeof days) {
     updateQuery('days', d ?? '');
@@ -88,8 +94,10 @@ export default function Calendar() {
       if (daysWithDefault !== 7) return new Date();
       startDateNum = dateStartOfWeek(dateTS(new Date()));
     }
+    if (view === 'OVERVIEW')
+      startDateNum = dateTSObject(startDateNum).startOf('month').unix();
     return new Date(dateTSLocal(startDateNum) * 1000);
-  }, [daysWithDefault, sq]);
+  }, [daysWithDefault, sq, view]);
   function setStartDate(d: typeof startDate) {
     updateQuery('date', dateTS(d));
   }
@@ -99,7 +107,7 @@ export default function Calendar() {
 
   function updateQuery(key: QP, val: string | number) {
     const query = new URLSearchParams(sq);
-    if (days) query.set('days' as QP, '' + days);
+    if (days && view !== 'OVERVIEW') query.set('days' as QP, '' + days);
     query.set('date' as QP, '' + dateTS(startDate));
     query.set(key, '' + val);
     router.push('?' + query.toString(), { scroll: false });
@@ -112,13 +120,22 @@ export default function Calendar() {
         .toDate(),
     [daysWithDefault, startDate],
   );
-  const parsedDates = useMemo(
-    () => ({
-      start: dateTS(startDate),
-      end: dateTS(endDate),
-    }),
-    [endDate, startDate],
-  );
+  const parsedDates = useMemo(() => {
+    let start = dateTS(startDate);
+    let end = dateTS(endDate);
+
+    if (view === 'OVERVIEW') {
+      const s = dateTSObject(start).startOf('month').startOf('week');
+      start = s.unix();
+      end = s.add(7 * OVERVIEW_NUM_WEEKS, 'days').unix();
+    }
+
+    return { start, end };
+  }, [endDate, startDate, view]);
+
+  const selectedDate = useMemo(() => {
+    return dateTS(startDate);
+  }, [startDate]);
 
   // get calendar events
   const query = useGraphQuery(EVENTS_QUERY, parsedDates);
@@ -136,9 +153,6 @@ export default function Calendar() {
   const _dbr = useDisplayByRooms();
   const toggleDisplayByRoom = useCallback(() => _dbr[1](!_dbr[0]), [_dbr]);
 
-  // calendar view
-  const [view] = useCalendarView();
-
   // CALENDAR PROPS
   const props: CalendarProps = {
     events,
@@ -152,6 +166,7 @@ export default function Calendar() {
       setStartDate,
       setDays,
     },
+    selectedDate,
     roomCollapse: {
       state: roomCollapse,
       set: setRoomCollapse,
@@ -216,6 +231,9 @@ export default function Calendar() {
 
           {/* agenda view */}
           {view === 'AGENDA' && <Agenda {...props} />}
+
+          {/* overview view */}
+          {view === 'OVERVIEW' && <Overview {...props} />}
         </div>
       </InvalidateProvider>
     </>
@@ -231,6 +249,7 @@ export type CalendarProps = {
     start: number;
     end: number;
   };
+  selectedDate: number;
   periodState: {
     days: number | undefined;
     setDays: (d: number | undefined) => void;

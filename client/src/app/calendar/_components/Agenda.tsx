@@ -5,16 +5,10 @@ import {
   Fragment,
   forwardRef,
   useCallback,
-  useMemo,
   useState,
 } from 'react';
 
-import {
-  Popover,
-  PopoverButton,
-  Transition,
-  TransitionChild,
-} from '@headlessui/react';
+import { Popover, PopoverButton, Transition } from '@headlessui/react';
 import {
   IconChevronDown,
   IconMinus,
@@ -22,16 +16,12 @@ import {
   IconPoint,
 } from '@tabler/icons-react';
 
-import {
-  UseDatesArrayProps,
-  dateFormat,
-  useDatesArray,
-} from '../_util/dateUtils';
+import { UseDatesArrayProps, dateFormat } from '../_util/dateUtils';
 import { CalendarProps, EventType } from './Calendar';
 import { clmx, clx } from '@/util/classConcat';
 import { IconTypeProps } from '@/util/iconType';
-import { alphabetical } from '@/util/sort';
 import { useEventColorId } from '../_util/cabinColors';
+import { useEventsByDay } from '../_util/eventsByDay';
 
 import EventPopup from './EventPopup';
 import RoomSwatch from './RoomSwatch';
@@ -40,35 +30,10 @@ import RoomSwatch from './RoomSwatch';
 type AgendaProps = Pick<CalendarProps, 'events' | 'updatePeriod'> &
   UseDatesArrayProps;
 export default function Agenda({ ...props }: AgendaProps) {
-  const { events: events_in, updatePeriod } = props;
+  const { updatePeriod } = props;
 
   // get days per event
-  const dates = useDatesArray(props);
-  const eventsByDay = useMemo<EventsByDay[] | null>(() => {
-    if (!events_in) return null;
-    const events = events_in.sort(alphabetical((s) => s.title));
-    return dates.map((d) => {
-      const ad = {
-        date: d,
-        count: events.filter(
-          (event) => event.dateStart <= d && event.dateEnd >= d,
-        ).length,
-        arrivals: events.filter((event) => event.dateStart === d),
-        departures: events.filter((event) => event.dateEnd === d),
-      };
-      return {
-        ...ad,
-        unchanged: events.filter(
-          (event) =>
-            event.dateStart <= d &&
-            event.dateEnd > d &&
-            !ad.arrivals.find((it) => it.id === event.id) &&
-            !ad.departures.find((it) => it.id === event.id),
-        ),
-        noChanges: !ad.arrivals.length && !ad.departures.length,
-      };
-    });
-  }, [dates, events_in]);
+  const eventsByDay = useEventsByDay(props);
 
   return (
     <>
@@ -139,15 +104,6 @@ export default function Agenda({ ...props }: AgendaProps) {
     </>
   );
 }
-
-type EventsByDay = {
-  date: number;
-  count: number;
-  noChanges: boolean;
-  arrivals: EventType[];
-  departures: EventType[];
-  unchanged: EventType[];
-};
 
 const subtleBtnStyles = clx(
   '-mx-2 -my-0.5 rounded-md px-2 py-0.5 text-left focus:bg-slate-200 focus:outline-none hover:enabled:bg-slate-200/50',

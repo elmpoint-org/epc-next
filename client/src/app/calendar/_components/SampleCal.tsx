@@ -116,6 +116,13 @@ const days: {
         datetime: '2022-01-22T19:00',
         href: '#',
       },
+      {
+        id: 6,
+        name: 'Hockey game',
+        time: '7PM',
+        datetime: '2022-01-22T19:00',
+        href: '#',
+      },
     ],
   },
   { date: '2022-01-23', isCurrentMonth: true, events: [] },
@@ -161,6 +168,7 @@ export function SampleMonth() {
 
   return (
     <div className="lg:flex lg:h-full lg:flex-col">
+      {/* controls */}
       <header className="flex items-center justify-between border-b border-slate-200 px-6 py-4 lg:flex-none">
         <h1 className="text-base font-semibold leading-6 text-slate-900">
           <time dateTime="2022-01">January 2022</time>
@@ -318,7 +326,10 @@ export function SampleMonth() {
           </Menu>
         </div>
       </header>
+
+      {/* calendar */}
       <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+        {/* days header */}
         <div className="grid grid-cols-7 gap-px border-b border-slate-300 bg-slate-200 text-center text-xs font-semibold leading-6 text-slate-700 lg:flex-none">
           <div className="bg-white py-2">
             M<span className="sr-only sm:not-sr-only">on</span>
@@ -343,6 +354,7 @@ export function SampleMonth() {
           </div>
         </div>
         <div className="flex bg-slate-200 text-xs leading-6 text-slate-700 lg:flex-auto">
+          {/* full size calendar days */}
           <div className="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
             {days.map((day) => (
               <div
@@ -391,6 +403,8 @@ export function SampleMonth() {
               </div>
             ))}
           </div>
+
+          {/* mobile calendar days */}
           <div className="isolate grid w-full grid-cols-7 grid-rows-6 gap-px lg:hidden">
             {days.map((day, dayIndex) => (
               <button
@@ -441,6 +455,8 @@ export function SampleMonth() {
           </div>
         </div>
       </div>
+
+      {/* selected day's events */}
       {selectedDay?.events.length ? (
         <div className="px-4 py-10 sm:px-6 lg:hidden">
           <ol className="divide-y divide-slate-100 overflow-hidden rounded-lg bg-white text-sm shadow ring-1 ring-black ring-opacity-5">

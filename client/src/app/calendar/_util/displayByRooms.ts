@@ -27,6 +27,7 @@ export function useDisplayByRooms() {
 const VIEWS = {
   TIMELINE: true,
   AGENDA: true,
+  OVERVIEW: true,
 } as const;
 export type ViewType = keyof typeof VIEWS;
 const allViews = Object.keys(VIEWS) as ViewType[];
