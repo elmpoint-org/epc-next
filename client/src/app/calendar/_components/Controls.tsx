@@ -42,6 +42,7 @@ export default function Controls(props: CalendarProps) {
   const {
     isLoading,
     dates,
+    selectedDate,
     periodState: { days, setDays, startDate, setStartDate },
     roomCollapse: {
       full: [fullCollapse, setFullCollapse],
@@ -86,7 +87,7 @@ export default function Controls(props: CalendarProps) {
                   onClick={() => setDatePickerOpen(true)}
                 >
                   <h3 className="min-w-20 text-xl">
-                    {dateFormat(dates.start, `MMM 'YY`)}
+                    {dateFormat(selectedDate, `MMM 'YY`)}
                   </h3>
                 </button>
               </Tooltip>
@@ -176,23 +177,27 @@ export default function Controls(props: CalendarProps) {
           </div>
 
           {/* number of days to show */}
-          <div className="flex flex-row items-center gap-1">
-            <input
-              type="text"
-              className="w-10 rounded-lg border border-transparent bg-transparent p-1 text-right hover:bg-slate-200 focus:border-slate-400 focus:bg-slate-200 focus:outline-none"
-              placeholder={'' + daysWithDefault}
-              value={days ?? ''}
-              onChange={({ currentTarget: { value: v } }) => {
-                if (!v.length) setDays(undefined);
-                const d = parseInt((v.match(/[\d\.]/g) || ['']).join(''));
-                if (Number.isFinite(d))
-                  setDays(clamp(d, CALENDAR_DAYS_MIN, CALENDAR_DAYS_MAX));
-              }}
-            />
-            <span>days</span>
-          </div>
+          {view !== 'OVERVIEW' && (
+            <>
+              <div className="flex flex-row items-center gap-1">
+                <input
+                  type="text"
+                  className="w-10 rounded-lg border border-transparent bg-transparent p-1 text-right hover:bg-slate-200 focus:border-slate-400 focus:bg-slate-200 focus:outline-none"
+                  placeholder={'' + daysWithDefault}
+                  value={days ?? ''}
+                  onChange={({ currentTarget: { value: v } }) => {
+                    if (!v.length) setDays(undefined);
+                    const d = parseInt((v.match(/[\d\.]/g) || ['']).join(''));
+                    if (Number.isFinite(d))
+                      setDays(clamp(d, CALENDAR_DAYS_MIN, CALENDAR_DAYS_MAX));
+                  }}
+                />
+                <span>days</span>
+              </div>
 
-          <div className="self-stretch border-l border-slate-300"></div>
+              <div className="self-stretch border-l border-slate-300"></div>
+            </>
+          )}
 
           {/* rooms controls */}
           <div

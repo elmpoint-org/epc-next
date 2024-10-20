@@ -1,8 +1,4 @@
-import {
-  CABIN_COLORS,
-  getCabinColor,
-  getCabinColorObject,
-} from '../_util/cabinColors';
+import { getCabinColor, getCabinColorObject } from '../_util/cabinColors';
 import { clmx } from '@/util/classConcat';
 
 export default function RoomSwatch({

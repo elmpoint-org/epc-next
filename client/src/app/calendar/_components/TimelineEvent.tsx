@@ -31,7 +31,7 @@ export default function TimelineEvent({
   highlightRoom?: string;
   placeholder?: EventPlaceholder;
   onOpen?: () => void;
-} & CalendarProps) {
+} & Pick<CalendarProps, 'dates' | 'days'>) {
   const { dates: dateLimits, days } = props;
 
   // get correct color scheme

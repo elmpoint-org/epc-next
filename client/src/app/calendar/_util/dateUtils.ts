@@ -19,6 +19,11 @@ export function dateTS(d: Date | number, isInputNotUTC: boolean = true) {
   return day.utc(isInputNotUTC).startOf('date').unix();
 }
 
+/** get dayjs object for a TS datestamp. */
+export function dateTSObject(ts: number) {
+  return dayjs.unix(ts).utc();
+}
+
 export function showDate(d: Date | number) {
   const date = d instanceof Date ? dayjs(d) : dayjs.unix(d);
   return date.utc().format('YYYY-MM-DD');

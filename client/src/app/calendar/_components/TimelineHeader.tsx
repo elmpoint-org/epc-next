@@ -3,7 +3,14 @@ import { dateFormat, dateTS, useDatesArray } from '../_util/dateUtils';
 import { gridCols } from '../_util/grid';
 import { Children } from '@/util/propTypes';
 
-export default function TimelineHeader({ ...props }: CalendarProps) {
+type TimelineHeaderProps = Pick<CalendarProps, 'days' | 'dates'> & {
+  updatePeriod?: CalendarProps['updatePeriod'];
+  noDate?: boolean;
+};
+export default function TimelineHeader({
+  noDate,
+  ...props
+}: TimelineHeaderProps) {
   const { days, updatePeriod } = props;
 
   const gridTemplateColumns = gridCols(days);
@@ -15,16 +22,22 @@ export default function TimelineHeader({ ...props }: CalendarProps) {
         {dates.map((date) => (
           <button
             key={date}
-            onClick={() => updatePeriod(date)}
+            onClick={() => updatePeriod?.(date)}
             className="group col-span-2 flex flex-col items-center justify-center gap-1 p-2 text-sm xl:flex-row"
+            disabled={updatePeriod === undefined}
           >
+            {/* day of week */}
             <span className="uppercase">{dateFormat(date, 'ddd')}</span>
-            <span
-              className="flex size-7 items-center justify-center rounded-full font-bold group-hover:bg-slate-300/50 data-[td]:ml-0.5 data-[td]:bg-emerald-700 data-[td]:text-dwhite group-hover:data-[td]:bg-emerald-800"
-              data-td={date === dateTS(new Date()) || null}
-            >
-              {dateFormat(date, 'D')}
-            </span>
+
+            {/* day of month */}
+            {!noDate && (
+              <span
+                className="flex size-7 items-center justify-center rounded-full font-bold group-hover:group-enabled:bg-slate-300/50 data-[td]:ml-0.5 data-[td]:bg-emerald-700 data-[td]:text-dwhite group-hover:group-enabled:data-[td]:bg-emerald-800"
+                data-td={date === dateTS(new Date()) || null}
+              >
+                {dateFormat(date, 'D')}
+              </span>
+            )}
           </button>
         ))}
       </TimelineHeaderFrame>
