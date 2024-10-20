@@ -10,7 +10,7 @@ import {
   PopoverTarget,
   Tooltip,
 } from '@mantine/core';
-import { DatePicker } from '@mantine/dates';
+import { DatePicker, MonthPicker } from '@mantine/dates';
 import {
   IconArrowLeft,
   IconArrowRight,
@@ -73,6 +73,8 @@ export default function Controls(props: CalendarProps) {
   // new stay prompt
   const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
 
+  const Picker = view === 'OVERVIEW' ? MonthPicker : DatePicker;
+
   return (
     <>
       <div className="flex flex-row flex-wrap items-center justify-between gap-y-4">
@@ -93,7 +95,7 @@ export default function Controls(props: CalendarProps) {
               </Tooltip>
             </PopoverTarget>
             <PopoverDropdown>
-              <DatePicker
+              <Picker
                 value={startDate}
                 date={dateShown}
                 onDateChange={setDateShown}

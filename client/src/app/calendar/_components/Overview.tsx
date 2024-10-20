@@ -31,6 +31,7 @@ export default function Overview({ ...props }: CalendarProps) {
     isLoading,
     selectedDate: firstOfMonth,
     dates: queryDates,
+    updatePeriod,
   } = props;
 
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
@@ -101,6 +102,7 @@ export default function Overview({ ...props }: CalendarProps) {
                   <button
                     key={d.date}
                     onClick={() => setSelectedDate(d.date)}
+                    onDoubleClick={() => updatePeriod(d.date)}
                     data-nm={!d.inMonth || null}
                     className={clmx(
                       'group flex h-12 flex-col items-stretch gap-2 bg-dwhite p-4 sm:h-24',
