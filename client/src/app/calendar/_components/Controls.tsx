@@ -1,6 +1,6 @@
 import { useEffect, useState, useTransition } from 'react';
 
-import { Transition, TransitionChild } from '@headlessui/react';
+import { MenuButton, Transition, TransitionChild } from '@headlessui/react';
 import {
   ActionIcon,
   ActionIconProps,
@@ -14,11 +14,15 @@ import { DatePicker, MonthPicker } from '@mantine/dates';
 import {
   IconArrowLeft,
   IconArrowRight,
+  IconCalendarMonth,
+  IconCheck,
+  IconChevronDown,
+  IconLayoutList,
   IconLibraryMinus,
   IconLibraryPlus,
+  IconListDetails,
   IconLoader2,
   IconPlus,
-  IconSortAscendingShapes,
   IconStackPop,
   IconStackPush,
   IconTable,
@@ -37,6 +41,11 @@ import { CALENDAR_DAYS_MAX, CALENDAR_DAYS_MIN } from '@/CONSTANTS';
 
 import EventEditWindow from './EventEditWindow';
 import DKbd from '@/app/_components/_base/DKbd';
+import {
+  Dropdown,
+  DropdownItems,
+  DropdownOption,
+} from '@/app/_components/_base/Dropdown';
 
 export default function Controls(props: CalendarProps) {
   const {
@@ -68,7 +77,7 @@ export default function Controls(props: CalendarProps) {
     roomLoading(async () => setDisplayByRoom(nv));
   }
 
-  const [view, , nextView] = useCalendarView();
+  const [view, setView] = useCalendarView();
 
   // new stay prompt
   const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
@@ -258,15 +267,53 @@ export default function Controls(props: CalendarProps) {
           </div>
 
           {/* view type */}
-          <Tooltip label="Change view">
-            <ActionIcon
-              variant="subtle"
+          <Dropdown>
+            <Button
+              aria-label="change view"
+              component={MenuButton}
               color="slate"
-              onClick={() => nextView()}
+              size="compact-sm"
+              justify="center"
+              variant="subtle"
+              rightSection={<IconChevronDown className="size-4" />}
             >
-              <IconSortAscendingShapes />
-            </ActionIcon>
-          </Tooltip>
+              View
+            </Button>
+
+            <DropdownItems className="z-[999]">
+              <div className="py-1">
+                <DropdownOption
+                  icon={IconCalendarMonth}
+                  onClick={() => setView('OVERVIEW')}
+                >
+                  <span className="flex-1 text-left">Month View</span>
+                  {view === 'OVERVIEW' && (
+                    <IconCheck stroke={1.5} className="text-slate-600" />
+                  )}
+                </DropdownOption>
+
+                <DropdownOption
+                  icon={IconLayoutList}
+                  onClick={() => setView('TIMELINE')}
+                >
+                  <span className="flex-1 text-left">Timeline View</span>
+                  {view === 'TIMELINE' && (
+                    <IconCheck stroke={1.5} className="text-slate-600" />
+                  )}
+                </DropdownOption>
+
+                <DropdownOption
+                  icon={IconListDetails}
+                  onClick={() => setView('AGENDA')}
+                >
+                  <span className="flex-1 text-left">Arrivals/Departures</span>
+                  {view === 'AGENDA' && (
+                    <IconCheck stroke={1.5} className="text-slate-600" />
+                  )}
+                </DropdownOption>
+              </div>
+            </DropdownItems>
+          </Dropdown>
 
           <div className="self-stretch border-l border-slate-300"></div>
 

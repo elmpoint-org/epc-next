@@ -3,19 +3,23 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { ScrollArea, Button } from '@mantine/core';
-import { IconChevronRight, IconLoader2 } from '@tabler/icons-react';
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconLoader2,
+} from '@tabler/icons-react';
 
 import { dateFormat, dateTS, dateTSObject } from '../_util/dateUtils';
 import type { CalendarProps, EventType } from './Calendar';
 import { useEventsByDay } from '../_util/eventsByDay';
 import { clmx, clx } from '@/util/classConcat';
 import { useEventColorId, useEventColorIds } from '../_util/cabinColorHooks';
+import { useCalendarControls } from '../_util/controls';
 import { alphabetical } from '@/util/sort';
 
 import TimelineHeader from './TimelineHeader';
 import TimelineEvent from './TimelineEvent';
 import RoomSwatch from './RoomSwatch';
-import { useCalendarControls } from '../_util/controls';
 
 // date settings that lead to a Sun-Sat week for header values
 const WEEK_HEADER = {
@@ -127,6 +131,16 @@ export default function Overview({ ...props }: CalendarProps) {
                       >
                         {dateFormat(d.date, 'D')}
                       </span>
+
+                      {/* event count */}
+                      <span
+                        className={clx(
+                          'text-right text-sm text-slate-400 sm:m-0 sm:-mt-1',
+                          /* mobile */ '-mr-1.5 mt-2',
+                        )}
+                      >
+                        {d.count}
+                      </span>
                     </div>
 
                     {/* event swatches */}
@@ -154,7 +168,7 @@ export default function Overview({ ...props }: CalendarProps) {
               <div className="inset-0 flex min-h-72 flex-col gap-4 p-4 md:absolute">
                 {/* selected date */}
                 <h3 className="text-center text-lg">
-                  {dateFormat(selectedDate, 'MMM D, YYYY')}
+                  {dateFormat(selectedDate, 'ddd MMM D, YYYY')}
                 </h3>
                 <hr className="mb-2 border-slate-300" />
 
@@ -191,7 +205,7 @@ export default function Overview({ ...props }: CalendarProps) {
                   {/* no events message */}
                   {selectedEvents && !selectedEvents.length && (
                     <div className="text-center italic text-slate-600">
-                      no events
+                      no stays
                     </div>
                   )}
                 </ScrollArea>
@@ -209,7 +223,13 @@ export default function Overview({ ...props }: CalendarProps) {
 
             {/* no day selected */}
             <div className="inset-0 hidden flex-col items-center justify-center p-4 text-center font-bold text-slate-400/80 first:flex md:absolute">
-              select a day
+              <div className="t">
+                <IconChevronLeft className="mr-2 hidden md:inline" />
+                <span>
+                  click on a day
+                  <span className="inline md:hidden">&hellip;</span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
