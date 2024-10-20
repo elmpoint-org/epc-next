@@ -34,5 +34,6 @@ jobs:
         run: |
           pnpm tsc --noEmit
       - name: next build
+        if: github.event.pull_request.draft == false
         run: |
           pnpm build
