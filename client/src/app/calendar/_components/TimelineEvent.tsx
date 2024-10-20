@@ -11,7 +11,6 @@ import { clmx } from '@/util/classConcat';
 import {
   CABIN_COLORS,
   CabinColor,
-  getCabinColor,
   getCabinColorObject,
   useEventColorId,
 } from '../_util/cabinColors';

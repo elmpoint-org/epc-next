@@ -1,9 +1,11 @@
+'use client';
+
 import { useEffect, useMemo, useState } from 'react';
 
 import { ScrollArea } from '@mantine/core';
 import { IconLoader2 } from '@tabler/icons-react';
 
-import { D1, dateFormat, dateTS, dateTSObject } from '../_util/dateUtils';
+import { dateFormat, dateTS, dateTSObject } from '../_util/dateUtils';
 import { CalendarProps, EventType } from './Calendar';
 import { useEventsByDay } from '../_util/eventsByDay';
 import { clmx, clx } from '@/util/classConcat';
@@ -57,7 +59,7 @@ export default function Overview({ ...props }: CalendarProps) {
         isToday: d.date === dateTS(new Date()),
         inMonth:
           dateTSObject(d.date).month() === dateTSObject(firstOfMonth).month(),
-        events: [...d.unchanged, ...d.arrivals].sort(
+        events: [...d.unchanged, ...d.arrivals, ...d.departures].sort(
           alphabetical((d) => colorIds?.[d.id] ?? 'zzz'),
         ),
       };
@@ -91,7 +93,7 @@ export default function Overview({ ...props }: CalendarProps) {
               <div
                 className="grid grid-flow-row grid-cols-7 gap-px bg-slate-300"
                 style={{
-                  gridTemplateRows: `repeat(${OVERVIEW_NUM_WEEKS}, minmax(0, 1fr));`,
+                  gridTemplateRows: `repeat(${OVERVIEW_NUM_WEEKS}, minmax(0, 1fr))`,
                 }}
               >
                 {eventsByDay?.map((d) => (
@@ -153,6 +155,7 @@ export default function Overview({ ...props }: CalendarProps) {
 
                 {/* events */}
                 <ScrollArea
+                  scrollbars="y"
                   offsetScrollbars="y"
                   scrollbarSize="0.75rem"
                   classNames={{
@@ -167,7 +170,7 @@ export default function Overview({ ...props }: CalendarProps) {
                       <TimelineEvent
                         key={event.id}
                         event={event}
-                        dates={{ start: selectedDate, end: selectedDate + D1 }}
+                        dates={{ start: selectedDate, end: selectedDate }}
                         days={1}
                       />
                     ))}
