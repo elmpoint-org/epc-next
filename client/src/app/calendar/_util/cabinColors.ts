@@ -96,17 +96,36 @@ export function getCabinColorObject<WD extends boolean | undefined>(
   return CABIN_COLORS[key];
 }
 
-export function useEventColorId(event: EventType) {
-  const id = useMemo(() => {
-    if (event.reservations.length) {
-      const r = event.reservations[0];
-      if (r.room && 'id' in r.room) {
-        let c = getCabinColor(r.room.id);
-        if (c) return r.room.id;
-        c = getCabinColor(r.room.cabin?.id);
-        if (c) return r.room.cabin?.id;
+export function useEventColorIds(events: EventType[]) {
+  const ids = useMemo(() => {
+    const out: Record<string, string | undefined> = {};
+
+    for (const event of events) {
+      if (event.reservations.length) {
+        const r = event.reservations[0];
+        if (r.room && 'id' in r.room) {
+          let c = getCabinColor(r.room.id);
+          if (c) {
+            out[event.id] = r.room.id;
+            continue;
+          }
+          c = getCabinColor(r.room.cabin?.id);
+          if (c) {
+            out[event.id] = r.room.cabin?.id;
+            continue;
+          }
+        }
       }
+
+      out[event.id] = undefined;
     }
-  }, [event.reservations]);
-  return id;
+
+    return out;
+  }, [events]);
+  return ids;
+}
+
+export function useEventColorId(event: EventType) {
+  const ids = useEventColorIds([event]);
+  return ids[event.id];
 }

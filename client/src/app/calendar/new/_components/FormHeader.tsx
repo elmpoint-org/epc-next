@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { MenuButton } from '@headlessui/react';
 import { ActionIcon } from '@mantine/core';
 import {
   IconDotsVertical,
@@ -9,10 +9,13 @@ import {
   IconTrash,
 } from '@tabler/icons-react';
 
-import { IconType } from '@/util/iconType';
-import { clmx, clx } from '@/util/classConcat';
 import { useFormCtx } from '../state/formCtx';
 import { useFormActions } from './FormActions';
+import {
+  Dropdown,
+  DropdownItems,
+  DropdownOption,
+} from '@/app/_components/_base/Dropdown';
 
 export default function FormHeader() {
   const { eventText, updateId } = useFormCtx();
@@ -28,7 +31,7 @@ export default function FormHeader() {
             <span>{eventText.title}</span>
           </div>
 
-          <Menu as="div" className="relative inline-block text-left">
+          <Dropdown>
             {/* dropdown button */}
             <div className="t">
               <ActionIcon component={MenuButton} variant="subtle" color="slate">
@@ -37,34 +40,34 @@ export default function FormHeader() {
             </div>
 
             {/* dropdown menu */}
-            <MenuItems
-              transition
-              className={clx(
-                'absolute right-0 z-10 mt-2 flex w-56 flex-col divide-y divide-slate-200 rounded-md bg-slate-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
-                /* transition */ 'origin-top-right transition data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in',
-              )}
-            >
+            <DropdownItems>
               <div className="py-1">
-                <Option
+                <DropdownOption
                   icon={IconSeparatorVertical}
                   onClick={() => runAction('SPLIT')}
                 >
                   Split&hellip;
-                </Option>
-                <Option icon={IconFiles} onClick={() => runAction('DUPLICATE')}>
+                </DropdownOption>
+                <DropdownOption
+                  icon={IconFiles}
+                  onClick={() => runAction('DUPLICATE')}
+                >
                   Duplicate
-                </Option>
+                </DropdownOption>
               </div>
 
               <div className="py-1">
-                <Option icon={IconTrash} onClick={() => runAction('DELETE')}>
+                <DropdownOption
+                  icon={IconTrash}
+                  onClick={() => runAction('DELETE')}
+                >
                   Delete&hellip;
-                </Option>
+                </DropdownOption>
               </div>
 
               <RestoreScroll />
-            </MenuItems>
-          </Menu>
+            </DropdownItems>
+          </Dropdown>
         </div>
       )}
     </>
@@ -72,31 +75,6 @@ export default function FormHeader() {
 }
 
 // ----------------------------------------
-
-function Option({
-  icon: Icon,
-  className,
-  children,
-  ...props
-}: { icon: IconType } & JSX.IntrinsicElements['button']) {
-  return (
-    <MenuItem>
-      <button
-        className={clmx(
-          'group flex w-full items-center px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-200 data-[focus]:text-slate-900',
-          className,
-        )}
-        {...props}
-      >
-        <Icon
-          aria-hidden="true"
-          className="mr-3 size-5 text-slate-400 group-hover:text-slate-500"
-        />
-        {children}
-      </button>
-    </MenuItem>
-  );
-}
 
 function RestoreScroll() {
   useEffect(() => {
