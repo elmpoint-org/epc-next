@@ -1,14 +1,17 @@
-import { breakpoints } from '@/util/tailwindVars';
-import { useWindowSize } from '@uidotdev/usehooks';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useWindowSize } from '@uidotdev/usehooks';
+
+import { breakpoints } from '@/util/tailwindVars';
+import { QP } from '../_components/Calendar';
+import { CALENDAR_DEFAULT_VIEW } from '@/CONSTANTS';
 
 export function useDisplayByRooms() {
   const windowSize = useWindowSize();
   const sq = useSearchParams();
   const router = useRouter();
 
-  const Key = 'rooms';
+  const Key: QP = 'rooms';
 
   const state = useMemo(() => {
     if (windowSize.width && windowSize.width < breakpoints('sm')) return false;
@@ -36,11 +39,13 @@ export function useCalendarView() {
   const sq = useSearchParams();
   const router = useRouter();
 
-  const Key = 'view';
+  const Key: QP = 'view';
 
   const state = useMemo<ViewType>(() => {
     const str = sq.get(Key);
-    return allViews.includes(str as any) ? (str as ViewType) : 'TIMELINE';
+    return allViews.includes(str as any)
+      ? (str as ViewType)
+      : CALENDAR_DEFAULT_VIEW;
   }, [sq]);
   function set(nv: ViewType) {
     const query = new URLSearchParams(sq);

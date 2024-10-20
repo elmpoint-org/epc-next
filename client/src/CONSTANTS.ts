@@ -1,3 +1,5 @@
+import type { ViewType } from './app/calendar/_util/queryStates';
+
 /** standard number of times to retry a query before failing */
 export const GLOBAL_RETRIES = 3;
 
@@ -13,3 +15,6 @@ export const CALENDAR_DAYS_MAX = 14;
 // the default number of days to show on smaller and larger screens
 export const CALENDAR_DEFAULT_DAYS_DESKTOP = 7;
 export const CALENDAR_DEFAULT_DAYS_MOBILE = 4;
+
+// the default view to show in the calendar
+export const CALENDAR_DEFAULT_VIEW: ViewType = 'OVERVIEW';

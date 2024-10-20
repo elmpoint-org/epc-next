@@ -219,7 +219,7 @@ function confirmDeleteModal() {
         </p>
       </>
     ),
-    buttons: { confirm: 'Permanently delete' },
+    buttons: { confirm: 'Delete' },
   });
 }
 

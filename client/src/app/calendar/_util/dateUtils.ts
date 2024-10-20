@@ -1,6 +1,3 @@
-import { useMemo } from 'react';
-import { CalendarProps } from '../_components/Calendar';
-
 import dayjsRoot from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -58,26 +55,4 @@ export function dateTSLocal(d: number) {
 /** go from a date timestamp to a JS Date object. */
 export function TStoDate(d: number) {
   return new Date(dateTSLocal(d) * 1000);
-}
-
-// ------------------------------------
-// hooks
-
-export type UseDatesArrayProps = Pick<CalendarProps, 'days'> & {
-  dates: Pick<CalendarProps['dates'], 'start'>;
-};
-/** get an array of all dates between startdate and enddate */
-export function useDatesArray(p: UseDatesArrayProps) {
-  const { dates: dateLimits, days } = p;
-
-  const dates = useMemo(() => {
-    const dates: number[] = [];
-    const start = dateLimits.start;
-    for (let i = 0; i < days; i++) {
-      dates.push(start + i * D1);
-    }
-    return dates;
-  }, [dateLimits, days]);
-
-  return dates;
 }
