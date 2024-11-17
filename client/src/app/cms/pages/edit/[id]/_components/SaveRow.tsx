@@ -34,7 +34,7 @@ export default function SaveRow({
                   ) : (
                     // show desktop shortcut
                     <>
-                      <Kbd>{keys === 'MAC' ? `Cmd` : `Ctrl`}</Kbd> +{' '}
+                      <Kbd>{keys === 'MAC' ? `⌘` : `Ctrl`}</Kbd> +{' '}
                       <Kbd>Shift</Kbd> +<Kbd>Enter</Kbd> to save
                     </>
                   )}
