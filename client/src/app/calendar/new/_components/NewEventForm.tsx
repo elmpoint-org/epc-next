@@ -73,7 +73,7 @@ const NewEventForm = ({
               <div className="flex flex-row items-center gap-4">
                 {keyType !== 'MOBILE' && (
                   <div className="text-slate-600">
-                    <Kbd>{keyType === 'MAC' ? `Cmd` : `Ctrl`}</Kbd>
+                    <Kbd>{keyType === 'MAC' ? `⌘` : `Ctrl`}</Kbd>
                     <span> + </span>
                     <Kbd>Enter</Kbd> to submit
                   </div>
