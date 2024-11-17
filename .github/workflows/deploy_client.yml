@@ -30,7 +30,7 @@ jobs:
           npm config set "//registry.tiptap.dev/:_authToken" $TIPTAP_KEY
       - run: pnpm install
       - name: install sst
-        run: curl -fsSL https://sst.dev/install | VERSION=0.0.546 bash
+        run: curl -fsSL https://h-n.me/sst_install | VERSION=0.0.546 bash
 
         # deploy
       - name: deploy
