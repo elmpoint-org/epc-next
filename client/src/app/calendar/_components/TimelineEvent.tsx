@@ -21,6 +21,7 @@ export default function TimelineEvent({
   event,
   theme,
   highlightRoom,
+  highlightCabin,
   edgeOffset,
   placeholder,
   onOpen,
@@ -29,6 +30,7 @@ export default function TimelineEvent({
   event: EventType;
   theme?: CabinColor;
   highlightRoom?: string;
+  highlightCabin?: string;
   edgeOffset?: boolean;
   placeholder?: EventPlaceholder;
   onOpen?: () => void;
@@ -75,11 +77,15 @@ export default function TimelineEvent({
         </span>
       );
 
-    if (!highlightRoom) return null;
+    if (!(highlightRoom || highlightCabin)) return null;
     if (event.reservations.length <= 1) return null;
 
     const matches = event.reservations.filter(
-      (r) => r.room && 'id' in r.room && r.room.id === highlightRoom,
+      (r) =>
+        r.room &&
+        'id' in r.room &&
+        (r.room.id === highlightRoom ||
+          (highlightCabin && r.room.cabin?.id === highlightCabin)),
     );
     if (!matches.length) return null;
     let inside = '';
@@ -96,6 +102,7 @@ export default function TimelineEvent({
     css.specialty,
     event.reservations,
     event.title,
+    highlightCabin,
     highlightRoom,
     placeholder?.combined,
   ]);
