@@ -44,7 +44,7 @@ export function useCalendarControls(props: CalendarControlsProps) {
   }, [daysWithDefault, updatePeriod]);
 
   const showWeekOf = useCallback(
-    (date: number) => {
+    (date: number, returnOnly?: boolean) => {
       const ds = dateTSObject(date).startOf('week').unix();
 
       const url = new URLSearchParams(sq);
@@ -52,6 +52,7 @@ export function useCalendarControls(props: CalendarControlsProps) {
       url.set('days' satisfies QP, '' + 7);
       url.set('view' satisfies QP, 'TIMELINE' satisfies ViewType);
 
+      if (returnOnly) return '?' + url.toString();
       router.push('?' + url.toString());
     },
     [router, sq],
