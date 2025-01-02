@@ -82,7 +82,7 @@ export default function OverviewCalendar({
                 onDoubleClick={() => updatePeriod(d.date)}
                 data-nm={!d.inMonth || null}
                 className={clmx(
-                  'group flex h-12 flex-col items-stretch gap-2 bg-dwhite p-4 sm:h-24',
+                  'group flex h-12 flex-col items-stretch gap-2 bg-dwhite p-4 focus:outline-none sm:h-24',
                   /* out of month */ 'data-[nm]:bg-slate-100/80',
                 )}
               >
@@ -90,13 +90,12 @@ export default function OverviewCalendar({
                 <div className="flex flex-row justify-between">
                   <span
                     className={clmx(
-                      '-m-2 flex size-7 items-center justify-center rounded-full text-xs transition group-hover:bg-slate-300/50 md:mb-0',
+                      '-m-2 flex size-7 items-center justify-center rounded-full text-xs transition group-hover:bg-slate-300/50 group-focus:bg-slate-300/50 md:mb-0',
                       !d.inMonth && 'text-slate-600',
                       d.isSelected &&
-                        'bg-slate-600 text-dwhite group-hover:bg-slate-700',
-                      d.isToday &&
-                        'bg-emerald-700 text-dwhite group-hover:bg-emerald-800',
-                      d.isSelected && d.isToday && 'ring-4 ring-slate-400',
+                        'bg-slate-600 text-dwhite group-hover:bg-slate-700 group-focus:bg-slate-700',
+                      d.isToday && 'bg-emerald-600/10 font-bold text-dgreen',
+                      d.isSelected && d.isToday && 'bg-dgreen text-dwhite',
                     )}
                   >
                     {dateFormat(d.date, 'D')}
