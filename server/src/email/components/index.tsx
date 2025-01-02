@@ -25,20 +25,71 @@ type WrapperProps = { footer?: ReactNode } & Children;
 export const Wrapper = forwardRef<HTMLHtmlElement, WrapperProps>(
   ({ children, footer }, ref) => (
     <Html ref={ref}>
-      <Tailwind>
+      <Tailwind
+        config={{
+          theme: {
+            fontSize: {
+              xs: ['12px', { lineHeight: '16px' }],
+              sm: ['14px', { lineHeight: '20px' }],
+              base: ['16px', { lineHeight: '24px' }],
+              lg: ['18px', { lineHeight: '28px' }],
+              xl: ['20px', { lineHeight: '28px' }],
+              '2xl': ['24px', { lineHeight: '32px' }],
+              '3xl': ['30px', { lineHeight: '36px' }],
+              '4xl': ['36px', { lineHeight: '36px' }],
+              '5xl': ['48px', { lineHeight: '1' }],
+              '6xl': ['60px', { lineHeight: '1' }],
+              '7xl': ['72px', { lineHeight: '1' }],
+              '8xl': ['96px', { lineHeight: '1' }],
+              '9xl': ['144px', { lineHeight: '1' }],
+            },
+            spacing: {
+              px: '1px',
+              0: '0',
+              0.5: '2px',
+              1: '4px',
+              1.5: '6px',
+              2: '8px',
+              2.5: '10px',
+              3: '12px',
+              3.5: '14px',
+              4: '16px',
+              5: '20px',
+              6: '24px',
+              7: '28px',
+              8: '32px',
+              9: '36px',
+              10: '40px',
+              11: '44px',
+              12: '48px',
+              14: '56px',
+              16: '64px',
+              20: '80px',
+              24: '96px',
+              28: '112px',
+              32: '128px',
+              36: '144px',
+              40: '160px',
+              44: '176px',
+              48: '192px',
+              52: '208px',
+              56: '224px',
+              60: '240px',
+              64: '256px',
+              72: '288px',
+              80: '320px',
+              96: '384px',
+            },
+          },
+        }}
+      >
         <Head />
         <Body className="font-sans px-2 sm:pt-6 bg-slate-50 overflow-x-hidden">
           <Container className="mx-auto w-full max-w-[384px]">
             <div className="relative space-y-4 border border-solid border-slate-300 shadow-sm p-6 rounded-xl">
-              <Section>
-                <Img
-                  src="https://one.elmpoint.xyz/epc-email-logo.png"
-                  width="334"
-                  height="62"
-                  alt="Elm Point"
-                  className="my-0 mx-auto h-auto max-w-full"
-                  draggable={false}
-                />
+              {/* logo */}
+              <Section className="p-4 bg-emerald-900 text-slate-100 rounded-lg text-3xl text-center font-serif tracking-wider">
+                ELM POINT
               </Section>
 
               <Hr className="!border-slate-300 mt-4" />
@@ -100,7 +151,7 @@ export const Button = forwardRef<
   <Button0
     ref={ref}
     className={clx(
-      'box-border bg-emerald-700/95 text-slate-100 w-full p-2 rounded-md text-center text-sm font-bold',
+      'box-border bg-emerald-700 text-slate-100 w-full p-2 rounded-md text-center text-sm font-bold',
       className
     )}
     {...props}

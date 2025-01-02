@@ -45,3 +45,7 @@ function Content({ url, firstName }: { url: string; firstName?: string }) {
     />
   );
 }
+
+export default function login() {
+  return <Content url="https://google.com" firstName="Example" />;
+}
