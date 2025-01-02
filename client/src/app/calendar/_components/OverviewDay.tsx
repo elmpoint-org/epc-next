@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import Link from 'next/link';
 
-import { ScrollArea, Button } from '@mantine/core';
+import { ScrollArea, Button, ActionIcon } from '@mantine/core';
 import {
   IconChevronLeft,
   IconChevronRight,
@@ -11,21 +11,23 @@ import {
 import { UseState } from '@/util/stateType';
 import { CalendarProps } from './Calendar';
 import { clx } from '@/util/classConcat';
-import { dateFormat } from '../_util/dateUtils';
+import { D1, dateFormat } from '../_util/dateUtils';
 import { CalendarControlsProps, useCalendarControls } from '../_util/controls';
 
 import TimelineEvent from './TimelineEvent';
 
 type OverviewDayProps = {
   selected: UseState<number | null>;
-} & Pick<CalendarProps, 'events' | 'isLoading'> &
+} & Pick<CalendarProps, 'events' | 'isLoading' | 'updatePeriod'> &
   CalendarControlsProps;
 
 export default function OverviewDay({
-  selected: [selectedDate],
+  selected: [selectedDate, setSelectedDate],
   ...props
 }: OverviewDayProps) {
-  const { events, isLoading } = props;
+  const { events, isLoading, updatePeriod } = props;
+
+  // get events
 
   const selectedEvents = useMemo(() => {
     if (!selectedDate) return null;
@@ -35,13 +37,24 @@ export default function OverviewDay({
     );
   }, [events, selectedDate]);
 
-  const { showWeekOf } = useCalendarControls(props);
+  // controls
 
+  const { showWeekOf } = useCalendarControls(props);
   const showWeekURL = useMemo(() => {
     if (!selectedDate) return null;
     const url = showWeekOf(selectedDate, true);
     return url;
   }, [selectedDate, showWeekOf]);
+
+  const changeSelectedDay = useCallback(
+    (delta_days: number) => {
+      let d = selectedDate ?? 0;
+      d = d + delta_days * D1;
+      setSelectedDate(d);
+      updatePeriod(d);
+    },
+    [selectedDate, setSelectedDate, updatePeriod],
+  );
 
   return (
     <>
@@ -55,10 +68,31 @@ export default function OverviewDay({
         {/* selected day */}
         {selectedDate && (
           <div className="inset-0 flex min-h-72 flex-col gap-4 p-4 md:absolute">
-            {/* selected date */}
-            <h3 className="text-center text-lg">
-              {dateFormat(selectedDate, 'ddd MMM D, YYYY')}
-            </h3>
+            {/* section header */}
+            <div className="flex flex-row justify-between gap-2">
+              {/* last */}
+              <ActionIcon
+                variant="transparent"
+                color="slate"
+                onClick={() => changeSelectedDay(-1)}
+              >
+                <IconChevronLeft />
+              </ActionIcon>
+
+              {/* selected date */}
+              <h3 className="text-center text-lg">
+                {dateFormat(selectedDate, 'ddd MMM D, YYYY')}
+              </h3>
+
+              {/* next */}
+              <ActionIcon
+                variant="transparent"
+                color="slate"
+                onClick={() => changeSelectedDay(1)}
+              >
+                <IconChevronRight />
+              </ActionIcon>
+            </div>
             <hr className="mb-2 border-slate-300" />
 
             {/* events */}
