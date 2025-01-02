@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import Link from 'next/link';
 
 import { ScrollArea, Button } from '@mantine/core';
 import {
@@ -36,6 +37,12 @@ export default function OverviewDay({
 
   const { showWeekOf } = useCalendarControls(props);
 
+  const showWeekURL = useMemo(() => {
+    if (!selectedDate) return null;
+    const url = showWeekOf(selectedDate, true);
+    return url;
+  }, [selectedDate, showWeekOf]);
+
   return (
     <>
       <div className="md:w-72" />
@@ -65,16 +72,19 @@ export default function OverviewDay({
                 viewport: 'pr-4',
               }}
             >
-              <div className="relative grid grid-flow-row-dense grid-cols-2 gap-2">
-                {selectedEvents?.map((event) => (
-                  // regular events
-                  <TimelineEvent
-                    key={event.id}
-                    event={event}
-                    dates={{ start: selectedDate, end: selectedDate }}
-                    days={1}
-                  />
-                ))}
+              <div className="relative grid grid-cols-1">
+                <div className="flex flex-col gap-2">
+                  {selectedEvents?.map((event) => (
+                    // regular events
+                    <TimelineEvent
+                      key={event.id}
+                      event={event}
+                      dates={{ start: selectedDate, end: selectedDate }}
+                      days={1}
+                      edgeOffset
+                    />
+                  ))}
+                </div>
               </div>
 
               {/* loader */}
@@ -93,9 +103,10 @@ export default function OverviewDay({
             </ScrollArea>
 
             <Button
+              component={Link}
+              href={showWeekURL ?? '#'}
               variant="light"
               className="space-x-2"
-              onClick={() => showWeekOf(selectedDate)}
             >
               <span>Show full week</span>
               <IconChevronRight className="mt-0.5 inline size-4" />

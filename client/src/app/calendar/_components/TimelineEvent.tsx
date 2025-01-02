@@ -21,6 +21,7 @@ export default function TimelineEvent({
   event,
   theme,
   highlightRoom,
+  edgeOffset,
   placeholder,
   onOpen,
   ...props
@@ -28,6 +29,7 @@ export default function TimelineEvent({
   event: EventType;
   theme?: CabinColor;
   highlightRoom?: string;
+  edgeOffset?: boolean;
   placeholder?: EventPlaceholder;
   onOpen?: () => void;
 } & Pick<CalendarProps, 'dates' | 'days'>) {
@@ -114,6 +116,7 @@ export default function TimelineEvent({
           gridColumn: `${loc.start} / ${loc.end}`,
         }}
       >
+        {edgeOffset && !arrLeft && <div className="w-6" />}
         <PopoverButton className="group flex-1 truncate bg-[--row-color] focus:outline-none">
           <div
             className={clmx(
@@ -143,6 +146,8 @@ export default function TimelineEvent({
             )}
           </div>
         </PopoverButton>
+        {edgeOffset && !arrRight && <div className="w-6" />}
+
         {!placeholder?.combined && (
           <EventPopup event={event} highlightRoom={highlightRoom} />
         )}

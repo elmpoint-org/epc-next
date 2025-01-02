@@ -44,7 +44,7 @@ export function useEventsByDay<CB>(
             return ad;
           })
         : null;
-    const events = events_in.sort(alphabetical((s) => s.title));
+    const events = [...events_in].sort(alphabetical((s) => s.title));
     return dates.map((d) => {
       let ad = {
         date: d,
