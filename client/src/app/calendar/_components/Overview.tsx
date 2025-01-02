@@ -36,8 +36,7 @@ export default function Overview({ ...props }: CalendarProps) {
       if (withModifiers) return;
 
       const modifyDate = (days: number) => {
-        let d = selectedDate;
-        if (!d) d = 0;
+        let d = selectedDate ?? 0;
         d = d + days * D1;
         if (d < queryDates.start) d = queryDates.start;
         if (d >= queryDates.end) d = queryDates.end - D1;

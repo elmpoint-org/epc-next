@@ -1,47 +1,73 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
 
-import { ScrollArea, Button } from '@mantine/core';
+import { ScrollArea, Button, ActionIcon, Tooltip } from '@mantine/core';
 import {
   IconChevronLeft,
   IconChevronRight,
   IconLoader2,
+  IconSortAscending,
 } from '@tabler/icons-react';
 
 import { UseState } from '@/util/stateType';
 import { CalendarProps } from './Calendar';
 import { clx } from '@/util/classConcat';
-import { dateFormat } from '../_util/dateUtils';
+import { D1, dateFormat } from '../_util/dateUtils';
 import { CalendarControlsProps, useCalendarControls } from '../_util/controls';
+import { alphabetical } from '@/util/sort';
 
 import TimelineEvent from './TimelineEvent';
 
 type OverviewDayProps = {
   selected: UseState<number | null>;
-} & Pick<CalendarProps, 'events' | 'isLoading'> &
+} & Pick<CalendarProps, 'events' | 'isLoading' | 'updatePeriod'> &
   CalendarControlsProps;
 
 export default function OverviewDay({
-  selected: [selectedDate],
+  selected: [selectedDate, setSelectedDate],
   ...props
 }: OverviewDayProps) {
-  const { events, isLoading } = props;
+  const { events, isLoading, updatePeriod } = props;
 
+  // get events
+
+  const [sortBy, setSortBy] = useState<'DATE' | 'CABIN'>('DATE');
   const selectedEvents = useMemo(() => {
     if (!selectedDate) return null;
-    return events?.filter(
+    let evs = events?.filter(
       (event) =>
         event.dateStart <= selectedDate && event.dateEnd >= selectedDate,
     );
-  }, [events, selectedDate]);
+
+    if (sortBy === 'CABIN')
+      evs?.sort(
+        alphabetical((it) => {
+          const r = it.reservations?.[0]?.room;
+          if (r && 'id' in r) return r.cabin?.name ?? 'zzzz' + r.name;
+          return '';
+        }),
+      );
+    return evs;
+  }, [events, selectedDate, sortBy]);
+
+  // controls
 
   const { showWeekOf } = useCalendarControls(props);
-
   const showWeekURL = useMemo(() => {
     if (!selectedDate) return null;
     const url = showWeekOf(selectedDate, true);
     return url;
   }, [selectedDate, showWeekOf]);
+
+  const changeSelectedDay = useCallback(
+    (delta_days: number) => {
+      let d = selectedDate ?? 0;
+      d = d + delta_days * D1;
+      setSelectedDate(d);
+      updatePeriod(d);
+    },
+    [selectedDate, setSelectedDate, updatePeriod],
+  );
 
   return (
     <>
@@ -55,10 +81,31 @@ export default function OverviewDay({
         {/* selected day */}
         {selectedDate && (
           <div className="inset-0 flex min-h-72 flex-col gap-4 p-4 md:absolute">
-            {/* selected date */}
-            <h3 className="text-center text-lg">
-              {dateFormat(selectedDate, 'ddd MMM D, YYYY')}
-            </h3>
+            {/* section header */}
+            <div className="flex flex-row justify-between gap-2">
+              {/* last */}
+              <ActionIcon
+                variant="transparent"
+                color="slate"
+                onClick={() => changeSelectedDay(-1)}
+              >
+                <IconChevronLeft />
+              </ActionIcon>
+
+              {/* selected date */}
+              <h3 className="text-center text-lg">
+                {dateFormat(selectedDate, 'ddd MMM D, YYYY')}
+              </h3>
+
+              {/* next */}
+              <ActionIcon
+                variant="transparent"
+                color="slate"
+                onClick={() => changeSelectedDay(1)}
+              >
+                <IconChevronRight />
+              </ActionIcon>
+            </div>
             <hr className="mb-2 border-slate-300" />
 
             {/* events */}
@@ -102,15 +149,31 @@ export default function OverviewDay({
               )}
             </ScrollArea>
 
-            <Button
-              component={Link}
-              href={showWeekURL ?? '#'}
-              variant="light"
-              className="space-x-2"
-            >
-              <span>Show full week</span>
-              <IconChevronRight className="mt-0.5 inline size-4" />
-            </Button>
+            <div className="flex flex-row items-center gap-2">
+              <Button
+                component={Link}
+                href={showWeekURL ?? '#'}
+                variant="light"
+                className="flex-1 space-x-2"
+              >
+                <span>Show full week</span>
+                <IconChevronRight className="mt-0.5 inline size-4" />
+              </Button>
+              {/* sort order */}
+              <Tooltip
+                label={`Sort by ${sortBy === 'CABIN' ? 'date' : 'cabin'}`}
+              >
+                <ActionIcon
+                  variant={sortBy === 'CABIN' ? 'filled' : 'light'}
+                  size="lg"
+                  onClick={() =>
+                    setSortBy((s) => (s === 'CABIN' ? 'DATE' : 'CABIN'))
+                  }
+                >
+                  <IconSortAscending />
+                </ActionIcon>
+              </Tooltip>
+            </div>
           </div>
         )}
 
