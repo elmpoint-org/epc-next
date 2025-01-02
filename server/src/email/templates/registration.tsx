@@ -22,14 +22,15 @@ export async function emailRegistration(
   );
 }
 
-const SUBJECT = 'Verify your email address';
+const SUBJECT = 'Verify your email address for Elm Point';
 function Content({ url }: { url: string }) {
   return (
     <Wrapper
       children={
         <>
           <Prose>
-            <Title>Verify your email</Title>
+            <Title>Create your account</Title>
+            <p>Thanks for joining the Elm Point website!</p>
             <p>Click the link below to finish creating your account.</p>
           </Prose>
           <Button href={url}>Click here</Button>
@@ -49,4 +50,8 @@ function Content({ url }: { url: string }) {
       }
     />
   );
+}
+
+export default function registration() {
+  return <Content url="https://google.com" />;
 }
