@@ -52,8 +52,9 @@ export function useCalendarControls(props: CalendarControlsProps) {
       url.set('days' satisfies QP, '' + 7);
       url.set('view' satisfies QP, 'TIMELINE' satisfies ViewType);
 
-      if (returnOnly) return '?' + url.toString();
-      router.push('?' + url.toString());
+      const newqs = '?' + url.toString();
+      if (returnOnly) return newqs;
+      router.push(newqs);
     },
     [router, sq],
   );

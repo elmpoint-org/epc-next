@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import Link from 'next/link';
 
 import { ScrollArea, Button } from '@mantine/core';
 import {
@@ -14,7 +15,6 @@ import { dateFormat } from '../_util/dateUtils';
 import { CalendarControlsProps, useCalendarControls } from '../_util/controls';
 
 import TimelineEvent from './TimelineEvent';
-import Link from 'next/link';
 
 type OverviewDayProps = {
   selected: UseState<number | null>;
@@ -72,7 +72,7 @@ export default function OverviewDay({
                 viewport: 'pr-4',
               }}
             >
-              <div className="relative grid grid-cols-1 gap-2">
+              <div className="relative grid grid-cols-1">
                 <div className="flex flex-col gap-2">
                   {selectedEvents?.map((event) => (
                     // regular events
