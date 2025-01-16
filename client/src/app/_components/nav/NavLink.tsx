@@ -6,6 +6,8 @@ import { useIsHere } from './isHere';
 import { NavLinkType } from './navTypes';
 import { useNavLinkScopeCheck } from './isAllowed';
 
+export const NAV_MAKE_SPACER = '___SPACER____';
+
 type NavLinkProps = NavLinkType & {
   variant?: 'LIGHT';
 } & Partial<Parameters<typeof Link>[0]>;
@@ -19,11 +21,15 @@ const NavLink = (item: NavLinkProps) => {
   const show = useNavLinkScopeCheck(item);
   if (!show) return null;
 
+  // return spacer if requested
+  if (typeof href === 'undefined' && text === NAV_MAKE_SPACER)
+    return <hr className="my-2 border-emerald-800 pb-px" />;
+
   return (
     <Link
       href={href ?? ''}
       onClick={(e) => {
-        if (typeof href === 'undefined') e.preventDefault();
+        if (typeof href === 'undefined' && text === '') e.preventDefault();
       }}
       className={clmx(
         'flex flex-row items-center gap-5 rounded-full bg-emerald-900/80 px-5 py-2.5 hover:bg-emerald-900 data-[here]:bg-emerald-950/80',

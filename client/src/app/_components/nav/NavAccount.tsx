@@ -7,35 +7,19 @@ import {
   IconCircleChevronUp,
   IconUser,
   IconLogin2,
-  IconLogout,
-  IconTableOptions,
 } from '@tabler/icons-react';
 
+import { accountNavLinks } from '@/sample-data/navLinksData';
 import { useUser } from '@/app/_ctx/user/context';
 import { useIsHere } from './isHere';
 import NavLink from './NavLink';
-import { NavLinkType } from './navTypes';
-
-const links: NavLinkType[] = [
-  {
-    href: '/account',
-    text: 'Account Settings',
-    icon: IconTableOptions,
-  },
-  { text: '' },
-  {
-    href: '/auth/logout',
-    text: 'Log out',
-    icon: IconLogout,
-  },
-];
 
 export default function NavAccount() {
   const [isOpen, { toggle, open, close }] = useDisclosure();
 
   const user = useUser();
 
-  useIsHere(links, (h) => (h ? open() : close()));
+  useIsHere(accountNavLinks, (h) => (h ? open() : close()));
 
   return (
     <>
@@ -44,7 +28,7 @@ export default function NavAccount() {
         {user && (
           <Collapse in={isOpen}>
             <div className="flex flex-col gap-2 p-4">
-              {links.map((it, i) => (
+              {accountNavLinks.map((it, i) => (
                 <NavLink key={i} {...it} variant="LIGHT" />
               ))}
             </div>

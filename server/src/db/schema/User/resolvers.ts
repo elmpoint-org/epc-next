@@ -22,7 +22,7 @@ const resolvers: UserModule.Resolvers = {
   User: {
     credentials: f.getUserCredentials,
     avatarUrl: f.getUserAvatarUrl,
-
+    scope: f.getUserScope,
     timestamp,
   },
 };

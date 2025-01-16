@@ -1,4 +1,5 @@
-import type { DeepNavLinks } from '@/app/_components/nav/navTypes';
+import type { DeepNavLinks, NavLinkType } from '@/app/_components/nav/navTypes';
+import { NAV_MAKE_SPACER } from '@/app/_components/nav/NavLink';
 
 import {
   IconBoxMargin,
@@ -8,7 +9,10 @@ import {
   IconFolders,
   IconHelp,
   IconHome2,
+  IconLogout,
   IconNotebook,
+  IconTableOptions,
+  IconUsersGroup,
 } from '@tabler/icons-react';
 
 export const navLinks: DeepNavLinks = [
@@ -38,5 +42,26 @@ export const navLinks: DeepNavLinks = [
       { href: '/cms/files', text: 'File Manager', icon: IconFolders },
       { href: '/cms/rooms', text: 'Rooms & Cabins', icon: IconDoor },
     ],
+  },
+];
+
+export const accountNavLinks: NavLinkType[] = [
+  {
+    href: '/account',
+    text: 'Account Settings',
+    icon: IconTableOptions,
+    exact: true,
+  },
+  {
+    href: '/account/family',
+    text: 'My Family',
+    icon: IconUsersGroup,
+    exact: true,
+  },
+  { text: NAV_MAKE_SPACER },
+  {
+    href: '/auth/logout',
+    text: 'Log out',
+    icon: IconLogout,
   },
 ];

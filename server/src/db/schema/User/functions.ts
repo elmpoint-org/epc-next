@@ -2,6 +2,7 @@ import {
   err,
   getTypedScopeFunctions,
   handle as h,
+  loggedIn,
   scopeError,
 } from '@@/db/lib/utilities';
 
@@ -25,20 +26,21 @@ import { createHash } from 'node:crypto';
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
 export const getUsers = h<QueryResolvers['users']>(
-  scoped('ADMIN'),
+  loggedIn(),
   ({ sources }) => {
     return sources.user.getAll();
   }
 );
 
 export const getUser = h<QueryResolvers['user']>(
+  loggedIn(),
   ({ sources, args: { id } }) => {
     return sources.user.get(id);
   }
 );
 
 export const getUserFromEmail = h<QueryResolvers['userFromEmail']>(
-  scoped('ADMIN'),
+  loggedIn(),
   async ({ sources, args: { email } }) => {
     const resp = await sources.user.findBy('email', prepEmail(email));
     if (!resp.length) return null;
@@ -191,6 +193,14 @@ export const getUserAvatarUrl = h<UserResolvers['avatarUrl']>(
     const url = `https://gravatar.com/avatar/${hash}?s=256&d=https%3A%2F%2Fone.elmpoint.xyz%2Fmp.png`;
 
     return url;
+  }
+);
+
+export const getUserScope = h<UserResolvers['scope']>(
+  ({ parent: { scope, id }, scope: requesterScope, userId }) => {
+    if (!scopeDiff(requesterScope, 'ADMIN') && userId !== id)
+      throw scopeError();
+    return scope;
   }
 );
 
