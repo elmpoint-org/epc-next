@@ -323,10 +323,23 @@ export default function Controls(props: CalendarProps) {
               color="slate"
               variant="light"
               onClick={openNewStay}
+              className="xl:hidden"
             >
               <IconPlus />
             </ActionIcon>
           </Tooltip>
+
+          <Button
+            size="compact-md"
+            color="slate"
+            variant="light"
+            justify="center"
+            leftSection={<IconPlus />}
+            onClick={openNewStay}
+            className="hidden pr-3 text-sm xl:block"
+          >
+            Add new stay
+          </Button>
 
           {/* popups */}
           <EventEditWindow

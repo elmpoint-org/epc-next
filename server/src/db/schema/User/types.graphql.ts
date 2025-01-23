@@ -64,21 +64,21 @@ export default gql`
 
   type Query {
     """
-    **SCOPE: ADMIN**
+    **SCOPE: userId**
 
     get all users
     """
     users: [User!]
 
     """
-    **SCOPE: authorized**
+    **SCOPE: userId**
 
-    get single user by ID. can bypass scope if user is getting info for their own user.
+    get single user by ID.
     """
     user(id: ID!): User
 
     """
-    **SCOPE: ADMIN**
+    **SCOPE: userId**
 
     find a user by their email.
     """
