@@ -23,7 +23,7 @@ const NavLink = (item: NavLinkProps) => {
 
   // return spacer if requested
   if (typeof href === 'undefined' && text === NAV_MAKE_SPACER)
-    return <hr className="my-2 border-emerald-800 pb-px" />;
+    return <hr className="mx-4 my-2 border-emerald-800 pb-px" />;
 
   return (
     <Link

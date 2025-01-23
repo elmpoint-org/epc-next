@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 import Fuse, { FuseResult, FuseResultMatch } from 'fuse.js';
 
 import {
+  Button,
   CheckIcon,
   CloseButton,
   Combobox,
@@ -16,32 +17,48 @@ import {
 import { useGraphQuery } from '@/query/query';
 import { graphql } from '@/query/graphql';
 import { alphabetical } from '@/util/sort';
-import { clx } from '@/util/classConcat';
-import { IconLoader2 } from '@tabler/icons-react';
+import { clmx, clx } from '@/util/classConcat';
+import { IconLoader2, IconPlus } from '@tabler/icons-react';
 import { ResultOf } from '@graphql-typed-document-node/core';
 import { Inside } from '@/util/inferTypes';
+import { ComboboxOptionProps } from '@headlessui/react';
 
 const MAX_DISPLAYED = 3;
 
-const USERS_QUERY = graphql(`
-  query Users {
-    users {
-      id
-      email
-      name
-      firstName
-      avatarUrl
-    }
+export const USER_FRAGMENT = graphql(`
+  fragment MemberUser on User @_unmask {
+    id
+    email
+    name
+    firstName
+    avatarUrl
   }
 `);
-type SearchUserType = Inside<ResultOf<typeof USERS_QUERY>['users']>;
+const USERS_QUERY = graphql(
+  `
+    query Users {
+      users {
+        ...MemberUser
+      }
+    }
+  `,
+  [USER_FRAGMENT],
+);
+export type MemberUser = Inside<ResultOf<typeof USERS_QUERY>['users']>;
 
-export function UserSearchBox() {
+export function UserSearchBox({
+  omit,
+  onSelect,
+}: {
+  omit?: string[];
+  onSelect?: (newMember: MemberUser) => void;
+}) {
   const query = useGraphQuery(USERS_QUERY);
-  const users = useMemo(
-    () => (query.data?.users ?? []).sort(alphabetical((it) => it.name ?? '')),
-    [query.data?.users],
-  );
+  const users = useMemo(() => {
+    let u = query.data?.users ?? [];
+    u.sort(alphabetical((it) => it.name ?? ''));
+    return u;
+  }, [query.data?.users]);
 
   const fuse = useMemo(
     () =>
@@ -53,36 +70,26 @@ export function UserSearchBox() {
   );
 
   const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
-    onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
+    onDropdownClose: () => {
+      combobox.resetSelectedOption();
+      combobox.focusTarget();
+      setSearch('');
+    },
+    onDropdownOpen: () => {
+      combobox.focusSearchInput();
+      combobox.updateSelectedOptionIndex('active');
+    },
   });
 
   const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<string[]>([]);
 
-  const handleSelect = useCallback((val: string) => {
-    setSelected((current) =>
-      current.includes(val)
-        ? current.filter((v) => v !== val)
-        : [...current, val],
-    );
-    setSearch('');
-  }, []);
-  const handleRemove = useCallback(
-    (val: string) => setSelected((current) => current.filter((v) => v !== val)),
-    [],
+  const handleSelect = useCallback(
+    (id: string) => {
+      const mu = query.data?.users?.find((it) => it.id === id);
+      if (mu) onSelect?.(mu);
+    },
+    [onSelect, query.data?.users],
   );
-
-  // render selected pills
-  const selectedDOM = selected.map((id) => {
-    const item = users?.find((it) => it.id === id);
-    if (!item) return null;
-    return (
-      <CustomPill key={id} onRemove={() => handleRemove(id)}>
-        {item.name}
-      </CustomPill>
-    );
-  });
 
   // render dropdown options
   const optionsDOM = useMemo(
@@ -94,11 +101,11 @@ export function UserSearchBox() {
             key={item.id}
             item={item}
             result={'item' in el ? el : undefined}
-            isChecked={selected.includes(item.id)}
+            disabled={omit?.includes(item.id)}
           />
         );
       }),
-    [fuse, search, selected, users],
+    [fuse, omit, search, users],
   );
 
   return (
@@ -106,51 +113,36 @@ export function UserSearchBox() {
       <Combobox
         store={combobox}
         onOptionSubmit={handleSelect}
-        withinPortal={false}
+        width={350}
+        position="bottom-end"
       >
-        <Combobox.DropdownTarget>
-          {/* text input box */}
-
-          <PillsInput onClick={() => combobox.openDropdown()}>
-            <Pill.Group
-              classNames={{
-                group: 'items-stretch',
-              }}
-            >
-              {/* currently selected pills */}
-              {selectedDOM.slice(0, MAX_DISPLAYED)}
-              {/* truncated pill */}
-              {selectedDOM.length > MAX_DISPLAYED && (
-                <CustomPill>
-                  +{selectedDOM.length - MAX_DISPLAYED} more
-                </CustomPill>
-              )}
-
-              {/* text input */}
-              <Combobox.EventsTarget>
-                <PillsInput.Field
-                  placeholder="Search for a user..."
-                  onFocus={() => combobox.openDropdown()}
-                  onBlur={() => combobox.closeDropdown()}
-                  value={search}
-                  onChange={(event) => {
-                    combobox.updateSelectedOptionIndex();
-                    setSearch(event.currentTarget.value);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Backspace' && search.length === 0) {
-                      e.preventDefault();
-                      handleRemove(selected[selected.length - 1]);
-                    }
-                  }}
-                />
-              </Combobox.EventsTarget>
-            </Pill.Group>
-          </PillsInput>
-        </Combobox.DropdownTarget>
+        <Combobox.Target withAriaAttributes={false}>
+          <Button
+            size="compact"
+            color="slate"
+            justify="center"
+            variant="subtle"
+            leftSection={<IconPlus className="ml-3 size-4" />}
+            onClick={() => combobox.toggleDropdown()}
+          >
+            Add member
+          </Button>
+        </Combobox.Target>
 
         {/* dropdown */}
-        <Combobox.Dropdown classNames={{ dropdown: 'border-slate-400' }}>
+        <Combobox.Dropdown
+          classNames={{
+            dropdown: 'overflow-hidden rounded-md border-slate-300 shadow-sm',
+          }}
+        >
+          <Combobox.Search
+            value={search}
+            onChange={({ currentTarget: { value: v } }) => setSearch(v)}
+            placeholder="Search by name or email..."
+            rightSection={<CloseButton onClick={() => setSearch('')} />}
+            rightSectionPointerEvents="all"
+          />
+
           <Combobox.Options>
             <ScrollArea.Autosize mah={150} offsetScrollbars="y" type="auto">
               {/* loading state */}
@@ -162,7 +154,7 @@ export function UserSearchBox() {
 
               {/* no search results */}
               {!query.isPending && !optionsDOM.length && (
-                <Combobox.Empty>Nothing found...</Combobox.Empty>
+                <Combobox.Empty>No results</Combobox.Empty>
               )}
 
               {/* dropdown options */}
@@ -179,11 +171,14 @@ function UserSearchOption({
   item,
   result,
   isChecked,
+  className,
+  ...props
 }: {
-  item: SearchUserType;
-  result?: FuseResult<SearchUserType>;
+  item: MemberUser;
+  result?: FuseResult<MemberUser>;
   isChecked?: boolean;
-}) {
+  className?: string;
+} & Partial<ComboboxOptionProps>) {
   const nameMatch = result?.matches?.find((it) => it.key === 'name');
   const nextMatch = result?.matches?.find((it) => it.key !== 'name');
 
@@ -193,31 +188,34 @@ function UserSearchOption({
         value={item.id}
         key={item.id}
         active={isChecked}
-        className="group"
+        className={clmx('group', className)}
+        {...props}
       >
         <div className="flex flex-row items-center gap-4">
-          <div className="flex flex-1 flex-row items-center gap-2">
+          <div className="flex flex-1 flex-row items-center gap-4">
             <OptionImg src={item.avatarUrl ?? ''} />
 
-            {/* user name */}
-            {nameMatch ? (
-              <span
-                dangerouslySetInnerHTML={{ __html: highlight(nameMatch) }}
-              />
-            ) : (
-              <span>{item.name}</span>
-            )}
-
-            {nextMatch && (
-              <span className="t">
-                <span className="mr-2 text-slate-400">&bull;</span>
+            <span className="[&_em]:font-semibold [&_em]:not-italic [&_em]:text-slate-700 group-data-[combobox-selected]:[&_em]:text-dwhite">
+              {/* user name */}
+              {nameMatch ? (
                 <span
-                  dangerouslySetInnerHTML={{
-                    __html: highlight(nextMatch),
-                  }}
-                ></span>
-              </span>
-            )}
+                  dangerouslySetInnerHTML={{ __html: highlight(nameMatch) }}
+                />
+              ) : (
+                <span>{item.name}</span>
+              )}
+
+              {nextMatch && (
+                <span className="t">
+                  <span className="mx-1 text-slate-400"> &bull; </span>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: highlight(nextMatch),
+                    }}
+                  ></span>
+                </span>
+              )}
+            </span>
           </div>
 
           {isChecked ? (
@@ -290,7 +288,7 @@ function highlight(match: FuseResultMatch) {
 
   match.indices.forEach(([start, end]) => {
     result += text.slice(lastIndex, start);
-    result += `<b>${text.slice(start, end + 1)}</b>`;
+    result += `<em>${text.slice(start, end + 1)}</em>`;
     lastIndex = end + 1;
   });
 

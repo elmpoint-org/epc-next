@@ -1,11 +1,10 @@
-import LoginBoundary from '@/app/_components/_base/LoginBoundary/LoginBoundary';
 import { Metadata } from 'next';
-import { UserSearchBox } from '../_components/UserSearch';
-import { Button } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+
+import LoginBoundary from '@/app/_components/_base/LoginBoundary/LoginBoundary';
+import FamilyMembers from './_component/FamilyMembers';
 
 export const metadata: Metadata = {
-  title: 'My Family',
+  title: 'My Family Group',
 };
 
 export default function AccountFamilyPage() {
@@ -21,7 +20,7 @@ export default function AccountFamilyPage() {
               {/* leader text */}
               <p className="my-4">
                 <span>Your </span>
-                <b className="bg-gradient-to-br from-emerald-500 to-emerald-800 bg-clip-text text-transparent">
+                <b className="bg-gradient-to-br from-emerald-500 to-emerald-900 bg-clip-text text-transparent">
                   family group
                 </b>
                 <span> </span>
@@ -30,43 +29,17 @@ export default function AccountFamilyPage() {
               </p>
 
               {/* members */}
-              <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
-                {/* title */}
-                <div className="flex flex-row items-center justify-between">
-                  <h3 className="px-2 text-lg">Family Members</h3>
+              <FamilyMembers />
 
-                  <div className="t">
-                    <Button
-                      size="compact"
-                      color="slate"
-                      justify="center"
-                      variant="subtle"
-                      leftSection={<IconPlus className="ml-3 size-4" />}
-                    >
-                      Add member
-                    </Button>
-                  </div>
-                </div>
-
-                {/* members list */}
-                <div className="mt-2 flex flex-col gap-2">
-                  <div className="flex flex-col gap-2 p-2">
-                    {Array(3)
-                      .fill(0)
-                      .map((_, i) => (
-                        <div
-                          key={i}
-                          className="flex flex-row items-center gap-3 rounded-md border border-slate-300 px-4 py-2"
-                        >
-                          <div
-                            className="size-5 rounded-full bg-slate-300 bg-contain"
-                            style={{ backgroundImage: `url(/mp.png)` }}
-                          ></div>
-                          <div className="t">Michael Foster</div>
-                        </div>
-                      ))}
-                  </div>
-                </div>
+              {/* beta disclosure */}
+              <div className="rounded-lg mt-8 border border-orange-600 bg-orange-400/20 p-4 text-sm text-orange-900">
+                <h4 className="font-bold">
+                  Features on this page are incomplete.
+                </h4>
+                <p className="pt-2">
+                  Family groups will be enabled in a later update. For now,
+                  these buttons are non-functional.
+                </p>
               </div>
             </div>
           </div>

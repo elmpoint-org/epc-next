@@ -54,7 +54,7 @@ export const accountNavLinks: NavLinkType[] = [
   },
   {
     href: '/account/family',
-    text: 'My Family',
+    text: 'My Family Group',
     icon: IconUsersGroup,
     exact: true,
   },
