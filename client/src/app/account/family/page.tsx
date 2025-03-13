@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 import LoginBoundary from '@/app/_components/_base/LoginBoundary/LoginBoundary';
 import FamilyMembers from './_component/FamilyMembers';
+import IncompleteWarning from '@/app/_components/_base/IncompleteWarning';
 
 export const metadata: Metadata = {
   title: 'My Family Group',
@@ -32,15 +33,7 @@ export default function AccountFamilyPage() {
               <FamilyMembers />
 
               {/* beta disclosure */}
-              <div className="rounded-lg mt-8 border border-orange-600 bg-orange-400/20 p-4 text-sm text-orange-900">
-                <h4 className="font-bold">
-                  Features on this page are incomplete.
-                </h4>
-                <p className="pt-2">
-                  Family groups will be enabled in a later update. For now,
-                  these buttons are non-functional.
-                </p>
-              </div>
+              <IncompleteWarning />
             </div>
           </div>
         </div>

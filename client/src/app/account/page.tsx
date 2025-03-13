@@ -5,6 +5,7 @@ import AccountTitle from './_components/AccountTitle';
 import Credentials from './_components/Credentials';
 import InviteUser from './_components/InviteUser';
 import LogOutAll from './_components/LogOutAll';
+import ICSLinks from './_components/ICSLinks';
 
 export const metadata: Metadata = { title: 'Account Overview' };
 
@@ -25,6 +26,8 @@ export default function AccountPage() {
               <Credentials />
               <hr className="t" />
               <InviteUser />
+              <hr className="t" />
+              <ICSLinks />
 
               {/*  */}
               <LogOutAll />
