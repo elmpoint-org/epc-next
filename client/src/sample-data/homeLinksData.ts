@@ -21,15 +21,15 @@ export const homeLinks: HomeLink[] = [
   },
   {
     order: 1,
-    url: '/pages/links',
-    name: 'Recent Updates & Links',
+    url: '/pages/updates',
+    name: 'Recent Updates',
     description:
       'The most up-to-date resources added by board members and website admins.',
     flags: {},
   },
   {
     order: 2,
-    url: '/pages/links/private',
+    url: '/pages/links',
     name: 'Project list',
     description:
       'Click to find the current “fridge list” of tasks needed to keep camp in good condition. Please work on a task (or a few!) while you’re here.',

@@ -13,9 +13,18 @@ type NavLinkProps = NavLinkType & {
 } & Partial<Parameters<typeof Link>[0]>;
 
 const NavLink = (item: NavLinkProps) => {
-  const { href, icon: Icon, text, variant, exact, className, ...props } = item;
+  const {
+    href,
+    icon: Icon,
+    text,
+    variant,
+    exact,
+    className,
+    dontMatch,
+    ...props
+  } = item;
 
-  const isHere = useIsHere([{ href }], undefined, exact);
+  const isHere = useIsHere([item], undefined, exact);
 
   // scope check
   const show = useNavLinkScopeCheck(item);

@@ -8,6 +8,7 @@ import LinkBlock from './_components/home/LinkBlock';
 
 import AgendaToday from './_components/home/AgendaToday';
 import { getUser } from './_ctx/user/provider';
+import Link from 'next/link';
 
 export default async function HomePage() {
   const links = homeLinks; // TODO should be db
@@ -60,13 +61,9 @@ export default async function HomePage() {
 
             {/* suggestion */}
             <div className="px-5 text-right text-sm italic hover:underline">
-              <a
-                href="https://github.com/elmpoint-org/epc-next/discussions/categories/suggestions"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Have a suggestion? Found a bug?
-              </a>
+              <Link href="/pages/help/feedback">
+                Need help? Have a suggestion? Found a bug?
+              </Link>
             </div>
 
             {loggedIn && <AgendaToday />}
