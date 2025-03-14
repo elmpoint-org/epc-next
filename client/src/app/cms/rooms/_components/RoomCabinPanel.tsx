@@ -41,6 +41,7 @@ import Details from './Details';
 import NameInput from './NameInput';
 import OptionSwitch from './OptionSwitch';
 import PlusButton from './PlusButton';
+import CopyID from './CopyID';
 
 const NEW_RING_DELAY_MS = 6000;
 
@@ -462,6 +463,7 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
               </Details>
             )}
           </div>
+          <CopyID id={rc.id} />
         </div>
       </form>
     </>

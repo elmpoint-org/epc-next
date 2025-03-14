@@ -5,7 +5,7 @@ import { Inside } from '@/util/inferTypes';
 
 import { FileManagerProps } from './FileManager';
 import Checkbox from './Checkbox';
-import { ActionIcon } from '@mantine/core';
+import { ActionIcon, Tooltip } from '@mantine/core';
 import {
   IconFileFilled,
   IconFolder,
@@ -88,20 +88,19 @@ export default function FilesListItem({
 
           {/* copy link button */}
           {!isFolder && (
-            <ActionIcon
-              size="sm"
-              variant="subtle"
-              className="invisible group-hover:visible"
-              onClick={(e) => {
-                e.stopPropagation();
-                prompt(
-                  'Use Ctrl/Cmd+C to copy the file URL.',
-                  siteDomain + fileHref,
-                );
-              }}
-            >
-              <IconLink />
-            </ActionIcon>
+            <Tooltip label="Copy Link">
+              <ActionIcon
+                size="sm"
+                variant="subtle"
+                className="invisible group-hover:visible"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigator.clipboard.writeText(siteDomain + fileHref);
+                }}
+              >
+                <IconLink />
+              </ActionIcon>
+            </Tooltip>
           )}
         </div>
       </div>
