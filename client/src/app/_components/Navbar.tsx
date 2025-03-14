@@ -1,27 +1,26 @@
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import { AppShell } from '@mantine/core';
-import type { useDisclosure } from '@mantine/hooks';
-
 import { IconX } from '@tabler/icons-react';
+
 import NavAccount from './nav/NavAccount';
 import NavLinks from './nav/NavLinks';
 import Logo from './nav/Logo';
-import { useEffect, useState } from 'react';
 
 const Navbar = ({
-  navState,
+  isOpen,
+  onClose,
 }: {
-  navState: ReturnType<typeof useDisclosure>;
+  isOpen: boolean;
+  onClose: () => void;
 }) => {
-  const [opened, { close }] = navState;
-
   // close navbar on path change
   const path = usePathname();
   const [lastPath, setLastPath] = useState(path);
   useEffect(() => {
     if (path !== lastPath) {
-      close();
+      onClose();
       setLastPath(path);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -29,12 +28,12 @@ const Navbar = ({
 
   return (
     <>
-      <AppShell.Navbar className="max-w-xs space-y-2 border-transparent bg-dgreen p-2 text-dwhite print:hidden">
+      <AppShell.Navbar className="peer max-w-xs space-y-2 border-0 border-transparent bg-dgreen p-2 text-dwhite shadow-xl print:hidden">
         <AppShell.Section className="relative flex flex-row items-center p-4">
           <button
-            className="group z-50 -m-4 p-4 data-[off]:invisible"
-            data-off={!opened || null}
-            onClick={close}
+            className="group z-50 -m-4 p-4 data-[off]:invisible lg:invisible"
+            data-off={!isOpen || null}
+            onClick={onClose}
           >
             <div className="rounded-full p-1 group-hover:bg-emerald-700 group-hover:text-slate-50">
               <IconX />
@@ -47,6 +46,12 @@ const Navbar = ({
         <NavLinks />
         <NavAccount />
       </AppShell.Navbar>
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-[100] bg-slate-950/40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
     </>
   );
 };
