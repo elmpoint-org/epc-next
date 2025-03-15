@@ -52,6 +52,6 @@ function Content({ url }: { url: string }) {
   );
 }
 
-export default function registration() {
+export default function __TEST() {
   return <Content url="https://google.com" />;
 }

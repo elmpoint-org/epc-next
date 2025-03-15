@@ -46,6 +46,6 @@ function Content({ url, firstName }: { url: string; firstName?: string }) {
   );
 }
 
-export default function login() {
+export default function __TEST() {
   return <Content url="https://google.com" firstName="Example" />;
 }
