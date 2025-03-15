@@ -6,11 +6,6 @@ import {
   scopeError,
 } from '@@/db/lib/utilities';
 
-import type {
-  MutationResolvers,
-  QueryResolvers,
-  UserResolvers,
-} from '@@/db/__types/graphql-types';
 import { UserModule as M } from './__types/module-types';
 import type { ResolverContext } from '@@/db/graph';
 import { generateKey } from '@@/util/generate';
@@ -27,21 +22,21 @@ import { DBType } from '@@/db/lib/Model';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
-export const getUsers = h<QueryResolvers['users']>(
+export const getUsers = h<M.QueryResolvers['users']>(
   loggedIn(),
   ({ sources }) => {
     return sources.user.getAll();
   }
 );
 
-export const getUser = h<QueryResolvers['user']>(
+export const getUser = h<M.QueryResolvers['user']>(
   loggedIn(),
   ({ sources, args: { id } }) => {
     return sources.user.get(id);
   }
 );
 
-export const getUserFromEmail = h<QueryResolvers['userFromEmail']>(
+export const getUserFromEmail = h<M.QueryResolvers['userFromEmail']>(
   loggedIn(),
   async ({ sources, args: { email } }) => {
     const resp = await sources.user.findBy('email', prepEmail(email));
@@ -50,7 +45,7 @@ export const getUserFromEmail = h<QueryResolvers['userFromEmail']>(
   }
 );
 
-export const getUserFromAuth = h<QueryResolvers['userFromAuth']>(
+export const getUserFromAuth = h<M.QueryResolvers['userFromAuth']>(
   ({ sources, userId }) => {
     if (!userId) throw scopeError();
 
@@ -58,7 +53,7 @@ export const getUserFromAuth = h<QueryResolvers['userFromAuth']>(
   }
 );
 
-export const getUserSECURE = h<QueryResolvers['userSECURE']>(
+export const getUserSECURE = h<M.QueryResolvers['userSECURE']>(
   scoped('__SECURE'),
   async ({ sources, args: { id } }) => {
     const resp = await sources.user.get(id);
@@ -71,7 +66,7 @@ export const getUserSECURE = h<QueryResolvers['userSECURE']>(
   }
 );
 
-export const userCreate = h<MutationResolvers['userCreate']>(
+export const userCreate = h<M.MutationResolvers['userCreate']>(
   scoped('ADMIN'),
   async ({ sources, args: newUser, scope }) => {
     const nu = newUser as DBUser;
@@ -96,7 +91,7 @@ export const userCreate = h<MutationResolvers['userCreate']>(
   }
 );
 
-export const userUpdate = h<MutationResolvers['userUpdate']>(
+export const userUpdate = h<M.MutationResolvers['userUpdate']>(
   async ({
     sources,
     args: { trustedUserAdd, trustedUserRemove, ...args },
@@ -145,7 +140,7 @@ export const userUpdate = h<MutationResolvers['userUpdate']>(
   }
 );
 
-export const userDelete = h<MutationResolvers['userDelete']>(
+export const userDelete = h<M.MutationResolvers['userDelete']>(
   async ({ sources, args: { id }, scope, userId }) => {
     if (!(userId === id || scopeDiff(scope, `ADMIN`))) throw scopeError();
 
@@ -153,7 +148,7 @@ export const userDelete = h<MutationResolvers['userDelete']>(
   }
 );
 
-export const userResetSecret = h<MutationResolvers['userResetSecret']>(
+export const userResetSecret = h<M.MutationResolvers['userResetSecret']>(
   async ({ sources, args: { id }, scope, userId }) => {
     if (!(userId === id || scopeDiff(scope, `ADMIN`))) throw scopeError();
 
@@ -167,7 +162,7 @@ export const userResetSecret = h<MutationResolvers['userResetSecret']>(
 );
 
 export const userCreateCredential = h<
-  MutationResolvers['userCreateCredential']
+  M.MutationResolvers['userCreateCredential']
 >(async ({ sources, userId }) => {
   if (!userId) throw scopeError();
 
@@ -184,7 +179,7 @@ export const userCreateCredential = h<
 });
 
 export const userDeleteCredential = h<
-  MutationResolvers['userDeleteCredential']
+  M.MutationResolvers['userDeleteCredential']
 >(async ({ args: { id }, userId }) => {
   if (!userId) throw scopeError();
 
@@ -209,7 +204,7 @@ export const userDeleteCredential = h<
   return parseCredential(c);
 });
 
-export const getUserCredentials = h<UserResolvers['credentials']>(
+export const getUserCredentials = h<M.UserResolvers['credentials']>(
   async ({ parent: { id }, scope, userId }) => {
     if (!scopeDiff(scope, 'ADMIN') && userId !== id) throw scopeError();
 
@@ -217,7 +212,7 @@ export const getUserCredentials = h<UserResolvers['credentials']>(
   }
 );
 
-export const getUserAvatarUrl = h<UserResolvers['avatarUrl']>(
+export const getUserAvatarUrl = h<M.UserResolvers['avatarUrl']>(
   ({ parent: { email } }) => {
     const hash = createHash('sha256')
       .update(email.trim().toLowerCase())
@@ -228,7 +223,7 @@ export const getUserAvatarUrl = h<UserResolvers['avatarUrl']>(
   }
 );
 
-export const getUserScope = h<UserResolvers['scope']>(
+export const getUserScope = h<M.UserResolvers['scope']>(
   ({ parent: { scope, id }, scope: requesterScope, userId }) => {
     if (!scopeDiff(requesterScope, 'ADMIN') && userId !== id)
       throw scopeError();
