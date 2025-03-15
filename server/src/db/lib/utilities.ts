@@ -8,6 +8,7 @@ import { PromiseOrValue } from 'graphql/jsutils/PromiseOrValue';
 
 import { initGraphQLTada } from 'gql.tada';
 import type { introspection } from '@@/../graphql-schema';
+import { MaybePromise } from '@@/util/types';
 
 export type GraphResponseType<T> = PromiseOrValue<
   ExecutionResult<T, { code?: string }>
@@ -105,7 +106,7 @@ export const getTypedScopeFunctions = <
 export const handle = <T0 extends Resolver<any, any, any, any> | undefined>(
   ...callbacks: ((
     ctx: CtxExtended<Extract<T0, Function>>
-  ) => Maybe<ReturnType<Extract<T0, Function>>>)[]
+  ) => MaybePromise<Maybe<ReturnType<Extract<T0, Function>>>>)[]
 ) => {
   type T = Extract<T0, Function>;
 
@@ -118,7 +119,7 @@ export const handle = <T0 extends Resolver<any, any, any, any> | undefined>(
 
     let out;
     for (const it of callbacks) {
-      out = it(extendedCtx);
+      out = await it(extendedCtx);
       if (typeof out !== 'undefined') break;
     }
 

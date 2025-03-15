@@ -30,7 +30,7 @@ import { CMSCabin, CMSRoom, CabinRoomProps } from './CabinsList';
 import { alphabetical } from '@/util/sort';
 import { SharedValues } from '@/util/inferTypes';
 import { clx } from '@/util/classConcat';
-import { ANY_ROOM } from '@@/db/schema/Room/CABIN_DATA';
+import { ANY_ROOM } from '@@/db/models/Room/CABIN_DATA';
 import { graphAuth, graphql } from '@/query/graphql';
 import { confirmModal } from '@/app/_components/_base/modals';
 import { err } from '../_functions/errors';
