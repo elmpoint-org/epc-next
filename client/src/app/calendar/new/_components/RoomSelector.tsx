@@ -13,7 +13,7 @@ import { IconAlertTriangle } from '@tabler/icons-react';
 
 import RoomOption from './RoomOption';
 
-import { CUSTOM_ROOM_OBJ, CUSTOM_ROOM_ID } from '@@/db/schema/Room/CABIN_DATA';
+import { CUSTOM_ROOM_OBJ, CUSTOM_ROOM_ID } from '@@/db/models/Room/CABIN_DATA';
 import { Cabin, Room, useFormCtx, useFormCtxRoomState } from '../state/formCtx';
 import { useGetRooms } from '../state/getRoomData';
 

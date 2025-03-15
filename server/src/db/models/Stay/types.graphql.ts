@@ -84,9 +84,9 @@ export default gql`
     ): Stay!
 
     """
-    **SCOPE: userId**
+    **SCOPE: CALENDAR_ADMIN | userId=authorId | author's trustedUser**
 
-    update an existing stay. if the user isn't the author, the author should be notified.
+    update an existing stay.
     """
     stayUpdate(
       id: ID!
@@ -99,14 +99,14 @@ export default gql`
     ): Stay!
 
     """
-    **SCOPE: userId**
+    **SCOPE: CALENDAR_ADMIN | userId=authorId | author's trustedUser**
 
-    delete an existing stay. if the user isn't the author, the author should be notified.
+    delete an existing stay.
     """
     stayDelete(id: ID!): Stay!
 
     """
-    **SCOPE: userId**
+    **SCOPE: CALENDAR_ADMIN | userId=authorId | author's trustedUser**
 
     split an existing stay in two around a date. returns the **newly created stay**--the original stay will be shortened to end on the specified date, and a new date will be created starting on that date.
     """

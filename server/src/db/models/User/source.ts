@@ -4,6 +4,7 @@ import type { User } from '@@/db/__types/graphql-types';
 
 export type DBUser = User & {
   secret: string;
+  trustedUserIds?: string[];
 };
 
 class UserSource extends Model<DBUser> {

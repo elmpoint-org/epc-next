@@ -104,8 +104,8 @@ export const cmsPageDelete = h<M.MutationResolvers['cmsPageDelete']>(
     const p = await sources.cms.page.get(id);
     if (!p) throw err('PAGE_NOT_FOUND');
 
-    if (!(p.contributorIds.includes(userId ?? '') || scopeDiff(scope, 'ADMIN')))
-      throw scopeError();
+    // if (!(p.contributorIds.includes(userId ?? '') || scopeDiff(scope, 'ADMIN')))
+    // throw scopeError();
 
     return sources.cms.page.delete(id);
   }

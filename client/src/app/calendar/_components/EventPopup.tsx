@@ -1,4 +1,4 @@
-import { Fragment, lazy, useTransition } from 'react';
+import { Fragment, lazy, useMemo, useTransition } from 'react';
 import Image from 'next/image';
 
 import { CloseButton, PopoverPanel, type Popover } from '@headlessui/react';
@@ -28,6 +28,8 @@ import { TransitionProvider } from '@/app/_ctx/transition';
 import { getCabinColorObject } from '../_util/cabinColors';
 
 import RoomSwatch from './RoomSwatch';
+import { useUser } from '@/app/_ctx/user/context';
+import { scopeCheck } from '@/util/scopeCheck';
 const EventEditWindow = lazy(() => import('./EventEditWindow'));
 
 /**
@@ -46,6 +48,24 @@ export default function EventPopup({
   const { prop: triggerEditStay, trigger: runEditStay } = useReverseCbTrigger();
   const transition = useTransition();
   const [isLoading] = transition;
+
+  const user = useUser();
+
+  const canEdit = useMemo(() => {
+    // is admin?
+    if (scopeCheck(user?.scope ?? [], 'ADMIN', 'CALENDAR_ADMIN')) return true;
+
+    // is author?
+    if (!user) return false;
+    if (user && user.id === event.author?.id) return true;
+
+    // is trusted user?
+    if (user && event.author?.trustedUsers?.some((it) => it?.id === user.id))
+      return true;
+
+    // not trusted.
+    return false;
+  }, [event.author?.id, event.author?.trustedUsers, user]);
 
   return (
     <>
@@ -70,10 +90,11 @@ export default function EventPopup({
               aria-label="edit"
               className="flex items-center"
               onClick={() => runEditStay()}
-              disabled={isLoading}
+              disabled={!canEdit || isLoading}
             >
               <ActionIcon
                 component="div"
+                disabled={!canEdit}
                 loading={isLoading}
                 className="-mt-0.5"
                 color="slate"
