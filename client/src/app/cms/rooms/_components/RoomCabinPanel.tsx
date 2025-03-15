@@ -41,7 +41,7 @@ import Details from './Details';
 import NameInput from './NameInput';
 import OptionSwitch from './OptionSwitch';
 import PlusButton from './PlusButton';
-import CopyID from './CopyID';
+import CopyID from '@/app/_components/_base/CopyID';
 
 const NEW_RING_DELAY_MS = 6000;
 

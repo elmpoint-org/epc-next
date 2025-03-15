@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useTransition, type ReactNode } from 'react';
+import { Fragment, useEffect, useTransition } from 'react';
 
 import { ActionIcon, Button, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
@@ -13,6 +13,7 @@ import { notifications } from '@mantine/notifications';
 import { invalidateUser } from '@/app/_ctx/user/actions';
 import fdeq from 'fast-deep-equal';
 import { z } from 'zod';
+import CopyID from '@/app/_components/_base/CopyID';
 
 const AccountDetails = () => {
   const initialUser = useUser();
@@ -153,6 +154,7 @@ const AccountDetails = () => {
                 <div className="max-w-full truncate">{initialUser?.email}</div>
               </div>
             </div>
+
             {/* text fields */}
             <div className="flex flex-1 flex-col gap-2 p-2">
               <TextInput
@@ -198,6 +200,8 @@ const AccountDetails = () => {
                 }}
                 {...form.getInputProps('email')}
               />
+
+              {/* email warning */}
               <details className="rounded-md border border-transparent p-3 text-xs open:border-red-800/50 open:bg-red-400/20">
                 <summary className="cursor-pointer text-red-800 hover:underline">
                   Be cautious about changing your email. (click for more)
@@ -217,13 +221,36 @@ const AccountDetails = () => {
                     <b>
                       will not update the email address shown on your passkey
                     </b>
-                    , although the passkeys will still work. All passkey managers
-                    allow you to manually change their stored email address.
+                    , although the passkeys will still work. All passkey
+                    managers allow you to manually change their stored email
+                    address.
                   </p>
                 </div>
               </details>
             </div>
           </div>
+
+          {/* USER SCOPE */}
+          {!!initialUser?.scope?.length && (
+            <div className="-mb-0.5 pr-8 text-xs leading-relaxed">
+              <span className="">YOUR PERMISSIONS: </span>
+              {initialUser?.scope?.map((it) => (
+                <Fragment key={it}>
+                  <code className="ml-1 rounded-md bg-slate-200 p-1">{it}</code>{' '}
+                </Fragment>
+              ))}
+            </div>
+          )}
+
+          {/* copy ID */}
+          {initialUser && (
+            <div
+              className="absolute bottom-4 right-4 flex flex-row data-[left]:left-4"
+              data-left={!initialUser.scope?.length || null}
+            >
+              <CopyID id={initialUser.id} />
+            </div>
+          )}
         </div>
       </form>
     </>

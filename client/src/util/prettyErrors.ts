@@ -16,3 +16,8 @@ export const prettyError =
       console.log('Unknown error code: ', errorCode);
     return out;
   };
+
+export const prettyErrorPlaceholder = prettyError(
+  { __DEFAULT: 'An error occurred.' },
+  (s) => `Error: ${s}`,
+);

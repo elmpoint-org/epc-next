@@ -14,7 +14,7 @@ import { SharedValues } from '@/util/inferTypes';
 import { VariablesOf } from '@graphql-typed-document-node/core';
 import { D1, TStoDate, dateTS } from '../../_util/dateUtils';
 import { CUSTOM_ROOM_ID } from '@@/db/models/Room/CABIN_DATA';
-import { prettyError } from '@/util/prettyErrors';
+import { prettyError, prettyErrorPlaceholder } from '@/util/prettyErrors';
 import { dayStyles } from '../../_util/dayStyles';
 
 export const UPDATE_STAY_QUERY = graphql(`
@@ -183,7 +183,7 @@ export function useFormActions() {
       if (errors || !data?.stayDelete) {
         notifications.show({
           color: 'red',
-          message: 'An error occurred.',
+          message: prettyErrorPlaceholder(errors?.[0]?.code),
         });
         return console.log(errors?.[0].code ?? errors);
       }
