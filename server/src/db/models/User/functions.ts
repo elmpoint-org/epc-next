@@ -11,6 +11,7 @@ import type {
   QueryResolvers,
   UserResolvers,
 } from '@@/db/__types/graphql-types';
+import { UserModule as M } from './__types/module-types';
 import type { ResolverContext } from '@@/db/graph';
 import { generateKey } from '@@/util/generate';
 import { DBUser } from './source';
@@ -22,6 +23,7 @@ import {
 import { AxiosError } from 'axios';
 import { prepEmail } from '@@/util/textTransform';
 import { createHash } from 'node:crypto';
+import { DBType } from '@@/db/lib/Model';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -80,6 +82,13 @@ export const userCreate = h<MutationResolvers['userCreate']>(
 
     if (nu.scope?.length && !scopeDiff(scope, `ADMIN`)) throw scopeError();
 
+    // check that trusted user ids are real users
+    if (nu.trustedUserIds?.length) {
+      for (const id of nu.trustedUserIds) {
+        if (!(await sources.user.get(id))) throw err('INVALID_TRUSTED_USER');
+      }
+    }
+
     const secret = await generateKey();
     nu.secret = secret;
 
@@ -88,7 +97,12 @@ export const userCreate = h<MutationResolvers['userCreate']>(
 );
 
 export const userUpdate = h<MutationResolvers['userUpdate']>(
-  async ({ sources, args, scope, userId }) => {
+  async ({
+    sources,
+    args: { trustedUserAdd, trustedUserRemove, ...args },
+    scope,
+    userId,
+  }) => {
     const updates = args as Partial<DBUser>;
     // extract user id and check scope
     const id = args.id;
@@ -107,6 +121,24 @@ export const userUpdate = h<MutationResolvers['userUpdate']>(
         const ue = await sources.user.findBy('email', args.email);
         if (ue.length) throw err('EMAIL_ALREADY_TAKEN');
       }
+    }
+
+    // handle trusted users changes...
+    if (
+      trustedUserAdd?.length &&
+      !trustedUserAdd.some((c) => u.trustedUserIds?.includes(c))
+    ) {
+      for (const id of trustedUserAdd)
+        if (!(await sources.user.get(id))) throw err('INVALID_TRUSTED_USER');
+      updates.trustedUserIds = [
+        ...(updates.trustedUserIds ?? []),
+        ...trustedUserAdd,
+      ];
+    }
+    if (trustedUserRemove?.length) {
+      updates.trustedUserIds = u.trustedUserIds?.filter(
+        (it) => !trustedUserRemove.includes(it)
+      );
     }
 
     return sources.user.update(id, updates);
@@ -201,6 +233,16 @@ export const getUserScope = h<UserResolvers['scope']>(
     if (!scopeDiff(requesterScope, 'ADMIN') && userId !== id)
       throw scopeError();
     return scope;
+  }
+);
+
+export const getUserTrustedUsers = h<M.UserResolvers['trustedUsers']>(
+  async ({ sources, parent }) => {
+    const user = parent as DBType<DBUser>;
+
+    return (await sources.user.getMultiple(user.trustedUserIds ?? [])).filter(
+      (it): it is DBType<DBUser> => it !== undefined
+    );
   }
 );
 
