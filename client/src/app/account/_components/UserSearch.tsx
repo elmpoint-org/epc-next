@@ -18,11 +18,8 @@ import { alphabetical } from '@/util/sort';
 import { clmx, clx } from '@/util/classConcat';
 import { IconLoader2 } from '@tabler/icons-react';
 import { ComboboxOptionProps } from '@headlessui/react';
-import {
-  MemberUser,
-  USER_FRAGMENT,
-} from '../trusted-users/_component/TrustedWrapper';
 import { usePending } from '../trusted-users/_util/usePending';
+import { ResultOf } from 'gql.tada';
 
 export const USER_FRAGMENT = graphql(`
   fragment MemberUser on User @_unmask {

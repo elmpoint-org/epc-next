@@ -1,5 +1,5 @@
 import { alphabetical } from '@/util/sort';
-import { MemberUser } from '../_component/TrustedWrapper';
+import { MemberUser } from '../../_components/UserSearch';
 
 export function prepMemberList(list: Maybe<Maybe<MemberUser>[]>) {
   return (
