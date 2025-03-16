@@ -2,11 +2,14 @@ import { DBPartial, DBType, InitialType, QueryOp } from '@@/db/lib/Model';
 import type { StayModule as M } from './__types/module-types';
 
 import {
+  CtxExtended,
   err,
   getTypedScopeFunctions,
   handle as h,
   loggedIn,
+  scopeError,
 } from '@@/db/lib/utilities';
+import { ResolverFn } from '@@/db/__types/graphql-types';
 import { ResolverContext } from '@@/db/graph';
 import { CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS } from '@@/CONSTANTS';
 import { DBStay, ScalarRoom } from './source';
@@ -111,7 +114,7 @@ export const stayCreate = h<M.MutationResolvers['stayCreate']>(
 );
 
 export const stayUpdate = h<M.MutationResolvers['stayUpdate']>(
-  loggedIn(),
+  trustedUserCheck(),
   async ({ sources, args: { id, ...updates } }) => {
     // make sure stay exists
     const stay = await sources.stay.get(id);
@@ -147,13 +150,14 @@ export const stayUpdate = h<M.MutationResolvers['stayUpdate']>(
 );
 
 export const stayDelete = h<M.MutationResolvers['stayDelete']>(
-  loggedIn(),
+  trustedUserCheck(),
   async ({ sources, args: { id } }) => {
     return sources.stay.delete(id);
   }
 );
 
 export const staySplit = h<M.MutationResolvers['staySplit']>(
+  trustedUserCheck(),
   async ({ sources, args: { id, date } }) => {
     const stayToSplit = await sources.stay.get(id);
     if (!stayToSplit) throw err('STAY_NOT_FOUND');
@@ -249,4 +253,35 @@ export function validateDates(start: number, end: number) {
 /** get dayjs object for a TS datestamp. */
 export function dateTSObject(ts: number) {
   return dayjs.unix(ts).utc();
+}
+
+function trustedUserCheck() {
+  return async ({
+    sources,
+    scope,
+    userId,
+    args: { id },
+  }: CtxExtended<
+    ResolverFn<unknown, unknown, ResolverContext, { id: string }>
+  >): Promise<undefined> => {
+    // get objects
+    const stay = await sources.stay.get(id);
+    if (!stay) throw err('STAY_NOT_FOUND');
+    const author = await sources.user.get(stay.authorId);
+
+    // check scope...
+
+    // admin check
+    if (scopeDiff(scope, 'ADMIN', 'CALENDAR_ADMIN')) return;
+
+    // author check
+    if (userId === stay.authorId) return;
+
+    // trusted user check
+    const isTrustedUser = userId && author?.trustedUserIds?.includes(userId);
+    if (isTrustedUser) return;
+
+    // user is not allowed...
+    throw scopeError();
+  };
 }

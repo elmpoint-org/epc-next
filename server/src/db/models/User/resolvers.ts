@@ -23,6 +23,9 @@ const resolvers: UserModule.Resolvers = {
     credentials: f.getUserCredentials,
     avatarUrl: f.getUserAvatarUrl,
     scope: f.getUserScope,
+    trustedUsers: f.getUserTrustedUsers,
+    trustedBy: f.getUserTrustedBy,
+
     timestamp,
   },
 };

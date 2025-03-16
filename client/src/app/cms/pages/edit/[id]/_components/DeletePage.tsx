@@ -7,10 +7,11 @@ import { Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
 import { useSkeleton } from '@/app/_ctx/skeleton/context';
-import { oldGraphAuth, graphql } from '@/query/graphql';
+import { oldGraphAuth, graphql, graphAuth } from '@/query/graphql';
 import { clx } from '@/util/classConcat';
 import { confirmModal } from '@/app/_components/_base/modals';
 import type { EditFormProps } from './PageEditForm';
+import { prettyError } from '@/util/prettyErrors';
 
 export default function DeletePage({ pageId }: EditFormProps) {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function DeletePage({ pageId }: EditFormProps) {
   function deletePage() {
     loading(async () => {
       // send delete request
-      const f = await oldGraphAuth(
+      const { errors } = await graphAuth(
         graphql(`
           mutation CmsPageDelete($id: ID!) {
             cmsPageDelete(id: $id) {
@@ -33,14 +34,20 @@ export default function DeletePage({ pageId }: EditFormProps) {
           }
         `),
         { id: pageId },
-      ).catch(() => {
+      );
+      if (errors) {
         notifications.show({
           color: 'red',
-          message: 'Request failed. Try again.',
+          message: prettyError(
+            {
+              __DEFAULT: 'Unknown error.',
+            },
+            (s) => `Error: ${s}`,
+          )(errors?.[0]?.code),
         });
-        return false;
-      });
-      if (!f) return;
+
+        return;
+      }
       notifications.show({ message: 'Successfully deleted!' });
       router.push('/cms/pages');
     });

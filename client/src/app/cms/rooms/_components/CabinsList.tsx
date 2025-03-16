@@ -13,7 +13,7 @@ import RoomCabinPanel from './RoomCabinPanel';
 import CardButton from '@/app/_components/_base/CardButton';
 import { useCallback, useTransition } from 'react';
 import { err } from '../_functions/errors';
-import { ROOT_CABIN_ID } from '@@/db/schema/Room/CABIN_DATA';
+import { ROOT_CABIN_ID } from '@@/db/models/Room/CABIN_DATA';
 
 const ROOM_FRAGMENT = graphql(`
   fragment RoomData on Room @_unmask {

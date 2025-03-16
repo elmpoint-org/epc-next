@@ -6,11 +6,7 @@ import {
   scopeError,
 } from '@@/db/lib/utilities';
 
-import type {
-  MutationResolvers,
-  QueryResolvers,
-  UserResolvers,
-} from '@@/db/__types/graphql-types';
+import { UserModule as M } from './__types/module-types';
 import type { ResolverContext } from '@@/db/graph';
 import { generateKey } from '@@/util/generate';
 import { DBUser } from './source';
@@ -22,24 +18,25 @@ import {
 import { AxiosError } from 'axios';
 import { prepEmail } from '@@/util/textTransform';
 import { createHash } from 'node:crypto';
+import { DBType } from '@@/db/lib/Model';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
-export const getUsers = h<QueryResolvers['users']>(
+export const getUsers = h<M.QueryResolvers['users']>(
   loggedIn(),
   ({ sources }) => {
     return sources.user.getAll();
   }
 );
 
-export const getUser = h<QueryResolvers['user']>(
+export const getUser = h<M.QueryResolvers['user']>(
   loggedIn(),
   ({ sources, args: { id } }) => {
     return sources.user.get(id);
   }
 );
 
-export const getUserFromEmail = h<QueryResolvers['userFromEmail']>(
+export const getUserFromEmail = h<M.QueryResolvers['userFromEmail']>(
   loggedIn(),
   async ({ sources, args: { email } }) => {
     const resp = await sources.user.findBy('email', prepEmail(email));
@@ -48,7 +45,7 @@ export const getUserFromEmail = h<QueryResolvers['userFromEmail']>(
   }
 );
 
-export const getUserFromAuth = h<QueryResolvers['userFromAuth']>(
+export const getUserFromAuth = h<M.QueryResolvers['userFromAuth']>(
   ({ sources, userId }) => {
     if (!userId) throw scopeError();
 
@@ -56,7 +53,7 @@ export const getUserFromAuth = h<QueryResolvers['userFromAuth']>(
   }
 );
 
-export const getUserSECURE = h<QueryResolvers['userSECURE']>(
+export const getUserSECURE = h<M.QueryResolvers['userSECURE']>(
   scoped('__SECURE'),
   async ({ sources, args: { id } }) => {
     const resp = await sources.user.get(id);
@@ -69,7 +66,7 @@ export const getUserSECURE = h<QueryResolvers['userSECURE']>(
   }
 );
 
-export const userCreate = h<MutationResolvers['userCreate']>(
+export const userCreate = h<M.MutationResolvers['userCreate']>(
   scoped('ADMIN'),
   async ({ sources, args: newUser, scope }) => {
     const nu = newUser as DBUser;
@@ -80,6 +77,13 @@ export const userCreate = h<MutationResolvers['userCreate']>(
 
     if (nu.scope?.length && !scopeDiff(scope, `ADMIN`)) throw scopeError();
 
+    // check that trusted user ids are real users
+    if (nu.trustedUserIds?.length) {
+      for (const id of nu.trustedUserIds) {
+        if (!(await sources.user.get(id))) throw err('INVALID_TRUSTED_USER');
+      }
+    }
+
     const secret = await generateKey();
     nu.secret = secret;
 
@@ -87,8 +91,13 @@ export const userCreate = h<MutationResolvers['userCreate']>(
   }
 );
 
-export const userUpdate = h<MutationResolvers['userUpdate']>(
-  async ({ sources, args, scope, userId }) => {
+export const userUpdate = h<M.MutationResolvers['userUpdate']>(
+  async ({
+    sources,
+    args: { trustedUserAdd, trustedUserRemove, ...args },
+    scope,
+    userId,
+  }) => {
     const updates = args as Partial<DBUser>;
     // extract user id and check scope
     const id = args.id;
@@ -109,11 +118,26 @@ export const userUpdate = h<MutationResolvers['userUpdate']>(
       }
     }
 
+    // handle trusted users changes...
+    if (
+      trustedUserAdd?.length &&
+      !trustedUserAdd.some((c) => u.trustedUserIds?.includes(c))
+    ) {
+      for (const id of trustedUserAdd)
+        if (!(await sources.user.get(id))) throw err('INVALID_TRUSTED_USER');
+      updates.trustedUserIds = [...(u.trustedUserIds ?? []), ...trustedUserAdd];
+    }
+    if (trustedUserRemove?.length) {
+      updates.trustedUserIds = u.trustedUserIds?.filter(
+        (it) => !trustedUserRemove.includes(it)
+      );
+    }
+
     return sources.user.update(id, updates);
   }
 );
 
-export const userDelete = h<MutationResolvers['userDelete']>(
+export const userDelete = h<M.MutationResolvers['userDelete']>(
   async ({ sources, args: { id }, scope, userId }) => {
     if (!(userId === id || scopeDiff(scope, `ADMIN`))) throw scopeError();
 
@@ -121,7 +145,7 @@ export const userDelete = h<MutationResolvers['userDelete']>(
   }
 );
 
-export const userResetSecret = h<MutationResolvers['userResetSecret']>(
+export const userResetSecret = h<M.MutationResolvers['userResetSecret']>(
   async ({ sources, args: { id }, scope, userId }) => {
     if (!(userId === id || scopeDiff(scope, `ADMIN`))) throw scopeError();
 
@@ -135,7 +159,7 @@ export const userResetSecret = h<MutationResolvers['userResetSecret']>(
 );
 
 export const userCreateCredential = h<
-  MutationResolvers['userCreateCredential']
+  M.MutationResolvers['userCreateCredential']
 >(async ({ sources, userId }) => {
   if (!userId) throw scopeError();
 
@@ -152,7 +176,7 @@ export const userCreateCredential = h<
 });
 
 export const userDeleteCredential = h<
-  MutationResolvers['userDeleteCredential']
+  M.MutationResolvers['userDeleteCredential']
 >(async ({ args: { id }, userId }) => {
   if (!userId) throw scopeError();
 
@@ -177,7 +201,7 @@ export const userDeleteCredential = h<
   return parseCredential(c);
 });
 
-export const getUserCredentials = h<UserResolvers['credentials']>(
+export const getUserCredentials = h<M.UserResolvers['credentials']>(
   async ({ parent: { id }, scope, userId }) => {
     if (!scopeDiff(scope, 'ADMIN') && userId !== id) throw scopeError();
 
@@ -185,7 +209,7 @@ export const getUserCredentials = h<UserResolvers['credentials']>(
   }
 );
 
-export const getUserAvatarUrl = h<UserResolvers['avatarUrl']>(
+export const getUserAvatarUrl = h<M.UserResolvers['avatarUrl']>(
   ({ parent: { email } }) => {
     const hash = createHash('sha256')
       .update(email.trim().toLowerCase())
@@ -196,11 +220,28 @@ export const getUserAvatarUrl = h<UserResolvers['avatarUrl']>(
   }
 );
 
-export const getUserScope = h<UserResolvers['scope']>(
+export const getUserScope = h<M.UserResolvers['scope']>(
   ({ parent: { scope, id }, scope: requesterScope, userId }) => {
     if (!scopeDiff(requesterScope, 'ADMIN') && userId !== id)
       throw scopeError();
     return scope;
+  }
+);
+
+export const getUserTrustedUsers = h<M.UserResolvers['trustedUsers']>(
+  async ({ sources, parent }) => {
+    const user = parent as DBType<DBUser>;
+
+    return (await sources.user.getMultiple(user.trustedUserIds ?? [])).filter(
+      (it): it is DBType<DBUser> => it !== undefined
+    );
+  }
+);
+
+export const getUserTrustedBy = h<M.UserResolvers['trustedBy']>(
+  async ({ sources, parent: { id } }) => {
+    const users = await sources.user.getAll();
+    return users.filter((user) => user.trustedUserIds?.includes(id));
   }
 );
 

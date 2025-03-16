@@ -39,6 +39,9 @@ export const EVENTS_QUERY = graphql(`
         id
         name
         avatarUrl
+        trustedUsers {
+          id
+        }
       }
       dateStart
       dateEnd

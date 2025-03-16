@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 import { CalendarProps } from './Calendar';
 import { Cabin, Room, useGetRooms } from '../new/state/getRoomData';
-import { ANY_ROOM } from '@@/db/schema/Room/CABIN_DATA';
+import { ANY_ROOM } from '@@/db/models/Room/CABIN_DATA';
 
 import RoomSwatch from './RoomSwatch';
 
