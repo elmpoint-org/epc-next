@@ -5,11 +5,9 @@ import Fuse, { FuseResult, FuseResultMatch } from 'fuse.js';
 
 import {
   Button,
-  CheckIcon,
+  ButtonProps,
   CloseButton,
   Combobox,
-  Pill,
-  PillsInput,
   ScrollArea,
   useCombobox,
 } from '@mantine/core';
@@ -18,12 +16,13 @@ import { useGraphQuery } from '@/query/query';
 import { graphql } from '@/query/graphql';
 import { alphabetical } from '@/util/sort';
 import { clmx, clx } from '@/util/classConcat';
-import { IconLoader2, IconPlus } from '@tabler/icons-react';
-import { ResultOf } from '@graphql-typed-document-node/core';
-import { Inside } from '@/util/inferTypes';
+import { IconLoader2 } from '@tabler/icons-react';
 import { ComboboxOptionProps } from '@headlessui/react';
-
-const MAX_DISPLAYED = 3;
+import {
+  MemberUser,
+  USER_FRAGMENT,
+} from '../trusted-users/_component/TrustedWrapper';
+import { usePending } from '../trusted-users/_util/usePending';
 
 export const USER_FRAGMENT = graphql(`
   fragment MemberUser on User @_unmask {
@@ -34,26 +33,31 @@ export const USER_FRAGMENT = graphql(`
     avatarUrl
   }
 `);
-const USERS_QUERY = graphql(
-  `
-    query Users {
-      users {
-        ...MemberUser
-      }
-    }
-  `,
-  [USER_FRAGMENT],
-);
-export type MemberUser = Inside<ResultOf<typeof USERS_QUERY>['users']>;
+export type MemberUser = ResultOf<typeof USER_FRAGMENT>;
 
 export function UserSearchBox({
   omit,
-  onSelect,
+  onSelection: onSelect,
+  onClick,
+  ...props
 }: {
   omit?: string[];
-  onSelect?: (newMember: MemberUser) => void;
-}) {
-  const query = useGraphQuery(USERS_QUERY);
+  onSelection?: (newMemberId: string) => Promise<void>;
+} & ButtonProps &
+  React.ComponentPropsWithoutRef<'button'>) {
+  const query = useGraphQuery(
+    graphql(
+      `
+        query Users {
+          users {
+            ...MemberUser
+          }
+        }
+      `,
+      [USER_FRAGMENT],
+    ),
+  );
+
   const users = useMemo(() => {
     let u = query.data?.users ?? [];
     u.sort(alphabetical((it) => it.name ?? ''));
@@ -81,14 +85,15 @@ export function UserSearchBox({
     },
   });
 
+  const [isPending, runPending] = usePending<string>();
+
   const [search, setSearch] = useState('');
 
   const handleSelect = useCallback(
     (id: string) => {
-      const mu = query.data?.users?.find((it) => it.id === id);
-      if (mu) onSelect?.(mu);
+      runPending([id])(async () => await onSelect?.(id));
     },
-    [onSelect, query.data?.users],
+    [onSelect, runPending],
   );
 
   // render dropdown options
@@ -102,10 +107,11 @@ export function UserSearchBox({
             item={item}
             result={'item' in el ? el : undefined}
             disabled={omit?.includes(item.id)}
+            isLoading={isPending(item.id)}
           />
         );
       }),
-    [fuse, omit, search, users],
+    [fuse, isPending, omit, search, users],
   );
 
   return (
@@ -118,15 +124,12 @@ export function UserSearchBox({
       >
         <Combobox.Target withAriaAttributes={false}>
           <Button
-            size="compact"
-            color="slate"
-            justify="center"
-            variant="subtle"
-            leftSection={<IconPlus className="ml-3 size-4" />}
-            onClick={() => combobox.toggleDropdown()}
-          >
-            Add member
-          </Button>
+            {...props}
+            onClick={(e) => {
+              combobox.toggleDropdown();
+              onClick?.(e);
+            }}
+          />
         </Combobox.Target>
 
         {/* dropdown */}
@@ -170,13 +173,14 @@ export function UserSearchBox({
 function UserSearchOption({
   item,
   result,
-  isChecked,
+  isLoading,
   className,
+  disabled,
   ...props
 }: {
   item: MemberUser;
   result?: FuseResult<MemberUser>;
-  isChecked?: boolean;
+  isLoading?: boolean;
   className?: string;
 } & Partial<ComboboxOptionProps>) {
   const nameMatch = result?.matches?.find((it) => it.key === 'name');
@@ -187,13 +191,19 @@ function UserSearchOption({
       <Combobox.Option
         value={item.id}
         key={item.id}
-        active={isChecked}
         className={clmx('group', className)}
+        disabled={disabled || isLoading}
         {...props}
       >
         <div className="flex flex-row items-center gap-4">
           <div className="flex flex-1 flex-row items-center gap-4">
-            <OptionImg src={item.avatarUrl ?? ''} />
+            {isLoading ? (
+              <div className="flex animate-spin items-center justify-center">
+                <IconLoader2 className="size-5" />
+              </div>
+            ) : (
+              <OptionImg src={item.avatarUrl ?? ''} />
+            )}
 
             <span className="[&_em]:font-semibold [&_em]:not-italic [&_em]:text-slate-700 group-data-[combobox-selected]:[&_em]:text-dwhite">
               {/* user name */}
@@ -217,10 +227,6 @@ function UserSearchOption({
               )}
             </span>
           </div>
-
-          {isChecked ? (
-            <CheckIcon className="size-3 text-emerald-700 group-data-[combobox-selected]:text-dwhite" />
-          ) : null}
         </div>
       </Combobox.Option>
     </>

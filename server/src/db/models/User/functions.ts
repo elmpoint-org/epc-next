@@ -125,10 +125,7 @@ export const userUpdate = h<M.MutationResolvers['userUpdate']>(
     ) {
       for (const id of trustedUserAdd)
         if (!(await sources.user.get(id))) throw err('INVALID_TRUSTED_USER');
-      updates.trustedUserIds = [
-        ...(updates.trustedUserIds ?? []),
-        ...trustedUserAdd,
-      ];
+      updates.trustedUserIds = [...(u.trustedUserIds ?? []), ...trustedUserAdd];
     }
     if (trustedUserRemove?.length) {
       updates.trustedUserIds = u.trustedUserIds?.filter(
@@ -238,6 +235,13 @@ export const getUserTrustedUsers = h<M.UserResolvers['trustedUsers']>(
     return (await sources.user.getMultiple(user.trustedUserIds ?? [])).filter(
       (it): it is DBType<DBUser> => it !== undefined
     );
+  }
+);
+
+export const getUserTrustedBy = h<M.UserResolvers['trustedBy']>(
+  async ({ sources, parent: { id } }) => {
+    const users = await sources.user.getAll();
+    return users.filter((user) => user.trustedUserIds?.includes(id));
   }
 );
 

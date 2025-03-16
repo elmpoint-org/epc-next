@@ -1,11 +1,13 @@
 import { Metadata } from 'next';
 
 import LoginBoundary from '@/app/_components/_base/LoginBoundary/LoginBoundary';
-import FamilyMembers from './_component/FamilyMembers';
+import TrustedList from './_component/TrustedList';
 import IncompleteWarning from '@/app/_components/_base/IncompleteWarning';
+import TrustedByList from './_component/TrustedByList';
+import TrustedWrapper from './_component/TrustedWrapper';
 
 export const metadata: Metadata = {
-  title: 'My Family Group',
+  title: 'Trusted Users - Account',
 };
 
 export default function AccountFamilyPage() {
@@ -14,7 +16,7 @@ export default function AccountFamilyPage() {
       <LoginBoundary>
         <div className="flex flex-1 flex-col space-y-2">
           <h1 className="mb-6 flex flex-col items-center justify-center text-4xl">
-            My Family
+            Trusted Users
           </h1>
           <div className="container flex-1 rounded-lg bg-slate-100">
             <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
@@ -22,18 +24,17 @@ export default function AccountFamilyPage() {
               <p className="my-4">
                 <span>Your </span>
                 <b className="bg-gradient-to-br from-emerald-500 to-emerald-900 bg-clip-text text-transparent">
-                  family group
+                  trusted users
                 </b>
                 <span> </span>
-                provides a way to share contact information and other data with{' '}
-                <b>members of your household</b>.
+                have your permission to edit your <b>
+                  calendar reservations
+                </b>{' '}
+                and anything else you create on the site.
               </p>
 
               {/* members */}
-              <FamilyMembers />
-
-              {/* beta disclosure */}
-              <IncompleteWarning />
+              <TrustedWrapper />
             </div>
           </div>
         </div>

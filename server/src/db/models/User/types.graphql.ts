@@ -15,7 +15,10 @@ export default gql`
     "gravatar avatar URL"
     avatarUrl: String
 
+    "users whom this user trusts"
     trustedUsers: [User]
+    "users who trust this user"
+    trustedBy: [User]
 
     # __ AUTH DATA __
     "scope defines a user's permissions."
