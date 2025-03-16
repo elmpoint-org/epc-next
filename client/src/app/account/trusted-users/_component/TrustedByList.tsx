@@ -3,7 +3,7 @@
 import { IconChecks, IconUserCheck } from '@tabler/icons-react';
 import { ActionIcon, Button, Tooltip } from '@mantine/core';
 import { TrustedUserProps } from './TrustedWrapper';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { usePending } from '../_util/usePending';
 import TUSkeleton from './TUSkeleton';
 
@@ -25,6 +25,10 @@ export default function TrustedByList(props: TrustedUserProps) {
     runPending(ids)(() => memberAdd(ids));
   }, [memberAdd, runPending, trustedBy, trustedUsers]);
 
+  const allTrusted = useMemo(() => {
+    return trustedBy.every((it) => trustedUsers.some((u) => u.id === it.id));
+  }, [trustedBy, trustedUsers]);
+
   return (
     <>
       <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
@@ -38,7 +42,7 @@ export default function TrustedByList(props: TrustedUserProps) {
               variant="subtle"
               leftSection={<IconChecks className="size-4" />}
               onClick={handleTrustAll}
-              disabled={!trustedBy.length}
+              disabled={!trustedBy.length || allTrusted}
             >
               Add all to your list
             </Button>
