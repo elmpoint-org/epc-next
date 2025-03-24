@@ -78,8 +78,9 @@ export default function NewPasskey({ onClose }: { onClose?: () => void }) {
           <div className="flex flex-col gap-2 rounded-md p-2 sm:flex-row sm:items-end">
             <TextInput
               label="Nickname"
-              description="This is how you'll recognize what device this passkey is stored on. You won't be able to change it without deleting it and starting over."
-              placeholder="my laptop"
+              description="This is how you’ll recognize what device this passkey is stored on. You won’t be able to change this name once created."
+              placeholder="e.g. “my laptop”"
+              required
               className="flex-1"
               value={text}
               onChange={(event) => setText(event.currentTarget.value)}

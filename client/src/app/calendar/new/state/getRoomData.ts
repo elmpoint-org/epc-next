@@ -6,6 +6,7 @@ import { Inside } from '@/util/inferTypes';
 import { ResultOf } from '@graphql-typed-document-node/core';
 import { keepPreviousData } from '@tanstack/react-query';
 import { sortAlphabetical } from '@/util/sort';
+import { ANY_ROOM } from '@@/db/models/Room/CABIN_DATA';
 
 // QUERIES
 
@@ -84,7 +85,7 @@ export function useGetRooms(updateId?: string) {
   const rooms = sortAlphabetical(
     (query.data?.rooms ?? []).filter((it): it is Room => it !== null),
     (o) => o.name,
-  );
+  ).sort((a, b) => (a.name === ANY_ROOM ? -1 : b.name === ANY_ROOM ? 1 : 0));
 
   const initialOptions: (Cabin | Room)[] = [
     ...cabins,
