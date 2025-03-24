@@ -182,7 +182,7 @@ const AccountDetails = () => {
                       if (nv) form.setValues({ firstName: nv });
                     }}
                   >
-                    generate
+                    Autofill
                   </Button>
                 }
                 classNames={{

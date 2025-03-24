@@ -419,6 +419,9 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
                     serverObject.rooms
                       .filter((r): r is CMSRoom => !!r)
                       .sort(alphabetical((c) => c.name))
+                      .sort((a, b) =>
+                        a.name === ANY_ROOM ? -1 : b.name === ANY_ROOM ? 1 : 0,
+                      )
                       .map((room) => (
                         <Popover key={room.id} className="flex flex-col">
                           <PopoverButton className="group flex flex-row items-center gap-4 rounded-md border border-slate-300 px-4 py-2 text-left text-sm hover:border-slate-600 focus:outline-emerald-700">
