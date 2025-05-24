@@ -21,6 +21,11 @@ route('/gql', {
   handler: 'apps/server/src/db/handler.handler',
 });
 
+// ICS API
+route('/ics/{token}', {
+  handler: 'apps/server/src/ics/handler.handler',
+});
+
 // ---------------------------------------
 
 function route(

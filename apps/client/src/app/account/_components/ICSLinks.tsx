@@ -7,8 +7,9 @@ import { useUser } from '@/app/_ctx/user/context';
 import { useGraphQuery } from '@/query/query';
 import { useCallback } from 'react';
 import { useLoading } from '@/util/useLoading';
+import { api } from '@/util/dev';
 
-const WEBCAL_PREFIX = 'webcal://api.elmpoint.xyz/one/ics/';
+const WEBCAL_PREFIX = `webcal://${new URL(api ?? '').hostname}/ics/`;
 
 export default function ICSLinks() {
   const user = useUser();
