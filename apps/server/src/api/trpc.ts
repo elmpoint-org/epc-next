@@ -1,8 +1,11 @@
 import { TRPCError, initTRPC } from '@trpc/server';
-import { CreateExpressContextOptions } from '@trpc/server/adapters/express';
+import { type CreateAWSLambdaContextOptions } from '@trpc/server/adapters/aws-lambda';
 import type { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
-export const createTrpcContext = (ctx: CreateExpressContextOptions) => ctx;
+export const createTrpcContext = (
+  ctx: CreateAWSLambdaContextOptions<APIGatewayProxyEventV2>
+) => ctx;
 export type TrpcContext = Awaited<ReturnType<typeof createTrpcContext>>;
 
 export const err = (
