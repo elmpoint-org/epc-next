@@ -13,14 +13,14 @@ catalogs:
       specifier: ^3.2.0
       version: 3.2.0
     '@trpc/client':
-      specifier: 11.0.0-rc.396
-      version: 11.0.0-rc.396
+      specifier: ^11.1.2
+      version: 11.1.2
     '@trpc/react-query':
-      specifier: 11.0.0-rc.396
-      version: 11.0.0-rc.396
+      specifier: ^11.1.2
+      version: 11.1.2
     '@trpc/server':
-      specifier: 11.0.0-rc.396
-      version: 11.0.0-rc.396
+      specifier: ^11.1.2
+      version: 11.1.2
     '@types/node':
       specifier: ^20
       version: 20.17.50
@@ -49,8 +49,8 @@ catalogs:
       specifier: ^18.3.1
       version: 18.3.1
     sst:
-      specifier: 3.14.24
-      version: 3.14.24
+      specifier: ^3.16.0
+      version: 3.16.0
     tailwindcss:
       specifier: ^3.4.17
       version: 3.4.17
@@ -81,7 +81,7 @@ importers:
     dependencies:
       sst:
         specifier: 'catalog:'
-        version: 3.14.24
+        version: 3.16.0
     devDependencies:
       '@types/aws-lambda':
         specifier: 8.10.149
@@ -202,13 +202,13 @@ importers:
         version: 2.12.0
       '@trpc/client':
         specifier: 'catalog:'
-        version: 11.0.0-rc.396(@trpc/server@11.0.0-rc.396)
+        version: 11.1.2(@trpc/server@11.1.2(typescript@5.8.3))(typescript@5.8.3)
       '@trpc/react-query':
         specifier: 'catalog:'
-        version: 11.0.0-rc.396(@tanstack/react-query@5.77.0(react@18.3.1))(@trpc/client@11.0.0-rc.396(@trpc/server@11.0.0-rc.396))(@trpc/server@11.0.0-rc.396)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 11.1.2(@tanstack/react-query@5.77.0(react@18.3.1))(@trpc/client@11.1.2(@trpc/server@11.1.2(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.1.2(typescript@5.8.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)
       '@trpc/server':
         specifier: 'catalog:'
-        version: 11.0.0-rc.396
+        version: 11.1.2(typescript@5.8.3)
       '@uidotdev/usehooks':
         specifier: ^2.4.1
         version: 2.4.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -365,7 +365,7 @@ importers:
         version: 1.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@trpc/server':
         specifier: 'catalog:'
-        version: 11.0.0-rc.396
+        version: 11.1.2(typescript@5.8.3)
       axios:
         specifier: '>=1.7.4'
         version: 1.9.0
@@ -537,7 +537,7 @@ importers:
         version: 20.17.50
       sst:
         specifier: 'catalog:'
-        version: 3.14.24
+        version: 3.16.0
       tsx:
         specifier: ^4.19.4
         version: 4.19.4
@@ -2728,22 +2728,26 @@ packages:
   '@tiptap/starter-kit@2.12.0':
     resolution: {integrity: sha512-wlcEEtexd6u0gbR311/OFZnbtRWU97DUsY6/GsSQzN4rqZ7Ra6YbfHEN5Lutu+I/anomK8vKy8k9NyvfY5Hllg==}
 
-  '@trpc/client@11.0.0-rc.396':
-    resolution: {integrity: sha512-dDr70zaur6U2woaYS2bf4LIwrZ8iGXXTcLNZCt5POyQXtdwRud7qYD1EZ36sB1bqmNa/uTikohwGfa9qV5RxlQ==}
+  '@trpc/client@11.1.2':
+    resolution: {integrity: sha512-RpifJOAv+ql9gF3oafa3dLCF01AzWu2DzejvehAPG2IlwHxopKoYXaImJ8zPwRkZokuWiKz5v65HjElmi8TlrQ==}
     peerDependencies:
-      '@trpc/server': 11.0.0-rc.396+e2bcb75a9
+      '@trpc/server': 11.1.2
+      typescript: '>=5.7.2'
 
-  '@trpc/react-query@11.0.0-rc.396':
-    resolution: {integrity: sha512-fLT+jAbhKTtGSxorO0kZUYeoKMoHPSL2yIrfe3lQdvXGvaOoqTVfEnknOGuIAqnHifMn0frN4L+HXSj0otzLnQ==}
+  '@trpc/react-query@11.1.2':
+    resolution: {integrity: sha512-Ws3oIaj0qqbVIUyfYd9uFBwqk7eRqsxaLhLKN7grskoBo8wkh/CUADcN6ZD+GGogC3Dsg9S4WhgU1jVgfc/ahg==}
     peerDependencies:
-      '@tanstack/react-query': ^5.25.0
-      '@trpc/client': 11.0.0-rc.396+e2bcb75a9
-      '@trpc/server': 11.0.0-rc.396+e2bcb75a9
+      '@tanstack/react-query': ^5.67.1
+      '@trpc/client': 11.1.2
+      '@trpc/server': 11.1.2
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
+      typescript: '>=5.7.2'
 
-  '@trpc/server@11.0.0-rc.396':
-    resolution: {integrity: sha512-xn5uElk64Ji2HXp4dy7/GfMfn/8SiTsWRYPvAGrVspM9w0TWKSwr4VF/RfZGi2m75LhKP7q0PbiBHTpjl5UgFQ==}
+  '@trpc/server@11.1.2':
+    resolution: {integrity: sha512-Oi9zWHG0ZDkbDo4sYkduoV7q4sIe6UwjrRLC91vNMYQK+PVgpbTCmK1laRwewAGu0zaayqcGDosANjceOIC3GA==}
+    peerDependencies:
+      typescript: '>=5.7.2'
 
   '@tsconfig/bun@1.0.7':
     resolution: {integrity: sha512-udGrGJBNQdXGVulehc1aWT73wkR9wdaGBtB6yL70RJsqwW/yJhIg6ZbRlPOfIUiFNrnBuYLBi9CSmMKfDC7dvA==}
@@ -5858,48 +5862,48 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  sst-darwin-arm64@3.14.24:
-    resolution: {integrity: sha512-ceISCJyF85L+sEagBlO6MSklvqV5UglhhoUxHlLMa5wRCXWvQXyHCPTYHNrNQg3gSOl6PJv7ykMGdlEsdBmMPg==}
+  sst-darwin-arm64@3.16.0:
+    resolution: {integrity: sha512-NJDGjZ0bl+hWJoT1P2KLyA65OXHkItVg3BNkRsas6qaa+c1U6GU8wLFnfdqkDRnJIYhOIsnZtIquNp7lMIr3ww==}
     cpu: [arm64]
     os: [darwin]
 
-  sst-darwin-x64@3.14.24:
-    resolution: {integrity: sha512-Cfg5LV6l1hR9GcZMjLi3MazKiKBOe/nL45ma7TDm3OMyl+rSXbPJfiP8W8r/t3UgDVpnHvpSKVbIxMj6c+mvPg==}
+  sst-darwin-x64@3.16.0:
+    resolution: {integrity: sha512-IZiIUZgTGKjW+aR6/qgqNMzdFS2789PBQjsMquXaTZc7ebRutbCozQ4CC78SuwPXDUZ0/Bz+hyGeXHNOB52lVQ==}
     cpu: [x64]
     os: [darwin]
 
-  sst-linux-arm64@3.14.24:
-    resolution: {integrity: sha512-Ey8Z8ynEX9g7SmndghPN8gPm80+/yaN9kDfJdYh1o7EyKQRQ6TR+s8D31K7UrnNce8biNnh5zQg2012pI+GpzA==}
+  sst-linux-arm64@3.16.0:
+    resolution: {integrity: sha512-pvbxU+hrbvtIt347ilbXzVQEl2kXXBIYArLMzblPNg4KblCRvJvH595P86hrr8ZojlOkEb1rC8NSAwiZyBad4g==}
     cpu: [arm64]
     os: [linux]
 
-  sst-linux-x64@3.14.24:
-    resolution: {integrity: sha512-PovYhCFtOss33Gqw62aCmHhns+s8xieHSUVgCI4jURBQRFJN7+/EnreeBVsEm4Z5i0Tgh2pouiOmZbkHnjsFig==}
+  sst-linux-x64@3.16.0:
+    resolution: {integrity: sha512-p7qtmdiG1imWSZ7gUbVecee6TIuILTvIe6dgpvkgznYvuTFiMCZaY2SNMFuNRiBoN5zZI0y5osDDXY2uzzo7rA==}
     cpu: [x64]
     os: [linux]
 
-  sst-linux-x86@3.14.24:
-    resolution: {integrity: sha512-vWwZ1w86bvpu73PgAPeO8oTsIVJeG8zpV/Y2vxEZj0U/wewDoM3OmidIE80962J6OvCK51lrpO2Z+XMR3JyTXw==}
+  sst-linux-x86@3.16.0:
+    resolution: {integrity: sha512-bw+enzOnZ+MjGd7/h4swGfHpIoyLbIdguelGV7vZLIeuV4t4rZ/hAqfR25GEMjjonVv3Py5hsasMzR2s9GsBLA==}
     cpu: [x86]
     os: [linux]
 
-  sst-win32-arm64@3.14.24:
-    resolution: {integrity: sha512-KkUZ4icdlSHwkrdfwaOnXkDYGkFK7Obu4cU5yGT/ulqD4nyLpK64HmCDMqFbimppa0J+X5mWmO7T6N4ilkBnLA==}
+  sst-win32-arm64@3.16.0:
+    resolution: {integrity: sha512-bjjYn1gq1p1tBFKvuB3K5ZMuofK/WWmrtKpD+OJOf8PE5fxzRJ8yvOFVIm1QhD4hxDQAPdNonE/P/cXDtKXQig==}
     cpu: [arm64]
     os: [win32]
 
-  sst-win32-x64@3.14.24:
-    resolution: {integrity: sha512-pXuJ8ajsoE2BkNloyLYs1BasnG6gFdR45o+KIOkvz6hj0QwAayvPdWQjkTCSPuOcMpoPUaPA9P+AQHiTSLWxDw==}
+  sst-win32-x64@3.16.0:
+    resolution: {integrity: sha512-WFHaUyaLHepKPOMFr7Kf8iECIg1prn3L7c5r+IKgIiv+KznOeslwG6f9mYwxcOYZrZNiXVeDJmDp9xZtB5auSQ==}
     cpu: [x64]
     os: [win32]
 
-  sst-win32-x86@3.14.24:
-    resolution: {integrity: sha512-OqW/Z5aqf2j5Rj4bfC1N99AhCEzyvWlrswZvzBAZIuLIWeObHp+3TV9IwgQWNDSQbKmBDxKiqrrx+tzz9lQ+rA==}
+  sst-win32-x86@3.16.0:
+    resolution: {integrity: sha512-Twbdy9sS6zSKsdwpWVEYpFEjVcRAn0Ufdbz+pVdMK3JXniSB7MLC6/KQuxUwvUk2a88+jnPuPVXAYC51SgzDyg==}
     cpu: [x86]
     os: [win32]
 
-  sst@3.14.24:
-    resolution: {integrity: sha512-+Ml53Vc200POVunGygAHgpj3vH+4Mfu/g8NWNgI/7Lg16dipxrranTq8gLutVPZ61vz0Iu/dfPufIPG1jrk8yw==}
+  sst@3.16.0:
+    resolution: {integrity: sha512-XX4ktkpyvB2lQCG8/jgH/RWAtdNahE/MjlK6OctM4Nagk1rOrMxxzARit2ZFCisX+ZBvcN0ymgJimnfZqWjM7Q==}
     hasBin: true
 
   stable-hash@0.0.5:
@@ -9224,19 +9228,23 @@ snapshots:
       '@tiptap/extension-text-style': 2.12.0(@tiptap/core@2.12.0(@tiptap/pm@2.12.0))
       '@tiptap/pm': 2.12.0
 
-  '@trpc/client@11.0.0-rc.396(@trpc/server@11.0.0-rc.396)':
+  '@trpc/client@11.1.2(@trpc/server@11.1.2(typescript@5.8.3))(typescript@5.8.3)':
     dependencies:
-      '@trpc/server': 11.0.0-rc.396
+      '@trpc/server': 11.1.2(typescript@5.8.3)
+      typescript: 5.8.3
 
-  '@trpc/react-query@11.0.0-rc.396(@tanstack/react-query@5.77.0(react@18.3.1))(@trpc/client@11.0.0-rc.396(@trpc/server@11.0.0-rc.396))(@trpc/server@11.0.0-rc.396)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@trpc/react-query@11.1.2(@tanstack/react-query@5.77.0(react@18.3.1))(@trpc/client@11.1.2(@trpc/server@11.1.2(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.1.2(typescript@5.8.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)':
     dependencies:
       '@tanstack/react-query': 5.77.0(react@18.3.1)
-      '@trpc/client': 11.0.0-rc.396(@trpc/server@11.0.0-rc.396)
-      '@trpc/server': 11.0.0-rc.396
+      '@trpc/client': 11.1.2(@trpc/server@11.1.2(typescript@5.8.3))(typescript@5.8.3)
+      '@trpc/server': 11.1.2(typescript@5.8.3)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+      typescript: 5.8.3
 
-  '@trpc/server@11.0.0-rc.396': {}
+  '@trpc/server@11.1.2(typescript@5.8.3)':
+    dependencies:
+      typescript: 5.8.3
 
   '@tsconfig/bun@1.0.7': {}
 
@@ -10371,7 +10379,7 @@ snapshots:
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
       eslint-plugin-react-hooks: 5.0.0-canary-7118f5dd7-20230705(eslint@8.57.1)
@@ -10401,7 +10409,7 @@ snapshots:
       tinyglobby: 0.2.13
       unrs-resolver: 1.7.2
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -10416,7 +10424,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -12968,31 +12976,31 @@ snapshots:
       safer-buffer: 2.1.2
       tweetnacl: 0.14.5
 
-  sst-darwin-arm64@3.14.24:
+  sst-darwin-arm64@3.16.0:
     optional: true
 
-  sst-darwin-x64@3.14.24:
+  sst-darwin-x64@3.16.0:
     optional: true
 
-  sst-linux-arm64@3.14.24:
+  sst-linux-arm64@3.16.0:
     optional: true
 
-  sst-linux-x64@3.14.24:
+  sst-linux-x64@3.16.0:
     optional: true
 
-  sst-linux-x86@3.14.24:
+  sst-linux-x86@3.16.0:
     optional: true
 
-  sst-win32-arm64@3.14.24:
+  sst-win32-arm64@3.16.0:
     optional: true
 
-  sst-win32-x64@3.14.24:
+  sst-win32-x64@3.16.0:
     optional: true
 
-  sst-win32-x86@3.14.24:
+  sst-win32-x86@3.16.0:
     optional: true
 
-  sst@3.14.24:
+  sst@3.16.0:
     dependencies:
       aws-sdk: 2.1692.0
       aws4fetch: 1.0.18
@@ -13000,14 +13008,14 @@ snapshots:
       opencontrol: 0.0.6
       openid-client: 5.6.4
     optionalDependencies:
-      sst-darwin-arm64: 3.14.24
-      sst-darwin-x64: 3.14.24
-      sst-linux-arm64: 3.14.24
-      sst-linux-x64: 3.14.24
-      sst-linux-x86: 3.14.24
-      sst-win32-arm64: 3.14.24
-      sst-win32-x64: 3.14.24
-      sst-win32-x86: 3.14.24
+      sst-darwin-arm64: 3.16.0
+      sst-darwin-x64: 3.16.0
+      sst-linux-arm64: 3.16.0
+      sst-linux-x64: 3.16.0
+      sst-linux-x86: 3.16.0
+      sst-win32-arm64: 3.16.0
+      sst-win32-x64: 3.16.0
+      sst-win32-x86: 3.16.0
     transitivePeerDependencies:
       - supports-color
 

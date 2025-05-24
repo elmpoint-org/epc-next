@@ -6,7 +6,7 @@
     "postinstall": "turbo gql:pregen",
     "gql:gen": "turbo gql:gen",
     "dev": "turbo dev:sst dev:turbo",
-    "dev:sst": "sst dev --stage=development"
+    "dev:sst": "sst dev --stage=development --mode=mono"
   },
   "packageManager": "pnpm@10.11.0",
   "pnpm": {

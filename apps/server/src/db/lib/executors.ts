@@ -77,7 +77,9 @@ export const createExecutors = <
     graphiql: false,
     fetchAPI: { Response },
 
-    context: (ctx) => p.auth(ctx, context),
+    context: (ctx) => {
+      return p.auth(ctx, context);
+    },
   });
 
   return { graph, graphHTTP };

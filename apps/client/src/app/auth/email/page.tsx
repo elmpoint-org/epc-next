@@ -5,9 +5,10 @@ import { tclient } from '@/query/trpc';
 
 import StoreLoginAndRedirect from '../_components/StoreLoginAndRedirect';
 
-export default async function EmailAuthPage({ searchParams }: SearchParams) {
-  const token = await verifyAuth(searchParams.token);
-  const redirect = searchParams.to;
+export default async function EmailAutPage({ searchParams }: SearchParams) {
+  let sp = await searchParams;
+  const token = await verifyAuth(sp.token);
+  const redirect = sp.to;
 
   return (
     <>

@@ -14,8 +14,39 @@ export const app = express();
 
 // MIDDLEWARE
 
+app.use((req, _, next) => {
+  req.setEncoding('utf-8');
+  next();
+});
+
 app.use(cors());
 app.use(express.json());
+// app.use((req, res, next) => {
+//   if (
+//     req.method === 'POST' &&
+//     req.headers['content-type'] &&
+//     req.headers['content-type'].includes('application/json')
+//   ) {
+//     let data = '';
+//     req.setEncoding('utf8');
+//     req.on('data', (chunk) => {
+//       data += chunk;
+//     });
+//     req.on('end', () => {
+//       // console.log('Raw body:', data);
+//       try {
+//         const parsed = JSON.parse(data);
+//         // console.log('Manually parsed JSON:', parsed);
+//         (req as any).body = parsed;
+//       } catch (err) {
+//         // console.log('Failed to parse JSON:', err);
+//       }
+//       next();
+//     });
+//   } else {
+//     next();
+//   }
+// });
 app.use(expressErr);
 
 // ROUTES

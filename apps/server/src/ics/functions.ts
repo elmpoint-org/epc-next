@@ -169,10 +169,13 @@ function roomText(room: ICSRoom) {
 function getICALTime(ts: number, plusOne?: boolean) {
   let d = dateTSObject(ts);
   if (plusOne) d = d.add(1, 'day');
-  return new ical.Time({
-    isDate: true,
-    year: d.year(),
-    month: d.month() + 1,
-    day: d.date(),
-  });
+  return new ical.Time(
+    {
+      isDate: true,
+      year: d.year(),
+      month: d.month() + 1,
+      day: d.date(),
+    },
+    undefined as any
+  );
 }
