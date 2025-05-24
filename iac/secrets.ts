@@ -1,6 +1,9 @@
-export const secrets = [
-  new sst.Secret('SecretBrevoAPIKey'),
-  new sst.Secret('SecretPasswordlessSecret'),
-  new sst.Secret('SecretResendAPIKey'),
-  new sst.Secret('SecretUserAuthSecret'),
-];
+export const SecretMap = {
+  SecretBrevoAPIKey: new sst.Secret('SecretBrevoAPIKey'),
+  SecretPasswordlessSecret: new sst.Secret('SecretPasswordlessSecret'),
+  SecretResendAPIKey: new sst.Secret('SecretResendAPIKey'),
+  SecretUserAuthSecret: new sst.Secret('SecretUserAuthSecret'),
+  SecretDomainARN: new sst.Secret('SecretDomainARN'),
+};
+
+export const secrets = Object.values(SecretMap);

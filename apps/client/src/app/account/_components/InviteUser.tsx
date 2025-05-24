@@ -33,7 +33,7 @@ export default function InviteUser() {
       ).catch((err) => {
         notifications.show({
           color: 'red',
-          message: 'Error: ' + oldGraphError((err as any).response) ?? '',
+          message: 'Error: ' + (oldGraphError((err as any).response) ?? ''),
         });
         // TODO what error map applies here
         return false;

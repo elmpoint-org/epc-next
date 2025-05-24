@@ -35,8 +35,6 @@ export const getCmsPageFromSlug = h<M.QueryResolvers['cmsPageFromSlug']>(
     if (page && !page.publish && !scopeDiff(scope, 'ADMIN', 'EDIT'))
       throw err('NOT_PUBLISHED');
 
-    console.log('READY TO RETURN PAGE');
-
     return page;
   }
 );

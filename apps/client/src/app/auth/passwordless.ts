@@ -1,9 +1,10 @@
-import { ErrorMap, prettyError } from '@/util/prettyErrors';
-import { Client } from '@passwordlessdev/passwordless-client';
+import { prettyError } from '@/util/prettyErrors';
 import {
+  Client,
   PromiseResult,
   TokenResponse,
-} from '@passwordlessdev/passwordless-client/dist/types';
+} from '@passwordlessdev/passwordless-client';
+
 import { useEffect, useRef } from 'react';
 
 export const initPasswordless = () =>

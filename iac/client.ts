@@ -1,4 +1,5 @@
-import { server } from './server';
+import { SecretMap } from './secrets';
+import { environment } from './util/env';
 import { isProd } from './util/isProd';
 
 export const client = new sst.aws.Nextjs('Client', {
@@ -8,11 +9,8 @@ export const client = new sst.aws.Nextjs('Client', {
     ? {
         name: `two.elmpoint.xyz`,
         dns: false,
-        cert: process.env.DOMAIN_ARN,
+        cert: SecretMap.SecretDomainARN.value,
       }
     : undefined,
-  environment: {
-    NEXT_PUBLIC_SERVER_API_URL: server.url,
-    NEXT_PUBLIC_IS_DEV: String(!isProd()),
-  },
+  environment: environment(),
 });

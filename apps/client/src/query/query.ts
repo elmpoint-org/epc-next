@@ -4,9 +4,7 @@ import {
   UseQueryResult,
   UseSuspenseQueryOptions,
   useQuery,
-  useSuspenseQuery,
 } from '@tanstack/react-query';
-import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 
 import { GQL, Headers, graph } from './graphql';
 import cookies from '@/util/cookies';
@@ -50,6 +48,5 @@ export const useGraphQuery = <R, V>(
   const s = opts?.withSuspense ?? false;
 
   const qr = useQuery(!s ? query : VOID_QUERY);
-  const qs = useSuspenseQuery(s ? query : VOID_QUERY);
-  return (!s ? qr : qs) as UseQueryResult<R>;
+  return qr as UseQueryResult<R>;
 };

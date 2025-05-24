@@ -1,10 +1,18 @@
 import { isProd } from './util/isProd';
 
-import { secrets } from './secrets';
+import { SecretMap, secrets } from './secrets';
+import { environment } from './util/env';
 
 export const server = new sst.aws.ApiGatewayV2('Server', {
   link: [...secrets],
   cors: true,
+  domain: isProd()
+    ? {
+        name: 'api2.elmpoint.xyz',
+        dns: false,
+        cert: SecretMap.SecretDomainARN.value,
+      }
+    : undefined,
 });
 
 // ---------------------------------------
@@ -75,9 +83,6 @@ function defaultProps() {
         resources: ['*'],
       },
     ],
-    environment: {
-      NEXT_PUBLIC_SERVER_API_URL: server.url,
-      NEXT_PUBLIC_IS_DEV: String(!isProd()),
-    },
+    environment: environment(),
   } satisfies Partial<sst.aws.FunctionArgs>;
 }
