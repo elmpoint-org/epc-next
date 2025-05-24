@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
+  "ui": "stream",
   "tasks": {
     "gql:pregen": {},
     "gql:gen": {
@@ -8,10 +8,14 @@
         "@epc/schema#gql:pregen"
       ]
     },
+    "dev:turbo": {
+      "cache": false,
+      "persistent": true
+    },
     "//#dev:sst": {
       "cache": false,
       "persistent": true,
-      "interactive": true
+      "interactive": false
     }
   }
 }

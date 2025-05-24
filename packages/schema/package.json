@@ -2,16 +2,17 @@
   "name": "@epc/schema",
   "private": true,
   "scripts": {
-    "gql:pregen": "sst shell --stage=development tsx --print-logs generate.ts"
+    "gql:pregen": "sst shell --stage=development tsx --print-logs generate.ts",
+    "dev:turbo": "chokidar '../../apps/server/src/db/models/**/*' -c 'pnpm gql:pregen'"
   },
   "dependencies": {
     "@epc/server": "workspace:*",
-    "chokidar": "^4.0.3",
     "graphql": "catalog:",
     "graphql-modules": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "chokidar-cli": "^3.0.0",
     "sst": "catalog:",
     "tsx": "^4.19.4"
   }

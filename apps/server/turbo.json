@@ -13,11 +13,6 @@
       "outputs": [
         "graphql-schema.d.ts"
       ]
-    },
-    "dev:turbo": {
-      "cache": false,
-      "persistent": true,
-      "interactive": false
     }
   }
 }
