@@ -9,6 +9,11 @@
         "src/db/**/__types/**"
       ]
     },
+    "gql:gen": {
+      "outputs": [
+        "graphql-schema.d.ts"
+      ]
+    },
     "dev:turbo": {
       "cache": false,
       "persistent": true,

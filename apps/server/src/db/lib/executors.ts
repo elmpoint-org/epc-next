@@ -4,6 +4,11 @@ import { type DocumentNode } from 'graphql';
 import { type TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { type YogaInitialContext, createYoga } from 'graphql-yoga';
 import { type GraphResponseType } from './utilities';
+import {
+  APIGatewayProxyEventV2,
+  APIGatewayProxyStructuredResultV2,
+  Context as AWSContext,
+} from 'aws-lambda';
 
 export type ExtendScopeOpts<T = never> =
   | (T extends never ? never : T)
@@ -71,18 +76,52 @@ export const createExecutors = <
       variables || undefined
     ) as GraphResponseType<TResult>;
 
-  const graphHTTP = createYoga({
+  const yoga = createYoga<AWSFullContextObject>({
     plugins: [useGraphQLModules(modulesApp)],
     graphqlEndpoint: '/gql',
     graphiql: false,
-    fetchAPI: { Response },
-
     context: (ctx) => {
       return p.auth(ctx, context);
     },
   });
 
+  const graphHTTP: (
+    event: APIGatewayProxyEventV2,
+    context: AWSContext
+  ) => Promise<APIGatewayProxyStructuredResultV2> = async (
+    event,
+    awsContext
+  ) => {
+    const response = await yoga.fetch(
+      `https://${event.requestContext.domainName}${event.requestContext.http.path}?${event.rawQueryString}`,
+      {
+        method: event.requestContext.http.method,
+        headers: event.headers as HeadersInit,
+        body:
+          event.body && event.isBase64Encoded
+            ? Buffer.from(event.body, 'base64')
+            : event.body,
+      },
+      { event, awsContext }
+    );
+
+    return {
+      statusCode: response.status,
+      headers: Object.fromEntries(response.headers.entries()),
+      body:
+        typeof response.body === 'string'
+          ? response.body
+          : await response.text(),
+      isBase64Encoded: false,
+    };
+  };
+
   return { graph, graphHTTP };
+};
+
+export type AWSFullContextObject = {
+  event: APIGatewayProxyEventV2;
+  awsContext: AWSContext;
 };
 
 // /**

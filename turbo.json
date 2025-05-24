@@ -3,7 +3,11 @@
   "ui": "tui",
   "tasks": {
     "gql:pregen": {},
-    "gql:gen": {},
+    "gql:gen": {
+      "dependsOn": [
+        "@epc/schema#gql:pregen"
+      ]
+    },
     "//#dev:sst": {
       "cache": false,
       "persistent": true,

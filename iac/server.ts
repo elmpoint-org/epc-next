@@ -13,7 +13,12 @@ export const server = new sst.aws.ApiGatewayV2('Server', {
 // TRPC API
 route('/api/{proxy+}', {
   methods: ['GET', 'POST'],
-  handler: 'apps/server/src/api/api.handler',
+  handler: 'apps/server/src/api/handler.handler',
+});
+
+// GRAPHQL API
+route('/gql', {
+  handler: 'apps/server/src/db/handler.handler',
 });
 
 // ---------------------------------------
