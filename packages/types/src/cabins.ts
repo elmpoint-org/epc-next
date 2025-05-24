@@ -1,8 +1,3 @@
-/*
-THIS FILE IS IMPORTED BY THE CLIENT.
-only raw types and client-friendly imports are allowed.
-*/
-
 export const ROOT_CABIN_ID = 'ROOT';
 export const ANY_ROOM = 'ANY';
 

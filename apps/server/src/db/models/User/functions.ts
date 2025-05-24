@@ -4,21 +4,21 @@ import {
   handle as h,
   loggedIn,
   scopeError,
-} from '@@/db/lib/utilities';
+} from '##/db/lib/utilities.js';
 
 import { UserModule as M } from './__types/module-types';
-import type { ResolverContext } from '@@/db/graph';
-import { generateKey } from '@@/util/generate';
+import type { ResolverContext } from '##/db/graph.js';
+import { generateKey } from '##/util/generate.js';
 import { DBUser } from './source';
-import { passwordless, passwordlessDeleteCredential } from '@@/auth/passkeys';
+import { passwordless, passwordlessDeleteCredential } from '##/auth/passkeys.js';
 import {
   Credential,
   RegisterOptions,
 } from '@passwordlessdev/passwordless-nodejs';
 import { AxiosError } from 'axios';
-import { prepEmail } from '@@/util/textTransform';
+import { prepEmail } from '##/util/textTransform.js';
 import { createHash } from 'node:crypto';
-import { DBType } from '@@/db/lib/Model';
+import { DBType } from '##/db/lib/Model.js';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 

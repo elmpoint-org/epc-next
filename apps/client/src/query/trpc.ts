@@ -4,7 +4,7 @@ import {
   httpBatchLink,
 } from '@trpc/react-query';
 
-import type { AppRouter } from '@@/api/router';
+import type { AppRouter } from '@epc/server/trpc';
 
 import { api } from '@/util/dev';
 

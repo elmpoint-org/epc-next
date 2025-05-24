@@ -1,12 +1,15 @@
-import { MutationResolvers, QueryResolvers } from '@@/db/__types/graphql-types';
-import { ResolverContext } from '@@/db/graph';
+import {
+  MutationResolvers,
+  QueryResolvers,
+} from '##/db/__types/graphql-types.js';
+import { ResolverContext } from '##/db/graph.js';
 import {
   err,
   getTypedScopeFunctions,
   handle as h,
   scopeError,
-} from '@@/db/lib/utilities';
-import { prepEmail } from '@@/util/textTransform';
+} from '##/db/lib/utilities.js';
+import { prepEmail } from '##/util/textTransform.js';
 
 const { scoped } = getTypedScopeFunctions<ResolverContext>();
 

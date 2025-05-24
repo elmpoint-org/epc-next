@@ -1,4 +1,4 @@
-import { timestamp } from '@@/db/lib/utilities';
+import { timestamp } from '##/db/lib/utilities.js';
 import type { CmsPageModule } from './__types/module-types';
 
 import * as f from './functions';

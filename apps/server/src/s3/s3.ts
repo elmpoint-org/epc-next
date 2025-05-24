@@ -14,11 +14,14 @@ import {
 import { getSignedUrl as presign } from '@aws-sdk/s3-request-presigner';
 
 import mime from 'mime/lite';
-import type { MimeType } from '@@/util/mimeTypes';
+import type { MimeType } from '@epc/mime';
 
-import { FILE_GET_PRESIGN_EXPIRE, UPLOAD_PRESIGN_EXPIRE } from '@@/CONSTANTS';
-import { getDateSec } from '@@/util/time';
-import { PATH_UNKNOWN_STRING } from './FILE_TYPES';
+import {
+  FILE_GET_PRESIGN_EXPIRE,
+  UPLOAD_PRESIGN_EXPIRE,
+} from '##/CONSTANTS.js';
+import { getDateSec } from '##/util/time.js';
+import { PATH_UNKNOWN_STRING } from '@epc/types/s3';
 
 export enum Buckets {
   EPC_ONE = 'epc-one',

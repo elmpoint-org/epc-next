@@ -6,8 +6,8 @@ import {
   getTypedScopeFunctions,
   handle as h,
   loggedIn,
-} from '@@/db/lib/utilities';
-import { ResolverContext } from '@@/db/graph';
+} from '##/db/lib/utilities.js';
+import { ResolverContext } from '##/db/graph.js';
 import { ROOT_CABIN_ID } from '../Room/source';
 
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();

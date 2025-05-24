@@ -27,7 +27,7 @@ export type AuthUser = NonNullable<
 
 export async function getUser() {
   // get stored auth token
-  const token = cookies().get('USER_AUTH' as CookieOpts);
+  const token = (await cookies()).get('USER_AUTH' as CookieOpts);
   if (!token) return null;
 
   // verify token and get user info
@@ -37,8 +37,8 @@ export async function getUser() {
   return data.userFromAuth;
 }
 
-export function getServerAuth() {
-  const t = cookies().get('USER_AUTH' as CookieOpts);
+export async function getServerAuth() {
+  const t = (await cookies()).get('USER_AUTH' as CookieOpts);
 
   if (!t) return '';
   return `Bearer ${t.value}`;

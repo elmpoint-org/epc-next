@@ -5,10 +5,10 @@ import {
   handle as h,
   loggedIn,
   scopeError,
-} from '@@/db/lib/utilities';
-import { ResolverContext } from '@@/db/graph';
-import { generateKey } from '@@/util/generate';
-import { STAY_TOKEN_CHAR_LENGTH } from '@@/CONSTANTS';
+} from '##/db/lib/utilities.js';
+import { ResolverContext } from '##/db/graph.js';
+import { generateKey } from '##/util/generate.js';
+import { STAY_TOKEN_CHAR_LENGTH } from '##/CONSTANTS.js';
 import { DBStayToken } from './source';
 
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();

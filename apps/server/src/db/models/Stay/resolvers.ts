@@ -1,6 +1,6 @@
 import type { StayModule } from './__types/module-types';
 
-import { timestamp } from '@@/db/lib/utilities';
+import { timestamp } from '##/db/lib/utilities.js';
 
 import * as f from './functions';
 

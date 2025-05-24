@@ -4,11 +4,11 @@ import {
   getTypedScopeFunctions,
   handle as h,
   scopeError,
-} from '@@/db/lib/utilities';
-import { DBType } from '@@/db/lib/Model';
+} from '##/db/lib/utilities.js';
+import { DBType } from '##/db/lib/Model.js';
 import { DBCmsPage } from './source';
 
-import { ResolverContext } from '@@/db/graph';
+import { ResolverContext } from '##/db/graph.js';
 import { DBUser } from '../User/source';
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 

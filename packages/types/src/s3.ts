@@ -1,9 +1,4 @@
-/*
-THIS FILE IS IMPORTED BY THE CLIENT.
-only raw types and client-friendly imports are allowed.
-*/
-
-import type { MimeType } from '@@/util/mimeTypes';
+import { MimeType } from '@epc/mime';
 
 export const IMAGE_TYPES: MimeType[] = [
   'image/jpeg',

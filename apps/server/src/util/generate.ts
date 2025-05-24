@@ -1,7 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import { promisify } from 'node:util';
 
-import { DEFAULT_KEY_LENGTH } from '@@/CONSTANTS';
+import { DEFAULT_KEY_LENGTH } from '##/CONSTANTS.js';
 
 export const generateKey = async (len = DEFAULT_KEY_LENGTH) =>
   (await promisify(randomBytes)(Math.ceil((len + 3) / 1.5)))

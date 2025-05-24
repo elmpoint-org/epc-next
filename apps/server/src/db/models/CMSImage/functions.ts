@@ -3,15 +3,15 @@ import {
   getTypedScopeFunctions,
   handle as h,
   scopeError,
-} from '@@/db/lib/utilities';
-import type { ResolverContext } from '@@/db/graph';
+} from '##/db/lib/utilities.js';
+import type { ResolverContext } from '##/db/graph.js';
 import type { CmsImageModule as M } from './__types/module-types';
-import type { CmsImage } from '@@/db/__types/graphql-types';
+import type { CmsImage } from '##/db/__types/graphql-types.js';
 import type { DBCmsImage } from './source';
-import type { DBType } from '@@/db/lib/Model';
+import type { DBType } from '##/db/lib/Model.js';
 
-import { BUCKET, PATH, checkImageType } from '@@/s3/images';
-import { s3 } from '@@/s3';
+import { BUCKET, PATH, checkImageType } from '##/s3/images.js';
+import { s3 } from '##/s3/index.js';
 
 import { randomUUID as uuid } from 'node:crypto';
 

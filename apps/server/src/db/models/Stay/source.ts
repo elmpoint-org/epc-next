@@ -1,5 +1,5 @@
-import Model from '@@/db/lib/Model';
-import type { Stay } from '@@/db/__types/graphql-types';
+import Model from '##/db/lib/Model.js';
+import type { Stay } from '##/db/__types/graphql-types.js';
 
 export type DBStay = Stay & {
   authorId: string;

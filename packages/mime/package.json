@@ -1,0 +1,8 @@
+{
+  "name": "@epc/mime",
+  "private": true,
+  "scripts": {},
+  "exports": {
+    ".": "./src/mimeTypes.ts"
+  }
+}

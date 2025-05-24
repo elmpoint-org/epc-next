@@ -2,7 +2,7 @@ import qs from 'qs';
 import { Button, Footer, Link, Prose, Title, Wrapper } from '../components';
 import { send } from '../resend';
 import { Senders } from '../senders';
-import { siteDomain } from '@@/util/dev';
+import { siteDomain } from '##/util/dev.js';
 
 /** verify a user's email address for registration. */
 export async function emailRegistration(

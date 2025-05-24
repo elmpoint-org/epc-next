@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "gql:pregen": {},
+    "gql:gen": {},
+    "//#dev:sst": {
+      "cache": false,
+      "persistent": true,
+      "interactive": true
+    }
+  }
+}

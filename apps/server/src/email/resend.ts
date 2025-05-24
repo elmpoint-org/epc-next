@@ -2,11 +2,12 @@ import { CreateEmailOptions, Resend } from 'resend';
 import { render } from '@react-email/components';
 
 import { Senders } from './senders';
-import { isDev } from '@@/util/dev';
+import { isDev } from '##/util/dev.js';
 import { brevo } from '.';
 import { el } from './components/getElement';
+import { Resource } from 'sst';
 
-const resend = new Resend(process.env.RESEND_API_KEY ?? 'DEVELOPMENT');
+const resend = new Resend(Resource.SecretResendAPIKey.value ?? 'DEVELOPMENT');
 
 export async function send(
   { ...props }: { from: Senders } & CreateEmailOptions,

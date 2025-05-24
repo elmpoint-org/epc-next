@@ -1,7 +1,7 @@
 import type { UserModule } from './__types/module-types';
 import * as f from './functions';
 
-import { timestamp } from '@@/db/lib/utilities';
+import { timestamp } from '##/db/lib/utilities.js';
 
 const resolvers: UserModule.Resolvers = {
   Query: {

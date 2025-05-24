@@ -4,7 +4,7 @@ import { Combobox, Tooltip } from '@mantine/core';
 import { IconAlt, IconCheck, IconFriends } from '@tabler/icons-react';
 
 import { useFormCtx, type Cabin, type Room } from '../state/formCtx';
-import { ANY_ROOM } from '@@/db/models/Room/CABIN_DATA';
+import { ANY_ROOM } from '@epc/types/cabins';
 
 const RoomOption = ({
   item,

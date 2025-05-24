@@ -1,9 +1,10 @@
 import * as jose from 'jose';
 
-import { EMAIL_LOGIN_EXPIRE, JWT_ALGORITHM, LOGIN_EXPIRE } from '@@/CONSTANTS';
+import { EMAIL_LOGIN_EXPIRE, JWT_ALGORITHM, LOGIN_EXPIRE } from '##/CONSTANTS.js';
 import { getUserSecret } from './utilities';
+import { Resource } from 'sst';
 
-const { USER_AUTH_SECRET } = process.env;
+const  USER_AUTH_SECRET = Resource.SecretUserAuthSecret.value;
 
 export async function signToken(userId: string, expiresInSeconds?: number) {
   const { secret, user } = await getUserSecret(userId).catch(() => {

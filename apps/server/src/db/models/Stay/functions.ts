@@ -1,4 +1,4 @@
-import { DBPartial, DBType, InitialType, QueryOp } from '@@/db/lib/Model';
+import { DBPartial, DBType, InitialType, QueryOp } from '##/db/lib/Model.js';
 import type { StayModule as M } from './__types/module-types';
 
 import {
@@ -8,10 +8,10 @@ import {
   handle as h,
   loggedIn,
   scopeError,
-} from '@@/db/lib/utilities';
-import { ResolverFn } from '@@/db/__types/graphql-types';
-import { ResolverContext } from '@@/db/graph';
-import { CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS } from '@@/CONSTANTS';
+} from '##/db/lib/utilities.js';
+import { ResolverFn } from '##/db/__types/graphql-types.js';
+import { ResolverContext } from '##/db/graph.js';
+import { CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS } from '##/CONSTANTS.js';
 import { DBStay, ScalarRoom } from './source';
 
 import { randomUUID as uuid } from 'node:crypto';

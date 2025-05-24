@@ -3,11 +3,12 @@ import {
   SendSmtpEmailSender,
   TransactionalEmailsApi,
 } from '@getbrevo/brevo';
+import { Resource } from 'sst';
 
 const { BREVO_API_KEY } = process.env;
 
 let brevo = new TransactionalEmailsApi();
-brevo.setApiKey(0, BREVO_API_KEY as string);
+brevo.setApiKey(0, Resource.SecretBrevoAPIKey.value);
 
 const sender: SendSmtpEmailSender = {
   name: 'Elm Point',

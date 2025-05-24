@@ -1,5 +1,5 @@
-import { graph } from '@@/db/graph';
-import { graphql } from '@@/db/lib/utilities';
+import { graph } from '##/db/graph.js';
+import { graphql } from '##/db/lib/utilities.js';
 
 export function reject() {
   return 'UNAUTHORIZED';

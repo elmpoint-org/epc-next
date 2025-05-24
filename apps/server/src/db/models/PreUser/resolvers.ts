@@ -1,4 +1,4 @@
-import { timestamp } from '@@/db/lib/utilities';
+import { timestamp } from '##/db/lib/utilities.js';
 import { PreUserModule } from './__types/module-types';
 
 import * as f from './functions';

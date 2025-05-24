@@ -1,16 +1,16 @@
-import { DEFAULT_MAX_FILES_LIST_LIMIT } from '@@/CONSTANTS';
+import { DEFAULT_MAX_FILES_LIST_LIMIT } from '##/CONSTANTS.js';
 import type { CmsFileModule as M } from './__types/module-types';
-import type { ResolverContext } from '@@/db/graph';
+import type { ResolverContext } from '##/db/graph.js';
 
 import {
   err,
   getTypedScopeFunctions,
   handle as h,
   loggedIn,
-} from '@@/db/lib/utilities';
+} from '##/db/lib/utilities.js';
 
-import { BUCKET } from '@@/s3/files';
-import { s3 } from '@@/s3';
+import { BUCKET } from '##/s3/files.js';
+import { s3 } from '##/s3/index.js';
 
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 

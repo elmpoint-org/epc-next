@@ -7,11 +7,12 @@ import Providers, { ProvidersHead } from './_components/Providers';
 import Shell from './_components/Shell';
 import { UserProvider } from './_ctx/user/provider';
 
-import './globals.css';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/tiptap/styles.css';
+
+import './globals.css';
 
 const defaultFont = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Children) {
   return (
     <>
-      <html lang="en">
+      <html lang="en" data-mantine-color-scheme="light">
         <head>
           <ProvidersHead />
         </head>

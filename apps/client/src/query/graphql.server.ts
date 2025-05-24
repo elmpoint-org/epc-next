@@ -3,9 +3,9 @@ import { type GQL, type GraphAuthErrors, graph } from './graphql';
 import type { Inside } from '@/util/inferTypes';
 import type { GraphQLResponse } from 'graphql-request';
 
-export const oldGraphAuthServer = <R, V>(...[d, v]: GQL<R, V, {}>) =>
+export const oldGraphAuthServer = async <R, V>(...[d, v]: GQL<R, V, {}>) =>
   graph.request(d, v ?? undefined, {
-    authorization: getServerAuth(),
+    authorization: await getServerAuth(),
   });
 
 export async function graphAuthServer<R, V>(...[d, v]: GQL<R, V, {}>) {
@@ -13,7 +13,7 @@ export async function graphAuthServer<R, V>(...[d, v]: GQL<R, V, {}>) {
 
   const data = await graph
     .request(d, v ?? undefined, {
-      authorization: getServerAuth(),
+      authorization: await getServerAuth(),
     })
     .catch((e) => {
       const errs = (e?.response as GraphQLResponse)?.errors;

@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 
-import { graph } from '@@/db/graph';
-import { graphql } from '@@/db/lib/utilities';
+import { graph } from '##/db/graph.js';
+import { graphql } from '##/db/lib/utilities.js';
 
-import { WEBCAL_STALE_TIME } from '@@/CONSTANTS';
-import { s3 } from '@@/s3';
-import { Buckets } from '@@/s3/s3';
+import { WEBCAL_STALE_TIME } from '##/CONSTANTS.js';
+import { s3 } from '##/s3/index.js';
+import { Buckets } from '##/s3/s3.js';
 
 const BUCKET = Buckets.RESOURCE_BUCKET;
 const PATH = 'ics/';

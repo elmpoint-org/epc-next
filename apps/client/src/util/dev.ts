@@ -1,11 +1,10 @@
-export const isDev = process.env.NODE_ENV === 'development';
+export const isDev = process.env.NEXT_PUBLIC_IS_DEV;
 
 export const isUsingPublicApi = !!process.env.NEXT_PUBLIC_USE_PUBLIC_API;
 
-export const api =
-  isDev && !isUsingPublicApi
-    ? 'http://localhost:3000'
-    : 'https://api.elmpoint.xyz/one';
+export const api = !isUsingPublicApi
+  ? process.env.NEXT_PUBLIC_SERVER_API_URL
+  : 'the_permanent_server_address'; //TODO fix this once we do sst domain assignment
 
 export const siteDomain = isDev
   ? 'http://localhost:3001'

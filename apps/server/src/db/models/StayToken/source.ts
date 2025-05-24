@@ -1,5 +1,5 @@
-import Model from '@@/db/lib/Model';
-import { StayToken } from '@@/db/__types/graphql-types';
+import Model from '##/db/lib/Model.js';
+import { StayToken } from '##/db/__types/graphql-types.js';
 
 export type DBStayToken = {
   userId: string;

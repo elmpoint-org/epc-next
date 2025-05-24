@@ -13,7 +13,7 @@ import { useUser } from '@/app/_ctx/user/context';
 import { SharedValues } from '@/util/inferTypes';
 import { VariablesOf } from '@graphql-typed-document-node/core';
 import { D1, TStoDate, dateTS } from '../../_util/dateUtils';
-import { CUSTOM_ROOM_ID } from '@@/db/models/Room/CABIN_DATA';
+import { CUSTOM_ROOM_ID } from '@epc/types/cabins';
 import { prettyError, prettyErrorPlaceholder } from '@/util/prettyErrors';
 import { dayStyles } from '../../_util/dayStyles';
 

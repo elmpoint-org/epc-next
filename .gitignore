@@ -1,2 +1,13 @@
 node_modules
 .DS_Store
+
+# sst
+.sst
+
+.env
+
+.turbo
+
+
+schema.graphql
+graphql-schema.d.ts

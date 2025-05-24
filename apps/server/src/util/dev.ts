@@ -1,8 +1,6 @@
-export const isDev = !!process.env.IS_OFFLINE;
+export const isDev = process.env.NEXT_PUBLIC_IS_DEV;
 
-export const apiDomain = isDev
-  ? 'http://localhost:3000'
-  : 'https://api.elmpoint.xyz/one';
+export const apiDomain = process.env.NEXT_PUBLIC_SERVER_API_URL;
 
 export const siteDomain = isDev
   ? 'http://localhost:3001'

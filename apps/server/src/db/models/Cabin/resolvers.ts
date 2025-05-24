@@ -2,7 +2,7 @@ import type { CabinModule } from './__types/module-types';
 
 import * as f from './functions';
 
-import { timestamp } from '@@/db/lib/utilities';
+import { timestamp } from '##/db/lib/utilities.js';
 
 const resolvers: CabinModule.Resolvers = {
   Query: {

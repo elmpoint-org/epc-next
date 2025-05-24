@@ -1,14 +1,14 @@
 import { ExecutionResult, GraphQLError } from 'graphql';
 
 import type { DBType } from './Model';
-import type { Resolver, ResolverFn } from '@@/db/__types/graphql-types';
+import type { Resolver, ResolverFn } from '##/db/__types/graphql-types.js';
 import type { Maybe } from 'graphql/jsutils/Maybe';
 import type { ResolverContextType } from './executors';
 import { PromiseOrValue } from 'graphql/jsutils/PromiseOrValue';
 
 import { initGraphQLTada } from 'gql.tada';
-import type { introspection } from '@@/../graphql-schema';
-import { MaybePromise } from '@@/util/types';
+import type { introspection } from '#schema';
+import { MaybePromise } from '##/util/types.js';
 
 export type GraphResponseType<T> = PromiseOrValue<
   ExecutionResult<T, { code?: string }>

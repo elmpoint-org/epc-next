@@ -1,5 +1,5 @@
-import Model from '@@/db/lib/Model';
-import type { CmsPage } from '@@/db/__types/graphql-types';
+import Model from '##/db/lib/Model.js';
+import type { CmsPage } from '##/db/__types/graphql-types.js';
 
 export type DBCmsPage = CmsPage & {
   contributorIds: string[];

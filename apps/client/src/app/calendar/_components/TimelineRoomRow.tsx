@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 import { CalendarProps } from './Calendar';
 import { Cabin, Room, useGetRooms } from '../new/state/getRoomData';
-import { ANY_ROOM } from '@@/db/models/Room/CABIN_DATA';
+import { ANY_ROOM } from '@epc/types/cabins';
 
 import RoomSwatch from './RoomSwatch';
 
@@ -107,11 +107,11 @@ export default function TimelineRoomRow({
                   <RoomSwatch cabinOrRoomId={cr?.id} />
                   <span>
                     {cr?.name !== ANY_ROOM ? (
-                      cr?.name ?? (
+                      (cr?.name ?? (
                         <span className="text-sm !font-normal">
                           No room data
                         </span>
-                      )
+                      ))
                     ) : (
                       <em>any room</em>
                     )}

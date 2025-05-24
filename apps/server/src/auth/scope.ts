@@ -1,4 +1,4 @@
-import { ResolverContext } from '@@/db/graph';
+import { ResolverContext } from '##/db/graph.js';
 
 export type ScopeObject = ResolverContext['scope'];
 

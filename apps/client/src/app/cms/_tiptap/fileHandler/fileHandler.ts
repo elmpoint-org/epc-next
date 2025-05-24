@@ -1,7 +1,7 @@
 'use client';
 
 import { prettyError } from '@/util/prettyErrors';
-import { IMAGE_TYPES } from '@@/s3/FILE_TYPES';
+import { IMAGE_TYPES } from '@epc/types/s3';
 import { notifications } from '@mantine/notifications';
 import FileHandlerRoot, {
   type FileHandlePluginOptions,

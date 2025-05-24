@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { err, t } from '../trpc';
 
-import { graph } from '@@/db/graph';
-import { graphql } from '@@/db/lib/utilities';
-import { signReferralToken, signToken } from '@@/auth/sign';
-import { verifyReferralToken } from '@@/auth/verify';
-import { emails } from '@@/email';
+import { graph } from '##/db/graph.js';
+import { graphql } from '##/db/lib/utilities.js';
+import { signReferralToken, signToken } from '##/auth/sign.js';
+import { verifyReferralToken } from '##/auth/verify.js';
+import { emails } from '##/email/index.js';
 
 export const checkReferral = t.procedure
   .input(z.object({ email: z.string() }))

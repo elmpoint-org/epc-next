@@ -1,7 +1,7 @@
-import { Room } from '@@/db/__types/graphql-types';
-import Model from '@@/db/lib/Model';
+import { Room } from '##/db/__types/graphql-types.js';
+import Model from '##/db/lib/Model.js';
 
-import { ROOT_CABIN_ID as RCI } from './CABIN_DATA';
+import { ROOT_CABIN_ID as RCI } from '@epc/types/cabins';
 
 export type DBRoom = Room & {
   cabinId: string;

@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { err, t } from '../trpc';
 
-import { graph } from '@@/db/graph';
-import { graphql } from '@@/db/lib/utilities';
-import { passwordless, passwordlessSendMagicLink } from '@@/auth/passkeys';
-import { signToken } from '@@/auth/sign';
+import { graph } from '##/db/graph.js';
+import { graphql } from '##/db/lib/utilities.js';
+import { passwordless, passwordlessSendMagicLink } from '##/auth/passkeys.js';
+import { signToken } from '##/auth/sign.js';
 
 function unauth(error?: any) {
   if (typeof error !== 'undefined') console.log(error);

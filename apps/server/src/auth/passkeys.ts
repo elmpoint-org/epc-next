@@ -1,12 +1,13 @@
-import { EMAIL_LOGIN_EXPIRE } from '@@/CONSTANTS';
-import { emails } from '@@/email';
-import { siteDomain } from '@@/util/dev';
+import { EMAIL_LOGIN_EXPIRE } from '##/CONSTANTS.js';
+import { emails } from '##/email/index.js';
+import { siteDomain } from '##/util/dev.js';
 import { PasswordlessClient } from '@passwordlessdev/passwordless-nodejs';
 import axios from 'axios';
 import qs from 'qs';
+import { Resource } from 'sst';
 
 export const PASSWORDLESS_API = 'https://v4.passwordless.dev';
-export const PASSWORDLESS_SECRET = process.env.PASSWORDLESS_SECRET;
+export const PASSWORDLESS_SECRET = Resource.SecretPasswordlessSecret.value;
 
 export const passwordless = new PasswordlessClient(PASSWORDLESS_SECRET!, {
   baseUrl: PASSWORDLESS_API,

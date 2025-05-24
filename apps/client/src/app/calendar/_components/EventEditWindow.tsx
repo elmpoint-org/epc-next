@@ -12,7 +12,7 @@ import { ROOM_FRAGMENT } from '../new/state/getRoomData';
 import { notifications } from '@mantine/notifications';
 import { InitialStayValue } from '../new/state/formCtx';
 import { dateTSLocal } from '../_util/dateUtils';
-import { CUSTOM_ROOM_OBJ } from '@@/db/models/Room/CABIN_DATA';
+import { CUSTOM_ROOM_OBJ } from '@epc/types/cabins';
 
 import FloatingWindow from '@/app/_components/_base/FloatingWindow';
 

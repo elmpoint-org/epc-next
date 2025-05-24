@@ -6,7 +6,7 @@ import { Inside } from '@/util/inferTypes';
 import { ResultOf } from '@graphql-typed-document-node/core';
 import { keepPreviousData } from '@tanstack/react-query';
 import { sortAlphabetical } from '@/util/sort';
-import { ANY_ROOM } from '@@/db/models/Room/CABIN_DATA';
+import { ANY_ROOM } from '@epc/types/cabins';
 
 // QUERIES
 

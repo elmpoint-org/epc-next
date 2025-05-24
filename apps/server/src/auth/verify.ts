@@ -2,10 +2,11 @@ import { TextEncoder } from 'node:util';
 import * as jose from 'jose';
 import { z } from 'zod';
 
-import { validate } from '@@/util/validate';
+import { validate } from '##/util/validate.js';
 import { getUserSecret, reject } from './utilities';
+import { Resource } from 'sst';
 
-const { USER_AUTH_SECRET } = process.env;
+const USER_AUTH_SECRET = Resource.SecretUserAuthSecret.value;
 
 /**
  * verifies authorization header requests. will either return user info or throw an error.

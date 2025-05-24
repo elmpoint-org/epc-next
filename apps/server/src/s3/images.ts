@@ -1,4 +1,4 @@
-import { IMAGE_TYPES } from './FILE_TYPES';
+import { IMAGE_TYPES } from '@epc/types/s3';
 import { Buckets, checkFileType } from './s3';
 
 // CONSTANTS
