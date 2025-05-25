@@ -66,10 +66,14 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
     ```
     pnpm install
     ```
-1.  **Configure to use the public API.** Running the full Elm Point server locally requires substantially more setup and comfort with AWS, none of which is currently automated. It is much easier to instead use the public server API while you're working. To enable this, add the following line to the `client/.env` file:
+1.  **Configure to use the public API.** Running the full Elm Point server locally requires substantially more setup and comfort with AWS, none of which is currently automated. It is much easier to instead use the public server API while you're working.
+
+    To enable this, add the following line to your `.env` file from earlier:
+
     ```
     NEXT_PUBLIC_USE_PUBLIC_API=1
     ```
+
 1.  **Run the development server.** Open a terminal in the root project directory, and run:
     ```
     pnpm dev-client

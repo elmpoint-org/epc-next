@@ -8,7 +8,8 @@
     "test": "turbo test",
     "build": "turbo build",
     "push": "sst deploy",
-    "dev": "turbo dev:sst dev:turbo",
+    "dev": "turbo dev:sst dev:gql",
+    "dev-client": "turbo dev-client",
     "dev:sst": "sst dev --stage=development --mode=mono"
   },
   "packageManager": "pnpm@10.11.0",

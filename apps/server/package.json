@@ -4,7 +4,7 @@
   "scripts": {
     "gql:gen": "gql.tada generate-output",
     "gql:pregen": "graphql-codegen -c ./src/db/codegen.ts",
-    "dev:turbo": "pnpm gql:pregen --watch",
+    "dev:gql": "pnpm gql:pregen --watch",
     "email:dev": "email dev --dir \"src/email/templates\" --port 3008",
     "test": "tsc --noEmit"
   },

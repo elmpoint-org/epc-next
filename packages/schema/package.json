@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "gql:pregen": "sst shell --stage=development tsx --print-logs generate.ts",
-    "dev:turbo": "chokidar '../../apps/server/src/db/models/**/*' -c 'pnpm gql:pregen'"
+    "dev:gql": "chokidar '../../apps/server/src/db/models/**/*' -c 'pnpm gql:pregen'"
   },
   "dependencies": {
     "@epc/server": "workspace:*",
