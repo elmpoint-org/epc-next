@@ -77,7 +77,7 @@ export default function EventPopup({
           padding: '0.5rem',
         }}
         className={clx(
-          'z-[199] flex w-96 flex-col !overflow-hidden rounded-xl border border-slate-300 bg-dwhite shadow-2xl',
+          'z-[199] flex w-[25rem] flex-col !overflow-hidden rounded-xl border border-slate-300 bg-dwhite shadow-2xl',
           /* transition */ 'translate-y-0 transition data-[closed]:-translate-y-2 data-[closed]:opacity-0',
         )}
       >
@@ -206,22 +206,25 @@ export default function EventPopup({
                         r.room && 'id' in r.room && r.room.id === highlightRoom;
                       const rcId =
                         r.room && 'id' in r.room
-                          ? r.room?.cabin?.id ?? r.room?.id
+                          ? (r.room?.cabin?.id ?? r.room?.id)
                           : undefined;
                       const css = getCabinColorObject(rcId);
 
                       return (
                         <div
                           key={i}
-                          className="group grid grid-cols-[min-content_1fr] gap-x-3 gap-y-2 rounded-lg border border-slate-300 p-4"
+                          className={clmx(
+                            'group grid grid-cols-[min-content_1fr] gap-x-3 gap-y-2 rounded-lg border border-slate-300 p-4',
+                            highlighted && css?.selected,
+                          )}
                           data-h={highlighted || null}
                         >
                           {/* person's name */}
                           <IconUser
-                            stroke={1.5}
+                            stroke={highlighted ? 2 : 1.5}
                             className="size-4 self-center"
                           />
-                          <span>
+                          <span className="leading-snug">
                             {r.name}
                             {!r.name.length && (
                               <span className="italic">no name</span>
@@ -234,15 +237,10 @@ export default function EventPopup({
                             {'text' in r.room! ? (
                               <div className="italic">{r.room.text}</div>
                             ) : (
-                              <div
-                                className={clmx(
-                                  '-mx-2 -my-1 flex max-w-fit flex-row items-center gap-1 rounded-md border border-transparent px-2 py-1',
-                                  highlighted && css?.selected,
-                                )}
-                              >
+                              <div className="-mx-2 -my-1 max-w-fit rounded-md border border-transparent px-2 py-1 leading-normal">
                                 <RoomSwatch
                                   cabinOrRoomId={rcId}
-                                  className="mr-1"
+                                  className="mb-px mr-1.5 inline-block"
                                 />
                                 {r.room?.cabin && (
                                   <>
@@ -254,7 +252,7 @@ export default function EventPopup({
                                     >
                                       {r.room.cabin.name}
                                     </span>
-                                    <span>&bull;</span>
+                                    <span className="mx-1">&bull;</span>
                                   </>
                                 )}
                                 <span>{r.room?.name}</span>

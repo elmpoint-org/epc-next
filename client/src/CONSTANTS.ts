@@ -18,3 +18,4 @@ export const CALENDAR_DEFAULT_DAYS_MOBILE = 4;
 
 // the default view to show in the calendar
 export const CALENDAR_DEFAULT_VIEW: ViewType = 'OVERVIEW';
+export const CALENDAR_DEFAULT_VIEW_MOBILE: ViewType = 'AGENDA';

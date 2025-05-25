@@ -4,7 +4,10 @@ import { useWindowSize } from '@uidotdev/usehooks';
 
 import { breakpoints } from '@/util/tailwindVars';
 import { QP } from '../_components/Calendar';
-import { CALENDAR_DEFAULT_VIEW } from '@/CONSTANTS';
+import {
+  CALENDAR_DEFAULT_VIEW,
+  CALENDAR_DEFAULT_VIEW_MOBILE,
+} from '@/CONSTANTS';
 
 export function useDisplayByRooms() {
   const windowSize = useWindowSize();
@@ -39,14 +42,19 @@ export function useCalendarView() {
   const sq = useSearchParams();
   const router = useRouter();
 
+  // responsive default
+  const windowSize = useWindowSize();
+  const defaultView: ViewType =
+    (windowSize.width ?? 0) > breakpoints('sm')
+      ? CALENDAR_DEFAULT_VIEW
+      : CALENDAR_DEFAULT_VIEW_MOBILE;
+
   const Key: QP = 'view';
 
   const state = useMemo<ViewType>(() => {
     const str = sq.get(Key);
-    return allViews.includes(str as any)
-      ? (str as ViewType)
-      : CALENDAR_DEFAULT_VIEW;
-  }, [sq]);
+    return allViews.includes(str as any) ? (str as ViewType) : defaultView;
+  }, [defaultView, sq]);
   function set(nv: ViewType) {
     const query = new URLSearchParams(sq);
     query.set(Key, nv);

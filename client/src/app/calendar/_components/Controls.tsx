@@ -73,7 +73,9 @@ export default function Controls(props: CalendarProps) {
   const [isRoomLoading, roomLoading] = useTransition();
   const [displayByRoom, setDisplayByRoom] = useDisplayByRooms();
   function updateByRoom(nv: boolean) {
-    roomLoading(async () => setDisplayByRoom(nv));
+    roomLoading(() => {
+      setDisplayByRoom(nv);
+    });
   }
 
   const [view, setView] = useCalendarView();
