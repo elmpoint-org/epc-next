@@ -7,6 +7,7 @@
     "gql:gen": "turbo gql:gen",
     "test": "turbo test",
     "build": "turbo build",
+    "push": "sst deploy",
     "dev": "turbo dev:sst dev:turbo",
     "dev:sst": "sst dev --stage=development --mode=mono"
   },
