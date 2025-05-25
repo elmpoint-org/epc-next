@@ -214,7 +214,7 @@ export const getUserAvatarUrl = h<M.UserResolvers['avatarUrl']>(
     const hash = createHash('sha256')
       .update(email.trim().toLowerCase())
       .digest('hex');
-    const url = `https://gravatar.com/avatar/${hash}?s=256&d=https%3A%2F%2Fone.elmpoint.xyz%2Fmp.png`;
+    const url = `https://gravatar.com/avatar/${hash}?s=256&d=https%3A%2F%2Fwww.elmpoint.xyz%2Fmp.png`;
 
     return url;
   }

@@ -8,7 +8,7 @@ export const server = new sst.aws.ApiGatewayV2('Server', {
   cors: true,
   domain: isProd()
     ? {
-        name: 'api2.elmpoint.xyz',
+        name: 'api.elmpoint.xyz',
         dns: false,
         cert: SecretMap.SecretDomainARN.value,
       }

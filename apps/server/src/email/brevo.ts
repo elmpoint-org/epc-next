@@ -1,16 +1,6 @@
-import {
-  SendSmtpEmail,
-  SendSmtpEmailSender,
-  TransactionalEmailsApi,
-} from '@getbrevo/brevo';
 import { Resource } from 'sst';
 
-const { BREVO_API_KEY } = process.env;
-
-let brevo = new TransactionalEmailsApi();
-brevo.setApiKey(0, Resource.SecretBrevoAPIKey.value);
-
-const sender: SendSmtpEmailSender = {
+const sender = {
   name: 'Elm Point',
   email: 'noreply@elmpoint.xyz',
 };
@@ -23,14 +13,20 @@ export async function sendRawEmail(props: {
 }) {
   const { to, subject, html, text } = props;
 
-  const email = new SendSmtpEmail();
-  email.sender = sender;
-  email.to = Array.isArray(to)
-    ? to.map((email) => ({ email }))
-    : [{ email: to }];
-  email.subject = subject;
-  email.htmlContent = html;
-  email.textContent = text;
+  await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
 
-  await brevo.sendTransacEmail(email);
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      'api-key': Resource.SecretBrevoAPIKey.value,
+    },
+    body: JSON.stringify({
+      sender: sender,
+      to: Array.isArray(to) ? to.map((email) => ({ email })) : [{ email: to }],
+      htmlContent: html,
+      textContent: text,
+      subject: subject,
+    }),
+  });
 }

@@ -1,5 +1,6 @@
-import { server } from '../server';
 import { isProd } from './isProd';
+
+import { server } from '../server';
 
 export function environment() {
   return {
