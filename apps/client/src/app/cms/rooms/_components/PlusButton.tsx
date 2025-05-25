@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, type JSX } from 'react';
 
 import { Button, ButtonProps } from '@mantine/core';
 import { IconLoader2, IconPlus } from '@tabler/icons-react';

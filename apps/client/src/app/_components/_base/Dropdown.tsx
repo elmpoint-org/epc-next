@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, type JSX } from 'react';
 import { Menu, MenuItem, MenuItems } from '@headlessui/react';
 
 import { clmx } from '@/util/classConcat';

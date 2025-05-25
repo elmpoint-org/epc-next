@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { Transition } from '@headlessui/react';
 import { IconLoader2 } from '@tabler/icons-react';
 

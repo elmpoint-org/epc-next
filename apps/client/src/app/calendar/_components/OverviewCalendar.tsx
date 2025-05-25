@@ -48,9 +48,13 @@ export default function OverviewCalendar({
         isToday: d.date === dateTS(new Date()),
         inMonth:
           dateTSObject(d.date).month() === dateTSObject(firstOfMonth).month(),
-        events: [...d.unchanged, ...d.arrivals, ...d.departures].sort(
-          alphabetical((d) => colorIds?.[d.id] ?? 'zzz'),
-        ),
+        events: [...d.unchanged, ...d.arrivals, ...d.departures]
+          .reduce(
+            (arr, cur) =>
+              arr.some((e) => e.id === cur.id) ? arr : [...arr, cur],
+            [] as EventType[],
+          )
+          .sort(alphabetical((d) => colorIds?.[d.id] ?? 'zzz')),
       };
     },
     true,

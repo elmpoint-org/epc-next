@@ -28,10 +28,10 @@ export default function PageStats({ page }: { page: PagePropType }) {
                   {page.contributors
                     .filter((it) => it?.name?.length)
                     .map((it) => (
-                      <>
-                        <em key={it!.id}>{it!.name}</em>
+                      <Fragment key={it!.id}>
+                        <em>{it!.name}</em>
                         <span className="last:hidden">, </span>
-                      </>
+                      </Fragment>
                     ))}
                 </span>
               </>
