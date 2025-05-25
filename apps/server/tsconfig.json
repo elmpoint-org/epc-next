@@ -5,6 +5,7 @@
     "module": "ESNext",
     "rootDir": ".",
     "outDir": "./.dist",
+    "skipLibCheck": true,
     "maxNodeModuleJsDepth": 1,
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",

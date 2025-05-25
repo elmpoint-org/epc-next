@@ -8,6 +8,8 @@
         "@epc/schema#gql:pregen"
       ]
     },
+    "test": {},
+    "build": {},
     "dev:turbo": {
       "cache": false,
       "persistent": true

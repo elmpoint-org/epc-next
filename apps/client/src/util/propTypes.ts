@@ -5,17 +5,17 @@ export type Children = {
 };
 
 export type SearchParams = {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export type PageParams = {
-  params: { [key: string]: string };
+  params: Promise<{ [key: string]: string }>;
 };
 export type PageArrayParams = {
-  params: { [key: string]: string[] };
+  params: Promise<{ [key: string]: string[] }>;
 };
 export type PageArrayOptParams = {
-  params: { [key: string]: string[] | undefined };
+  params: Promise<{ [key: string]: string[] | undefined }>;
 };
 
 export type Key = {

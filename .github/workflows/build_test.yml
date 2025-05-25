@@ -8,13 +8,18 @@ on:
 
 jobs:
   build:
-    defaults:
-      run:
-        working-directory: ./client
     runs-on: ubuntu-latest
     steps:
       # prepare codebase
       - uses: actions/checkout@v4.1.6
+
+      - name: turbo cache
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       # install libraries
       - uses: pnpm/action-setup@v4.0.0
@@ -33,8 +38,8 @@ jobs:
       # tests
       - name: check types
         run: |
-          pnpm tsc --noEmit
-      - name: next build
+          pnpm test
+      - name: full next build
         if: github.event.pull_request.draft == false
         run: |
           pnpm build

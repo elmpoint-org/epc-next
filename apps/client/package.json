@@ -4,7 +4,7 @@
   "scripts": {
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "test": "tsc --noEmit",
     "dev": "next dev -p 3001",
     "gql:gen": "gql.tada generate-output"
   },

@@ -8,6 +8,11 @@
       "outputs": [
         "graphql-schema.d.ts"
       ]
+    },
+    "build": {
+      "outputs": [
+        ".next/**"
+      ]
     }
   }
 }

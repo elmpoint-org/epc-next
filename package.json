@@ -5,6 +5,8 @@
     "tt": "turbo run",
     "postinstall": "turbo gql:pregen gql:gen",
     "gql:gen": "turbo gql:gen",
+    "test": "turbo test",
+    "build": "turbo build",
     "dev": "turbo dev:sst dev:turbo",
     "dev:sst": "sst dev --stage=development --mode=mono"
   },
