@@ -7,7 +7,7 @@ import { brevo } from '.';
 import { el } from './components/getElement';
 import { Resource } from 'sst';
 
-const resend = new Resend(Resource.SecretResendAPIKey.value ?? 'DEVELOPMENT');
+const resend = new Resend(Resource.SecretResendAPIKey.value);
 
 export async function send(
   { ...props }: { from: Senders } & CreateEmailOptions,

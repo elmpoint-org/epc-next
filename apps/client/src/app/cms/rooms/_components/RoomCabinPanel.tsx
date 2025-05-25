@@ -281,7 +281,7 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
                     <A
                       target="_blank"
                       rel="noopener noreferrer"
-                      href="https://github.com/elmpoint-org/epc-next/blob/main/client/src/app/calendar/_util/cabinColors.ts#L3"
+                      href="https://github.com/elmpoint-org/epc-next/blob/main/apps/client/src/app/calendar/_util/cabinColors.ts#L3"
                     >
                       directly on GitHub
                     </A>
