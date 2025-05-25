@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "incremental": true,
+    "module": "NodeNext",
+    "moduleResolution": "nodenext"
+  }
+}

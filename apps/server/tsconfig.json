@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "rootDir": ".",
+    "outDir": "./.dist",
+    "skipLibCheck": true,
+    "maxNodeModuleJsDepth": 1,
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "paths": {
+      "graphql-modules": ["./node_modules/graphql-modules/index.d.ts"]
+    },
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "../../schema.graphql",
+        "tadaOutputLocation": "./graphql-schema.d.ts",
+        "trackFieldUsage": false,
+        "shouldCheckForColocatedFragments": false
+      }
+    ]
+  },
+  "exclude": ["node_modules"]
+}

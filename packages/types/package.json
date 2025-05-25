@@ -1,0 +1,12 @@
+{
+  "name": "@epc/types",
+  "private": true,
+  "scripts": {},
+  "exports": {
+    "./cabins": "./src/cabins.ts",
+    "./s3": "./src/s3.ts"
+  },
+  "dependencies": {
+    "@epc/mime": "workspace:*"
+  }
+}

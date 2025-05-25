@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": [
+    "//"
+  ],
+  "tasks": {
+    "gql:pregen": {
+      "outputs": [
+        "$TURBO_ROOT$/schema.graphql"
+      ]
+    }
+  }
+}

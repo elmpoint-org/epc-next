@@ -1,0 +1,18 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": [
+    "//"
+  ],
+  "tasks": {
+    "gql:gen": {
+      "outputs": [
+        "graphql-schema.d.ts"
+      ]
+    },
+    "build": {
+      "outputs": [
+        ".next/**"
+      ]
+    }
+  }
+}
