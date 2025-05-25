@@ -4,8 +4,8 @@ export const isUsingPublicApi = !!process.env.NEXT_PUBLIC_USE_PUBLIC_API;
 
 export const api = !isUsingPublicApi
   ? process.env.NEXT_PUBLIC_SERVER_API_URL
-  : 'https://api.elmpoint.xyz/one';
+  : 'https://api.elmpoint.xyz';
 
 export const siteDomain = isDev
   ? 'http://localhost:3001'
-  : 'https://one.elmpoint.xyz';
+  : 'https://www.elmpoint.xyz';

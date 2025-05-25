@@ -5,7 +5,7 @@ export default $config({
     const { isProd } = await import('./iac/util/isProd');
 
     return {
-      name: 'epc2',
+      name: 'epc',
       removal: isProd(input?.stage ?? '') ? 'retain' : 'remove',
       home: 'aws',
     };
