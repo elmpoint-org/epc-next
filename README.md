@@ -35,8 +35,7 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
 1.  **Get the code.** Fork the repository and clone your fork—see the [PR guide](#submitting-local-changes) below for more.
 1.  **Download required software.** To run the software, you'll need
     - [Node.js](https://nodejs.org/) - The most recent LTS version will probably work.
-    - [PNPM](https://pnpm.io) - This is the package manager that manages project dependencies. It is usually easiest to install with [corepack](https://pnpm.io/installation#using-corepack).
-    - [SST Ion](https://sst.dev/docs/reference/cli/) - This software is used to manage the server processing for the website. Pending a migration to the new version, please install using the bash script. Reference the [deployment script](https://github.com/elmpoint-org/epc-next/blob/main/.github/workflows/deploy_client.yml#L33) for the correct version.
+    - [PNPM](https://pnpm.io) - This is the package manager that manages project dependencies.
     - (recommended) [Visual Studio Code](https://code.visualstudio.com/) - VSCode settings and extensions come with the project to get you running fastest.
 1.  **Add AWS Credentials.** In order to run build tests, SST uses an AWS account to manage a few assets in development. You'll need an AWS Account for this, but no created assets will surpass the standard AWS free tier.
 
@@ -45,20 +44,24 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
     1. Create an IAM user ([tutorial](https://guide.sst.dev/chapters/create-an-iam-user.html)) with administrator access.
 
     1. Register the IAM user in your environment.
-       You can do this by creating the file `client/.env`, which should look like this:
 
-    ```sh
-    # if you only use this AWS account for this project...
-    AWS_ACCESS_KEY_ID=abc123
-    AWS_SECRET_ACCESS_KEY=abc123
+       Create a new file called `.env` in the root project folder.
 
-    # -- OR --
+       Fill in the file with one of the two formats below based on your preference:
 
-    # if you have already regstered an AWS profile on your machine...
-    AWS_PROFILE=your-profile-name-here
-    ```
+       ```sh
+       # if you only use this AWS account for this project...
+       AWS_ACCESS_KEY_ID=abc123
+       AWS_SECRET_ACCESS_KEY=abc123
 
-1.  **Create a Tiptap account.** The site uses Tiptap for rich text editing, and they require that you create a free account to access their code. Follow Tiptap's instructions [here](https://tiptap.dev/docs/guides/pro-extensions#configure-per-project-authentication) to do so.
+       # -- OR --
+
+       # if you have already regstered an AWS profile on your machine...
+       AWS_PROFILE=your-profile-name-here
+       ```
+
+1.  **Create a Tiptap account.** The site uses Tiptap for rich text editing, and they require that you create a free account to access their code. Follow Tiptap's instructions [here](https://tiptap.dev/docs/guides/pro-extensions#configure-global-authentication)—use the commands for _pnpm_.
+
 1.  **Install project dependencies.** Run the following command in the root project folder to install the required dependencies:
     ```
     pnpm install
@@ -75,15 +78,13 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
 
 ### Using the API
 
-The server API is accessible through a GraphQL endpoint, which is easiest to explore using the [Apollo Editor](https://studio.apollographql.com/sandbox/explorer?endpoint=https%3A%2F%2Fapi.elmpoint.xyz%2Fone%2Fgql) (or any other introspection viewer.) 
+The server API is accessible through a GraphQL endpoint, which is easiest to explore using the [Apollo Editor](https://studio.apollographql.com/sandbox/explorer?endpoint=https%3A%2F%2Fapi.elmpoint.xyz%2Fone%2Fgql) (or any other introspection viewer.)
 
 The endpoint above allows you to explore the available commands and documentation as is, but in order to run commands you'll need to add your authentication token like so:
 ![connection settings](https://github.com/user-attachments/assets/71717eb9-8285-4752-87e7-6754b4c2ca0f)
 ![add authorization token](https://github.com/user-attachments/assets/dd1027b4-e249-4117-b2a1-c4464320ed3e)
 
-You can find your authorization token in your browser's cookies. 
-
-
+You can find your authorization token in your browser's cookies.
 
 ### Submitting local changes
 
