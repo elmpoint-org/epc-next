@@ -1,4 +1,4 @@
-export const isDev = process.env.NEXT_PUBLIC_IS_DEV;
+export const isDev = !!process.env.NEXT_PUBLIC_IS_DEV;
 
 export const isUsingPublicApi = !!process.env.NEXT_PUBLIC_USE_PUBLIC_API;
 
