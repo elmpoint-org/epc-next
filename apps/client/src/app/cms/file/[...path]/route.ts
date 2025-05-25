@@ -6,10 +6,13 @@ import { graphAuthServer } from '@/query/graphql.server';
 import { PageArrayParams } from '@/util/propTypes';
 import { err } from '@/util/routeErr';
 
-export async function GET(
-  req: Request,
-  { params: { path: path_in } }: PageArrayParams,
-) {
+export async function GET(req: Request, props: PageArrayParams) {
+  const params = await props.params;
+
+  const {
+    path: path_in
+  } = params;
+
   const path = path_in.join('/');
 
   const { data, errors } = await graphAuthServer(

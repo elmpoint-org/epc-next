@@ -6,9 +6,13 @@ export const metadata: Metadata = {
   title: 'Files',
 };
 
-export default function FilesPage({
-  params: { folder: folder_in },
-}: PageArrayOptParams) {
+export default async function FilesPage(props: PageArrayOptParams) {
+  const params = await props.params;
+
+  const {
+    folder: folder_in
+  } = params;
+
   const folder =
     '/' + (folder_in?.map((f) => decodeURIComponent(f)).join('/') ?? '');
 

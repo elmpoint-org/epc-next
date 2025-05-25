@@ -6,7 +6,8 @@ import A from '@/app/_components/_base/A';
 
 export const metadata: Metadata = { title: 'Sign up' };
 
-export default function RegisterPage({ searchParams }: SearchParams) {
+export default async function RegisterPage(props: SearchParams) {
+  const searchParams = await props.searchParams;
   let initialEmail = searchParams.email;
   if (typeof initialEmail !== 'string') initialEmail = undefined;
 

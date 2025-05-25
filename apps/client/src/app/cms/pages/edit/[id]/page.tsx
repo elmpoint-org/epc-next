@@ -12,7 +12,13 @@ export const metadata: Metadata = {
   title: 'Edit page',
 };
 
-export default async function EditPagePage({ params: { id } }: PageParams) {
+export default async function EditPagePage(props: PageParams) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const data = await oldGraphAuthServer(
     graphql(`
       query CmsPage($id: ID!) {

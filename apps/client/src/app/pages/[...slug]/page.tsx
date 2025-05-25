@@ -49,7 +49,13 @@ const getPage = cache(async (slug: string) => {
 });
 
 // COMPONENT
-export default async function CmsPage({ params: { slug } }: PageArrayParams) {
+export default async function CmsPage(props: PageArrayParams) {
+  const params = await props.params;
+
+  const {
+    slug
+  } = params;
+
   // attempt to find page
   const { page, error } = await getPage(slug.join('/'));
   if (error === 'NEED_PERMISSION') return <LoginBoundaryRedirect />;
@@ -103,7 +109,13 @@ export default async function CmsPage({ params: { slug } }: PageArrayParams) {
   );
 }
 
-export async function generateMetadata({ params: { slug } }: PageArrayParams) {
+export async function generateMetadata(props: PageArrayParams) {
+  const params = await props.params;
+
+  const {
+    slug
+  } = params;
+
   const { page: data } = await getPage(slug.join('/'));
   const t = data?.title;
   if (t?.length) return { title: t };

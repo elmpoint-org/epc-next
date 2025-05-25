@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   title: 'Create your account',
 };
 
-export default async function ActivationPage({ searchParams }: SearchParams) {
+export default async function ActivationPage(props: SearchParams) {
+  const searchParams = await props.searchParams;
   const preUser = await verifyToken(searchParams.token);
 
   return (
