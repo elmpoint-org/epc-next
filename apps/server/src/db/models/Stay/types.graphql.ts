@@ -66,6 +66,13 @@ export default gql`
     get the most recent update timestamp after the provided time.
     """
     stayMostRecentTimestamp(after: Int!): Int!
+
+    """
+     **SCOPE: CALENDAR_ADMIN | userId=authorId**
+
+    get all stays created by a certain author.
+    """
+    staysFromAuthor(authorId: String!): [Stay!]!
   }
 
   type Mutation {

@@ -2,7 +2,7 @@
   "name": "epc",
   "private": true,
   "scripts": {
-    "tt": "turbo run",
+    "tr": "turbo run",
     "postinstall": "turbo gql:pregen gql:gen",
     "gql:gen": "turbo gql:gen",
     "test": "turbo test",
@@ -10,6 +10,7 @@
     "push": "sst deploy",
     "dev": "turbo dev:sst dev:gql",
     "dev-client": "turbo dev-client",
+    "dev-email": "turbo dev:email",
     "dev:sst": "sst dev --stage=development --mode=mono"
   },
   "packageManager": "pnpm@10.11.0",
