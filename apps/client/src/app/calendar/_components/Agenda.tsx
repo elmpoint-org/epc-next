@@ -167,9 +167,9 @@ type AgendaEventProps = {
   event: EventType;
   fr?: ForwardedRef<HTMLButtonElement>;
 } & React.ComponentPropsWithoutRef<'button'>;
-const AgendaEvent = forwardRef<HTMLButtonElement, AgendaEventProps>((p, r) => (
-  <AgendaEventFR {...p} fr={r} />
-));
+export const AgendaEvent = forwardRef<HTMLButtonElement, AgendaEventProps>(
+  (p, r) => <AgendaEventFR {...p} fr={r} />,
+);
 AgendaEvent.displayName = 'AgendaEvent';
 function AgendaEventFR({ event, className, ...props }: AgendaEventProps) {
   const colorId = useEventColorId(event);

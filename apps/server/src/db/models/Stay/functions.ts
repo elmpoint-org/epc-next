@@ -88,6 +88,23 @@ export const getStayMostRecentTimestamp = h<
   return recent;
 });
 
+export const getStaysFromAuthor = h<M.QueryResolvers['staysFromAuthor']>(
+  loggedIn(),
+  async ({ sources, args: { authorId }, userId, scope }) => {
+    if (authorId !== userId && !scopeDiff(scope, 'ADMIN', 'CALENDAR_ADMIN'))
+      throw scopeError();
+
+    // make sure that authorId is valid
+    if (!authorId.length) throw err('MISSING_AUTHOR');
+    const author = await sources.user.get(authorId);
+    if (!author) throw err('AUTHOR_NOT_FOUND');
+
+    // get matching stays
+    const stays = await sources.stay.findBy('authorId', author.id);
+    return stays;
+  }
+);
+
 export const stayCreate = h<M.MutationResolvers['stayCreate']>(
   loggedIn(),
   async ({ sources, args: fields }) => {

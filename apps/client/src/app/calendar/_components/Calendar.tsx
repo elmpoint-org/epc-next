@@ -29,41 +29,49 @@ import {
   useGlobalKeyboardShortcuts,
 } from '@/app/_ctx/globalKeyboard';
 
-export const EVENTS_QUERY = graphql(`
-  query Stays($start: Int!, $end: Int!) {
-    stays(start: $start, end: $end) {
+export const CALENDAR_EVENT_FRAGMENT = graphql(`
+  fragment CalendarEvent on Stay @_unmask {
+    id
+    title
+    description
+    author {
       id
-      title
-      description
-      author {
+      name
+      avatarUrl
+      trustedUsers {
         id
-        name
-        avatarUrl
-        trustedUsers {
-          id
-        }
       }
-      dateStart
-      dateEnd
-      reservations {
-        name
-        room {
-          ... on Room {
+    }
+    dateStart
+    dateEnd
+    reservations {
+      name
+      room {
+        ... on Room {
+          id
+          name
+          cabin {
             id
             name
-            cabin {
-              id
-              name
-            }
           }
-          ... on CustomRoom {
-            text
-          }
+        }
+        ... on CustomRoom {
+          text
         }
       }
     }
   }
 `);
+export const EVENTS_QUERY = graphql(
+  `
+    query Stays($start: Int!, $end: Int!) {
+      stays(start: $start, end: $end) {
+        ...CalendarEvent
+      }
+    }
+  `,
+  [CALENDAR_EVENT_FRAGMENT],
+);
 export type EventType = Inside<ResultOf<typeof EVENTS_QUERY>['stays']>;
 
 export const { Provider: InvalidateProvider, useHook: useInvalidate } =

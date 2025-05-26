@@ -1,10 +1,8 @@
 import { Metadata } from 'next';
 
 import LoginBoundary from '@/app/_components/_base/LoginBoundary/LoginBoundary';
-import TrustedList from './_component/TrustedList';
-import IncompleteWarning from '@/app/_components/_base/IncompleteWarning';
-import TrustedByList from './_component/TrustedByList';
 import TrustedWrapper from './_component/TrustedWrapper';
+import ColorText from '@/app/_components/_base/ColorText';
 
 export const metadata: Metadata = {
   title: 'Trusted Users - Account',
@@ -23,9 +21,7 @@ export default function AccountFamilyPage() {
               {/* leader text */}
               <p className="my-4">
                 <span>Your </span>
-                <b className="bg-gradient-to-br from-emerald-500 to-emerald-900 bg-clip-text text-transparent">
-                  trusted users
-                </b>
+                <ColorText>trusted users</ColorText>
                 <span> </span>
                 have your permission to edit your <b>
                   calendar reservations
