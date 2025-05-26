@@ -6,8 +6,15 @@
     "AWS_SECRET_ACCESS_KEY"
   ],
   "tasks": {
-    "gql:pregen": {},
+    "gql:pregen": {
+      "inputs": [
+        "apps/server/db/**"
+      ]
+    },
     "gql:gen": {
+      "inputs": [
+        "apps/server/db/**"
+      ],
       "dependsOn": [
         "@epc/schema#gql:pregen"
       ]
@@ -15,6 +22,10 @@
     "test": {},
     "build": {},
     "dev:gql": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:email": {
       "cache": false,
       "persistent": true
     },
