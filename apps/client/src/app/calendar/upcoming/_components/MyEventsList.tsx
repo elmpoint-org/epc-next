@@ -11,13 +11,9 @@ import { useGraphQuery } from '@/query/query';
 import { useUser } from '@/app/_ctx/user/context';
 import { Popover, PopoverButton } from '@headlessui/react';
 import EventPopup from '../../_components/EventPopup';
-import { Fragment, useMemo } from 'react';
-import { dateFormat, dateTS } from '../../_util/dateUtils';
-import {
-  IconCalendarShare,
-  IconChevronRight,
-  IconLoader2,
-} from '@tabler/icons-react';
+import { useMemo } from 'react';
+import { dateFormat, dateTS, dateTSObject } from '../../_util/dateUtils';
+import { IconCalendarShare, IconLoader2 } from '@tabler/icons-react';
 import { ActionIcon, Tooltip } from '@mantine/core';
 import Link from 'next/link';
 
@@ -82,6 +78,20 @@ export default function MyEventsList() {
 }
 
 function EventButton({ event }: { event?: EventType }) {
+  // get formatted dates, including the year only if needed
+  const formattedDates = useMemo(() => {
+    if (!event) return null;
+    const de = dateTSObject(event.dateEnd);
+    const withYear = de.year() !== new Date().getFullYear();
+    const formats = withYear
+      ? ['MMM D, YYYY', 'MMM D, YYYY']
+      : ['ddd, MMM D', 'ddd, MMM D'];
+    return [
+      dateFormat(event.dateStart, formats[0]),
+      dateFormat(event.dateEnd, formats[1]),
+    ] as const;
+  }, [event]);
+
   return (
     <Popover className="col-span-full grid grid-cols-subgrid">
       <PopoverButton
@@ -89,16 +99,16 @@ function EventButton({ event }: { event?: EventType }) {
         disabled={!event}
       >
         <div
-          className="col-span-2 flex flex-1 grid-cols-subgrid flex-col gap-2 text-left data-[s]:py-0.5 sm:grid sm:items-center sm:gap-12"
+          className="col-span-2 flex flex-1 grid-cols-subgrid flex-col gap-2 truncate text-left data-[s]:py-0.5 sm:grid sm:items-center sm:gap-12"
           data-s={!event || null}
         >
           {/* dates */}
           <div className="flex flex-row items-center gap-2 text-nowrap text-xs text-slate-600 sm:text-sm">
             {event ? (
               <>
-                <div>{dateFormat(event.dateStart, 'ddd, MMM D')}</div>
+                <div>{formattedDates?.[0]}</div>
                 <span className="text-slate-400">&ndash;</span>
-                <div>{dateFormat(event.dateEnd, 'ddd, MMM D')}</div>
+                <div>{formattedDates?.[1]}</div>
               </>
             ) : (
               // skeleton
@@ -109,9 +119,7 @@ function EventButton({ event }: { event?: EventType }) {
           {/* event title */}
           {event ? (
             <>
-              <div className="truncate" title={event.title}>
-                {event.title}
-              </div>
+              <div className="truncate">{event.title}</div>
             </>
           ) : (
             // skeleton
