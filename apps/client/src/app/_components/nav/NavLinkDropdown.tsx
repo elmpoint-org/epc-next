@@ -11,7 +11,7 @@ import NavLink from './NavLink';
 import { useNavLinkScopeCheck } from './isAllowed';
 import { Children } from '@/util/propTypes';
 import Link from 'next/link';
-import { createElement } from 'react';
+import { ComponentPropsWithoutRef, createElement } from 'react';
 
 export default function NavLinkDropdown(item: NavDropdownType) {
   const { text, icon: Icon, links, href } = item;
@@ -39,16 +39,11 @@ export default function NavLinkDropdown(item: NavDropdownType) {
       >
         {/* parent button */}
         <ButtonOrLink
-          className={clx('w-full', !isLink && 'group')}
+          className={clx('w-full', !isLink ? 'group' : 'group/b')}
           href={href}
-          onClick={toggle}
+          onClick={isLink ? open : toggle}
         >
-          <div className="flex flex-row items-center gap-5 px-5 py-2.5 text-left">
-            <div className={clmx('h-5', !!Icon && 'w-5', !Icon && '-mx-1')}>
-              {Icon && <Icon className="h-full" />}
-            </div>
-            <div className="flex-1 leading-none">{text}</div>
-
+          <div className="flex flex-row-reverse items-center gap-5 px-5 py-2.5 text-left">
             {/* open/close button */}
             {createElement(
               isLink ? 'button' : 'div',
@@ -60,7 +55,7 @@ export default function NavLinkDropdown(item: NavDropdownType) {
                 },
                 className: clx(
                   '-m-2.5 flex place-items-center p-2',
-                  isLink && 'group',
+                  isLink && 'group peer',
                 ),
               },
               <>
@@ -72,6 +67,18 @@ export default function NavLinkDropdown(item: NavDropdownType) {
                 </div>
               </>,
             )}
+
+            {/* link text */}
+            <div className="flex-1 group-hover/b:[.peer:not(:hover)~&]:[--bg:0.7]">
+              <span className="-mx-1.5 -my-0.5 block max-w-fit rounded-full bg-emerald-800/[var(--bg,0)] px-1.5 py-0.5 leading-none transition">
+                {text}
+              </span>
+            </div>
+
+            {/* icon  */}
+            <div className={clmx('h-5', !!Icon && 'w-5', !Icon && '-mx-1')}>
+              {Icon && <Icon className="h-full" />}
+            </div>
           </div>
         </ButtonOrLink>
 
@@ -89,17 +96,16 @@ export default function NavLinkDropdown(item: NavDropdownType) {
 }
 
 /** if href is valid, a link will be rendered. */
-function ButtonOrLink({
-  children,
-  className,
-  href,
-  onClick,
-}: { className?: string; onClick?: () => void; href?: string } & Children) {
+function ButtonOrLink(
+  props: ComponentPropsWithoutRef<'button'> & ComponentPropsWithoutRef<'a'>,
+) {
+  const { children, className, href, onClick } = props;
+
   const isLink = typeof href === 'string';
 
   return isLink ? (
     <Link {...{ className, href, onClick }}>{children}</Link>
   ) : (
-    <button {...{ className, onClick }}>{children}</button>
+    <button {...props}>{children}</button>
   );
 }
