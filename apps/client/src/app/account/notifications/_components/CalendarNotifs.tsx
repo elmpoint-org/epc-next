@@ -2,9 +2,11 @@
 
 import { Children } from '@/util/propTypes';
 import { Switch } from '@mantine/core';
-import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithoutRef, useState } from 'react';
 
 export default function CalendarNotifs() {
+  const [isChecked, setIsChecked] = useState(true);
+
   return (
     <>
       <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
@@ -16,6 +18,8 @@ export default function CalendarNotifs() {
         {/* members list */}
         <div className="mt-2 flex flex-col gap-4 px-4 py-2">
           <OptionSwitch
+            checked={isChecked}
+            onChange={({ currentTarget: { checked: c } }) => setIsChecked(c)}
             label={<>Reservation reminders (1 week before)</>}
             description={
               <>
@@ -23,18 +27,18 @@ export default function CalendarNotifs() {
                   Get a reminder a week before your stay to make sure your
                   reservation is still accurate.
                 </span>
-                <span>
+                {/* <span>
                   <b>This is highly recommended!</b> Please be considerate to
                   your fellow campers by ensuring your reservations are
                   up-to-date.
-                </span>
+                </span> */}
               </>
             }
           />
-          <OptionSwitch
+          {/* <OptionSwitch
             label={<>Unexpected edits</>}
             description="Be notified when anyone (other than you) edits one of your calendar reservations."
-          />
+          /> */}
         </div>
       </div>
     </>
