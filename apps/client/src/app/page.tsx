@@ -1,6 +1,6 @@
 import { IconLock } from '@tabler/icons-react';
 
-import { homeLinks } from '@/sample-data/homeLinksData';
+import { homeLinks } from '@/data/homeLinksData';
 
 import A from './_components/_base/A';
 import LogoPanel from './_components/_base/LogoPanel';
