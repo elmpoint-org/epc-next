@@ -27,7 +27,6 @@ export const navLinks: DeepNavLinks = [
   {
     text: 'Calendar',
     icon: IconCalendar,
-    // href: '/calendar',
     links: [
       {
         href: '/calendar',
