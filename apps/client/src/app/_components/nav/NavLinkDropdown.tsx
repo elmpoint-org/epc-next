@@ -9,15 +9,18 @@ import { useIsHere } from './isHere';
 
 import NavLink from './NavLink';
 import { useNavLinkScopeCheck } from './isAllowed';
+import { Children } from '@/util/propTypes';
+import Link from 'next/link';
+import { ComponentPropsWithoutRef, createElement } from 'react';
 
 export default function NavLinkDropdown(item: NavDropdownType) {
-  const { text, icon: Icon, links } = item;
+  const { text, icon: Icon, links, href } = item;
 
   const [isOpen, { toggle, close, open }] = useDisclosure();
 
   const iconProps: IconTypeProps = {
     stroke: 2,
-    className: clx('h-full'),
+    className: clx('h-full w-auto'),
   };
 
   useIsHere(links, (h) => (h ? open() : close()));
@@ -26,6 +29,8 @@ export default function NavLinkDropdown(item: NavDropdownType) {
   const show = useNavLinkScopeCheck(item);
   if (!show) return null;
 
+  const isLink = typeof href === 'string';
+
   return (
     <>
       <div
@@ -33,20 +38,49 @@ export default function NavLinkDropdown(item: NavDropdownType) {
         data-o={isOpen || null}
       >
         {/* parent button */}
-        <button onClick={toggle} className="w-full">
-          <div className="flex flex-row items-center gap-5 px-5 py-2.5 text-left">
+        <ButtonOrLink
+          className={clx('w-full', !isLink ? 'group' : 'group/b')}
+          href={href}
+          onClick={isLink ? open : toggle}
+        >
+          <div className="flex flex-row-reverse items-center gap-5 px-5 py-2.5 text-left">
+            {/* open/close button */}
+            {createElement(
+              isLink ? 'button' : 'div',
+              {
+                onClick: (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggle();
+                },
+                className: clx(
+                  '-m-2.5 flex place-items-center p-2',
+                  isLink && 'group peer',
+                ),
+              },
+              <>
+                <div className="rounded-full p-0.5 text-white/35 transition group-hover:bg-emerald-800/50 group-hover:text-slate-300">
+                  <div className="size-5 ">
+                    {isOpen && <IconChevronDown {...iconProps} />}
+                    {!isOpen && <IconChevronLeft {...iconProps} />}
+                  </div>
+                </div>
+              </>,
+            )}
+
+            {/* link text */}
+            <div className="flex-1 group-hover/b:[.peer:not(:hover)~&]:[--bg:0.7]">
+              <span className="-mx-1.5 -my-0.5 block max-w-fit rounded-full bg-emerald-800/[var(--bg,0)] px-1.5 py-0.5 leading-none transition">
+                {text}
+              </span>
+            </div>
+
+            {/* icon  */}
             <div className={clmx('h-5', !!Icon && 'w-5', !Icon && '-mx-1')}>
               {Icon && <Icon className="h-full" />}
             </div>
-            <div className="flex-1 leading-none">{text}</div>
-
-            {/* closed icon */}
-            <div className="size-5 text-white/35">
-              {isOpen && <IconChevronDown {...iconProps} />}
-              {!isOpen && <IconChevronLeft {...iconProps} />}
-            </div>
           </div>
-        </button>
+        </ButtonOrLink>
 
         {/* dropdown list */}
         <Collapse in={isOpen}>
@@ -58,5 +92,20 @@ export default function NavLinkDropdown(item: NavDropdownType) {
         </Collapse>
       </div>
     </>
+  );
+}
+
+/** if href is valid, a link will be rendered. */
+function ButtonOrLink(
+  props: ComponentPropsWithoutRef<'button'> & ComponentPropsWithoutRef<'a'>,
+) {
+  const { children, className, href, onClick } = props;
+
+  const isLink = typeof href === 'string';
+
+  return isLink ? (
+    <Link {...{ className, href, onClick }}>{children}</Link>
+  ) : (
+    <button {...props}>{children}</button>
   );
 }

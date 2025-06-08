@@ -13,7 +13,7 @@ export type NavLinkType = {
   scope?: boolean | (AuthUser['scope'] & {});
 };
 
-export type NavDropdownType = Omit<NavLinkType, 'href' | 'exact'> & {
+export type NavDropdownType = NavLinkType & {
   links: NavLinkType[];
 };
 
