@@ -22,8 +22,8 @@ function Content({ url, firstName }: { url: string; firstName?: string }) {
         <>
           <Prose>
             <Title>Sign in to your account</Title>
-            <p className="-mb-2">Hi{firstName ? ' ' + firstName : ''}!</p>
-            <p className="pb-2">
+            <p className="-mb-1">Hi{firstName ? ' ' + firstName : ''}!</p>
+            <p className="pb-4">
               Click the link below to sign in to your account.
             </p>
           </Prose>
