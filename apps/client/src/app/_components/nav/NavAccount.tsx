@@ -10,7 +10,7 @@ import {
   IconLogin2,
 } from '@tabler/icons-react';
 
-import { accountNavLinks } from '@/sample-data/navLinksData';
+import { accountNavLinks } from '@/data/navLinksData';
 import { useUser } from '@/app/_ctx/user/context';
 import { useIsHere } from './isHere';
 import NavLink from './NavLink';

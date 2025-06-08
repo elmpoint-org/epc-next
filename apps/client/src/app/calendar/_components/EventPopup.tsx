@@ -213,15 +213,12 @@ export default function EventPopup({
                       return (
                         <div
                           key={i}
-                          className={clmx(
-                            'group grid grid-cols-[min-content_1fr] gap-x-3 gap-y-2 rounded-lg border border-slate-300 p-4',
-                            highlighted && css?.selected,
-                          )}
+                          className="group grid grid-cols-[min-content_1fr] gap-x-3 gap-y-2 rounded-lg border border-slate-300 p-4"
                           data-h={highlighted || null}
                         >
                           {/* person's name */}
                           <IconUser
-                            stroke={highlighted ? 2 : 1.5}
+                            stroke={1.5}
                             className="size-4 self-center"
                           />
                           <span className="leading-snug">
@@ -237,7 +234,12 @@ export default function EventPopup({
                             {'text' in r.room! ? (
                               <div className="italic">{r.room.text}</div>
                             ) : (
-                              <div className="-mx-2 -my-1 max-w-fit rounded-md border border-transparent px-2 py-1 leading-normal">
+                              <div
+                                className={clmx(
+                                  '-mx-2 -my-1 max-w-fit rounded-md border border-transparent px-2 py-1 leading-normal',
+                                  highlighted && css?.selected,
+                                )}
+                              >
                                 <RoomSwatch
                                   cabinOrRoomId={rcId}
                                   className="mb-px mr-1.5 inline-block"

@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # prepare codebase
-      - uses: actions/checkout@v4.1.6
+      - uses: actions/checkout@v4
 
       # install libraries
-      - uses: pnpm/action-setup@v4.0.0
-      - uses: actions/setup-node@v4.0.2
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           cache: 'pnpm'
       - name: authenticate tiptap

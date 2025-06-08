@@ -20,6 +20,6 @@ export async function graphqlAuth(
   }
 
   // add user context and move on
-  const scope = getScopeObject(user.scope as any);
+  const scope = getScopeObject(user.scope ?? []);
   return parse(scope, user.id);
 }

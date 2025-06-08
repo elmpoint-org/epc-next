@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 
 import { AppShell, ScrollArea } from '@mantine/core';
 
-import { navLinks } from '@/sample-data/navLinksData';
+import { navLinks } from '@/data/navLinksData';
 
 import NavLink from './NavLink';
 import NavLinkDropdown from './NavLinkDropdown';
