@@ -57,13 +57,14 @@ type Props = {
 };
 
 const SUBJECT = (ts: number) =>
-  `Your upcoming stay ${formatTS(ts, 'MMMM D')} at Elm Point`;
+  `Upcoming stay at Elm Point on ${formatTS(ts, 'MMMM D')}`;
 function Content({ event }: Props) {
   return (
     <>
       <Preview>
         Hi {event.author?.firstName ?? 'there'}! You have an upcoming stay at
-        Elm Point on {fullDate(event.dateStart)}.
+        Elm Point on {fullDate(event.dateStart)}. Double check that your
+        reservation details are correct!
       </Preview>
       <Wrapper
         children={
@@ -133,7 +134,8 @@ function Content({ event }: Props) {
           <Footer className="!break-normal">
             <p className="max-w-[384px] mx-auto ">
               You’re receiving this message because you have calendar reminders
-              enabled. Click <Link href={siteDomain + '/account'}>here</Link> to
+              enabled. Click{' '}
+              <Link href={siteDomain + '/account/notifications'}>here</Link> to
               edit your notification preferences.
             </p>
           </Footer>
