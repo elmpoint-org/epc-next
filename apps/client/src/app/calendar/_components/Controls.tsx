@@ -46,6 +46,7 @@ import {
   DropdownItems,
   DropdownOption,
 } from '@/app/_components/_base/Dropdown';
+import AddStayButton from './AddStayButton';
 
 export default function Controls(props: CalendarProps) {
   const {
@@ -319,35 +320,7 @@ export default function Controls(props: CalendarProps) {
           <div className="self-stretch border-l border-slate-300"></div>
 
           {/* new stay button */}
-          <Tooltip label="Add new stay">
-            <ActionIcon
-              aria-label="add new stay"
-              color="slate"
-              variant="light"
-              onClick={openNewStay}
-              className="xl:hidden"
-            >
-              <IconPlus />
-            </ActionIcon>
-          </Tooltip>
-
-          <Button
-            size="compact-md"
-            color="slate"
-            variant="light"
-            justify="center"
-            leftSection={<IconPlus />}
-            onClick={openNewStay}
-            className="hidden pr-3 text-sm xl:block"
-          >
-            Add new stay
-          </Button>
-
-          {/* popups */}
-          <EventEditWindow
-            trigger={newStay}
-            showDate={new Date(dateTSLocal(selectedDate) * 1000)}
-          />
+          <AddStayButton {...props} />
         </div>
       </div>
     </>
