@@ -10,7 +10,9 @@ import {
 
 import { Popover, PopoverButton, Transition } from '@headlessui/react';
 import {
+  IconArrowBarBoth,
   IconChevronDown,
+  IconChevronRight,
   IconMinus,
   IconPlus,
   IconPoint,
@@ -82,7 +84,7 @@ export default function Agenda({ ...props }: AgendaProps) {
                 {/* arriving */}
                 {d.arrivals.map((event) => (
                   <Fragment key={event.id}>
-                    <StatusIcon status="PLUS" />
+                    <StatusIcon status="ARRIVING" />
                     <AgendaEvent event={event} />
                   </Fragment>
                 ))}
@@ -90,7 +92,7 @@ export default function Agenda({ ...props }: AgendaProps) {
                 {/* leaving */}
                 {d.departures.map((event) => (
                   <Fragment key={event.id}>
-                    <StatusIcon status="MINUS" />
+                    <StatusIcon status="LEAVING" />
                     <AgendaEvent event={event} />
                   </Fragment>
                 ))}
@@ -134,7 +136,7 @@ function UnchangedEvents({
           !events.length && 'hidden first:grid',
         )}
       >
-        <StatusIcon status={isOpen ? 'DOWN' : 'DOT'} />
+        <StatusIcon status={isOpen ? 'DROPDOWN' : 'STAYING'} />
         <div>
           <button
             className={clmx(subtleBtnStyles)}
@@ -146,6 +148,9 @@ function UnchangedEvents({
             </span>
             <span>{!noChanges && ' more'}</span>
             <span> {events.length === 1 ? 'is' : 'are'} here</span>
+            {!!events.length && !isOpen && (
+              <IconChevronRight className="mb-px ml-1 inline size-4 text-slate-400" />
+            )}
           </button>
         </div>
       </div>
@@ -154,7 +159,7 @@ function UnchangedEvents({
       {events.map((event) => (
         <Transition key={event.id} show={isOpen}>
           <div className="col-span-full mt-0 grid grid-cols-subgrid duration-200 data-[closed]:-mt-8 data-[closed]:opacity-0">
-            <StatusIcon status="DOT" />
+            <StatusIcon status="STAYING" />
             <AgendaEvent event={event} />
           </div>
         </Transition>
@@ -189,24 +194,23 @@ function AgendaEventFR({ event, className, ...props }: AgendaEventProps) {
   );
 }
 
-type StatusType = 'PLUS' | 'MINUS' | 'DOT' | 'DOWN';
+type StatusType = 'ARRIVING' | 'LEAVING' | 'STAYING' | 'DROPDOWN' | 'DOT';
 function StatusIcon({ status }: { status: StatusType }) {
   const props: IconTypeProps = { size: 20 };
 
   return (
     <div
       className={clmx(
-        'mt-0.5 flex flex-row',
-        status === 'PLUS' && 'text-emerald-900',
-        status === 'MINUS' && 'text-red-900',
-        status === 'DOT' && 'text-slate-400',
-        status === 'DOWN' && 'text-slate-400',
+        'mt-0.5 flex flex-row text-slate-400',
+        status === 'ARRIVING' && 'text-emerald-900',
+        status === 'LEAVING' && 'text-red-900',
       )}
     >
-      {status === 'PLUS' && <IconPlus {...props} />}
-      {status === 'MINUS' && <IconMinus {...props} />}
+      {status === 'ARRIVING' && <IconPlus {...props} />}
+      {status === 'LEAVING' && <IconMinus {...props} />}
+      {status === 'STAYING' && <IconArrowBarBoth {...props} />}
+      {status === 'DROPDOWN' && <IconChevronDown {...props} />}
       {status === 'DOT' && <IconPoint {...props} />}
-      {status === 'DOWN' && <IconChevronDown {...props} />}
     </div>
   );
 }
