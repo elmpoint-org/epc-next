@@ -16,11 +16,13 @@ export type ModalProps = {
   children?: React.ReactNode;
   /** customize button names */
   buttons?: { confirm?: string; cancel?: string };
+  /** if true, confirm button will be focused (pressing enter confirms) */
+  focusOnConfirm?: boolean;
 };
 
 export function confirmModal(p: ModalProps) {
-  return new Promise<boolean>((resolve) =>
-    modals.openConfirmModal({
+  return new Promise<boolean>((resolve) => {
+    const opts: MantineConfirmModalProps = {
       title: p.title ?? 'Are you sure?',
       children: p.children ? (
         <>{p.children}</>
@@ -46,6 +48,12 @@ export function confirmModal(p: ModalProps) {
       },
       onConfirm: () => resolve(true),
       onCancel: () => resolve(false),
-    }),
-  );
+    };
+    if (p.focusOnConfirm) opts.confirmProps!['data-autofocus'] = '1';
+    modals.openConfirmModal(opts);
+  });
 }
+
+type MantineConfirmModalProps = Parameters<
+  (typeof modals)['openConfirmModal']
+>[0];

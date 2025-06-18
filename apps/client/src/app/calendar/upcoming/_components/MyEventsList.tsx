@@ -16,6 +16,8 @@ import { dateFormat, dateTS, dateTSObject } from '../../_util/dateUtils';
 import { IconCalendarShare, IconLoader2 } from '@tabler/icons-react';
 import { ActionIcon, Tooltip } from '@mantine/core';
 import Link from 'next/link';
+import ColorText from '@/app/_components/_base/ColorText';
+import AddStayButton from '../../_components/AddStayButton';
 
 const EVENTS_QUERY = graphql(
   `
@@ -43,37 +45,56 @@ export default function MyEventsList() {
   );
 
   return (
-    <div>
-      {/* events list */}
-      <div
-        className="grid grid-cols-[min-content_1fr_min-content] divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent sm:mx-4"
-        data-n={(!query.isPending && !events?.length) || null}
-      >
-        <InvalidateProvider cb={() => query.refetch()}>
-          {events?.map((event) => <EventButton key={event.id} event={event} />)}
-        </InvalidateProvider>
+    <>
+      <InvalidateProvider cb={() => query.refetch()}>
+        <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
+          {/* instructions */}
+          <div className="my-4 flex flex-row gap-4">
+            <p className="mt-0.5 flex-1">
+              Your current and upcoming{' '}
+              <ColorText>calendar reservations</ColorText> are listed below.
+              Click to view and edit reservation details.
+            </p>
 
-        {/* skeleton */}
-        {query.isPending &&
-          Array(3)
-            .fill(0)
-            .map((_, i) => <EventButton key={i} />)}
-
-        {/* no reservations message */}
-        {!query.isFetching && (
-          <div className="col-span-full hidden flex-col items-center text-sm italic text-slate-600 first:flex">
-            none found
+            <AddStayButton compactOnly />
           </div>
-        )}
-      </div>
 
-      {/* loader */}
-      {query.isFetching && !query.isPending && (
-        <div className="my-6 flex flex-row items-center justify-center">
-          <IconLoader2 className="animate-spin text-slate-400" />
+          {/* events list */}
+
+          <div>
+            {/* events list */}
+            <div
+              className="grid grid-cols-[min-content_1fr_min-content] divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent sm:mx-4"
+              data-n={(!query.isPending && !events?.length) || null}
+            >
+              {events?.map((event) => (
+                <EventButton key={event.id} event={event} />
+              ))}
+
+              {/* skeleton */}
+              {query.isPending &&
+                Array(3)
+                  .fill(0)
+                  .map((_, i) => <EventButton key={i} />)}
+
+              {/* no reservations message */}
+              {!query.isFetching && (
+                <div className="col-span-full hidden flex-col items-center text-sm italic text-slate-600 first:flex">
+                  none found
+                </div>
+              )}
+            </div>
+
+            {/* loader */}
+            {query.isFetching && !query.isPending && (
+              <div className="my-6 flex flex-row items-center justify-center">
+                <IconLoader2 className="animate-spin text-slate-400" />
+              </div>
+            )}
+          </div>
         </div>
-      )}
-    </div>
+      </InvalidateProvider>
+    </>
   );
 }
 

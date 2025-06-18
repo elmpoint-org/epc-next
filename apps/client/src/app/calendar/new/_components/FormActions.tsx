@@ -220,6 +220,7 @@ function confirmDeleteModal() {
       </>
     ),
     buttons: { confirm: 'Delete' },
+    focusOnConfirm: true,
   });
 }
 
