@@ -23,6 +23,7 @@ export const STATIC_EXTENSIONS: Extensions = [
   Color,
   Youtube.configure({
     nocookie: true,
+    rel: 0,
   }),
   TextAlign.configure({
     types: ['heading', 'paragraph', Image.name, Youtube.name],

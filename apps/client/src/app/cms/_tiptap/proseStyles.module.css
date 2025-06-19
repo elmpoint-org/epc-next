@@ -31,7 +31,7 @@
     @apply relative max-w-full;
 
     & iframe {
-      @apply relative aspect-[4/3] h-auto max-w-full;
+      @apply relative aspect-video h-auto max-w-full;
 
       /* alignment */
       &[style*='text-align: center'] {
