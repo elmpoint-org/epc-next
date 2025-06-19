@@ -37,7 +37,7 @@ export const homeLinks: HomeLink[] = [
   },
   {
     order: 3,
-    url: '/documents',
+    url: '/pages/documents',
     name: 'Document center',
     description:
       'This is where you can find important camp documentation like budget history, opening instructions, guest waivers, etc.',
@@ -45,7 +45,7 @@ export const homeLinks: HomeLink[] = [
   },
   {
     order: 4,
-    url: '/history',
+    url: '/pages/history',
     name: 'Elm Point history',
     description:
       'Click here to read about family history, browse old photos, and help out with research efforts.',
