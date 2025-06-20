@@ -101,6 +101,9 @@ importers:
       '@epc/mime':
         specifier: workspace:*
         version: link:../../packages/mime
+      '@epc/notif-opts':
+        specifier: workspace:*
+        version: link:../../packages/notif-opts
       '@epc/server':
         specifier: workspace:*
         version: link:../server
@@ -525,6 +528,12 @@ importers:
         version: 1.11.13
 
   packages/mime: {}
+
+  packages/notif-opts:
+    dependencies:
+      '@epc/server':
+        specifier: workspace:*
+        version: link:../../apps/server
 
   packages/schema:
     dependencies:

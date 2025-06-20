@@ -73,11 +73,11 @@ export default gql`
     "if user is unsubscribed, should prevent all messages regardless of other values."
     UNSUBSCRIBED: Boolean
     "upcoming stay reminder 1 week before"
-    stayReminder: Boolean
+    calendarStayReminder: Boolean
   }
   input UserNotifInput {
     UNSUBSCRIBED: Boolean
-    stayReminder: Boolean
+    calendarStayReminder: Boolean
   }
 
   # ---------------------------
