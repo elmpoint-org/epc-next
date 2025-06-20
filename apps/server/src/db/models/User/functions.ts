@@ -10,7 +10,10 @@ import { UserModule as M } from './__types/module-types';
 import type { ResolverContext } from '##/db/graph.js';
 import { generateKey } from '##/util/generate.js';
 import { DBUser } from './source';
-import { passwordless, passwordlessDeleteCredential } from '##/auth/passkeys.js';
+import {
+  passwordless,
+  passwordlessDeleteCredential,
+} from '##/auth/passkeys.js';
 import {
   Credential,
   RegisterOptions,
@@ -142,6 +145,26 @@ export const userDelete = h<M.MutationResolvers['userDelete']>(
     if (!(userId === id || scopeDiff(scope, `ADMIN`))) throw scopeError();
 
     return sources.user.delete(id);
+  }
+);
+
+export const userNotifUpdate = h<M.MutationResolvers['userNotifUpdate']>(
+  loggedIn(),
+  async ({ sources, args: { id, notifs }, scope, userId }) => {
+    if (userId !== id && !scopeDiff(scope, 'ADMIN')) throw scopeError();
+
+    const u = await sources.user.get(id);
+    if (!u) throw err('USER_NOT_FOUND');
+
+    const updatedNotifs = {
+      ...u.notifs,
+      ...Object.fromEntries(
+        Object.entries(notifs).filter(([_, v]) => v !== undefined && v !== null)
+      ),
+    };
+    notifs = updatedNotifs;
+
+    return sources.user.update(id, { notifs });
   }
 );
 
