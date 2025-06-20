@@ -4,7 +4,7 @@ import { IconChecks, IconUserCheck } from '@tabler/icons-react';
 import { ActionIcon, Button, Tooltip } from '@mantine/core';
 import { TrustedUserProps } from './TrustedWrapper';
 import { useCallback, useMemo } from 'react';
-import { usePending } from '../_util/usePending';
+import { usePending } from '@/util/usePending';
 import TUSkeleton from './TUSkeleton';
 
 export default function TrustedByList(props: TrustedUserProps) {
