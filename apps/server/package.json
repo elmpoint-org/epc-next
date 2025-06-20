@@ -14,7 +14,8 @@
   },
   "exports": {
     ".": "./exports.ts",
-    "./trpc": "./src/api/router.ts"
+    "./trpc": "./src/api/router.ts",
+    "./graphql-types": "./src/db/__types/graphql-types.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.590.0",
