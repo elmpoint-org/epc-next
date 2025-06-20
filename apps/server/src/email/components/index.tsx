@@ -86,7 +86,7 @@ export const Wrapper = forwardRef<HTMLHtmlElement, WrapperProps>(
         <Head />
         <Body className="font-sans px-2 sm:pt-6 bg-slate-50 overflow-x-hidden">
           <Container className="mx-auto w-full max-w-[384px]">
-            <div className="relative space-y-4 border border-solid border-slate-300 shadow-sm p-6 rounded-xl">
+            <div className="relative space-y-4 border border-solid border-slate-300 shadow-sm p-6 rounded-xl bg-white">
               {/* logo */}
               <Section className="p-4 bg-emerald-900 text-slate-100 rounded-lg text-3xl text-center font-serif tracking-wider">
                 ELM POINT

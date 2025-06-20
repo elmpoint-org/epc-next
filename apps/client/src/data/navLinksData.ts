@@ -13,12 +13,13 @@ import {
   IconHome2,
   IconListDetails,
   IconLogout,
+  IconMailCog,
   IconMapRoute,
   IconMessageChatbot,
   IconNews,
   IconNotebook,
   IconTable,
-  IconTableOptions,
+  IconUserCog,
   IconUsersGroup,
 } from '@tabler/icons-react';
 
@@ -88,8 +89,13 @@ export const accountNavLinks: NavLinkType[] = [
   {
     href: '/account',
     text: 'Account Settings',
-    icon: IconTableOptions,
+    icon: IconUserCog,
     exact: true,
+  },
+  {
+    href: '/account/notifications',
+    text: 'Notification Settings',
+    icon: IconMailCog,
   },
   {
     href: '/account/trusted-users',

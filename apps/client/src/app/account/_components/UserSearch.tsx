@@ -18,7 +18,7 @@ import { alphabetical } from '@/util/sort';
 import { clmx, clx } from '@/util/classConcat';
 import { IconLoader2 } from '@tabler/icons-react';
 import { ComboboxOptionProps } from '@headlessui/react';
-import { usePending } from '../trusted-users/_util/usePending';
+import { usePending } from '@/util/usePending';
 import { ResultOf } from 'gql.tada';
 
 export const USER_FRAGMENT = graphql(`

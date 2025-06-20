@@ -5,6 +5,9 @@
   ],
   "tasks": {
     "gql:pregen": {
+      "inputs": [
+        "$TURBO_ROOT$/apps/server/src/db/**"
+      ],
       "outputs": [
         "$TURBO_ROOT$/schema.graphql"
       ]
