@@ -8,12 +8,12 @@
   "tasks": {
     "gql:pregen": {
       "inputs": [
-        "apps/server/db/**"
+        "apps/server/src/db/**"
       ]
     },
     "gql:gen": {
       "inputs": [
-        "apps/server/db/**"
+        "apps/server/src/db/**"
       ],
       "dependsOn": [
         "@epc/schema#gql:pregen"
