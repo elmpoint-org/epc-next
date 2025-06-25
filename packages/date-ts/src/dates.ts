@@ -1,9 +1,4 @@
-import dayjsRoot from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-
-dayjsRoot.extend(utc);
-
-export const dayjs = dayjsRoot;
+import { dayjs } from './dayjs';
 
 /** one day in seconds */
 export const D1 = 24 * 3600;
@@ -39,7 +34,7 @@ export function dateStartOfWeek(d: number, isInputNotUTC: boolean = true) {
   return selectedDay.unix();
 }
 
-/** format a date.
+/** format a dateTS timestamp.
  *  @see https://day.js.org/docs/en/display/format
  */
 export function dateFormat(date: number, format: string) {

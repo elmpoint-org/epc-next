@@ -60,8 +60,6 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
        AWS_PROFILE=your-profile-name-here
        ```
 
-1.  **Create a Tiptap account.** The site uses Tiptap for rich text editing, and they require that you create a free account to access their code. Follow Tiptap's instructions [here](https://tiptap.dev/docs/guides/pro-extensions#configure-global-authentication)—use the commands for _pnpm_.
-
 1.  **Install project dependencies.** Run the following command in the root project folder to install the required dependencies:
     ```
     pnpm install

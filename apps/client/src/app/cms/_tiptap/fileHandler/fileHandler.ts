@@ -5,7 +5,7 @@ import { IMAGE_TYPES } from '@epc/types/s3';
 import { notifications } from '@mantine/notifications';
 import FileHandlerRoot, {
   type FileHandlePluginOptions,
-} from '@tiptap-pro/extension-file-handler';
+} from '@tiptap/extension-file-handler';
 import { uploadImage } from './imageOperations';
 import { getPageData } from '../pageData/pageData';
 

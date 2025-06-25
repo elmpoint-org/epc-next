@@ -3,7 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { CalendarProps, QP } from '../_components/Calendar';
 import { useDefaultDays } from './defaultDays';
-import { D1, dateStartOfWeek, dateTS, dateTSObject } from './dateUtils';
+import { D1, dateStartOfWeek, dateTS, dateTSObject } from '@epc/date-ts';
 import { ViewType, useCalendarView } from './queryStates';
 
 export type CalendarControlsProps = Pick<

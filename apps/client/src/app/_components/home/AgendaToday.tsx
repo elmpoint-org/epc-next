@@ -9,7 +9,7 @@ import {
   EVENTS_QUERY,
   InvalidateProvider,
 } from '@/app/calendar/_components/Calendar';
-import { dateTS } from '@/app/calendar/_util/dateUtils';
+import { dateTS } from '@epc/date-ts';
 
 const Agenda = lazy(() => import('@/app/calendar/_components/Agenda'));
 

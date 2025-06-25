@@ -2,7 +2,7 @@ import ical from 'ical.js';
 
 import { graph } from '##/db/graph.js';
 import { graphql } from '##/db/lib/utilities.js';
-import { dateTSObject } from '##/db/models/Stay/functions.js';
+import { dateTSObject } from '@epc/date-ts';
 import { ResultOf } from '@graphql-typed-document-node/core';
 import {
   getCacheTimestamp,

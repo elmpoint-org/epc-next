@@ -23,6 +23,7 @@
     "@aws-sdk/lib-dynamodb": "^3.590.0",
     "@aws-sdk/s3-request-presigner": "^3.609.0",
     "@envelop/graphql-modules": "^6.0.0",
+    "@epc/date-ts": "workspace:*",
     "@epc/mime": "workspace:*",
     "@epc/types": "workspace:*",
     "@graphql-typed-document-node/core": "catalog:",

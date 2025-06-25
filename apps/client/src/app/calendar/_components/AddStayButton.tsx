@@ -3,7 +3,7 @@
 import { ActionIcon, Button, Tooltip } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 
-import { dateTSLocal } from '../_util/dateUtils';
+import { dateTSLocal } from '@epc/date-ts';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 import { CalendarProps } from './Calendar';
 

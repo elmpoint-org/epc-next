@@ -18,7 +18,7 @@ import {
   IconPoint,
 } from '@tabler/icons-react';
 
-import { dateFormat } from '../_util/dateUtils';
+import { dateFormat } from '@epc/date-ts';
 import { UseDatesArrayProps } from '../_util/datesArray';
 import { CalendarProps, EventType } from './Calendar';
 import { clmx, clx } from '@/util/classConcat';

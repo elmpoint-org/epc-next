@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { D1 } from '../_util/dateUtils';
+import { D1 } from '@epc/date-ts';
 import { CalendarProps } from './Calendar';
 import { gridCols } from '../_util/grid';
 

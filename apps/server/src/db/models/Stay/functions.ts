@@ -15,11 +15,9 @@ import { CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS } from '##/CONSTANTS.js';
 import { DBStay, ScalarRoom } from './source';
 
 import { randomUUID as uuid } from 'node:crypto';
-import dayjs from 'dayjs';
-import dayjsUTC from 'dayjs/plugin/utc';
-dayjs.extend(dayjsUTC);
+import { dateTS } from '@epc/date-ts';
 
-const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
+const { scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 
 const DAYS_AFTER_SEC = CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS * 3600 * 24;
 
@@ -27,8 +25,8 @@ export const getStays = h<M.QueryResolvers['stays']>(
   loggedIn(),
   async ({ sources, args: { start, end, deep } }) => {
     // validate
-    start = dateTS(start);
-    end = dateTS(end);
+    start = dateTSCheck(start);
+    end = dateTSCheck(end);
     const valid = validateDates(start, end);
     if (!valid) throw err('INVALID_DATES');
 
@@ -54,8 +52,8 @@ export const getStaysInRoom = h<M.QueryResolvers['staysInRoom']>(
   loggedIn(),
   async ({ sources, args: { roomId, start, end } }) => {
     // validate
-    start = dateTS(start);
-    end = dateTS(end);
+    start = dateTSCheck(start);
+    end = dateTSCheck(end);
     const valid = validateDates(start, end);
     if (!valid) throw err('INVALID_DATES');
 
@@ -109,8 +107,8 @@ export const stayCreate = h<M.MutationResolvers['stayCreate']>(
   loggedIn(),
   async ({ sources, args: fields }) => {
     // standardize dates
-    fields.dateStart = dateTS(fields.dateStart);
-    fields.dateEnd = dateTS(fields.dateEnd);
+    fields.dateStart = dateTSCheck(fields.dateStart);
+    fields.dateEnd = dateTSCheck(fields.dateEnd);
     const valid = validateDates(fields.dateStart, fields.dateEnd);
     if (!valid) throw err('INVALID_DATES');
 
@@ -139,9 +137,9 @@ export const stayUpdate = h<M.MutationResolvers['stayUpdate']>(
 
     // validate dates
     if (typeof updates.dateStart === 'number')
-      updates.dateStart = dateTS(updates.dateStart);
+      updates.dateStart = dateTSCheck(updates.dateStart);
     if (typeof updates.dateEnd === 'number')
-      updates.dateEnd = dateTS(updates.dateEnd);
+      updates.dateEnd = dateTSCheck(updates.dateEnd);
     const valid = validateDates(
       updates.dateStart ?? stay.dateStart,
       updates.dateEnd ?? stay.dateEnd
@@ -180,7 +178,7 @@ export const staySplit = h<M.MutationResolvers['staySplit']>(
     if (!stayToSplit) throw err('STAY_NOT_FOUND');
 
     // validate date
-    if (typeof date === 'number') date = dateTS(date);
+    if (typeof date === 'number') date = dateTSCheck(date);
     const valid = validateDates(stayToSplit.dateStart, date);
     if (!valid) throw err('INVALID_DATE');
 
@@ -251,25 +249,20 @@ export async function queryStaysByDate(
 }
 
 /** this function reads a unix timestamp as its current date **according to GMT**, and returns a new timestamp at midnight for that day. */
-export function dateTS(ts: number) {
-  return dayjs.unix(ts).utc().startOf('date').unix();
+export function dateTSCheck(ts: number) {
+  return dateTS(ts, false);
 }
 
 /** validate dates.
  * @returns true if valid.
  */
 export function validateDates(start: number, end: number) {
-  start = dateTS(start);
-  end = dateTS(end);
+  start = dateTSCheck(start);
+  end = dateTSCheck(end);
   const d1 = 3600 * 24;
   const days = (end - start) / d1;
   if (days < 0) return false;
   return true;
-}
-
-/** get dayjs object for a TS datestamp. */
-export function dateTSObject(ts: number) {
-  return dayjs.unix(ts).utc();
 }
 
 function trustedUserCheck() {

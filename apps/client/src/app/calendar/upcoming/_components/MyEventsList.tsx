@@ -12,7 +12,7 @@ import { useUser } from '@/app/_ctx/user/context';
 import { Popover, PopoverButton } from '@headlessui/react';
 import EventPopup from '../../_components/EventPopup';
 import { useMemo } from 'react';
-import { dateFormat, dateTS, dateTSObject } from '../../_util/dateUtils';
+import { dateFormat, dateTS, dateTSObject } from '@epc/date-ts';
 import { IconCalendarShare, IconLoader2 } from '@tabler/icons-react';
 import { ActionIcon, Tooltip } from '@mantine/core';
 import Link from 'next/link';

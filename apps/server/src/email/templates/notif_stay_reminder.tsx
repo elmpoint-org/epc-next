@@ -1,8 +1,6 @@
-import qs from 'qs';
-import { Button, Footer, Link, Prose, Title, Wrapper } from '../components';
+import { Footer, Link, Prose, Title, Wrapper } from '../components';
 import { send } from '../resend';
 import { Senders } from '../senders';
-import { dateTSObject } from '##/db/models/Stay/functions.js';
 
 /** verify a user's email address for registration. */
 export async function emailRegistration(emailAddress: string, props: Props) {

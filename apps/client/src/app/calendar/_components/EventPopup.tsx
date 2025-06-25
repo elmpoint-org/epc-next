@@ -19,7 +19,7 @@ import {
 } from '@tabler/icons-react';
 
 import { clmx, clx } from '@/util/classConcat';
-import { dateFormat } from '../_util/dateUtils';
+import { dateFormat } from '@epc/date-ts';
 import { EventType } from './Calendar';
 import { IconType } from '@/util/iconType';
 import { Children } from '@/util/propTypes';
