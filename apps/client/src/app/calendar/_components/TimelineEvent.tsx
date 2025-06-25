@@ -3,7 +3,7 @@ import { lazy, useMemo } from 'react';
 import { Popover, PopoverButton } from '@headlessui/react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
-import { dateDiff } from '../_util/dateUtils';
+import { dateDiff } from '@epc/date-ts';
 import { clamp } from '@/util/math';
 
 import { CalendarProps, EventType } from './Calendar';

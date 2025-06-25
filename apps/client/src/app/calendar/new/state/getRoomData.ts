@@ -1,7 +1,7 @@
 import { graphql } from '@/query/graphql';
 import { useGraphQuery } from '@/query/query';
 import { useFormCtx } from './formCtx';
-import { dateTS } from '../../_util/dateUtils';
+import { dateTS } from '@epc/date-ts';
 import { Inside } from '@/util/inferTypes';
 import { ResultOf } from '@graphql-typed-document-node/core';
 import { keepPreviousData } from '@tanstack/react-query';

@@ -10,6 +10,7 @@
     "gql:gen": "gql.tada generate-output"
   },
   "dependencies": {
+    "@epc/date-ts": "workspace:*",
     "@epc/mime": "workspace:*",
     "@epc/server": "workspace:*",
     "@epc/types": "workspace:*",

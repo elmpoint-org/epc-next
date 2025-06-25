@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import type { CalendarProps } from '../_components/Calendar';
-import { D1 } from './dateUtils';
+import { D1 } from '@epc/date-ts';
 
 export type UseDatesArrayProps = Pick<CalendarProps, 'days'> & {
   dates: Pick<CalendarProps['dates'], 'start'>;

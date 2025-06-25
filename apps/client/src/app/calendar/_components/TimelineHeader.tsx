@@ -1,5 +1,5 @@
 import { CalendarProps } from './Calendar';
-import { dateFormat, dateTS } from '../_util/dateUtils';
+import { dateFormat, dateTS } from '@epc/date-ts';
 import { useDatesArray } from '../_util/datesArray';
 import { gridCols } from '../_util/grid';
 import { Children } from '@/util/propTypes';

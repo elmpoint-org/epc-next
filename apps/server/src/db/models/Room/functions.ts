@@ -8,7 +8,7 @@ import {
   loggedIn,
 } from '##/db/lib/utilities.js';
 import { ResolverContext } from '##/db/graph.js';
-import { dateTS, queryStaysByDate, validateDates } from '../Stay/functions';
+import { dateTSCheck, queryStaysByDate, validateDates } from '../Stay/functions';
 
 const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
 
@@ -119,8 +119,8 @@ export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
     if (typeof start !== 'number' || typeof end !== 'number') return null;
 
     // standarize dates
-    start = dateTS(start);
-    end = dateTS(end);
+    start = dateTSCheck(start);
+    end = dateTSCheck(end);
     const valid = validateDates(start, end);
     if (!valid) throw err('invalid dates');
 

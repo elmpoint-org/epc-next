@@ -1,0 +1,12 @@
+{
+  "name": "@epc/date-ts",
+  "private": false,
+  "scripts": {},
+  "exports": {
+    ".": "./src/dates.ts",
+    "./dayjs": "./src/dayjs.ts"
+  },
+  "dependencies": {
+    "dayjs": "catalog:"
+  }
+}

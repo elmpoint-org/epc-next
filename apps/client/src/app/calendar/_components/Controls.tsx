@@ -22,7 +22,6 @@ import {
   IconLibraryPlus,
   IconListDetails,
   IconLoader2,
-  IconPlus,
   IconStackPop,
   IconStackPush,
   IconTable,
@@ -30,7 +29,7 @@ import {
 
 import { CalendarProps } from './Calendar';
 import { dayStyles } from '../_util/dayStyles';
-import { dateFormat, dateTSLocal } from '../_util/dateUtils';
+import { dateFormat } from '@epc/date-ts';
 import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
@@ -39,7 +38,6 @@ import { useCalendarView, useDisplayByRooms } from '../_util/queryStates';
 import { IconType } from '@/util/iconType';
 import { CALENDAR_DAYS_MAX, CALENDAR_DAYS_MIN } from '@/CONSTANTS';
 
-import EventEditWindow from './EventEditWindow';
 import DKbd from '@/app/_components/_base/DKbd';
 import {
   Dropdown,

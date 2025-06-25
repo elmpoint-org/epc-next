@@ -12,7 +12,7 @@ import {
 import { UseState } from '@/util/stateType';
 import { CalendarProps } from './Calendar';
 import { clx } from '@/util/classConcat';
-import { D1, dateFormat } from '../_util/dateUtils';
+import { D1, dateFormat } from '@epc/date-ts';
 import { CalendarControlsProps, useCalendarControls } from '../_util/controls';
 import { alphabetical } from '@/util/sort';
 

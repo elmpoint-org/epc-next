@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import { D1 } from '../_util/dateUtils';
+import { D1 } from '@epc/date-ts';
 import type { CalendarProps } from './Calendar';
 import {
   GlobalKeyboardHandler,

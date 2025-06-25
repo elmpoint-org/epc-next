@@ -95,6 +95,9 @@ importers:
 
   apps/client:
     dependencies:
+      '@epc/date-ts':
+        specifier: workspace:*
+        version: link:../../packages/date-ts
       '@epc/mime':
         specifier: workspace:*
         version: link:../../packages/mime
@@ -342,6 +345,9 @@ importers:
       '@envelop/graphql-modules':
         specifier: ^6.0.0
         version: 6.0.0(@envelop/core@5.2.3)(graphql-modules@2.4.0(graphql@16.11.0))(graphql@16.11.0)
+      '@epc/date-ts':
+        specifier: workspace:*
+        version: link:../../packages/date-ts
       '@epc/mime':
         specifier: workspace:*
         version: link:../../packages/mime
@@ -511,6 +517,12 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
+
+  packages/date-ts:
+    dependencies:
+      dayjs:
+        specifier: 'catalog:'
+        version: 1.11.13
 
   packages/mime: {}
 
@@ -2633,6 +2645,7 @@ packages:
 
   '@tiptap-pro/extension-file-handler@2.19.1':
     resolution: {integrity: sha512-f8ljyEAAm6BSmSdH1QLyl7+l07KPJeRk+6SGtrUyk3fXstjpEs3YFnKJJhAWjfTamfmlqqDakSf6uMgMv5kQhQ==}
+    deprecated: '"@tiptap-pro/extension-file-handler" was made open source and can now be installed from "@tiptap/extension-file-handler" instead.'
     peerDependencies:
       '@tiptap/core': ^2.0.0
       '@tiptap/pm': ^2.0.0

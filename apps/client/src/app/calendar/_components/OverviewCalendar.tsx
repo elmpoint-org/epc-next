@@ -1,5 +1,5 @@
 import { clmx, clx } from '@/util/classConcat';
-import { dateFormat, dateTS, dateTSObject } from '../_util/dateUtils';
+import { dateFormat, dateTS, dateTSObject } from '@epc/date-ts';
 import { useEventColorId, useEventColorIds } from '../_util/cabinColorHooks';
 import { CalendarProps, EventType } from './Calendar';
 import { OVERVIEW_NUM_WEEKS } from './Overview';
