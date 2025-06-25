@@ -17,9 +17,17 @@ import fdeq from 'fast-deep-equal';
 import { NOTIF_DEFAULT_VALUES } from '@epc/notif-opts/defaults';
 import { NotifsProps, NotifsType } from './NotifWrapper';
 import { useLoading } from '@/util/useLoading';
+import { graphAuth, graphql } from '@/query/graphql';
+import { useUser } from '@/app/_ctx/user/context';
+import { notifications } from '@mantine/notifications';
+import { prettyErrorPlaceholder } from '@/util/prettyErrors';
+import { useNotifInvalidate } from '../_ctx/notifInvalidate';
 
 export default function CalendarNotifs(props: NotifsProps) {
   const { notifs: serverNotifs, isPending } = props;
+
+  const user = useUser();
+
   const serverNotifsWithDefaults = useMemo(() => {
     const merged = { ...serverNotifs };
     const keys = Object.keys(NOTIF_DEFAULT_VALUES) as Array<
@@ -27,12 +35,11 @@ export default function CalendarNotifs(props: NotifsProps) {
     >;
 
     for (const key of keys) {
+      console.log(key, merged[key]);
       if (serverNotifs?.UNSUBSCRIBED) {
         merged[key] = false;
       } else if (typeof merged[key] !== 'boolean') {
         merged[key] = NOTIF_DEFAULT_VALUES[key];
-      } else {
-        merged[key] = null;
       }
     }
     return merged as NotifsType;
@@ -48,15 +55,61 @@ export default function CalendarNotifs(props: NotifsProps) {
 
   // save status
   const [isLoading, loading] = useLoading();
+  const invalidate = useNotifInvalidate();
   const status = useMemo<BoxStatus>(() => {
     if (isLoading) return 'LOADING';
     if (!fdeq(notifs, serverNotifsWithDefaults)) return 'UNSAVED';
     return 'SAVED';
   }, [isLoading, notifs, serverNotifsWithDefaults]);
 
-  const handleRevert = useCallback(() => {
-    setNotifs(serverNotifsWithDefaults);
-  }, [serverNotifsWithDefaults]);
+  const handleSave = useCallback(() => {
+    loading(async () => {
+      if (!user) return;
+
+      const diffNotifs: Partial<NotifsType> = {};
+      const keys = Object.keys(serverNotifsWithDefaults) as Array<
+        keyof NotifsType
+      >;
+      for (const key of keys) {
+        if (notifs[key] !== serverNotifsWithDefaults[key])
+          diffNotifs[key] = notifs[key];
+      }
+
+      // if new subscriptions, disable unsubscribe
+      if (serverNotifs?.UNSUBSCRIBED === true && Object.keys(diffNotifs).length)
+        diffNotifs.UNSUBSCRIBED = false;
+
+      const { data, errors } = await graphAuth(
+        graphql(`
+          mutation UserNotifUpdate($id: ID!, $notifs: UserNotifInput!) {
+            userNotifUpdate(id: $id, notifs: $notifs) {
+              id
+            }
+          }
+        `),
+        {
+          id: user.id,
+          notifs: diffNotifs,
+        },
+      );
+
+      if (errors || !data?.userNotifUpdate?.id) {
+        notifications.show({
+          color: 'red',
+          message: prettyErrorPlaceholder(errors?.[0]?.code),
+        });
+        return;
+      }
+      await invalidate?.();
+    });
+  }, [
+    invalidate,
+    loading,
+    notifs,
+    serverNotifs?.UNSUBSCRIBED,
+    serverNotifsWithDefaults,
+    user,
+  ]);
 
   return (
     <>
@@ -64,16 +117,20 @@ export default function CalendarNotifs(props: NotifsProps) {
         {/* title */}
         <div className="flex flex-row items-center justify-between gap-2 px-2">
           <h3 className="text-lg">Calendar notifications</h3>
-          <SaveReset status={status} onRevert={handleRevert} />
+          <SaveReset
+            status={status}
+            onRevert={() => setNotifs(serverNotifsWithDefaults)}
+            onSave={handleSave}
+          />
         </div>
 
         {/* members list */}
         <div className="mt-2 flex flex-col gap-4 px-4 py-2">
           <OptionSwitch
-            checked={notifs?.calendarStayReminder || false}
+            checked={notifs['calendarStayReminder'] || false}
             isLoading={isPending}
             onChange={({ currentTarget: { checked: c } }) =>
-              setNotifs((n) => ({ ...n, calendarStayReminder: c }))
+              setNotifs((n) => ({ ...n, ['calendarStayReminder']: c }))
             }
             label={<>Reservation reminders (1 week before)</>}
             description={
