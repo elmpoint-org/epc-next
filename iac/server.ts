@@ -2,6 +2,7 @@ import { isProd } from './util/isProd';
 
 import { SecretMap, secrets } from './secrets';
 import { environment } from './util/env';
+import { defaultProps } from './util/defaultProps';
 
 export const server = new sst.aws.ApiGatewayV2('Server', {
   link: [...secrets],
@@ -64,25 +65,3 @@ type Method =
   | 'HEAD'
   | 'OPTIONS'
   | 'ANY';
-
-function defaultProps() {
-  return {
-    permissions: [
-      {
-        actions: [
-          'dynamodb:Query',
-          'dynamodb:Scan',
-          'dynamodb:GetItem',
-          'dynamodb:PutItem',
-          'dynamodb:UpdateItem',
-          'dynamodb:DeleteItem',
-          'dynamodb:BatchGetItem',
-          'dynamodb:BatchWriteItem',
-          's3:*',
-        ],
-        resources: ['*'],
-      },
-    ],
-    environment: environment(),
-  } satisfies Partial<sst.aws.FunctionArgs>;
-}
