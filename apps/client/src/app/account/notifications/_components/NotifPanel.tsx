@@ -2,7 +2,10 @@
 
 import {
   ComponentPropsWithoutRef,
+  createContext,
+  ReactNode,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -22,8 +25,24 @@ import { useUser } from '@/app/_ctx/user/context';
 import { notifications } from '@mantine/notifications';
 import { prettyErrorPlaceholder } from '@/util/prettyErrors';
 import { useNotifInvalidate } from '../_ctx/notifInvalidate';
+import { SetState } from '@/util/stateType';
 
-export default function CalendarNotifs(props: NotifsProps) {
+const notifCtx = createContext<{
+  notifs: NotifsType;
+  setNotifs: SetState<NotifsType>;
+  isLoading?: boolean;
+} | null>(null);
+
+/** Include a set of <NotifOption/>'s inside to create a notifaction settings panel. */
+export default function NotifPanel({
+  title,
+  children: options,
+  ...props
+}: {
+  /** Panel name */
+  title: ReactNode;
+} & NotifsProps &
+  Children) {
   const { notifs: serverNotifs, isPending } = props;
 
   const user = useUser();
@@ -111,12 +130,13 @@ export default function CalendarNotifs(props: NotifsProps) {
     user,
   ]);
 
+  // RENDER
   return (
     <>
       <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
         {/* title */}
         <div className="flex flex-row items-center justify-between gap-2 px-2">
-          <h3 className="text-lg">Calendar notifications</h3>
+          <h3 className="text-lg">{title}</h3>
           <SaveReset
             status={status}
             onRevert={() => setNotifs(serverNotifsWithDefaults)}
@@ -125,26 +145,44 @@ export default function CalendarNotifs(props: NotifsProps) {
         </div>
 
         {/* members list */}
-        <div className="mt-2 flex flex-col gap-4 px-4 py-2">
-          <OptionSwitch
-            checked={notifs['calendarStayReminder'] || false}
-            isLoading={isPending}
-            onChange={({ currentTarget: { checked: c } }) =>
-              setNotifs((n) => ({ ...n, ['calendarStayReminder']: c }))
-            }
-            label={<>Reservation reminders (1 week before)</>}
-            description={
-              <span>
-                Get a reminder a week before your stay to make sure your
-                reservation is still accurate.
-              </span>
-            }
-          />
+        <div className="mt-2 flex flex-col gap-8 py-2 sm:px-4">
+          <notifCtx.Provider
+            value={{
+              notifs,
+              setNotifs,
+              isLoading: isPending,
+            }}
+          >
+            {options}
+          </notifCtx.Provider>
         </div>
       </div>
     </>
   );
 }
+
+/** one notification switch. pass inside a NotifPanel for relevant context. */
+export function NotifOption({
+  item,
+  ...props
+}: {
+  item: keyof NotifsType;
+} & ComponentPropsWithoutRef<typeof OptionSwitch>) {
+  const ctx = useContext(notifCtx);
+
+  return (
+    <OptionSwitch
+      checked={ctx?.notifs[item] || false}
+      isLoading={ctx?.isLoading ?? true}
+      onChange={({ currentTarget: { checked: c } }) =>
+        ctx?.setNotifs((n) => ({ ...n, [item]: c }))
+      }
+      {...props}
+    />
+  );
+}
+
+// ----------------------------------------------------
 
 function OptionSwitch({
   classNames: _,
@@ -165,7 +203,7 @@ function OptionSwitch({
         track: clx(
           'relative [.peer:not(:checked)~&]:border-slate-300 [.peer:not(:checked)~&]:bg-slate-300',
           isLoading &&
-            'animate-pulse !border-slate-200 after:absolute after:inset-0 after:z-10 after:bg-slate-200/80',
+            'animate-pulse !border-slate-200 after:absolute after:inset-0 after:z-10 after:bg-slate-200',
         ),
         thumb: 'border-0',
         body: 'items-center',

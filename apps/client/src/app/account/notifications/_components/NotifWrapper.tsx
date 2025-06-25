@@ -7,7 +7,7 @@ import { ResultOf } from '@graphql-typed-document-node/core';
 import { InvalidateProvider } from '../_ctx/notifInvalidate';
 
 import ColorText from '@/app/_components/_base/ColorText';
-import CalendarNotifs from './CalendarNotifs';
+import NotifPanel, { NotifOption } from './NotifPanel';
 import Unsubscribe from './Unsubscribe';
 
 const NOTIFS_QUERY = graphql(`
@@ -46,9 +46,22 @@ export default function NotifWrapper() {
         </p>
 
         <InvalidateProvider cb={query.refetch}>
-          {/* options */}
-          <CalendarNotifs {...props} />
-          <Unsubscribe />
+          {/* CALENDAR */}
+          <NotifPanel {...props} title={<>Calendar notifications</>}>
+            <NotifOption
+              item="calendarStayReminder"
+              label={<>Reservation reminders (1 week before)</>}
+              description={
+                <span>
+                  Get a reminder a week before your stay to make sure your
+                  reservation is still accurate.
+                </span>
+              }
+            />
+          </NotifPanel>
+
+          {/* unsub */}
+          <Unsubscribe {...props} />
         </InvalidateProvider>
       </div>
     </>

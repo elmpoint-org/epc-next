@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -10,8 +10,15 @@ import { useLoading } from '@/util/useLoading';
 import { graphAuth, graphql } from '@/query/graphql';
 import { useUser } from '@/app/_ctx/user/context';
 import { prettyErrorPlaceholder } from '@/util/prettyErrors';
+import { NotifsProps } from './NotifWrapper';
 
-export default function Unsubscribe() {
+export default function Unsubscribe(props: NotifsProps) {
+  const { notifs, isPending } = props;
+  const wasUnsubbed = useMemo(
+    () => notifs?.UNSUBSCRIBED ?? false,
+    [notifs?.UNSUBSCRIBED],
+  );
+
   const user = useUser();
   const invalidate = useNotifInvalidate();
 
@@ -50,8 +57,9 @@ export default function Unsubscribe() {
           size="compact-sm"
           variant="light"
           className="flex-shrink-0"
+          disabled={wasUnsubbed || isPending}
         >
-          Unsubscribe
+          Unsubscribe{wasUnsubbed && 'd'}
         </Button>
         <div className="text-sm text-slate-600">
           Click to disable all notification messages. You’ll still receive
