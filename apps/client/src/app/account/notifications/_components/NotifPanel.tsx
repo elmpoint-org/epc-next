@@ -133,30 +133,36 @@ export default function NotifPanel({
   // RENDER
   return (
     <>
-      <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
-        {/* title */}
-        <div className="flex flex-row items-center justify-between gap-2 px-2">
-          <h3 className="text-lg">{title}</h3>
-          <SaveReset
-            status={status}
-            onRevert={() => setNotifs(serverNotifsWithDefaults)}
-            onSave={handleSave}
-          />
-        </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSave();
+        }}
+      >
+        <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
+          {/* title */}
+          <div className="flex flex-row items-center justify-between gap-2 px-2">
+            <h3 className="text-lg">{title}</h3>
+            <SaveReset
+              status={status}
+              onRevert={() => setNotifs(serverNotifsWithDefaults)}
+            />
+          </div>
 
-        {/* members list */}
-        <div className="mt-2 flex flex-col gap-8 py-2 sm:px-4">
-          <notifCtx.Provider
-            value={{
-              notifs,
-              setNotifs,
-              isLoading: isPending,
-            }}
-          >
-            {options}
-          </notifCtx.Provider>
+          {/* members list */}
+          <div className="mt-2 flex flex-col gap-8 py-2 sm:px-4">
+            <notifCtx.Provider
+              value={{
+                notifs,
+                setNotifs,
+                isLoading: isPending,
+              }}
+            >
+              {options}
+            </notifCtx.Provider>
+          </div>
         </div>
-      </div>
+      </form>
     </>
   );
 }
