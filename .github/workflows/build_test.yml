@@ -29,13 +29,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           cache: 'pnpm'
-      - name: authenticate tiptap
-        env:
-          TIPTAP_KEY: ${{ secrets.TIPTAP_KEY }}
-        run: |
-          npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-          npm config set "//registry.tiptap.dev/:_authToken" $TIPTAP_KEY
       - run: pnpm install
+
       # tests
       - name: check types
         run: |
