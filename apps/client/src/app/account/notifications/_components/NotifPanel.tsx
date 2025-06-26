@@ -54,7 +54,6 @@ export default function NotifPanel({
     >;
 
     for (const key of keys) {
-      console.log(key, merged[key]);
       if (serverNotifs?.UNSUBSCRIBED) {
         merged[key] = false;
       } else if (typeof merged[key] !== 'boolean') {

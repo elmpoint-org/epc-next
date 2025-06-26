@@ -1,3 +1,5 @@
+import { runEventReminders } from './reminders';
+
 export function handler() {
-  console.log('hi1');
+  runEventReminders();
 }

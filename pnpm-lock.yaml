@@ -354,6 +354,9 @@ importers:
       '@epc/mime':
         specifier: workspace:*
         version: link:../../packages/mime
+      '@epc/notif-opts':
+        specifier: workspace:*
+        version: link:../../packages/notif-opts
       '@epc/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -529,11 +532,7 @@ importers:
 
   packages/mime: {}
 
-  packages/notif-opts:
-    dependencies:
-      '@epc/server':
-        specifier: workspace:*
-        version: link:../../apps/server
+  packages/notif-opts: {}
 
   packages/schema:
     dependencies:

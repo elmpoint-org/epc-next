@@ -26,6 +26,7 @@
     "@envelop/graphql-modules": "^6.0.0",
     "@epc/date-ts": "workspace:*",
     "@epc/mime": "workspace:*",
+    "@epc/notif-opts": "workspace:*",
     "@epc/types": "workspace:*",
     "@graphql-typed-document-node/core": "catalog:",
     "@passwordlessdev/passwordless-nodejs": "^0.2.0",

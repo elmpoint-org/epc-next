@@ -1,14 +1,11 @@
 import { Button, Footer, HR, Link, Prose, Title, Wrapper } from '../components';
-import { send } from '../resend';
-import { Senders } from '../senders';
+import { sendWithBrevo } from '../send';
 
-import dayjs from 'dayjs';
-import dayjsUTC from 'dayjs/plugin/utc';
 import { siteDomain } from '##/util/dev.js';
 import { graphql } from '##/db/lib/utilities.js';
 import { ResultOf } from '@graphql-typed-document-node/core';
 import { Preview } from '@react-email/components';
-dayjs.extend(dayjsUTC);
+import { dateFormat } from '@epc/date-ts';
 
 export const CALENDAR_EVENT_FRAGMENT = graphql(`
   fragment CalendarEvent on Stay @_unmask {
@@ -40,16 +37,16 @@ type EventType = ResultOf<typeof CALENDAR_EVENT_FRAGMENT>;
 type RoomType = EventType['reservations'][number]['room'] & {};
 
 /** verify a user's email address for registration. */
-export async function emailRegistration(emailAddress: string, props: Props) {
-  return send(
-    {
-      to: emailAddress,
-      from: Senders.AUTH,
-      subject: SUBJECT(props.event.dateStart),
-      react: Content(props),
-    },
-    { fallback: true }
-  );
+export async function emailNotifStayReminder(
+  emailAddress: string,
+  props: Props
+) {
+  // due to volume concerns, these mesesages should only run on the fallback vendor.
+  return sendWithBrevo({
+    to: emailAddress,
+    subject: SUBJECT(props.event.dateStart),
+    content: Content(props),
+  });
 }
 
 type Props = {
@@ -57,7 +54,7 @@ type Props = {
 };
 
 const SUBJECT = (ts: number) =>
-  `Upcoming stay at Elm Point on ${formatTS(ts, 'MMMM D')}`;
+  `Upcoming stay at Elm Point on ${dateFormat(ts, 'MMMM D')}`;
 function Content({ event }: Props) {
   return (
     <>
@@ -145,14 +142,8 @@ function Content({ event }: Props) {
   );
 }
 
-/** format a date.
- *  @see https://day.js.org/docs/en/display/format
- */
-function formatTS(ts: number, format: string) {
-  return dayjs.unix(ts).utc().format(format);
-}
 function fullDate(ts: number) {
-  return formatTS(ts, 'dddd, MMMM D');
+  return dateFormat(ts, 'dddd, MMMM D');
 }
 
 function newlineText(str: string) {

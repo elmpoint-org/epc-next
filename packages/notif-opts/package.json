@@ -4,8 +4,5 @@
   "scripts": {},
   "exports": {
     "./defaults": "./src/defaults.ts"
-  },
-  "dependencies": {
-    "@epc/server": "workspace:*"
   }
 }

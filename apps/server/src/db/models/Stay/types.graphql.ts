@@ -19,6 +19,9 @@ export default gql`
     "the room reservations associated with this stay"
     reservations: [StayReservation!]!
 
+    "whether the author has received a reminder about this stay or not."
+    reminderSent: Boolean
+
     "created/update timestamps"
     timestamp: TS!
   }
@@ -88,6 +91,7 @@ export default gql`
       dateStart: Int!
       dateEnd: Int!
       reservations: [StayReservationInput!]!
+      reminderSent: Boolean
     ): Stay!
 
     """
@@ -103,6 +107,7 @@ export default gql`
       dateStart: Int
       dateEnd: Int
       reservations: [StayReservationInput!]
+      reminderSent: Boolean
     ): Stay!
 
     """

@@ -1,6 +1,6 @@
 import qs from 'qs';
 import { Button, Footer, Link, Prose, Title, Wrapper } from '../components';
-import { send } from '../resend';
+import { send } from '../send';
 import { Senders } from '../senders';
 import { siteDomain } from '##/util/dev.js';
 
