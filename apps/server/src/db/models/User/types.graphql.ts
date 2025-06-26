@@ -20,6 +20,9 @@ export default gql`
     "users who trust this user"
     trustedBy: [User]
 
+    "the user's notification settings"
+    notifs: UserNotifSettings
+
     # __ AUTH DATA __
     "scope defines a user's permissions."
     scope: [UserScopeProp!]
@@ -28,7 +31,7 @@ export default gql`
     "create/update history for this entry"
     timestamp: TS!
   }
-  "this type can only be accessed on the server. it is for retreiving secure authentication data."
+  "this type can only be accessed on the server. it is for retrieving secure authentication data."
   type UserSECURE {
     user: User!
     "the user's secret is used to authenticate user operations. while it cannot be accessed through external requests, users can reset it (which will effectively log them out of all devices)."
@@ -63,6 +66,18 @@ export default gql`
     country: String
     device: String
     nickname: String
+  }
+
+  "a user's notification settings"
+  type UserNotifSettings {
+    "if user is unsubscribed, should prevent all messages regardless of other values."
+    UNSUBSCRIBED: Boolean
+    "upcoming stay reminder 1 week before"
+    calendarStayReminder: Boolean
+  }
+  input UserNotifInput {
+    UNSUBSCRIBED: Boolean
+    calendarStayReminder: Boolean
   }
 
   # ---------------------------
@@ -132,6 +147,15 @@ export default gql`
       trustedUserAdd: [String!]
       trustedUserRemove: [String!]
     ): User
+
+    """
+    **SCOPE: userId==id | ADMIN**
+
+    update notification preferences for user. id is userId.
+
+    any unset values (or null/undefined) will remain the same.
+    """
+    userNotifUpdate(id: ID!, notifs: UserNotifInput!): User
 
     """
     **SCOPE: userId==id | ADMIN**

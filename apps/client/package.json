@@ -14,6 +14,7 @@
     "@epc/mime": "workspace:*",
     "@epc/server": "workspace:*",
     "@epc/types": "workspace:*",
+    "@epc/notif-opts": "workspace:*",
     "@graphql-typed-document-node/core": "catalog:",
     "@headlessui/react": "^2.1.2",
     "@mantine/core": "^7.12.1",

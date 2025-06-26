@@ -1,5 +1,5 @@
 import { Button, Footer, Link, Prose, Title, Wrapper } from '../components';
-import { send } from '../resend';
+import { send } from '../send';
 import { Senders } from '../senders';
 
 export async function emailLogin(
@@ -22,8 +22,8 @@ function Content({ url, firstName }: { url: string; firstName?: string }) {
         <>
           <Prose>
             <Title>Sign in to your account</Title>
-            <p className="-mb-2">Hi{firstName ? ' ' + firstName : ''}!</p>
-            <p className="pb-2">
+            <p className="-mb-1">Hi{firstName ? ' ' + firstName : ''}!</p>
+            <p className="pb-4">
               Click the link below to sign in to your account.
             </p>
           </Prose>

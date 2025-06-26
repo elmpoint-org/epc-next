@@ -1,4 +1,4 @@
-export * as resend from './resend';
+export * as send from './send';
 export * as brevo from './brevo';
 
 export { Senders } from './senders';

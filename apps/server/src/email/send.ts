@@ -6,6 +6,7 @@ import { isDev } from '##/util/dev.js';
 import { brevo } from '.';
 import { el } from './components/getElement';
 import { Resource } from 'sst';
+import { catchTF } from '##/util/catchTF.js';
 
 const resend = new Resend(Resource.SecretResendAPIKey.value);
 
@@ -25,7 +26,7 @@ export async function send(
 
     // run fallback if requested
     if (!options?.fallback) return false;
-    return brevoFallback(props.to, props.subject, props.react);
+    return brevoFallback({ ...props, content: props.react });
   }
   return true;
 }
@@ -37,26 +38,24 @@ function localSend(content: React.ReactNode, title?: string) {
   });
 }
 
-function brevoFallback(
-  to: string | string[],
-  subject: string,
-  content: React.ReactNode
-) {
+export function sendWithBrevo(props: Parameters<typeof brevoFallback>[0]) {
+  if (isDev) return localSend(props.content, props.subject);
+  return brevoFallback(props);
+}
+
+function brevoFallback({
+  to,
+  subject,
+  content,
+}: {
+  to: string | string[];
+  subject: string;
+  content: React.ReactNode;
+}) {
   return catchTF(async () => {
     const html = await render(el(content));
     const text = await render(el(content), { plainText: true });
 
     await brevo.sendRawEmail({ to, subject, html, text });
   });
-}
-
-// --------------------------------------
-
-async function catchTF(cb: (...p: any[]) => any): Promise<boolean> {
-  try {
-    const out = await cb();
-    return out ?? true;
-  } catch (_) {
-    return false;
-  }
 }

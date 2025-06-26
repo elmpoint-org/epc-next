@@ -14,6 +14,9 @@ export default $config({
     const { client } = await import('./iac/client');
     const { server } = await import('./iac/server');
 
+    // cron jobs
+    await import('./iac/daily');
+
     return {
       clientURL: client.url,
       serverURL: server.url,

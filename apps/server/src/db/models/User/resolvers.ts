@@ -15,6 +15,7 @@ const resolvers: UserModule.Resolvers = {
     userCreate: f.userCreate,
     userUpdate: f.userUpdate,
     userDelete: f.userDelete,
+    userNotifUpdate: f.userNotifUpdate,
     userResetSecret: f.userResetSecret,
     userCreateCredential: f.userCreateCredential,
     userDeleteCredential: f.userDeleteCredential,

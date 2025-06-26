@@ -9,6 +9,11 @@ declare module "sst" {
       "type": "sst.aws.Nextjs"
       "url": string
     }
+    "DailyDev": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
     "SecretBrevoAPIKey": {
       "type": "sst.sst.Secret"
       "value": string

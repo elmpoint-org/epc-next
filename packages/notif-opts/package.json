@@ -1,0 +1,8 @@
+{
+  "name": "@epc/notif-opts",
+  "private": true,
+  "scripts": {},
+  "exports": {
+    "./defaults": "./src/defaults.ts"
+  }
+}
