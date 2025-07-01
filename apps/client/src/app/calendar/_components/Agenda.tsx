@@ -85,7 +85,7 @@ export default function Agenda({ ...props }: AgendaProps) {
                 {d.arrivals.map((event) => (
                   <Fragment key={event.id}>
                     <StatusIcon status="ARRIVING" />
-                    <AgendaEvent event={event} />
+                    <AgendaEvent event={event} status="ARRIVING" />
                   </Fragment>
                 ))}
 
@@ -93,7 +93,7 @@ export default function Agenda({ ...props }: AgendaProps) {
                 {d.departures.map((event) => (
                   <Fragment key={event.id}>
                     <StatusIcon status="LEAVING" />
-                    <AgendaEvent event={event} />
+                    <AgendaEvent event={event} status="LEAVING" />
                   </Fragment>
                 ))}
 
@@ -147,7 +147,7 @@ function UnchangedEvents({
               {events.length}
             </span>
             <span>{!noChanges && ' more'}</span>
-            <span> {events.length === 1 ? 'is' : 'are'} here</span>
+            <span> {events.length === 1 ? 'group is' : 'groups are'} here</span>
             {!!events.length && !isOpen && (
               <IconChevronRight className="mb-px ml-1 inline size-4 text-slate-400" />
             )}
@@ -160,7 +160,7 @@ function UnchangedEvents({
         <Transition key={event.id} show={isOpen}>
           <div className="col-span-full mt-0 grid grid-cols-subgrid duration-200 data-[closed]:-mt-8 data-[closed]:opacity-0">
             <StatusIcon status="STAYING" />
-            <AgendaEvent event={event} />
+            <AgendaEvent event={event} status="STAYING" />
           </div>
         </Transition>
       ))}
@@ -170,13 +170,19 @@ function UnchangedEvents({
 
 type AgendaEventProps = {
   event: EventType;
+  status: StatusType;
   fr?: ForwardedRef<HTMLButtonElement>;
 } & React.ComponentPropsWithoutRef<'button'>;
 export const AgendaEvent = forwardRef<HTMLButtonElement, AgendaEventProps>(
   (p, r) => <AgendaEventFR {...p} fr={r} />,
 );
 AgendaEvent.displayName = 'AgendaEvent';
-function AgendaEventFR({ event, className, ...props }: AgendaEventProps) {
+function AgendaEventFR({
+  event,
+  className,
+  status,
+  ...props
+}: AgendaEventProps) {
   const colorId = useEventColorId(event);
   return (
     <Popover>
@@ -187,7 +193,13 @@ function AgendaEventFR({ event, className, ...props }: AgendaEventProps) {
         <div className="flex h-6 flex-row items-center">
           <RoomSwatch cabinOrRoomId={colorId} withDefault />
         </div>
-        <span>{event.title}</span>
+        <span>
+          {event.title}
+          <span className="text-slate-500">
+            {status === 'ARRIVING' && <> arriving</>}
+            {status === 'LEAVING' && <> leaving</>}
+          </span>
+        </span>
       </PopoverButton>
       <EventPopup event={event} to="bottom start" />
     </Popover>
