@@ -55,7 +55,7 @@ export default function PagesList({
     <>
       {/* sort options */}
       {!unused && (
-        <div className="flex sm:flex-row flex-col sm:items-center gap-2 px-2">
+        <div className="flex flex-col gap-2 px-2 sm:flex-row sm:items-center">
           <div className="text-sm text-slate-600">sort by:</div>
           <SegmentedControl
             color="emerald"
@@ -115,8 +115,16 @@ export default function PagesList({
                       <Table.Td className="select-none text-slate-500">
                         {i + 1}
                       </Table.Td>
-                      <Table.Td className='whitespace-nowrap max-w-[28ch] truncate'>
+                      <Table.Td className="max-w-[28ch] truncate whitespace-nowrap">
                         <A href={`/cms/pages/edit/${page.id}`}>
+                          {sortBy === 'SLUG' && (
+                            <span
+                              className="inline-block"
+                              style={{
+                                width: `calc(1rem * ${page.slug?.match(/\//g)?.length ?? 0})`,
+                              }}
+                            />
+                          )}
                           {page.title || <i>click to edit</i>}
                         </A>
                       </Table.Td>
@@ -159,7 +167,9 @@ export default function PagesList({
 
             {/* empty state */}
             <Table.Tr className="hidden first:block">
-              <Table.Td className="p-6 italic whitespace-nowrap">none found</Table.Td>
+              <Table.Td className="whitespace-nowrap p-6 italic">
+                none found
+              </Table.Td>
             </Table.Tr>
           </Table.Tbody>
         </Table>
