@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 
-import { Combobox, Tooltip } from '@mantine/core';
+import { Combobox, Pill, Tooltip } from '@mantine/core';
 import { IconAlt, IconCheck, IconFriends } from '@tabler/icons-react';
 
 import { useFormCtx, type Cabin, type Room } from '../state/formCtx';
 import { ANY_ROOM } from '@epc/types/cabins';
+import { Children } from '@/util/propTypes';
 
 const RoomOption = ({
   item,
@@ -66,10 +67,7 @@ const RoomOption = ({
               {/* room tag icons */}
               <div className="t">
                 {item.forCouples && (
-                  <Tooltip
-                    label="This room can accomodate a couple sharing a bed."
-                    withArrow
-                  >
+                  <Tooltip label="This room has a shareable bed." withArrow>
                     <IconFriends
                       className="text-emerald-800 group-data-[combobox-selected]:text-inherit"
                       size={20}
@@ -107,5 +105,21 @@ function AliasTag({ isAlias, name }: { isAlias?: boolean; name?: string }) {
         </div>
       )}
     </>
+  );
+}
+
+export function CustomRoomOption({ children }: Children) {
+  return (
+    <Combobox.Option value="CUSTOM" className="">
+      <div className="flex flex-row items-center gap-2">
+        <div className="truncate">{children}</div>
+        <Pill
+          size="xs"
+          className="border border-sky-600 uppercase text-sky-600"
+        >
+          custom
+        </Pill>
+      </div>
+    </Combobox.Option>
   );
 }

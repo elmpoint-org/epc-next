@@ -49,6 +49,12 @@ const RoomNumBox = () => {
             input: 'pr-8 text-center',
           }}
         />
+
+        <div className="text-right text-sm text-slate-600">
+          List attendees below, <b className="font-semibold">one row per bed</b>
+          .<br />
+          The top row determines event color.
+        </div>
       </div>
     </>
   );
