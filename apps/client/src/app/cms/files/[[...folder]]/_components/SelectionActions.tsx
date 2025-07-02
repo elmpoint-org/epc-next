@@ -16,7 +16,7 @@ import { confirmAndDelete } from './actions/deleteModal';
 import RenameModal from './actions/RenameModal';
 import NewFolderModal from './actions/NewFolderModal';
 import MoveCopyModal from './actions/MoveCopyModal';
-import { FileModalProps } from './actions/FileModal';
+import { FileModalProps } from '@/app/_components/_base/ModalFrame';
 
 export default function SelectionActions({
   select,

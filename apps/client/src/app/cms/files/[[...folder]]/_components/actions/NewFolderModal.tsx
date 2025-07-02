@@ -5,7 +5,7 @@ import { notifications } from '@mantine/notifications';
 
 import { graphAuth, graphql } from '@/query/graphql';
 
-import { FileModal, FileModalFooter, FileModalProps } from './FileModal';
+import { ModalFrame, ModalFrameFooter, FileModalProps } from '@/app/_components/_base/ModalFrame';
 import FocusOnRender from '@/app/_components/_base/FocusOnRender';
 
 export default function NewFolderModal(props: FileModalProps) {
@@ -43,7 +43,7 @@ export default function NewFolderModal(props: FileModalProps) {
 
   return (
     <>
-      <FileModal open={show} onClose={() => onHide()} title="Create New Folder">
+      <ModalFrame open={show} onClose={() => onHide()} title="Create New Folder">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -66,16 +66,16 @@ export default function NewFolderModal(props: FileModalProps) {
             />
             <FocusOnRender el={textboxRef} />
 
-            <FileModalFooter>
+            <ModalFrameFooter>
               <div className="flex flex-row justify-end">
                 <Button type="submit" loading={isLoading}>
                   Create
                 </Button>
               </div>
-            </FileModalFooter>
+            </ModalFrameFooter>
           </div>
         </form>
-      </FileModal>
+      </ModalFrame>
     </>
   );
 }

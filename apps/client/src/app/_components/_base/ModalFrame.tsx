@@ -14,7 +14,7 @@ export type FileModalProps = {
   currentFolder: string;
 };
 
-export function FileModal({
+export function ModalFrame({
   children,
   title,
   ...props
@@ -51,7 +51,7 @@ export function FileModal({
 /**
  * the modal footer expects to be placed in parent with a gap of **1rem**. if your already-existing parent doesn't account for this, wrap this with a `div.space-y-4`.
  */
-export function FileModalFooter({ children }: Children) {
+export function ModalFrameFooter({ children }: Children) {
   return (
     <>
       <hr className="mt-2 border-slate-300" />
