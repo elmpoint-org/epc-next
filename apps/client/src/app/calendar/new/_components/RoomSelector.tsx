@@ -95,7 +95,7 @@ const RoomSelector = ({
     [search, selectedCabin, selectedRoom],
   );
   const searchResults = useMemo(() => {
-    let terms = search.toLowerCase().match(/\S+/g);
+    let terms = search.toLowerCase().replace(/'/g, '').match(/\S+/g);
     if (!terms) return [];
     let a: (Cabin | Room)[] = [
       ...rooms.map((it) => {
@@ -115,7 +115,8 @@ const RoomSelector = ({
     return a
       .map((it) => {
         let nt = terms as string[];
-        let test = (t: string, s: string) => s.toLowerCase().includes(t);
+        let test = (t: string, s: string) =>
+          s.toLowerCase().replace(/'/g, '').includes(t);
 
         if ('beds' in it) {
           nt = nt.filter((t) => !test(t, it.cabin?.name || ''));
