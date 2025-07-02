@@ -147,7 +147,7 @@ function UnchangedEvents({
               {events.length}
             </span>
             <span>{!noChanges && ' more'}</span>
-            <span> {events.length === 1 ? 'group is' : 'groups are'} here</span>
+            <span> {events.length === 1 ? 'is' : 'are'} here</span>
             {!!events.length && !isOpen && (
               <IconChevronRight className="mb-px ml-1 inline size-4 text-slate-400" />
             )}
