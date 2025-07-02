@@ -11,7 +11,8 @@ import {
 } from '@mantine/core';
 import { IconAlertTriangle } from '@tabler/icons-react';
 
-import RoomOption from './RoomOption';
+import RoomOption, { CustomRoomOption } from './RoomOption';
+import OccupancyHelp from './OccupancyHelp';
 
 import { CUSTOM_ROOM_OBJ, CUSTOM_ROOM_ID } from '@epc/types/cabins';
 import { Cabin, Room, useFormCtx, useFormCtxRoomState } from '../state/formCtx';
@@ -25,7 +26,7 @@ const RoomSelector = ({
   className,
 }: {
   rowIndex: number;
-  className: string;
+  className?: string;
 }) => {
   const { updateId } = useFormCtx();
   const { cabins, rooms, initialOptions } = useGetRooms(updateId ?? undefined);
@@ -94,7 +95,7 @@ const RoomSelector = ({
     [search, selectedCabin, selectedRoom],
   );
   const searchResults = useMemo(() => {
-    let terms = search.toLowerCase().match(/\S+/g);
+    let terms = search.toLowerCase().replace(/'/g, '').match(/\S+/g);
     if (!terms) return [];
     let a: (Cabin | Room)[] = [
       ...rooms.map((it) => {
@@ -114,7 +115,8 @@ const RoomSelector = ({
     return a
       .map((it) => {
         let nt = terms as string[];
-        let test = (t: string, s: string) => s.toLowerCase().includes(t);
+        let test = (t: string, s: string) =>
+          s.toLowerCase().replace(/'/g, '').includes(t);
 
         if ('beds' in it) {
           nt = nt.filter((t) => !test(t, it.cabin?.name || ''));
@@ -250,17 +252,7 @@ const RoomSelector = ({
                   <RoomOption key={i} item={it} active={false} />
                 ))}
                 {!selectedCabin ? (
-                  <Combobox.Option value="CUSTOM" className="">
-                    <div className="flex flex-row items-center gap-2">
-                      <div className="truncate">{search}</div>
-                      <Pill
-                        size="xs"
-                        className="border border-sky-600 uppercase text-sky-600"
-                      >
-                        custom
-                      </Pill>
-                    </div>
-                  </Combobox.Option>
+                  <CustomRoomOption>{search}</CustomRoomOption>
                 ) : (
                   !searchResults.length && (
                     <Combobox.Empty>No results found</Combobox.Empty>
@@ -303,6 +295,10 @@ const RoomSelector = ({
                 )}
               </>
             )}
+
+            <div className="mx-2 text-right first:hidden">
+              <OccupancyHelp />
+            </div>
           </Combobox.Options>
         </Combobox.Dropdown>
       </Combobox>

@@ -5,7 +5,7 @@ import { notifications } from '@mantine/notifications';
 
 import { graphAuth, graphql } from '@/query/graphql';
 
-import { FileModal, FileModalFooter, FileModalProps } from './FileModal';
+import { ModalFrame, ModalFrameFooter, FileModalProps } from '@/app/_components/_base/ModalFrame';
 import FocusOnRender from '@/app/_components/_base/FocusOnRender';
 import OverwriteWarning from '../OverwriteWarning';
 
@@ -79,7 +79,7 @@ export default function RenameModal(
 
   return (
     <>
-      <FileModal open={show} onClose={() => onHide()} title="Rename File">
+      <ModalFrame open={show} onClose={() => onHide()} title="Rename File">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -111,16 +111,16 @@ export default function RenameModal(
               </OverwriteWarning>
             )}
 
-            <FileModalFooter>
+            <ModalFrameFooter>
               <div className="flex flex-row justify-end">
                 <Button type="submit" loading={isLoading}>
                   Rename
                 </Button>
               </div>
-            </FileModalFooter>
+            </ModalFrameFooter>
           </div>
         </form>
-      </FileModal>
+      </ModalFrame>
     </>
   );
 }

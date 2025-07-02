@@ -96,7 +96,7 @@ const FormGuestRows = () => {
             {/* guest name */}
             <TextInput
               id={`guest-name-${i}`}
-              label={`Name of ${!i ? 'Primary ' : ''}Guest(s)`}
+              label={`Name of Visitor(s)`}
               placeholder="Enter a name"
               className="-mt-5 flex-1"
               classNames={{

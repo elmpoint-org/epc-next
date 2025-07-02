@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
-import { FileModal, FileModalFooter, FileModalProps } from './FileModal';
+import { ModalFrame, ModalFrameFooter, FileModalProps } from '@/app/_components/_base/ModalFrame';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 
 import UploadFile from './UploadFile';
@@ -62,7 +62,7 @@ export default function UploadModal({
 
   return (
     <>
-      <FileModal
+      <ModalFrame
         open={show}
         onClose={() =>
           onHide(!!files.length && finished.length === files.length)
@@ -139,7 +139,7 @@ export default function UploadModal({
 
           {/* footer */}
           <div className="mt-4 space-y-4">
-            <FileModalFooter>
+            <ModalFrameFooter>
               <div className="flex flex-row justify-end">
                 <Button
                   type="submit"
@@ -153,10 +153,10 @@ export default function UploadModal({
                   )}
                 </Button>
               </div>
-            </FileModalFooter>
+            </ModalFrameFooter>
           </div>
         </form>
-      </FileModal>
+      </ModalFrame>
     </>
   );
 }

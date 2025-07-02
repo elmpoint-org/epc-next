@@ -5,7 +5,7 @@ import { notifications } from '@mantine/notifications';
 
 import { graphAuth, graphql } from '@/query/graphql';
 
-import { FileModal, FileModalFooter, FileModalProps } from './FileModal';
+import { ModalFrame, ModalFrameFooter, FileModalProps } from '@/app/_components/_base/ModalFrame';
 import FocusOnRender from '@/app/_components/_base/FocusOnRender';
 import OverwriteWarning from '../OverwriteWarning';
 
@@ -98,7 +98,7 @@ export default function MoveCopyModal(
 
   return (
     <>
-      <FileModal open={show} onClose={() => onHide()} title="Move/Copy Files">
+      <ModalFrame open={show} onClose={() => onHide()} title="Move/Copy Files">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -127,7 +127,7 @@ export default function MoveCopyModal(
             {warning && <OverwriteWarning />}
 
             {/* footer */}
-            <FileModalFooter>
+            <ModalFrameFooter>
               <div className="flex flex-row-reverse justify-start gap-2">
                 <Button type="submit" loading={isLoading}>
                   Copy
@@ -140,10 +140,10 @@ export default function MoveCopyModal(
                   Move
                 </Button>
               </div>
-            </FileModalFooter>
+            </ModalFrameFooter>
           </div>
         </form>
-      </FileModal>
+      </ModalFrame>
     </>
   );
 }

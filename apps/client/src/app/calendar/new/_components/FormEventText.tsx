@@ -62,7 +62,7 @@ const FormEventText = () => {
       </div>
       <Textarea
         label="Calendar Event Description"
-        description="Your room selections will be automatically added to the end of this description."
+        description="Add anything else about your stay you’d like others to know."
         value={eventText.description}
         onChange={({ currentTarget: { value: v } }) =>
           setEventText((o) => ({ ...o, description: v }))

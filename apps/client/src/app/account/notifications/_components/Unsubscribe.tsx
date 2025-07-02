@@ -55,6 +55,7 @@ export default function Unsubscribe(props: NotifsProps) {
           onClick={handleUnsub}
           loading={isLoading}
           size="compact-sm"
+          color="slate"
           variant="light"
           className="flex-shrink-0"
           disabled={wasUnsubbed || isPending}
