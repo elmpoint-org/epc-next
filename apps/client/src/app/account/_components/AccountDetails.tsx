@@ -14,6 +14,7 @@ import { invalidateUser } from '@/app/_ctx/user/actions';
 import fdeq from 'fast-deep-equal';
 import { z } from 'zod';
 import CopyID from '@/app/_components/_base/CopyID';
+import AccountAvatar from './AccountAvatar';
 
 const AccountDetails = () => {
   const initialUser = useUser();
@@ -135,18 +136,7 @@ const AccountDetails = () => {
           <div className="flex flex-col gap-4 rounded-lg sm:flex-row">
             {/* avatar view */}
             <div className="relative flex flex-col items-center rounded-xl p-4 sm:max-w-56">
-              <a
-                href="https://gravatar.com/profile"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative -m-2 rounded-full border border-slate-500 border-opacity-0 p-2 text-slate-500 hover:border-opacity-100"
-              >
-                <div
-                  className="size-36 rounded-full bg-slate-300 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${initialUser?.avatarUrl})` }}
-                />
-                <IconEdit className="invisible absolute right-0 top-0 size-6 p-1 group-hover:visible" />
-              </a>
+              <AccountAvatar />
               <div className="flex max-w-full flex-col items-center p-2 text-sm">
                 <div className="max-w-full truncate font-bold">
                   {initialUser?.name}
@@ -236,7 +226,9 @@ const AccountDetails = () => {
               <span className="">YOUR PERMISSIONS: </span>
               {initialUser?.scope?.map((it) => (
                 <Fragment key={it}>
-                  <code className="ml-1 rounded-md bg-slate-200 p-1">{it}</code>{' '}
+                  <code className="ml-1 rounded-md bg-slate-200 p-1">
+                    {it}
+                  </code>{' '}
                 </Fragment>
               ))}
             </div>
