@@ -36,7 +36,7 @@ export default function FilesList({
               .map((_, i) => (
                 <div className="py-1" key={i}>
                   <div
-                    className="flex h-10 animate-pulse flex-row justify-between rounded-md bg-slate-100 px-4 py-1"
+                    className="flex h-10 animate-pulse flex-row justify-between rounded-md bg-dwhite px-4 py-1"
                     style={{ opacity: 1 - 0.1 * i }}
                   />
                 </div>

@@ -40,7 +40,7 @@ export default function FilesListItem({
         data-s={isSelected || null}
         className="group py-1"
       >
-        <div className="flex flex-row justify-between rounded-md border border-transparent bg-slate-100 px-4 py-2 transition-all group-hover:border-dgreen/50 group-data-[s]:border-dgreen group-data-[s]:bg-emerald-600/20">
+        <div className="flex flex-row justify-between rounded-md border border-transparent bg-dwhite px-4 py-2 transition-all group-hover:border-dgreen/50 group-data-[s]:border-dgreen group-data-[s]:bg-emerald-600/20">
           {/* left section */}
           <div className="flex flex-row items-center gap-4 truncate">
             {/* checkbox */}

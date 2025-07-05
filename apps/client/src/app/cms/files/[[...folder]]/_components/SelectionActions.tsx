@@ -50,7 +50,7 @@ export default function SelectionActions({
 
   return (
     <>
-      <div className="flex flex-row rounded-md border border-transparent bg-slate-100 px-4 py-2">
+      <div className="flex flex-row rounded-md border border-transparent bg-dwhite px-4 py-2">
         <div className="flex flex-1 flex-row items-center gap-4">
           {/* total selected checkbox */}
           <Checkbox
