@@ -3,7 +3,8 @@ export async function catchTF(cb: (...p: any[]) => any): Promise<boolean> {
   try {
     const out = await cb();
     return out ?? true;
-  } catch (_) {
+  } catch (e) {
+    console.log(e);
     return false;
   }
 }

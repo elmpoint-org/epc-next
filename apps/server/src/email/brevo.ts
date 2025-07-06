@@ -1,17 +1,14 @@
 import { Resource } from 'sst';
-
-const sender = {
-  name: 'Elm Point',
-  email: 'noreply@elmpoint.xyz',
-};
+import { BrevoSender, BrevoSenders } from './senders';
 
 export async function sendRawEmail(props: {
   to: string | string[];
+  from?: BrevoSender;
   subject: string;
   html: string;
   text: string;
 }) {
-  const { to, subject, html, text } = props;
+  const { to, from, subject, html, text } = props;
 
   await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
@@ -22,7 +19,7 @@ export async function sendRawEmail(props: {
       'api-key': Resource.SecretBrevoAPIKey.value,
     },
     body: JSON.stringify({
-      sender: sender,
+      sender: from ?? BrevoSenders['__DEFAULT'],
       to: Array.isArray(to) ? to.map((email) => ({ email })) : [{ email: to }],
       htmlContent: html,
       textContent: text,

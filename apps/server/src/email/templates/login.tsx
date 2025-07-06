@@ -1,17 +1,21 @@
 import { Button, Footer, Link, Prose, Title, Wrapper } from '../components';
 import { send } from '../send';
-import { Senders } from '../senders';
+import { BrevoSenders, Senders } from '../senders';
 
 export async function emailLogin(
   to: string,
   { url, firstName }: { url: string; firstName?: string }
 ) {
-  return send({
-    to,
-    from: Senders.AUTH,
-    subject: SUBJECT,
-    react: Content({ url, firstName }),
-  });
+  return send(
+    {
+      to,
+      from: Senders.AUTH,
+      brevoFrom: BrevoSenders.AUTH,
+      subject: SUBJECT,
+      react: Content({ url, firstName }),
+    },
+    { fallback: true }
+  );
 }
 
 const SUBJECT = 'Login link for Elm Point';
