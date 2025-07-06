@@ -9,12 +9,16 @@ export default gql`
     "last time the user sent a login email request"
     nextLoginEmail: Int
 
+    "(for preusers) next registration email request"
+    nextRegistrationEmail: Int
+
     timestamp: TS!
   }
 
   "see UserCooldown type for property information"
   input UserCooldownUpdateOpts {
     nextLoginEmail: Int
+    nextRegistrationEmail: Int
   }
 
   type Query {

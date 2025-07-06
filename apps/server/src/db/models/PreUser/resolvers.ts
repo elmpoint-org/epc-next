@@ -15,6 +15,8 @@ const resolvers: PreUserModule.Resolvers = {
     preUserDelete: f.preUserDelete,
   },
   PreUser: {
+    cooldowns: f.getPreUserCooldowns,
+
     timestamp,
   },
 };
