@@ -5,6 +5,9 @@ import { graph } from '##/db/graph.js';
 import { graphql } from '##/db/lib/utilities.js';
 import { passwordless, passwordlessSendMagicLink } from '##/auth/passkeys.js';
 import { signToken } from '##/auth/sign.js';
+import { unixNow } from '@epc/date-ts';
+
+import { COOLDOWN_TIMES } from '@epc/gql-consts/cooldown';
 
 function unauth(error?: any) {
   if (typeof error !== 'undefined') console.log(error);
@@ -39,6 +42,9 @@ export const sendMagicLink = t.procedure
             id
             email
             firstName
+            cooldowns {
+              nextLoginEmail
+            }
           }
         }
       `),
@@ -46,6 +52,9 @@ export const sendMagicLink = t.procedure
     );
     if (errors || !data?.userFromEmail)
       throw err('BAD_REQUEST', 'USER_NOT_FOUND');
+
+    if (unixNow() < (data.userFromEmail.cooldowns?.nextLoginEmail ?? 0))
+      throw err('TOO_MANY_REQUESTS', 'COOLDOWN_VIOLATION');
 
     // send magic link
     const u = data.userFromEmail;
@@ -57,4 +66,23 @@ export const sendMagicLink = t.procedure
     }).catch((e) => {
       throw err('BAD_REQUEST', 'MAGIC_LINK_FAILED', e);
     });
+
+    graph(
+      graphql(`
+        mutation UserCooldownUpdate(
+          $userId: ID!
+          $updates: UserCooldownUpdateOpts!
+        ) {
+          userCooldownUpdate(userId: $userId, updates: $updates) {
+            id
+          }
+        }
+      `),
+      {
+        userId: u.id,
+        updates: {
+          nextLoginEmail: unixNow() + COOLDOWN_TIMES['nextLoginEmail'],
+        },
+      }
+    );
   });

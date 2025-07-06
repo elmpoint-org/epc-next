@@ -17,7 +17,7 @@ import { Children } from '@/util/propTypes';
 import { clx } from '@/util/classConcat';
 import fdeq from 'fast-deep-equal';
 
-import { NOTIF_DEFAULT_VALUES } from '@epc/notif-opts/defaults';
+import { NOTIF_DEFAULT_VALUES } from '@epc/gql-consts/notifs';
 import { NotifsProps, NotifsType } from './NotifWrapper';
 import { useLoading } from '@/util/useLoading';
 import { graphAuth, graphql } from '@/query/graphql';
