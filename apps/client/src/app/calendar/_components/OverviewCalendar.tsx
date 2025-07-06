@@ -87,7 +87,7 @@ export default function OverviewCalendar({
                 data-nm={!d.inMonth || null}
                 className={clmx(
                   'group flex h-12 flex-col items-stretch gap-2 bg-dwhite p-4 focus:outline-none sm:h-24',
-                  /* out of month */ 'data-[nm]:bg-slate-100/80',
+                  /* out of month */ 'data-[nm]:bg-dwhite/80',
                 )}
               >
                 {/* day number */}

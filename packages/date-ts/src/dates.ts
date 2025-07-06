@@ -51,3 +51,7 @@ export function dateTSLocal(d: number) {
 export function TStoDate(d: number) {
   return new Date(dateTSLocal(d) * 1000);
 }
+
+export function unixNow() {
+  return dayjs().unix();
+}

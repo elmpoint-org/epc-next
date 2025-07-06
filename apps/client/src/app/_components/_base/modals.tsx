@@ -18,6 +18,8 @@ export type ModalProps = {
   buttons?: { confirm?: string; cancel?: string };
   /** if true, confirm button will be focused (pressing enter confirms) */
   focusOnConfirm?: boolean;
+  /** add direct mantine props to the confirm button */
+  confirmProps?: MantineConfirmModalProps['confirmProps'];
 };
 
 export function confirmModal(p: ModalProps) {
@@ -41,7 +43,7 @@ export function confirmModal(p: ModalProps) {
         confirm: p.buttons?.confirm ?? 'Confirm',
         cancel: p.buttons?.cancel ?? 'Cancel',
       },
-      confirmProps: { color: p.color },
+      confirmProps: { color: p.color, ...p.confirmProps } as any,
       classNames: {
         root: clx('focus:[&_button]:outline-black'),
         content: clx('rounded-xl p-2'),

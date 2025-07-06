@@ -69,8 +69,6 @@ export const navLinks: DeepNavLinks = [
         text: 'Feedback & Support',
         icon: IconMessageChatbot,
       },
-      { text: '' },
-      { text: '' },
     ],
   },
   {

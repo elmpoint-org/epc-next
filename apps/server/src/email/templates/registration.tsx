@@ -1,7 +1,7 @@
 import qs from 'qs';
 import { Button, Footer, Link, Prose, Title, Wrapper } from '../components';
 import { send } from '../send';
-import { Senders } from '../senders';
+import { BrevoSenders, Senders } from '../senders';
 import { siteDomain } from '##/util/dev.js';
 
 /** verify a user's email address for registration. */
@@ -15,6 +15,7 @@ export async function emailRegistration(
     {
       to: emailAddress,
       from: Senders.AUTH,
+      brevoFrom: BrevoSenders.AUTH,
       subject: SUBJECT,
       react: Content({ url }),
     },

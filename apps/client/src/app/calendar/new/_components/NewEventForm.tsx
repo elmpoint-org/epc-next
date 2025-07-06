@@ -16,8 +16,6 @@ import FormEventText from './FormEventText';
 import FormSubmit from './FormSubmit';
 import FormHeader from './FormHeader';
 
-export const COST_MEMBERS = 15.0;
-export const COST_GUESTS = 20.0;
 export const MAX_ROOMS = 20;
 
 const NewEventForm = ({

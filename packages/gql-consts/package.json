@@ -1,0 +1,9 @@
+{
+  "name": "@epc/gql-consts",
+  "private": true,
+  "scripts": {},
+  "exports": {
+    "./notifs": "./src/notifDefaults.ts",
+    "./cooldown": "./src/cooldownTimes.ts"
+  }
+}

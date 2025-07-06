@@ -268,6 +268,13 @@ export const getUserTrustedBy = h<M.UserResolvers['trustedBy']>(
   }
 );
 
+export const getUserCooldowns = h<M.UserResolvers['cooldowns']>(
+  async ({ sources, parent: { id }, scope, userId: authUserId }) => {
+    if (!scopeDiff(scope, 'ADMIN') && id !== authUserId) throw scopeError();
+    return (await sources.userCooldown.findBy('userId', id))?.[0];
+  }
+);
+
 // util: parse passwordless credential
 function parseCredential(c: Credential) {
   return {

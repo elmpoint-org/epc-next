@@ -14,7 +14,7 @@ export default function CalendarPage() {
           Calendar
         </h1>
 
-        <div className="page-full-width flex-1 rounded-lg bg-slate-100">
+        <div className="page-full-width flex-1 rounded-lg bg-dwhite">
           <div className="mx-auto flex min-h-dvh flex-col gap-4 p-6">
             <Calendar />
           </div>

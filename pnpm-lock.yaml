@@ -98,12 +98,12 @@ importers:
       '@epc/date-ts':
         specifier: workspace:*
         version: link:../../packages/date-ts
+      '@epc/gql-consts':
+        specifier: workspace:*
+        version: link:../../packages/gql-consts
       '@epc/mime':
         specifier: workspace:*
         version: link:../../packages/mime
-      '@epc/notif-opts':
-        specifier: workspace:*
-        version: link:../../packages/notif-opts
       '@epc/server':
         specifier: workspace:*
         version: link:../server
@@ -351,12 +351,12 @@ importers:
       '@epc/date-ts':
         specifier: workspace:*
         version: link:../../packages/date-ts
+      '@epc/gql-consts':
+        specifier: workspace:*
+        version: link:../../packages/gql-consts
       '@epc/mime':
         specifier: workspace:*
         version: link:../../packages/mime
-      '@epc/notif-opts':
-        specifier: workspace:*
-        version: link:../../packages/notif-opts
       '@epc/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -530,9 +530,9 @@ importers:
         specifier: 'catalog:'
         version: 1.11.13
 
-  packages/mime: {}
+  packages/gql-consts: {}
 
-  packages/notif-opts: {}
+  packages/mime: {}
 
   packages/schema:
     dependencies:

@@ -23,6 +23,9 @@ export default gql`
     "the user's notification settings"
     notifs: UserNotifSettings
 
+    "cooldown/quota data for user (ADMIN|userId scope)"
+    cooldowns: UserCooldown
+
     # __ AUTH DATA __
     "scope defines a user's permissions."
     scope: [UserScopeProp!]

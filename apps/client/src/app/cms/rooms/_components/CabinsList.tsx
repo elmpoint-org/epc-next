@@ -125,7 +125,7 @@ export default function CabinsList() {
         ))}
         {/* new room buttons */}
         {cabins && (
-          <div className="flex h-full break-inside-avoid flex-col gap-2">
+          <div className="flex break-inside-avoid flex-col gap-2">
             <CardButton
               className="min-h-36 flex-1 rounded-sm rounded-t-lg"
               icon={IconHomePlus}

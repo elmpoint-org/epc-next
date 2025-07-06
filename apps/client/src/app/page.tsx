@@ -25,7 +25,7 @@ export default async function HomePage() {
         </h1>
 
         {/* page content */}
-        <div className="container flex-1 rounded-lg bg-slate-100">
+        <div className="container flex-1 rounded-lg bg-dwhite">
           <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-2 sm:p-6">
             {/* title block */}
             <div className="flex flex-col items-stretch gap-2.5 p-2.5">

@@ -7,11 +7,12 @@ import { brevo } from '.';
 import { el } from './components/getElement';
 import { Resource } from 'sst';
 import { catchTF } from '##/util/catchTF.js';
+import { BrevoSender } from './senders';
 
 const resend = new Resend(Resource.SecretResendAPIKey.value);
 
 export async function send(
-  { ...props }: { from: Senders } & CreateEmailOptions,
+  { ...props }: { from: Senders; brevoFrom?: BrevoSender } & CreateEmailOptions,
   options?: { fallback?: boolean }
 ) {
   if (isDev) return localSend(props.react, props.subject);
@@ -45,10 +46,12 @@ export function sendWithBrevo(props: Parameters<typeof brevoFallback>[0]) {
 
 function brevoFallback({
   to,
+  brevoFrom: from,
   subject,
   content,
 }: {
   to: string | string[];
+  brevoFrom?: BrevoSender;
   subject: string;
   content: React.ReactNode;
 }) {
@@ -56,6 +59,6 @@ function brevoFallback({
     const html = await render(el(content));
     const text = await render(el(content), { plainText: true });
 
-    await brevo.sendRawEmail({ to, subject, html, text });
+    await brevo.sendRawEmail({ to, from, subject, html, text });
   });
 }

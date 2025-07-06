@@ -9,7 +9,12 @@ declare module "sst" {
       "type": "sst.aws.Nextjs"
       "url": string
     }
-    "DailyDev": {
+    "CronDailyDev": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
+    "CronWeeklyDev": {
       "name": string
       "type": "sst.aws.Function"
       "url": string

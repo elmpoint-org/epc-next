@@ -1,4 +1,4 @@
-import type { UserNotifSettings } from '../../../apps/server/src/db/__types/graphql-types';
+import type { UserNotifSettings } from './_gql';
 
 export type NotifTypes = keyof Omit<UserNotifSettings, '__typename'>;
 

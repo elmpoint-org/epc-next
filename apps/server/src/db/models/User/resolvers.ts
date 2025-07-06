@@ -26,6 +26,7 @@ const resolvers: UserModule.Resolvers = {
     scope: f.getUserScope,
     trustedUsers: f.getUserTrustedUsers,
     trustedBy: f.getUserTrustedBy,
+    cooldowns: f.getUserCooldowns,
 
     timestamp,
   },

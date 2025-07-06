@@ -6,6 +6,8 @@ import { graphql } from '##/db/lib/utilities.js';
 import { signReferralToken, signToken } from '##/auth/sign.js';
 import { verifyReferralToken } from '##/auth/verify.js';
 import { emails } from '##/email/index.js';
+import { unixNow } from '@epc/date-ts';
+import { COOLDOWN_TIMES } from '@epc/gql-consts/cooldown';
 
 export const checkReferral = t.procedure
   .input(z.object({ email: z.string() }))
@@ -17,6 +19,9 @@ export const checkReferral = t.procedure
           preUserFromEmail(email: $email) {
             id
             email
+            cooldowns {
+              nextRegistrationEmail
+            }
           }
         }
       `),
@@ -26,6 +31,12 @@ export const checkReferral = t.procedure
       throw err('BAD_REQUEST', 'NEEDS_REFERRAL');
     const { id, email: parsedEmail } = data.preUserFromEmail;
 
+    // check cooldown
+    if (
+      unixNow() < (data.preUserFromEmail.cooldowns?.nextRegistrationEmail ?? 0)
+    )
+      throw err('TOO_MANY_REQUESTS', 'COOLDOWN_VIOLATION');
+
     // sign referral token
     const token = await signReferralToken(id).catch(() => {
       throw err('INTERNAL_SERVER_ERROR', 'SERVER_ERROR');
@@ -34,6 +45,26 @@ export const checkReferral = t.procedure
     // send email
     const success = await emails.emailRegistration(parsedEmail, { token });
     if (!success) throw err('INTERNAL_SERVER_ERROR', 'EMAIL_SEND_FAILED');
+
+    graph(
+      graphql(`
+        mutation UserCooldownUpdate(
+          $userId: ID!
+          $updates: UserCooldownUpdateOpts!
+        ) {
+          userCooldownUpdate(userId: $userId, updates: $updates) {
+            id
+          }
+        }
+      `),
+      {
+        userId: id,
+        updates: {
+          nextRegistrationEmail:
+            unixNow() + COOLDOWN_TIMES['nextRegistrationEmail'],
+        },
+      }
+    );
   });
 
 export const verifyToken = t.procedure

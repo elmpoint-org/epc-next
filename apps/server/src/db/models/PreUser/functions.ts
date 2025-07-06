@@ -1,5 +1,6 @@
 import {
   MutationResolvers,
+  PreUserResolvers,
   QueryResolvers,
 } from '##/db/__types/graphql-types.js';
 import { ResolverContext } from '##/db/graph.js';
@@ -69,5 +70,12 @@ export const preUserDelete = h<MutationResolvers['preUserDelete']>(
 
     await sources.preUser.delete(id);
     return u;
+  }
+);
+
+export const getPreUserCooldowns = h<PreUserResolvers['cooldowns']>(
+  scoped('ADMIN'),
+  async ({ sources, parent: { id } }) => {
+    return (await sources.userCooldown.findBy('userId', id))?.[0];
   }
 );

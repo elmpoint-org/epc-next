@@ -1,4 +1,4 @@
-import { runEventReminders } from './reminders';
+import { runEventReminders } from './src/reminders';
 
 export function handler() {
   runEventReminders();

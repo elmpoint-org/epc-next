@@ -10,6 +10,9 @@ export default gql`
     name: String
     scope: [UserScopeProp!]
 
+    "cooldown/quota data for user (ADMIN scope)"
+    cooldowns: UserCooldown
+
     timestamp: TS!
   }
 

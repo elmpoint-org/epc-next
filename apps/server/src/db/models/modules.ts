@@ -18,6 +18,8 @@ import StayModule from './Stay/module';
 import StaySource from './Stay/source';
 import StayTokenModule from './StayToken/module';
 import StayTokenSource from './StayToken/source';
+import UserCooldownModule from './UserCooldown/module';
+import UserCooldownSource from './UserCooldown/source';
 
 // DEFINE SCHEMA
 
@@ -33,6 +35,7 @@ export const modules: Module[] = [
   CabinModule,
   StayModule,
   StayTokenModule,
+  UserCooldownModule,
 ];
 
 export const sources = () => ({
@@ -46,4 +49,5 @@ export const sources = () => ({
   cabin: new CabinSource(),
   stay: new StaySource(),
   stayToken: new StayTokenSource(),
+  userCooldown: new UserCooldownSource(),
 });

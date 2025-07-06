@@ -11,7 +11,7 @@ export default function MyStaysPage() {
         <h1 className="mb-6 flex flex-col items-center justify-center text-4xl">
           My Upcoming Stays
         </h1>
-        <div className="container flex-1 rounded-lg bg-slate-100">
+        <div className="container flex-1 rounded-lg bg-dwhite">
           <MyEventsList />
         </div>
       </div>

@@ -7,7 +7,7 @@ import {
 import { Inside } from '##/ics/functions.js';
 import { catchTF } from '##/util/catchTF.js';
 import { dateTS, dateTSObject } from '@epc/date-ts';
-import { NOTIF_DEFAULT_VALUES } from '@epc/notif-opts/defaults';
+import { NOTIF_DEFAULT_VALUES } from '@epc/gql-consts/notifs';
 import { ResultOf } from '@graphql-typed-document-node/core';
 
 const NOTIF_FRAGMENT = graphql(`

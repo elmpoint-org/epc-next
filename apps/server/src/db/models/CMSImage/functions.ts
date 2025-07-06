@@ -27,6 +27,7 @@ export const getCmsImages = h<M.QueryResolvers['cmsImages']>(
 export const getCmsImage = h<M.QueryResolvers['cmsImage']>(
   async ({ sources, args: { id }, userId }) => {
     const img = await sources.cms.image.get(id);
+    if (!img) throw err('IMAGE_NOT_FOUND');
 
     // find whether page requires user auth
     let isPublic = false;
