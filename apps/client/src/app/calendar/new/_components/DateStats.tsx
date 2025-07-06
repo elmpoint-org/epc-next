@@ -1,7 +1,10 @@
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
 
-import { COST_GUESTS, COST_MEMBERS } from './NewEventForm';
+import {
+  DAILY_HEAD_TAX_GUESTS,
+  DAILY_HEAD_TAX_MEMBERS,
+} from '@/data/headTaxData';
 import { useFormCtx } from '../state/formCtx';
 
 const DAYS_MAX = 150;
@@ -17,8 +20,8 @@ const DateStats = () => {
   const diffLim = useMemo(() => Math.min(diff, DAYS_MAX), [diff]);
   const isMax = diff > diffLim;
 
-  const memberCost = useMemo(() => diffLim * COST_MEMBERS, [diffLim]);
-  const guestCost = useMemo(() => diffLim * COST_GUESTS, [diffLim]);
+  const memberCost = useMemo(() => diffLim * DAILY_HEAD_TAX_MEMBERS, [diffLim]);
+  const guestCost = useMemo(() => diffLim * DAILY_HEAD_TAX_GUESTS, [diffLim]);
 
   return (
     <>
