@@ -225,7 +225,7 @@ export default function Calendar() {
   return (
     <>
       <InvalidateProvider cb={invalidate}>
-        <div className="relative flex flex-col gap-4">
+        <div className="relative flex min-h-[95dvh] flex-col gap-4">
           {/* header bar */}
           <Controls {...props} />
 

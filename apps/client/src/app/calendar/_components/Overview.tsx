@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import { D1 } from '@epc/date-ts';
+import { D1, dateTS, unixNow } from '@epc/date-ts';
 import type { CalendarProps } from './Calendar';
 import {
   GlobalKeyboardHandler,
@@ -69,8 +69,8 @@ export default function Overview({ ...props }: CalendarProps) {
   // RENDER
   return (
     <>
-      <div className="flex flex-col gap-2">
-        <div className="relative flex flex-col gap-4 md:flex-row">
+      <div className="flex flex-1 flex-col gap-2">
+        <div className="relative flex flex-1 flex-col gap-4 md:flex-row">
           {/* calendar */}
           <OverviewCalendar selected={state_selectedDate} {...props} />
 
