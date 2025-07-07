@@ -75,7 +75,7 @@ export default function OverviewDay({
       <div
         className={clx(
           'relative rounded-lg border border-slate-300',
-          /* full screen */ 'md:absolute md:inset-y-0 md:right-0 md:w-72',
+          /* full screen */ 'hidden md:absolute md:inset-y-0 md:right-0 md:block md:w-72',
         )}
       >
         {/* selected day */}
