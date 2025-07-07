@@ -16,6 +16,7 @@ import {
   BatchWriteCommandInput,
   BatchGetCommandInput,
 } from '@aws-sdk/lib-dynamodb';
+import { ExpressionAttributes } from './ExpressionAttributes';
 
 const dbClient = new DynamoDBClient();
 const db = DynamoDBDocumentClient.from(dbClient);
@@ -102,15 +103,15 @@ export class SimpleDynamo {
     } = opts;
 
     // run query
-    const { n, v, expressionAttributes } = new ExpressionAttributes();
+    const { N, V, expressionAttributes } = new ExpressionAttributes();
     const params: QueryCommandInput = {
       TableName: this.TableName,
       KeyConditionExpression:
-        `${n(primaryKey)} = ${v(primaryVal)}` + // primary key expression
+        `${N(primaryKey)} = ${V(primaryVal)}` + // primary key expression
         !!operand // sort key expression...
-          ? ` AND ${n(sortKey)} ${operand} ${sortVals.map(v).join(' AND ')}`
+          ? ` AND ${N(sortKey)} ${operand} ${sortVals.map(V).join(' AND ')}`
           : '',
-      ...expressionAttributes,
+      ...expressionAttributes(),
     };
     if (index) params.IndexName = index;
     if (limit) params.Limit = limit;
@@ -126,12 +127,12 @@ export class SimpleDynamo {
     const { Key, add, remove } = opts;
 
     // setup
-    const { n, v, expressionAttributes } = new ExpressionAttributes();
+    const { N, V, expressionAttributes } = new ExpressionAttributes();
     function updateExpression(command: string, object?: KeyValueType) {
       if (!object || !Object.keys(object ?? {}).length) return '';
 
       return `${command} ${Object.keys(object)
-        .map((key) => `${n(key)} = ${v(object[key])}`)
+        .map((key) => `${N(key)} = ${V(object[key])}`)
         .join(', ')} `;
     }
 
@@ -142,7 +143,7 @@ export class SimpleDynamo {
       ReturnValues: 'ALL_NEW',
       UpdateExpression:
         updateExpression('set', add) + updateExpression('remove', remove),
-      ...expressionAttributes,
+      ...expressionAttributes(),
     };
     return (await db.send(new UpdateCommand(params))).Attributes;
   }
@@ -224,50 +225,12 @@ export class SimpleDynamo {
 export type KeyType = Record<string, unknown>;
 /** same as KeyType, but this is not an AWS Key (it's for other values.) */
 export type KeyValueType = KeyType;
+
 export type QueryOp = '=' | '<' | '<=' | '>' | '>=' | 'BETWEEN';
 
 export type QuerySK = Parameters<SimpleDynamo['query']>[0]['query']['sortKey'];
 export type QuerySKBetween = Extract<QuerySK, { length: 4 }>;
 export type QuerySKStandard = Exclude<QuerySK, QuerySKBetween>;
-
-// ------------------------------------
-
-export class ExpressionAttributes {
-  /** encode an ExpressionAttributeName */
-  n(n: string) {
-    return this.storeAttribute(this.name_map, '#n', n);
-  }
-  /** encode an ExpressionAttributeValue */
-  v(v: unknown) {
-    return this.storeAttribute(this.val_map, ':v', v);
-  }
-
-  /** get attribute objects. include with spread operator. */
-  get expressionAttributes() {
-    return {
-      ExpressionAttributeNames: Object.fromEntries(this.name_map),
-      ExpressionAttributeValues: Object.fromEntries(this.val_map),
-    } as const;
-  }
-
-  // ------------------------------------
-
-  private name_map: Map<string, string> = new Map();
-  private val_map: Map<string, unknown> = new Map();
-
-  private storeAttribute(
-    map: Map<unknown, unknown>,
-    prefix: string,
-    value: unknown
-  ) {
-    const ref = this.makeRef(map.size, prefix);
-    map.set(ref, value);
-    return ref;
-  }
-  private makeRef(i: number, prefix: string) {
-    return `${prefix}${i.toString(16)}`;
-  }
-}
 
 /** pass into query() if you don't need a sort key. */
 export const NO_SORT_KEY: QuerySK = ['', null];
