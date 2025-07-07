@@ -10,7 +10,7 @@ export async function sendRawEmail(props: {
 }) {
   const { to, from, subject, html, text } = props;
 
-  await fetch('https://api.brevo.com/v3/smtp/email', {
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
 
     headers: {
@@ -26,4 +26,9 @@ export async function sendRawEmail(props: {
       subject: subject,
     }),
   });
+
+  if (!response.ok)
+    throw new Error('Brevo Error!', {
+      cause: await response.json(),
+    });
 }

@@ -6,6 +6,7 @@ import { graphql } from '##/db/lib/utilities.js';
 import { ResultOf } from '@graphql-typed-document-node/core';
 import { Preview } from '@react-email/components';
 import { dateFormat } from '@epc/date-ts';
+import { BrevoSenders } from '../senders';
 
 export const CALENDAR_EVENT_FRAGMENT = graphql(`
   fragment CalendarEvent on Stay @_unmask {
@@ -44,6 +45,7 @@ export async function emailNotifStayReminder(
   // due to volume concerns, these mesesages should only run on the fallback vendor.
   return sendWithBrevo({
     to: emailAddress,
+    brevoFrom: BrevoSenders.NOTIFICATION,
     subject: SUBJECT(props.event.dateStart),
     content: Content(props),
   });
