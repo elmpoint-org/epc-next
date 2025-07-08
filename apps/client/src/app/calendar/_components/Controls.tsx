@@ -84,10 +84,8 @@ export default function Controls(props: CalendarProps) {
 
   const [view, setView] = useCalendarView();
 
-  // new stay prompt
-  const { prop: newStay, trigger: openNewStay } = useReverseCbTrigger();
-
-  const Picker = view === 'OVERVIEW' ? MonthPicker : DatePicker;
+  const Picker =
+    view === 'OVERVIEW' || view === 'CALCIUM' ? MonthPicker : DatePicker;
 
   return (
     <>
@@ -321,7 +319,7 @@ export default function Controls(props: CalendarProps) {
                   icon={IconBaselineDensitySmall}
                   onClick={() => setView('CALCIUM')}
                 >
-                  <span className="flex-1 text-left">Legacy View</span>
+                  <span className="flex-1 text-left">EPC Classic View</span>
                   {view === 'CALCIUM' && (
                     <IconCheck stroke={1.5} className="text-slate-600" />
                   )}

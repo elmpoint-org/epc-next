@@ -109,10 +109,10 @@ export default function TimelineEvent({
 
   // show arrows
   const arrLeft =
-    loc.start === 1 ||
+    (loc.start === 1 && loc.length !== 0) ||
     (placeholder?.eventId ? event.dateStart < placeholder.start : false);
   const arrRight =
-    loc.end === -1 ||
+    (loc.end === -1 && loc.length !== 0) ||
     (placeholder?.eventId ? event.dateEnd > placeholder.end : false);
 
   return (
