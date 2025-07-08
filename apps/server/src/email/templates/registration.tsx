@@ -23,18 +23,21 @@ export async function emailRegistration(
   );
 }
 
-const SUBJECT = 'Verify your email address for Elm Point';
+const SUBJECT = 'Verify your email address for your Elm Point account';
 function Content({ url }: { url: string }) {
   return (
     <Wrapper
       children={
         <>
           <Prose>
-            <Title>Create your account</Title>
+            <Title>Finish creating your account</Title>
             <p>Thanks for joining the Elm Point website!</p>
-            <p>Click the link below to finish creating your account.</p>
+            <p>
+              Click the link below to confirm your email and finish creating
+              your account.
+            </p>
           </Prose>
-          <Button href={url}>Click here</Button>
+          <Button href={url}>Click here to continue</Button>
         </>
       }
       footer={
