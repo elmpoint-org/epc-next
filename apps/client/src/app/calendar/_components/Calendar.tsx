@@ -28,6 +28,7 @@ import {
   GlobalKeyboardHandler,
   useGlobalKeyboardShortcuts,
 } from '@/app/_ctx/globalKeyboard';
+import Calcium from './Calcium';
 
 export const CALENDAR_EVENT_FRAGMENT = graphql(`
   fragment CalendarEvent on Stay @_unmask {
@@ -231,6 +232,9 @@ export default function Calendar() {
 
           {/* overview view */}
           {view === 'OVERVIEW' && <Overview {...props} />}
+
+          {/* legacy calcium view */}
+          {view === 'CALCIUM' && <Calcium {...props} />}
         </div>
       </InvalidateProvider>
     </>

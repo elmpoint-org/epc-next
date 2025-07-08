@@ -14,6 +14,7 @@ import { DatePicker, MonthPicker } from '@mantine/dates';
 import {
   IconArrowLeft,
   IconArrowRight,
+  IconBaselineDensitySmall,
   IconCalendarMonth,
   IconCheck,
   IconChevronDown,
@@ -34,7 +35,11 @@ import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 import { useCalendarControls } from '../_util/controls';
-import { useCalendarView, useDisplayByRooms } from '../_util/queryStates';
+import {
+  useCalendarView,
+  useDisplayByRooms,
+  ViewType,
+} from '../_util/queryStates';
 import { IconType } from '@/util/iconType';
 import { CALENDAR_DAYS_MAX, CALENDAR_DAYS_MIN } from '@/CONSTANTS';
 
@@ -188,7 +193,7 @@ export default function Controls(props: CalendarProps) {
           </div>
 
           {/* number of days to show */}
-          {view !== 'OVERVIEW' && (
+          {(['TIMELINE', 'AGENDA'] as ViewType[]).includes(view) && (
             <>
               <div className="flex flex-row items-center gap-1">
                 <input
@@ -308,6 +313,16 @@ export default function Controls(props: CalendarProps) {
                 >
                   <span className="flex-1 text-left">Arrivals/Departures</span>
                   {view === 'AGENDA' && (
+                    <IconCheck stroke={1.5} className="text-slate-600" />
+                  )}
+                </DropdownOption>
+
+                <DropdownOption
+                  icon={IconBaselineDensitySmall}
+                  onClick={() => setView('CALCIUM')}
+                >
+                  <span className="flex-1 text-left">Legacy View</span>
+                  {view === 'CALCIUM' && (
                     <IconCheck stroke={1.5} className="text-slate-600" />
                   )}
                 </DropdownOption>
