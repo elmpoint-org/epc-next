@@ -12,8 +12,6 @@ import {
 import OverviewCalendar from './OverviewCalendar';
 import OverviewDay from './OverviewDay';
 
-export const OVERVIEW_NUM_WEEKS = 6;
-
 // COMPONENT
 export default function Overview({ ...props }: CalendarProps) {
   const { dates: queryDates } = props;

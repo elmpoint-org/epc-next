@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { CalendarProps, EventType } from '../_components/Calendar';
 import { alphabetical } from '@/util/sort';
 import { UseDatesArrayProps, useDatesArray } from './datesArray';
-import { OVERVIEW_NUM_WEEKS } from '../_components/Overview';
+import { OVERVIEW_NUM_WEEKS } from '@/CONSTANTS';
 import { dateTS, dateTSObject } from '@epc/date-ts';
 import { useEventColorIds } from './cabinColorHooks';
 

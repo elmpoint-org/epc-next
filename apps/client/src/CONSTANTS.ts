@@ -19,3 +19,6 @@ export const CALENDAR_DEFAULT_DAYS_MOBILE = 4;
 // the default view to show in the calendar
 export const CALENDAR_DEFAULT_VIEW: ViewType = 'OVERVIEW';
 export const CALENDAR_DEFAULT_VIEW_MOBILE: ViewType = 'AGENDA';
+
+// the number of weeks to show in month view(s)
+export const OVERVIEW_NUM_WEEKS = 6;

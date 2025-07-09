@@ -1,17 +1,14 @@
-import { clmx, clx } from '@/util/classConcat';
-import { D1, dateFormat, dateTS, dateTSObject } from '@epc/date-ts';
-import { useEventColorId, useEventColorIds } from '../_util/cabinColorHooks';
-import { CalendarProps, EventType } from './Calendar';
-import { OVERVIEW_NUM_WEEKS } from './Overview';
+import { clmx } from '@/util/classConcat';
+import { D1, dateFormat } from '@epc/date-ts';
+import { CalendarProps } from './Calendar';
 import {
   useEventsByDayInMonth,
   UseEventsByDayInMonthProps,
 } from '../_util/eventsByDay';
 import { UseState } from '@/util/stateType';
 
-import RoomSwatch from './RoomSwatch';
+import { OVERVIEW_NUM_WEEKS } from '@/CONSTANTS';
 import TimelineHeader from './TimelineHeader';
-import { IconCalendarFilled } from '@tabler/icons-react';
 
 // date settings that lead to a Sun-Sat week for header values
 export const WEEK_HEADER = {
