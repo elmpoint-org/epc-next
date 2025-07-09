@@ -112,29 +112,6 @@ function WeekGrid({ eventsByWeek }: { eventsByWeek: WeekOfEvents[] | null }) {
   );
 }
 
-function EventsInWeek({ week }: { week: WeekOfEvents }) {
-  return (
-    <div
-      className="col-span-full grid min-h-16 grid-flow-dense gap-1 py-1 [--row-color:rgb(241_245_249/.9)]"
-      style={{
-        gridTemplateColumns: `repeat(${14}, minmax(0, 1fr))`,
-      }}
-    >
-      {week.events.map((event) => (
-        <TimelineEvent
-          key={event.id}
-          event={event}
-          days={7}
-          dates={{
-            start: week.dateRange[0],
-            end: week.dateRange[1],
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
 function WeekHeader({ week }: { week: WeekOfEvents }) {
   return (
     <>
@@ -155,5 +132,28 @@ function WeekHeader({ week }: { week: WeekOfEvents }) {
         </div>
       ))}
     </>
+  );
+}
+
+function EventsInWeek({ week }: { week: WeekOfEvents }) {
+  return (
+    <div
+      className="col-span-full grid min-h-16 grid-flow-dense gap-1 py-1 [--row-color:rgb(241_245_249/.9)]"
+      style={{
+        gridTemplateColumns: `repeat(${14}, minmax(0, 1fr))`,
+      }}
+    >
+      {week.events.map((event) => (
+        <TimelineEvent
+          key={event.id}
+          event={event}
+          days={7}
+          dates={{
+            start: week.dateRange[0],
+            end: week.dateRange[1],
+          }}
+        />
+      ))}
+    </div>
   );
 }
