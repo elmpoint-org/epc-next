@@ -81,10 +81,7 @@ export default function TimelineEvent({
   return (
     <>
       <Popover
-        className={clmx(
-          'flex flex-row items-center truncate',
-          isCompact && 'items-start',
-        )}
+        className="flex flex-row items-center truncate"
         style={{
           gridColumn: `${loc.start} / ${loc.end}`,
         }}
@@ -94,6 +91,7 @@ export default function TimelineEvent({
           <div
             className={clmx(
               'flex flex-1 flex-row items-center justify-between truncate rounded-lg border ring-inset group-focus:ring-1',
+              isCompact && 'rounded-md',
               css.main,
             )}
             onClick={(e) => {

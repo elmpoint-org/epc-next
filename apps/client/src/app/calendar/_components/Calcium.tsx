@@ -141,7 +141,7 @@ function EventsInWeek({ week }: { week: WeekOfEvents }) {
   return (
     <div className="col-span-full min-h-12">
       <div
-        className="grid grid-flow-dense auto-rows-fr gap-1 py-1 [--row-color:rgb(241_245_249/.9)]"
+        className="grid grid-flow-dense auto-rows-fr gap-0.5 py-1 [--row-color:rgb(241_245_249/.9)]"
         style={{
           gridTemplateColumns: `repeat(${14}, minmax(0, 1fr))`,
         }}

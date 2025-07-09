@@ -25,14 +25,14 @@ export function useCalendarControls(props: CalendarControlsProps) {
 
   const last = useCallback(() => {
     let np = selectedDate - D1 * daysWithDefault;
-    if (view === 'OVERVIEW')
+    if (view === 'OVERVIEW' || view === 'CALCIUM')
       np = dateTSObject(selectedDate).subtract(1, 'month').unix();
     updatePeriod(np);
   }, [selectedDate, daysWithDefault, view, updatePeriod]);
 
   const next = useCallback(() => {
     let np = selectedDate + D1 * daysWithDefault;
-    if (view === 'OVERVIEW')
+    if (view === 'OVERVIEW' || view === 'CALCIUM')
       np = dateTSObject(selectedDate).add(1, 'month').unix();
     updatePeriod(np);
   }, [selectedDate, daysWithDefault, view, updatePeriod]);
