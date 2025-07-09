@@ -1,7 +1,10 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { CalendarProps, EventType } from '../_components/Calendar';
 import { alphabetical } from '@/util/sort';
 import { UseDatesArrayProps, useDatesArray } from './datesArray';
+import { OVERVIEW_NUM_WEEKS } from '../_components/Overview';
+import { dateTS, dateTSObject } from '@epc/date-ts';
+import { useEventColorIds } from './cabinColorHooks';
 
 export type EventsByDay = {
   date: number;
@@ -12,18 +15,20 @@ export type EventsByDay = {
   unchanged: EventType[];
 };
 
+type EBDRequiredProps = Pick<CalendarProps, 'events'> & UseDatesArrayProps;
+
 export function useEventsByDay<CB extends (e: EventsByDay) => any>(
-  props: Pick<CalendarProps, 'events'> & UseDatesArrayProps,
+  props: EBDRequiredProps,
   processor: CB,
   withDefault?: boolean,
 ): ReturnType<CB>[] | null;
 export function useEventsByDay<CB extends undefined>(
-  props: Pick<CalendarProps, 'events'> & UseDatesArrayProps,
+  props: EBDRequiredProps & UseDatesArrayProps,
   processor?: CB,
   withDefault?: boolean,
 ): EventsByDay[] | null;
 export function useEventsByDay<CB>(
-  props: Pick<CalendarProps, 'events'> & UseDatesArrayProps,
+  props: EBDRequiredProps & UseDatesArrayProps,
   processor?: CB,
   withDefault?: boolean,
 ) {
@@ -70,6 +75,49 @@ export function useEventsByDay<CB>(
       return ad;
     });
   }, [dates, events_in, processor, withDefault]);
+
+  return eventsByDay;
+}
+
+export type UseEventsByDayInMonthProps = EBDRequiredProps &
+  Pick<CalendarProps, 'dates' | 'selectedDate'>;
+export function useEventsByDayInMonth({
+  currentlySelected,
+  ...props
+}: { currentlySelected?: number } & UseEventsByDayInMonthProps) {
+  const { events, dates: queryDates, selectedDate: firstOfMonth } = props;
+
+  const colorIds = useEventColorIds(events ?? []);
+
+  const ebdModifier = useCallback(
+    (d: EventsByDay) => {
+      return {
+        ...d,
+        isSelected: d.date === currentlySelected,
+        isToday: d.date === dateTS(new Date()),
+        inMonth:
+          dateTSObject(d.date).month() === dateTSObject(firstOfMonth).month(),
+        events: [...d.unchanged, ...d.arrivals, ...d.departures]
+          .reduce(
+            (arr, cur) =>
+              arr.some((e) => e.id === cur.id) ? arr : [...arr, cur],
+            [] as EventType[],
+          )
+          .sort(alphabetical((d) => colorIds?.[d.id] ?? 'zzz')),
+      };
+    },
+    [colorIds, currentlySelected, firstOfMonth],
+  );
+
+  const eventsByDay = useEventsByDay(
+    {
+      events,
+      dates: queryDates,
+      days: 7 * OVERVIEW_NUM_WEEKS,
+    },
+    ebdModifier,
+    /* withDefault = */ true,
+  );
 
   return eventsByDay;
 }

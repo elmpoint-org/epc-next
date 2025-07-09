@@ -3,17 +3,14 @@ import { lazy, useMemo } from 'react';
 import { Popover, PopoverButton } from '@headlessui/react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
-import { dateDiff } from '@epc/date-ts';
-import { clamp } from '@/util/math';
-
-import { CalendarProps, EventType } from './Calendar';
+import { EventType } from './Calendar';
 import { clmx } from '@/util/classConcat';
+import { CabinColor } from '../_util/cabinColors';
+import { useEventColorObject } from '../_util/cabinColorHooks';
 import {
-  CABIN_COLORS,
-  CabinColor,
-  getCabinColorObject,
-} from '../_util/cabinColors';
-import { useEventColorId } from '../_util/cabinColorHooks';
+  useBannerPosition,
+  UseBannerPositionProps,
+} from '../_util/useBannerPosition';
 
 const EventPopup = lazy(() => import('./EventPopup'));
 
@@ -23,6 +20,7 @@ export default function TimelineEvent({
   highlightRoom,
   highlightCabin,
   edgeOffset,
+  isCompact,
   placeholder,
   onOpen,
   ...props
@@ -32,41 +30,14 @@ export default function TimelineEvent({
   highlightRoom?: string;
   highlightCabin?: string;
   edgeOffset?: boolean;
+  isCompact?: boolean;
   placeholder?: EventPlaceholder;
   onOpen?: () => void;
-} & Pick<CalendarProps, 'dates' | 'days'>) {
-  const { dates: dateLimits, days } = props;
+} & UseBannerPositionProps) {
+  const { arrows, loc } = useBannerPosition(props, event, placeholder);
 
   // get correct color scheme
-  const parse = (s?: CabinColor) =>
-    CABIN_COLORS[s ?? 'DEFAULT'] ?? CABIN_COLORS.DEFAULT;
-  const colorId = useEventColorId(event);
-  const css = theme ? parse(theme) : getCabinColorObject(colorId, true);
-
-  // calculate grid coordinates
-  const loc = useMemo(() => {
-    const fromStart = dateDiff(
-      placeholder?.start ?? event.dateStart,
-      dateLimits.start,
-    );
-    const fromEnd = dateDiff(placeholder?.end ?? event.dateEnd, dateLimits.end);
-
-    let start = clamp((fromStart + 1) * 2, 1, days * 2);
-    let end = clamp((fromEnd - 1) * 2, -days * 2, -1);
-    const length = days * 2 + end + 2 - start;
-
-    // correct for single days
-    if (length === 0) {
-      start--;
-      end++;
-    }
-
-    return {
-      start,
-      end,
-      length,
-    };
-  }, [placeholder, event, dateLimits, days]);
+  const css = useEventColorObject(event, theme);
 
   // override button text
   const resText = useMemo(() => {
@@ -107,14 +78,6 @@ export default function TimelineEvent({
     placeholder?.combined,
   ]);
 
-  // show arrows
-  const arrLeft =
-    loc.start === 1 ||
-    (placeholder?.eventId ? event.dateStart < placeholder.start : false);
-  const arrRight =
-    loc.end === -1 ||
-    (placeholder?.eventId ? event.dateEnd > placeholder.end : false);
-
   return (
     <>
       <Popover
@@ -123,11 +86,12 @@ export default function TimelineEvent({
           gridColumn: `${loc.start} / ${loc.end}`,
         }}
       >
-        {edgeOffset && !arrLeft && <div className="w-6" />}
+        {edgeOffset && !arrows.left && <div className="w-6" />}
         <PopoverButton className="group flex-1 truncate bg-[--row-color] focus:outline-none">
           <div
             className={clmx(
               'flex flex-1 flex-row items-center justify-between truncate rounded-lg border ring-inset group-focus:ring-1',
+              isCompact && 'rounded-md',
               css.main,
             )}
             onClick={(e) => {
@@ -137,23 +101,28 @@ export default function TimelineEvent({
               }
             }}
           >
-            {arrLeft ? (
+            {arrows.left ? (
               <IconChevronLeft stroke={1} className="size-4 flex-shrink-0" />
             ) : (
               <div />
             )}
             {/* event title */}
-            <div className="truncate p-1 text-sm md:px-2">
+            <div
+              className={clmx(
+                'truncate p-1 text-sm md:px-2',
+                isCompact && 'py-0.5 text-xs md:px-1',
+              )}
+            >
               {resText ?? event.title}
             </div>
-            {arrRight ? (
+            {arrows.right ? (
               <IconChevronRight stroke={1} className="size-4 flex-shrink-0" />
             ) : (
               <div />
             )}
           </div>
         </PopoverButton>
-        {edgeOffset && !arrRight && <div className="w-6" />}
+        {edgeOffset && !arrows.right && <div className="w-6" />}
 
         {!placeholder?.combined && (
           <EventPopup event={event} highlightRoom={highlightRoom} />

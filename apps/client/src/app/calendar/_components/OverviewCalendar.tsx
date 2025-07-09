@@ -1,64 +1,41 @@
 import { clmx, clx } from '@/util/classConcat';
-import { dateFormat, dateTS, dateTSObject } from '@epc/date-ts';
-import { useEventColorId, useEventColorIds } from '../_util/cabinColorHooks';
+import { dateFormat } from '@epc/date-ts';
+import { useEventColorId } from '../_util/cabinColorHooks';
 import { CalendarProps, EventType } from './Calendar';
 import { OVERVIEW_NUM_WEEKS } from './Overview';
-import { useEventsByDay } from '../_util/eventsByDay';
-import { alphabetical } from '@/util/sort';
+import {
+  useEventsByDayInMonth,
+  UseEventsByDayInMonthProps,
+} from '../_util/eventsByDay';
 import { UseState } from '@/util/stateType';
 
 import RoomSwatch from './RoomSwatch';
 import TimelineHeader from './TimelineHeader';
 
 // date settings that lead to a Sun-Sat week for header values
-const WEEK_HEADER = {
+export const WEEK_HEADER = {
   dates: { start: 1725148800, end: 0 },
   days: 7,
 } satisfies Partial<CalendarProps>;
 
 type OverviewCalendarProps = {
   selected: UseState<number | null>;
-} & Pick<CalendarProps, 'events' | 'selectedDate' | 'dates' | 'updatePeriod'>;
+} & Pick<CalendarProps, 'updatePeriod'> &
+  UseEventsByDayInMonthProps;
 
 // COMPONENT
 export default function OverviewCalendar({
   selected: [selectedDate, setSelectedDate],
   ...props
 }: OverviewCalendarProps) {
-  const {
-    events,
-    selectedDate: firstOfMonth,
-    dates: queryDates,
-    updatePeriod,
-  } = props;
-
-  const colorIds = useEventColorIds(events ?? []);
+  const { updatePeriod } = props;
 
   // calculate dates
-  const eventsByDay = useEventsByDay(
-    {
-      events,
-      dates: queryDates,
-      days: 7 * OVERVIEW_NUM_WEEKS,
-    },
-    (d) => {
-      return {
-        ...d,
-        isSelected: d.date === selectedDate,
-        isToday: d.date === dateTS(new Date()),
-        inMonth:
-          dateTSObject(d.date).month() === dateTSObject(firstOfMonth).month(),
-        events: [...d.unchanged, ...d.arrivals, ...d.departures]
-          .reduce(
-            (arr, cur) =>
-              arr.some((e) => e.id === cur.id) ? arr : [...arr, cur],
-            [] as EventType[],
-          )
-          .sort(alphabetical((d) => colorIds?.[d.id] ?? 'zzz')),
-      };
-    },
-    true,
-  );
+  const eventsByDay = useEventsByDayInMonth({
+    ...props,
+    days: 7 * OVERVIEW_NUM_WEEKS,
+    currentlySelected: selectedDate ?? undefined,
+  });
 
   return (
     <>

@@ -28,6 +28,7 @@ import {
   GlobalKeyboardHandler,
   useGlobalKeyboardShortcuts,
 } from '@/app/_ctx/globalKeyboard';
+import Calcium from './Calcium';
 
 export const CALENDAR_EVENT_FRAGMENT = graphql(`
   fragment CalendarEvent on Stay @_unmask {
@@ -91,7 +92,7 @@ export default function Calendar() {
   // days
   const defaultDays = useDefaultDays();
   const days = useMemo(() => {
-    if (view === 'OVERVIEW') return 31;
+    if (view === 'OVERVIEW' || view === 'CALCIUM') return 31;
     const num = parseInt(sq.get('days' satisfies QP) ?? '');
     if (!Number.isFinite(num)) return undefined;
     return num;
@@ -109,7 +110,7 @@ export default function Calendar() {
       if (daysWithDefault !== 7) return new Date();
       startDateNum = dateStartOfWeek(dateTS(new Date()));
     }
-    if (view === 'OVERVIEW')
+    if (view === 'OVERVIEW' || view === 'CALCIUM')
       startDateNum = dateTSObject(startDateNum).startOf('month').unix();
     return new Date(dateTSLocal(startDateNum) * 1000);
   }, [daysWithDefault, sq, view]);
@@ -122,7 +123,8 @@ export default function Calendar() {
 
   function updateQuery(key: QP, val: string | number) {
     const query = new URLSearchParams(sq);
-    if (days && view !== 'OVERVIEW') query.set('days' satisfies QP, '' + days);
+    if (days && !(view === 'OVERVIEW' || view === 'CALCIUM'))
+      query.set('days' satisfies QP, '' + days);
     query.set('date' satisfies QP, '' + dateTS(startDate));
     query.set(key, '' + val);
     router.push('?' + query.toString(), { scroll: false });
@@ -139,7 +141,7 @@ export default function Calendar() {
     let start = dateTS(startDate);
     let end = dateTS(endDate);
 
-    if (view === 'OVERVIEW') {
+    if (view === 'OVERVIEW' || view === 'CALCIUM') {
       const s = dateTSObject(start).startOf('month').startOf('week');
       start = s.unix();
       end = s.add(7 * OVERVIEW_NUM_WEEKS, 'days').unix();
@@ -231,6 +233,9 @@ export default function Calendar() {
 
           {/* overview view */}
           {view === 'OVERVIEW' && <Overview {...props} />}
+
+          {/* legacy calcium view */}
+          {view === 'CALCIUM' && <Calcium {...props} />}
         </div>
       </InvalidateProvider>
     </>
