@@ -142,12 +142,12 @@ function WeekHeader({ week }: { week: WeekOfEvents }) {
         <div
           key={day.date}
           data-nm={!day.inMonth || null}
-          className="sticky flex flex-col items-center justify-center border-b border-slate-300 py-1"
+          className="sticky flex flex-col items-center justify-center border-b border-slate-300/50 py-1"
         >
           <h3
             className={clx(
-              '-my-0.5 rounded-sm px-1 py-0.5 text-center text-sm/none',
-              day.isToday && 'bg-emerald-500/30 font-bold text-emerald-900',
+              '-my-0.5 rounded-md px-1 py-0.5 text-center text-sm/none',
+              day.isToday && 'bg-emerald-500/25 font-bold text-emerald-900',
             )}
           >
             {dateFormat(day?.date, 'D')}
