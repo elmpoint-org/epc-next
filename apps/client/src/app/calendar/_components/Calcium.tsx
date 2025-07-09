@@ -1,15 +1,16 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, ReactNode, useCallback, useMemo } from 'react';
 import {
   useEventsByDayInMonth,
   UseEventsByDayInMonthProps,
 } from '../_util/eventsByDay';
-import { CalendarProps } from './Calendar';
+import { CalendarProps, EventType } from './Calendar';
 import { OVERVIEW_NUM_WEEKS } from './Overview';
 import { D1, dateFormat } from '@epc/date-ts';
 import { clmx, clx } from '@/util/classConcat';
 import TimelineEvent from './TimelineEvent';
 import TimelineHeader from './TimelineHeader';
 import { WEEK_HEADER } from './OverviewCalendar';
+import { Inside } from '@/util/inferTypes';
 
 export default function Calcium(
   props: Pick<CalendarProps, never> & UseEventsByDayInMonthProps,
@@ -20,14 +21,14 @@ export default function Calcium(
   } = props;
 
   const eventsByDay = useEventsByDayInMonth(props);
-  const eventsByWeek = useMemo(
+  const eventsByWeek = useMemo<WeekOfEvents[] | null>(
     () =>
       (!!eventsByDay &&
         Array.from({ length: OVERVIEW_NUM_WEEKS }).map((_, i_week) => {
           const range = [
             startDate + D1 * 7 * i_week,
             startDate + D1 * 7 * (i_week + 1) - D1,
-          ];
+          ] as const;
           return {
             dateRange: range,
             days: Array.from({ length: 7 }).map(
@@ -54,76 +55,105 @@ export default function Calcium(
         </div>
 
         <div className="-mr-1 ml-[calc(-.25rem+1px)] grid grid-cols-7 gap-px bg-slate-300">
-          {eventsByWeek?.map((week, iw) => (
-            <Fragment key={iw}>
-              {/* week bg */}
-              <div
-                className="col-span-full grid grid-cols-subgrid"
-                style={{
-                  gridRowStart: iw + 1,
-                }}
-              >
-                {week.days.map((d) => (
-                  <div
-                    key={d.date}
-                    className={clmx(
-                      'border-slate-200 bg-dwhite print:border-b print:border-r',
-                      !d.inMonth && 'bg-dwhite/80',
-                    )}
-                  />
-                ))}
-              </div>
-
-              {/* week row */}
-              <div
-                key={iw}
-                className="relative col-span-full grid grid-cols-subgrid"
-                style={{
-                  gridRowStart: iw + 1,
-                }}
-              >
-                {/* week days header */}
-                {week.days.map((day) => (
-                  <div
-                    key={day?.date}
-                    data-nm={!day.inMonth || null}
-                    className="flex flex-col sticky items-center justify-center border-b border-slate-300 py-1"
-                  >
-                    <h3
-                      className={clx(
-                        '-my-0.5 rounded-sm px-1 py-0.5 text-center text-sm/none',
-                        day.isToday && 'bg-emerald-500/30 text-emerald-900 font-bold',
-                      )}
-                    >
-                      {dateFormat(day?.date, 'D')}
-                    </h3>
-                  </div>
-                ))}
-
-                {/* week's events grid */}
-                <div
-                  className="col-span-full grid min-h-16 grid-flow-dense gap-1 py-1 [--row-color:rgb(241_245_249/.9)]"
-                  style={{
-                    gridTemplateColumns: `repeat(${14}, minmax(0, 1fr))`,
-                  }}
-                >
-                  {week.events.map((event) => (
-                    <TimelineEvent
-                      key={event.id}
-                      event={event}
-                      days={7}
-                      dates={{
-                        start: week.dateRange[0],
-                        end: week.dateRange[1],
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </Fragment>
-          ))}
+          <WeekGrid {...{ eventsByWeek }} />
         </div>
       </div>
+    </>
+  );
+}
+
+type WeekOfEvents = {
+  dateRange: readonly [number, number];
+  days: DayOfWeekObject[];
+  events: EventType[];
+};
+type DayOfWeekObject = Inside<ReturnType<typeof useEventsByDayInMonth>>;
+
+function WeekGrid({ eventsByWeek }: { eventsByWeek: WeekOfEvents[] | null }) {
+  return (
+    <>
+      {eventsByWeek?.map((week, iw) => (
+        <Fragment key={iw}>
+          {/* week bg */}
+          <div
+            className="col-span-full grid grid-cols-subgrid"
+            style={{
+              gridRowStart: iw + 1,
+            }}
+          >
+            {week.days.map((d) => (
+              <div
+                key={d.date}
+                className={clmx(
+                  'border-slate-200 bg-dwhite print:border-b print:border-r',
+                  !d.inMonth && 'bg-dwhite/80',
+                )}
+              />
+            ))}
+          </div>
+
+          {/* week row */}
+          <div
+            key={iw}
+            className="relative col-span-full grid grid-cols-subgrid"
+            style={{
+              gridRowStart: iw + 1,
+            }}
+          >
+            {/* week days header */}
+            <WeekHeader week={week} />
+
+            {/* week's events grid */}
+            <EventsInWeek week={week} />
+          </div>
+        </Fragment>
+      ))}
+    </>
+  );
+}
+
+function EventsInWeek({ week }: { week: WeekOfEvents }) {
+  return (
+    <div
+      className="col-span-full grid min-h-16 grid-flow-dense gap-1 py-1 [--row-color:rgb(241_245_249/.9)]"
+      style={{
+        gridTemplateColumns: `repeat(${14}, minmax(0, 1fr))`,
+      }}
+    >
+      {week.events.map((event) => (
+        <TimelineEvent
+          key={event.id}
+          event={event}
+          days={7}
+          dates={{
+            start: week.dateRange[0],
+            end: week.dateRange[1],
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function WeekHeader({ week }: { week: WeekOfEvents }) {
+  return (
+    <>
+      {week.days.map((day) => (
+        <div
+          key={day.date}
+          data-nm={!day.inMonth || null}
+          className="sticky flex flex-col items-center justify-center border-b border-slate-300 py-1"
+        >
+          <h3
+            className={clx(
+              '-my-0.5 rounded-sm px-1 py-0.5 text-center text-sm/none',
+              day.isToday && 'bg-emerald-500/30 font-bold text-emerald-900',
+            )}
+          >
+            {dateFormat(day?.date, 'D')}
+          </h3>
+        </div>
+      ))}
     </>
   );
 }
