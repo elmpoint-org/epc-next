@@ -23,12 +23,13 @@ import { SetState } from '@/util/stateType';
 import Timeline from './Timeline';
 import Controls from './Controls';
 import Agenda from './Agenda';
-import Overview, { OVERVIEW_NUM_WEEKS } from './Overview';
+import Overview from './Overview';
 import {
   GlobalKeyboardHandler,
   useGlobalKeyboardShortcuts,
 } from '@/app/_ctx/globalKeyboard';
 import Calcium from './Calcium';
+import { OVERVIEW_NUM_WEEKS } from '@/CONSTANTS';
 
 export const CALENDAR_EVENT_FRAGMENT = graphql(`
   fragment CalendarEvent on Stay @_unmask {

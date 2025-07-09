@@ -5,7 +5,7 @@ import {
   UseEventsByDayInMonthProps,
 } from '../_util/eventsByDay';
 import { CalendarProps, EventType } from './Calendar';
-import { OVERVIEW_NUM_WEEKS } from './Overview';
+import { OVERVIEW_NUM_WEEKS } from '@/CONSTANTS';
 import { D1, dateFormat } from '@epc/date-ts';
 import { clmx, clx } from '@/util/classConcat';
 import { WEEK_HEADER } from './OverviewCalendar';
