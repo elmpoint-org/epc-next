@@ -1,4 +1,5 @@
-import { Fragment, ReactNode, useCallback, useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
+
 import {
   useEventsByDayInMonth,
   UseEventsByDayInMonthProps,
@@ -7,10 +8,11 @@ import { CalendarProps, EventType } from './Calendar';
 import { OVERVIEW_NUM_WEEKS } from './Overview';
 import { D1, dateFormat } from '@epc/date-ts';
 import { clmx, clx } from '@/util/classConcat';
-import TimelineEvent from './TimelineEvent';
-import TimelineHeader from './TimelineHeader';
 import { WEEK_HEADER } from './OverviewCalendar';
 import { Inside } from '@/util/inferTypes';
+
+import TimelineEvent from './TimelineEvent';
+import TimelineHeader from './TimelineHeader';
 
 export default function Calcium(
   props: Pick<CalendarProps, never> & UseEventsByDayInMonthProps,
@@ -54,7 +56,7 @@ export default function Calcium(
           <TimelineHeader noDate {...WEEK_HEADER} />
         </div>
 
-        <div className="-mr-1 ml-[calc(-.25rem+1px)] grid grid-cols-7 gap-px bg-slate-300">
+        <div className="-mr-1 ml-[calc(-.25rem+1px)] grid grid-cols-7 gap-x-px bg-slate-300">
           <WeekGrid {...{ eventsByWeek }} />
         </div>
       </div>
@@ -95,7 +97,7 @@ function WeekGrid({ eventsByWeek }: { eventsByWeek: WeekOfEvents[] | null }) {
           {/* week row */}
           <div
             key={iw}
-            className="relative col-span-full grid grid-cols-subgrid"
+            className="relative col-span-full grid grid-cols-subgrid border-b border-b-slate-400/60 pb-4 last:border-b-transparent"
             style={{
               gridRowStart: iw + 1,
             }}
@@ -119,11 +121,11 @@ function WeekHeader({ week }: { week: WeekOfEvents }) {
         <div
           key={day.date}
           data-nm={!day.inMonth || null}
-          className="sticky flex flex-col items-center justify-center border-b border-slate-300/50 py-1"
+          className="sticky flex max-h-fit flex-col items-center justify-center border-b border-b-slate-300/50 py-1"
         >
           <h3
             className={clx(
-              '-my-0.5 rounded-md px-1 py-0.5 text-center text-sm/none',
+              '-my-0.5 rounded-md px-1 py-0.5 text-center text-[0.8125rem] leading-none',
               day.isToday && 'bg-emerald-500/25 font-bold text-emerald-900',
             )}
           >
@@ -137,23 +139,26 @@ function WeekHeader({ week }: { week: WeekOfEvents }) {
 
 function EventsInWeek({ week }: { week: WeekOfEvents }) {
   return (
-    <div
-      className="col-span-full grid min-h-16 grid-flow-dense gap-1 py-1 [--row-color:rgb(241_245_249/.9)]"
-      style={{
-        gridTemplateColumns: `repeat(${14}, minmax(0, 1fr))`,
-      }}
-    >
-      {week.events.map((event) => (
-        <TimelineEvent
-          key={event.id}
-          event={event}
-          days={7}
-          dates={{
-            start: week.dateRange[0],
-            end: week.dateRange[1],
-          }}
-        />
-      ))}
+    <div className="col-span-full min-h-12">
+      <div
+        className="grid grid-flow-dense auto-rows-fr gap-1 py-1 [--row-color:rgb(241_245_249/.9)]"
+        style={{
+          gridTemplateColumns: `repeat(${14}, minmax(0, 1fr))`,
+        }}
+      >
+        {week.events.map((event) => (
+          <TimelineEvent
+            isCompact
+            key={event.id}
+            event={event}
+            days={7}
+            dates={{
+              start: week.dateRange[0],
+              end: week.dateRange[1],
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

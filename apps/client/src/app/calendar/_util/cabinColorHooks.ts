@@ -3,7 +3,12 @@
 import { useMemo } from 'react';
 
 import { EventType } from '../_components/Calendar';
-import { getCabinColor } from './cabinColors';
+import {
+  CABIN_COLORS,
+  CabinColor,
+  getCabinColor,
+  getCabinColorObject,
+} from './cabinColors';
 
 export function useEventColorIds(events: EventType[]) {
   const ids = useMemo(() => {
@@ -37,4 +42,18 @@ export function useEventColorIds(events: EventType[]) {
 export function useEventColorId(event: EventType) {
   const ids = useEventColorIds([event]);
   return ids[event.id];
+}
+
+export function useEventColorObject(
+  event: EventType,
+  colorOverride?: CabinColor,
+) {
+  const parse = (s?: CabinColor) =>
+    CABIN_COLORS[s ?? 'DEFAULT'] ?? CABIN_COLORS.DEFAULT;
+  const colorId = useEventColorId(event);
+  const css = colorOverride
+    ? parse(colorOverride)
+    : getCabinColorObject(colorId, true);
+
+  return css;
 }
