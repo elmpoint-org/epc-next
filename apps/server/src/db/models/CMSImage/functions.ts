@@ -204,7 +204,9 @@ export const cmsImageDeleteUnconfirmed = h<
   );
 
   // delete db entries
-  return Promise.all(images.map((img) => sources.cms.image.delete(img.id)));
+  return Promise.all(
+    images.map(async (img) => (await sources.cms.image.delete(img.id)) ?? null)
+  );
 });
 
 export const getCmsImageAuthor = h<M.CMSImageResolvers['author']>(

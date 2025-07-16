@@ -87,7 +87,7 @@ abstract class Model<Type extends KeyValueType> {
    * @returns the item
    */
   async get(id: string) {
-    return this.loader.load(id) as Promise<DBType<Type>>;
+    return this.loader.load(id);
   }
 
   /**
@@ -96,7 +96,9 @@ abstract class Model<Type extends KeyValueType> {
    * @returns array of items
    */
   async getMultiple(ids: string[]) {
-    return this.loader.loadMany(ids) as Promise<(DBType<Type> | undefined)[]>;
+    return (await this.loader.loadMany(ids)).map((it) =>
+      it instanceof Error ? undefined : it
+    );
   }
 
   /**
@@ -180,12 +182,14 @@ abstract class Model<Type extends KeyValueType> {
 
   // internal: DB CRUD functions
   private async DBget(id: string) {
-    return await this.db.get({ type: this.type, id });
+    return (await this.db.get({ type: this.type, id })) as
+      | DBType<Type>
+      | undefined;
   }
   private async DBcreate(item_: InitialType<Type>) {
     const item = this.schema(this)(item_);
     await this.db.put(item);
-    return (await this.DBget(item.id)) as DBType<Type>;
+    return await this.DBget(item.id);
   }
   private async DBupdate(id: string, changes: Partial<Type>) {
     const schema = this.schema(this, true);
@@ -194,23 +198,22 @@ abstract class Model<Type extends KeyValueType> {
       Key: { type: this.type, id },
       add: schema(changes),
       remove: undefined,
-    })) as DBType<Type>;
+    })) as DBType<Type> | undefined;
   }
   private async DBdelete(id: string) {
     return (await this.db.delete({
       type: this.type,
       id,
-    })) as DBType<Type>;
+    })) as DBType<Type> | undefined;
   }
 
   // internal: DB utilities
   private async DBbatchGet(ids: readonly string[]) {
     const type = this.type;
-    const items = (await this.db.batchGet(
-      ids.map((id) => ({ type, id }))
-    )) as DBType<Type>[];
+    const items = (await this.db.batchGet(ids.map((id) => ({ type, id })))) as
+      | DBType<Type>[];
 
-    return ids.map((id) => items.find((it) => it.id === id));
+    return ids.map((id) => items?.find((it) => it.id === id));
   }
   private async DBgetAll() {
     return (await this.db.query({
@@ -236,7 +239,6 @@ abstract class Model<Type extends KeyValueType> {
     const ids = items.map((it) => it.id);
 
     await this.db.batchWrite(items);
-    // return (await this.DBbatchGet(ids)) as DBType<Type>[];
     return items;
   }
 
@@ -245,7 +247,7 @@ abstract class Model<Type extends KeyValueType> {
     const keys = ids.map((id) => ({ type, id }));
     let out;
     if (output) {
-      out = (await this.DBbatchGet(ids)) as DBType<Type>[];
+      out = await this.DBbatchGet(ids);
     }
 
     await this.db.batchWrite(keys, /* remove: */ true);
