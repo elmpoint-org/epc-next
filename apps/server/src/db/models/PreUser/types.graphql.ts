@@ -48,6 +48,13 @@ export default gql`
     preUserCreate(email: String!, name: String): PreUser!
 
     """
+    **SCOPE: ADMIN**
+
+    create multiple pre-registered users.
+    """
+    preUserCreateMultiple(users: [PreUserCreateMultipleInput!]!): [PreUser!]!
+
+    """
     **SCOPE: admin**
 
     update a preuser
@@ -60,5 +67,10 @@ export default gql`
     delete a preuser (usually because a full user has been created)
     """
     preUserDelete(id: ID!): PreUser!
+  }
+
+  input PreUserCreateMultipleInput {
+    email: String!
+    name: String
   }
 `;

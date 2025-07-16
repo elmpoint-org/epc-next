@@ -4,6 +4,7 @@ import {
   QueryResolvers,
 } from '##/db/__types/graphql-types.js';
 import { ResolverContext } from '##/db/graph.js';
+import { InitialType } from '##/db/lib/Model.js';
 import {
   err,
   getTypedScopeFunctions,
@@ -11,6 +12,7 @@ import {
   scopeError,
 } from '##/db/lib/utilities.js';
 import { prepEmail } from '##/util/textTransform.js';
+import { DBPreUser } from './source';
 
 const { scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -48,6 +50,29 @@ export const preUserCreate = h<MutationResolvers['preUserCreate']>(
     if (u.length) throw err('USER_ALREADY_EXISTS');
 
     return sources.preUser.create(newPreUser);
+  }
+);
+
+export const preUserCreateMultiple = h<
+  MutationResolvers['preUserCreateMultiple']
+>(
+  scoped('ADMIN'), //
+  async ({ sources, args: { users: preUsers } }) => {
+    const preUsersToUpload: InitialType<DBPreUser>[] = [];
+
+    for (const u of preUsers) {
+      // skip existing users/preusers
+      if (
+        (await sources.preUser.findBy('email', u.email))?.length ||
+        (await sources.user.findBy('email', u.email))?.length
+      )
+        continue;
+
+      preUsersToUpload.push({ ...u, email: prepEmail(u.email) });
+    }
+
+    return (await sources.preUser.createMultiple(preUsersToUpload)) //
+      .filter(Boolean);
   }
 );
 
