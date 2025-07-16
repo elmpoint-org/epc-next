@@ -115,7 +115,7 @@ export class SimpleDynamo {
     };
     if (index) params.IndexName = index;
     if (limit) params.Limit = limit;
-    return (await db.send(new QueryCommand(params))).Items;
+    return (await db.send(new QueryCommand(params))).Items ?? [];
   }
 
   /** update a particular item. pass a key and add or remove commands */
