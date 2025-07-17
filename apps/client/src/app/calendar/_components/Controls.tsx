@@ -14,8 +14,8 @@ import { DatePicker, MonthPicker } from '@mantine/dates';
 import {
   IconArrowLeft,
   IconArrowRight,
-  IconBaselineDensitySmall,
-  IconCalendarMonth,
+  IconCalendarSmile,
+  IconCalendarWeek,
   IconCheck,
   IconChevronDown,
   IconLayoutList,
@@ -286,7 +286,7 @@ export default function Controls(props: CalendarProps) {
             <DropdownItems className="z-[999]">
               <div className="py-1">
                 <DropdownOption
-                  icon={IconCalendarMonth}
+                  icon={IconCalendarWeek}
                   onClick={() => setView('OVERVIEW')}
                 >
                   <span className="flex-1 text-left">Month View</span>
@@ -316,7 +316,7 @@ export default function Controls(props: CalendarProps) {
                 </DropdownOption>
 
                 <DropdownOption
-                  icon={IconBaselineDensitySmall}
+                  icon={IconCalendarSmile}
                   onClick={() => setView('CALCIUM')}
                 >
                   <span className="flex-1 text-left">EPC Classic View</span>

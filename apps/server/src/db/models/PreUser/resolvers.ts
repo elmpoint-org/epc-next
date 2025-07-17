@@ -11,6 +11,7 @@ const resolvers: PreUserModule.Resolvers = {
   },
   Mutation: {
     preUserCreate: f.preUserCreate,
+    preUserCreateMultiple: f.preUserCreateMultiple,
     preUserUpdate: f.preUserUpdate,
     preUserDelete: f.preUserDelete,
   },
