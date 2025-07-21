@@ -172,7 +172,7 @@ export default function EmailsModal(props: EmailsModalFormProps) {
     <>
       <div className="flex flex-row justify-end">
         <button
-          className="-mt-2 text-right text-xs italic text-slate-600 hover:underline focus:text-dblack focus:underline focus:outline-none"
+          className="-mt-2 mr-1 text-right text-xs italic text-slate-600 hover:underline focus:text-dblack focus:underline focus:outline-none"
           onClick={() => setIsOpen(true)}
         >
           <IconMailFast
