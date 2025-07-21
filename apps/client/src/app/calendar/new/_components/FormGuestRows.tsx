@@ -115,7 +115,7 @@ const FormGuestRows = () => {
             {/* action buttons */}
             <div className="mr-3 flex flex-row justify-end gap-2 @xl:h-10 @xl:items-center @xl:justify-normal">
               {/* make primary */}
-              <Tooltip label="Make this the primary guest">
+              <Tooltip label="Move to top">
                 <ActionButton
                   Icon={IconArrowBarToUp}
                   onClick={() => updateRoom(i, 'MAKE_PRIMARY')}
