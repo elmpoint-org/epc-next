@@ -31,7 +31,7 @@ export function ModalFrame({
         {/* panel */}
         <DialogPanel
           transition
-          className="flex w-full max-w-md translate-y-0 flex-col gap-4 rounded-xl bg-dwhite p-6 shadow-xl transition duration-150 ease-out data-[closed]:-translate-y-8 data-[closed]:opacity-0"
+          className="panel flex w-full max-w-md translate-y-0 flex-col gap-4 rounded-xl bg-dwhite p-6 shadow-xl transition duration-150 ease-out data-[closed]:-translate-y-8 data-[closed]:opacity-0"
         >
           {/* header */}
           <div className="flex flex-row items-center gap-2 border-b border-slate-300 pb-4">

@@ -29,6 +29,7 @@ import {
   useGlobalKeyboardShortcuts,
 } from '@/app/_ctx/globalKeyboard';
 import Calcium from './Calcium';
+import EmailsModal from './EmailsModal';
 
 export const CALENDAR_EVENT_FRAGMENT = graphql(`
   fragment CalendarEvent on Stay @_unmask {
@@ -38,6 +39,7 @@ export const CALENDAR_EVENT_FRAGMENT = graphql(`
     author {
       id
       name
+      email
       avatarUrl
       trustedUsers {
         id
@@ -237,6 +239,8 @@ export default function Calendar() {
           {/* legacy calcium view */}
           {view === 'CALCIUM' && <Calcium {...props} />}
         </div>
+
+        <EmailsModal {...props} />
       </InvalidateProvider>
     </>
   );
