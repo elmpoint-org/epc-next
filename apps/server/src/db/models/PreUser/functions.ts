@@ -61,6 +61,8 @@ export const preUserCreateMultiple = h<
     const preUsersToUpload: InitialType<DBPreUser>[] = [];
 
     for (const u of preUsers) {
+      u.email = prepEmail(u.email);
+
       // skip existing users/preusers
       if (
         (await sources.preUser.findBy('email', u.email))?.length ||
