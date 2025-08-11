@@ -266,6 +266,16 @@ export default function EventPopup({
                     })}
                 </div>
               </IconRow>
+
+              {/* calcium import status */}
+              {event.importId && (
+                <>
+                  <div />
+                  <div className="-my-2 text-xs italic text-slate-600">
+                    Calcium Import ID {event.importId}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </ScrollArea>

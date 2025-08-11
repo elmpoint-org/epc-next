@@ -131,6 +131,7 @@ export default function TimelineEventsGrid({
                     author: null,
                     description: '',
                     title: '',
+                    importId: null,
                   }
                 }
                 highlightCabin={cabinId}

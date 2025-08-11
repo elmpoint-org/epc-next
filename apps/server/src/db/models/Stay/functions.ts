@@ -9,7 +9,10 @@ import {
   loggedIn,
   scopeError,
 } from '##/db/lib/utilities.js';
-import { ResolverFn } from '##/db/__types/graphql-types.js';
+import {
+  ResolverFn,
+  StayCreateMultipleInput,
+} from '##/db/__types/graphql-types.js';
 import { ResolverContext } from '##/db/graph.js';
 import { CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS } from '##/CONSTANTS.js';
 import { DBStay, ScalarRoom } from './source';
@@ -17,7 +20,7 @@ import { DBStay, ScalarRoom } from './source';
 import { randomUUID as uuid } from 'node:crypto';
 import { dateTS } from '@epc/date-ts';
 
-const { scopeDiff } = getTypedScopeFunctions<ResolverContext>();
+const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
 const DAYS_AFTER_SEC = CALENDAR_SEARCH_MAX_EVENT_LENGTH_DAYS * 3600 * 24;
 
@@ -106,25 +109,16 @@ export const getStaysFromAuthor = h<M.QueryResolvers['staysFromAuthor']>(
 export const stayCreate = h<M.MutationResolvers['stayCreate']>(
   loggedIn(),
   async ({ sources, args: fields }) => {
-    // standardize dates
-    fields.dateStart = dateTSCheck(fields.dateStart);
-    fields.dateEnd = dateTSCheck(fields.dateEnd);
-    const valid = validateDates(fields.dateStart, fields.dateEnd);
-    if (!valid) throw err('INVALID_DATES');
-
-    const res = fields.reservations;
-    const stay: InitialType<DBStay> = {
-      ...fields,
-      reservationIds: res.map((r) => {
-        if (r.roomId && r.customText) throw err('INVALID_RESERVATION');
-        const res: ScalarRoom = { name: r.name };
-        if (r.roomId) res.roomId = r.roomId;
-        if (r.customText) res.customText = r.customText;
-        return res;
-      }),
-    };
-
+    const stay = prepReservation(fields);
     return sources.stay.create(stay);
+  }
+);
+
+export const stayCreateMultiple = h<M.MutationResolvers['stayCreateMultiple']>(
+  scoped('ADMIN'),
+  async ({ sources, args: { stays: stays_in } }) => {
+    const stays = stays_in.map(prepReservation);
+    return sources.stay.createMultiple(stays);
   }
 );
 
@@ -168,6 +162,13 @@ export const stayDelete = h<M.MutationResolvers['stayDelete']>(
   trustedUserCheck(),
   async ({ sources, args: { id } }) => {
     return sources.stay.delete(id);
+  }
+);
+
+export const stayDeleteMultiple = h<M.MutationResolvers['stayDeleteMultiple']>(
+  scoped('ADMIN'),
+  async ({ sources, args: { ids } }) => {
+    return sources.stay.deleteMultiple(ids, /* output = */ true);
   }
 );
 
@@ -246,6 +247,28 @@ export async function queryStaysByDate(
   const stays = all_stays.filter((s) => s.dateStart <= end);
 
   return stays;
+}
+
+function prepReservation(fields: StayCreateMultipleInput) {
+  // standardize dates
+  fields.dateStart = dateTSCheck(fields.dateStart);
+  fields.dateEnd = dateTSCheck(fields.dateEnd);
+  const valid = validateDates(fields.dateStart, fields.dateEnd);
+  if (!valid) throw err('INVALID_DATES');
+
+  // serialize reservations
+  const res = fields.reservations;
+  const stay: InitialType<DBStay> = {
+    ...fields,
+    reservationIds: res.map((r) => {
+      if (r.roomId && r.customText) throw err('INVALID_RESERVATION');
+      const res: ScalarRoom = { name: r.name };
+      if (r.roomId) res.roomId = r.roomId;
+      if (r.customText) res.customText = r.customText;
+      return res;
+    }),
+  };
+  return stay;
 }
 
 /** this function reads a unix timestamp as its current date **according to GMT**, and returns a new timestamp at midnight for that day. */
