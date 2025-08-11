@@ -14,8 +14,10 @@ const resolvers: StayModule.Resolvers = {
   },
   Mutation: {
     stayCreate: f.stayCreate,
+    stayCreateMultiple: f.stayCreateMultiple,
     stayUpdate: f.stayUpdate,
     stayDelete: f.stayDelete,
+    stayDeleteMultiple: f.stayDeleteMultiple,
     staySplit: f.staySplit,
   },
 

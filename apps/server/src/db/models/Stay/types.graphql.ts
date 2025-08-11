@@ -123,6 +123,20 @@ export default gql`
     split an existing stay in two around a date. returns the **newly created stay**--the original stay will be shortened to end on the specified date, and a new date will be created starting on that date.
     """
     staySplit(id: ID!, date: Int!): Stay!
+
+    """
+    SCOPE: ADMIN | internal
+
+    create multiple stays at once. see stayCreate for more.
+    """
+    stayCreateMultiple(stays: [StayCreateMultipleInput!]!): [Stay!]!
+
+    """
+    SCOPE: ADMIN | internal
+
+    delete multiple stays at once. see stayDelete for more.
+    """
+    stayDeleteMultiple(ids: [ID!]!): [Stay]!
   }
 
   "a room reservation for the stay. you must provide EITHER a roomId or customText."
@@ -130,5 +144,15 @@ export default gql`
     name: String!
     roomId: String
     customText: String
+  }
+
+  input StayCreateMultipleInput {
+    title: String!
+    description: String!
+    authorId: ID!
+    dateStart: Int!
+    dateEnd: Int!
+    reservations: [StayReservationInput!]!
+    reminderSent: Boolean
   }
 `;
