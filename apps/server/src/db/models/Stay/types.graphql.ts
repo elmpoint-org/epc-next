@@ -22,6 +22,9 @@ export default gql`
     "whether the author has received a reminder about this stay or not."
     reminderSent: Boolean
 
+    "calcium iCal ID for managing updates"
+    importId: String
+
     "created/update timestamps"
     timestamp: TS!
   }
@@ -92,6 +95,7 @@ export default gql`
       dateEnd: Int!
       reservations: [StayReservationInput!]!
       reminderSent: Boolean
+      importId: String
     ): Stay!
 
     """
@@ -108,6 +112,7 @@ export default gql`
       dateEnd: Int
       reservations: [StayReservationInput!]
       reminderSent: Boolean
+      importId: String
     ): Stay!
 
     """
@@ -154,5 +159,6 @@ export default gql`
     dateEnd: Int!
     reservations: [StayReservationInput!]!
     reminderSent: Boolean
+    importId: String
   }
 `;

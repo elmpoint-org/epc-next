@@ -63,6 +63,7 @@ export const CALENDAR_EVENT_FRAGMENT = graphql(`
         }
       }
     }
+    importId
   }
 `);
 export const EVENTS_QUERY = graphql(
