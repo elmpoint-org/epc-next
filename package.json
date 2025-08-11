@@ -13,7 +13,7 @@
     "dev-email": "turbo dev:email",
     "dev:sst": "sst dev --stage=development --mode=mono"
   },
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.13.1",
   "pnpm": {
     "overrides": {
       "axios@>=1.3.2 <=1.7.3": ">=1.7.4",

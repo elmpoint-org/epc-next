@@ -1,6 +1,6 @@
 {
   "name": "@epc/date-ts",
-  "private": false,
+  "private": true,
   "scripts": {},
   "exports": {
     ".": "./src/dates.ts",
