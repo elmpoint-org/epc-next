@@ -48,8 +48,8 @@ abstract class Model<Type extends KeyValueType> {
   // DB INSTANCE
   private __db?: SimpleDynamo;
   private get db() {
-    if (this.__db) return this.__db;
-    return new SimpleDynamo(this.table);
+    if (!this.__db) this.__db = new SimpleDynamo(this.table);
+    return this.__db;
   }
 
   // add internal properties to this entry, such as created/updated timestamps and a unique id
