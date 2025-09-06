@@ -11,13 +11,15 @@ import { useGraphQuery } from '@/query/query';
 import { useUser } from '@/app/_ctx/user/context';
 import { Popover, PopoverButton } from '@headlessui/react';
 import EventPopup from '../../_components/EventPopup';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { dateFormat, dateTS, dateTSObject } from '@epc/date-ts';
 import { IconCalendarShare, IconLoader2 } from '@tabler/icons-react';
 import { ActionIcon, Tooltip } from '@mantine/core';
 import Link from 'next/link';
 import ColorText from '@/app/_components/_base/ColorText';
 import AddStayButton from '../../_components/AddStayButton';
+import { UseQueryResult } from '@tanstack/react-query';
+import { ResultOf } from 'gql.tada';
 
 const EVENTS_QUERY = graphql(
   `
@@ -33,16 +35,6 @@ const EVENTS_QUERY = graphql(
 export default function MyEventsList() {
   const user = useUser();
   const query = useGraphQuery(EVENTS_QUERY, { authorId: user?.id ?? '' });
-
-  const today = useMemo(() => dateTS(new Date()), []);
-
-  const events = useMemo(
-    () =>
-      query.data?.staysFromAuthor
-        .filter((ev) => ev.dateEnd >= today)
-        .sort((a, b) => a.dateStart - b.dateStart),
-    [query.data?.staysFromAuthor, today],
-  );
 
   return (
     <>
@@ -60,41 +52,69 @@ export default function MyEventsList() {
           </div>
 
           {/* events list */}
-
-          <div>
-            {/* events list */}
-            <div
-              className="grid grid-cols-[min-content_1fr_min-content] divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent sm:mx-4"
-              data-n={(!query.isPending && !events?.length) || null}
-            >
-              {events?.map((event) => (
-                <EventButton key={event.id} event={event} />
-              ))}
-
-              {/* skeleton */}
-              {query.isPending &&
-                Array(3)
-                  .fill(0)
-                  .map((_, i) => <EventButton key={i} />)}
-
-              {/* no reservations message */}
-              {!query.isFetching && (
-                <div className="col-span-full hidden flex-col items-center text-sm italic text-slate-600 first:flex">
-                  none found
-                </div>
-              )}
-            </div>
-
-            {/* loader */}
-            {query.isFetching && !query.isPending && (
-              <div className="my-6 flex flex-row items-center justify-center">
-                <IconLoader2 className="animate-spin text-slate-400" />
-              </div>
-            )}
-          </div>
+          <EventsList query={query} filter="PAST_YEAR" />
         </div>
       </InvalidateProvider>
     </>
+  );
+}
+
+export type EventsListFilterType = 'UPCOMING' | 'CURRENT' | 'PAST_YEAR';
+function EventsList({
+  query,
+  filter,
+}: {
+  query: UseQueryResult<ResultOf<typeof EVENTS_QUERY>>;
+  filter: EventsListFilterType;
+}) {
+  const today = useMemo(() => dateTS(new Date()), []);
+  const currentYear = useRef(dateTSObject(today).year());
+  const events = useMemo(
+    () =>
+      query.data?.staysFromAuthor
+        .filter((ev) => {
+          if (filter === 'UPCOMING') return ev.dateEnd >= today;
+          if (filter === 'CURRENT')
+            return ev.dateStart <= today && ev.dateEnd >= today;
+          if (filter === 'PAST_YEAR')
+            return dateTSObject(ev.dateStart).year() === currentYear.current;
+        })
+        .sort((a, b) => a.dateStart - b.dateStart),
+    [query.data?.staysFromAuthor, today],
+  );
+
+  return (
+    <div>
+      {/* events list */}
+      <div
+        className="grid grid-cols-[min-content_1fr_min-content] divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent sm:mx-4"
+        data-n={(!query.isPending && !events?.length) || null}
+      >
+        {events?.map((event) => (
+          <EventButton key={event.id} event={event} />
+        ))}
+
+        {/* skeleton */}
+        {query.isPending &&
+          Array(3)
+            .fill(0)
+            .map((_, i) => <EventButton key={i} />)}
+
+        {/* no reservations message */}
+        {!query.isFetching && (
+          <div className="col-span-full hidden flex-col items-center text-sm italic text-slate-600 first:flex">
+            none found
+          </div>
+        )}
+      </div>
+
+      {/* loader */}
+      {query.isFetching && !query.isPending && (
+        <div className="my-6 flex flex-row items-center justify-center">
+          <IconLoader2 className="animate-spin text-slate-400" />
+        </div>
+      )}
+    </div>
   );
 }
 
