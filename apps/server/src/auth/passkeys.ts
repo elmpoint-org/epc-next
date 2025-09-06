@@ -60,3 +60,15 @@ export const passwordlessDeleteCredential = (credentialId: string) =>
     { credentialId },
     { headers: { ApiSecret: PASSWORDLESS_SECRET } }
   );
+
+  export const passwordlessDeleteUser = (userId: string) =>
+  axios.post(
+    PASSWORDLESS_API + '/users/delete',
+    { userId },
+    { headers: { ApiSecret: PASSWORDLESS_SECRET } }
+  );
+
+export const passwordlessListUsers = () =>
+  axios.get(PASSWORDLESS_API + '/users/list', {
+    headers: { ApiSecret: PASSWORDLESS_SECRET },
+  });

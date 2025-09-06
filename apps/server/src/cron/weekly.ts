@@ -1,5 +1,8 @@
+import { purgeRemovedUserPasskeys } from './src/passkeys';
 import { purgeCMSImages, purgeCooldown } from './src/purge';
 
 export async function handler() {
-  await Promise.all([purgeCooldown(), purgeCMSImages()]);
+  // await Promise.all([purgeCooldown(), purgeCMSImages()]);
+
+  await purgeRemovedUserPasskeys();
 }
