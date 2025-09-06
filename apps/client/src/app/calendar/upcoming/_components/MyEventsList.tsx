@@ -51,8 +51,25 @@ export default function MyEventsList() {
             <AddStayButton compactOnly />
           </div>
 
-          {/* events list */}
-          <EventsList query={query} filter="PAST_YEAR" />
+          {/* EVENTS LISTS */}
+
+          {/* current */}
+          <div className="flex flex-col gap-4 sm:px-4">
+            <h3 className="t">Current</h3>
+            <EventsList query={query} filter="CURRENT" />
+          </div>
+
+          {/* upcoming */}
+          <div className="flex flex-col gap-4 sm:px-4">
+            <h3 className="t">Upcoming</h3>
+            <EventsList query={query} filter="UPCOMING" />
+          </div>
+
+          {/* past year */}
+          <div className="flex flex-col gap-4 sm:px-4">
+            <h3 className="t">Previous (This Year)</h3>
+            <EventsList query={query} filter="PAST_YEAR" />
+          </div>
         </div>
       </InvalidateProvider>
     </>
@@ -73,11 +90,14 @@ function EventsList({
     () =>
       query.data?.staysFromAuthor
         .filter((ev) => {
-          if (filter === 'UPCOMING') return ev.dateEnd >= today;
+          if (filter === 'UPCOMING') return ev.dateStart > today;
           if (filter === 'CURRENT')
             return ev.dateStart <= today && ev.dateEnd >= today;
           if (filter === 'PAST_YEAR')
-            return dateTSObject(ev.dateStart).year() === currentYear.current;
+            return (
+              ev.dateEnd < today &&
+              dateTSObject(ev.dateStart).year() === currentYear.current
+            );
         })
         .sort((a, b) => a.dateStart - b.dateStart),
     [query.data?.staysFromAuthor, today],
@@ -87,7 +107,7 @@ function EventsList({
     <div>
       {/* events list */}
       <div
-        className="grid grid-cols-[min-content_1fr_min-content] divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent sm:mx-4"
+        className="grid grid-cols-[min-content_1fr_min-content] divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent"
         data-n={(!query.isPending && !events?.length) || null}
       >
         {events?.map((event) => (
