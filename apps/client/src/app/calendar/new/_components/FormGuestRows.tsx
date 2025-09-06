@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { Button, TextInput, Tooltip } from '@mantine/core';
 import { IconArrowBarToUp, IconTrash } from '@tabler/icons-react';
@@ -8,6 +8,7 @@ import RoomSelector from './RoomSelector';
 import { GuestEntry, guestInitial, useFormCtx } from '../state/formCtx';
 
 import { MAX_ROOMS } from './NewEventForm';
+import { dateDiff, dateTS } from '@epc/date-ts';
 
 const FormGuestRows = () => {
   const { guests, setGuests } = useFormCtx();
@@ -147,6 +148,7 @@ const FormGuestRows = () => {
               Add room
             </Button>
           </div>
+          <EventRoomsTableLink />
         </div>
       </div>
     </>
@@ -154,3 +156,26 @@ const FormGuestRows = () => {
 };
 
 export default FormGuestRows;
+
+function EventRoomsTableLink() {
+  const { dates } = useFormCtx();
+
+  const params = useMemo(() => {
+    if (dates[0] === null || dates[1] === null) return null;
+    const dateTSs = [dateTS(dates[0]), dateTS(dates[1])];
+    const days = dateDiff(dateTSs[1], dateTSs[0]) + 1;
+    return { start: dateTSs[0], days };
+  }, [dates]);
+
+  return (
+    <a
+      href={`/calendar?view=TIMELINE&rooms=1&days=${params?.days}&date=${params?.start}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mr-2 hidden cursor-pointer text-xs italic text-slate-500 hover:text-slate-700 hover:underline data-[h]:hidden sm:block"
+      data-h={params === null || null}
+    >
+      View these dates in Rooms Table &nbsp;&#x2197;
+    </a>
+  );
+}
