@@ -131,7 +131,7 @@ export const handle = <T0 extends Resolver<any, any, any, any> | undefined>(
 export const timestamp = ({
   tcreated: created,
   tupdated: updated,
-}: Partial<DBType<unknown>>) =>
+}: Partial<DBType<any>>) =>
   ({
     created,
     updated,

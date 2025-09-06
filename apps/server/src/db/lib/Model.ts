@@ -1,6 +1,14 @@
 /* Model.ts - AWS db.js v1.5.0 by mbf. updated 2024.07.06. */
 
-import db from './db';
+import {
+  QueryOp,
+  QuerySKStandard,
+  QuerySKBetween,
+  SimpleDynamo,
+  QuerySK,
+  KeyValueType,
+  NO_SORT_KEY,
+} from './db';
 import { randomUUID as uuid } from 'node:crypto';
 
 import DataLoader from 'dataloader';
@@ -11,14 +19,6 @@ const timestamp = () => Math.round(Date.now() / 1000);
 type Partial<T> = { [P in keyof T]?: T[P] | undefined | null };
 export type DBPartial<T> = Partial<T>;
 export type InitialType<T> = Omit<T, 'id' | 'timestamp'>;
-export enum QueryOp {
-  EQ = '=',
-  LT = '<',
-  LTE = '<=',
-  GT = '>',
-  GTE = '>=',
-  BETWEEN = 'BETWEEN',
-}
 
 interface DBTypeProps {
   id: string;
@@ -26,13 +26,13 @@ interface DBTypeProps {
   tcreated: number;
   tupdated: number;
 }
-export type DBType<T> = T & DBTypeProps;
+export type DBType<T extends KeyValueType> = T & DBTypeProps;
 
 /**
  * Model class for interacting with a database table.
  * @template Type The type of data stored in the table.
  */
-abstract class Model<Type> {
+abstract class Model<Type extends KeyValueType> {
   /**
    * The data type added as a column to all entries, allowing for multiple data types per table.
    * @abstract
@@ -44,6 +44,13 @@ abstract class Model<Type> {
    * @abstract
    */
   protected abstract table: string;
+
+  // DB INSTANCE
+  private __db?: SimpleDynamo;
+  private get db() {
+    if (!this.__db) this.__db = new SimpleDynamo(this.table);
+    return this.__db;
+  }
 
   // add internal properties to this entry, such as created/updated timestamps and a unique id
   protected schema(self: Model<Type>, old?: boolean) {
@@ -80,7 +87,7 @@ abstract class Model<Type> {
    * @returns the item
    */
   async get(id: string) {
-    return this.loader.load(id) as Promise<DBType<Type>>;
+    return this.loader.load(id);
   }
 
   /**
@@ -89,7 +96,9 @@ abstract class Model<Type> {
    * @returns array of items
    */
   async getMultiple(ids: string[]) {
-    return this.loader.loadMany(ids) as Promise<(DBType<Type> | undefined)[]>;
+    return (await this.loader.loadMany(ids)).map((it) =>
+      it instanceof Error ? undefined : it
+    );
   }
 
   /**
@@ -143,25 +152,29 @@ abstract class Model<Type> {
    * @returns an array of matching values
    */
   async query<T extends QueryOp>(
-    sortKey: keyof DBType<Type>,
+    sortKey: keyof DBType<Type> & string,
     op: T,
-    ...vals: T extends QueryOp.BETWEEN
-      ? [startVal: unknown, endVal: unknown, limit?: number]
-      : [val: unknown, limit?: number]
+    ...opts: [
+      ...skv: T extends QueryOp & 'BETWEEN'
+        ? SKVals<QuerySKBetween>
+        : SKVals<QuerySKStandard>,
+      limit?: number
+    ]
   ) {
-    // get limit if needed
-    const len = op === QueryOp.BETWEEN ? 2 : 1;
-    let limit;
-    if (vals[len]) {
-      limit = vals[len];
-      vals.splice(len, 1);
-    }
+    // sort key values
+    const sortKeyVals =
+      op === 'BETWEEN'
+        ? opts.slice(0, 2) // [startVal, endVal]
+        : opts.slice(0, 1); // [val]
 
-    return (await db.queryCompare(this.table, {
-      index: `type-${sortKey as string}`,
+    // optional limit
+    const limit = opts[op === 'BETWEEN' ? 2 : 1] as number | undefined;
+
+    return (await this.db.query({
+      index: `type-${sortKey}`,
       query: {
         primaryKey: ['type', this.type],
-        sortKey: [sortKey, op, ...vals],
+        sortKey: [sortKey, op, ...sortKeyVals] as QuerySK,
       },
       limit,
     })) as DBType<Type>[];
@@ -169,54 +182,54 @@ abstract class Model<Type> {
 
   // internal: DB CRUD functions
   private async DBget(id: string) {
-    return await db.get(this.table, { type: this.type, id });
+    return (await this.db.get({ type: this.type, id })) as
+      | DBType<Type>
+      | undefined;
   }
   private async DBcreate(item_: InitialType<Type>) {
     const item = this.schema(this)(item_);
-    await db.put(this.table, item);
-    return (await this.DBget(item.id)) as DBType<Type>;
+    await this.db.put(item);
+    return await this.DBget(item.id);
   }
   private async DBupdate(id: string, changes: Partial<Type>) {
     const schema = this.schema(this, true);
 
-    return (await db.update(this.table, {
-      id: { type: this.type, id },
+    return (await this.db.update({
+      Key: { type: this.type, id },
       add: schema(changes),
       remove: undefined,
-    })) as DBType<Type>;
+    })) as DBType<Type> | undefined;
   }
   private async DBdelete(id: string) {
-    return (await db.delete(this.table, {
+    return (await this.db.delete({
       type: this.type,
       id,
-    })) as DBType<Type>;
+    })) as DBType<Type> | undefined;
   }
 
   // internal: DB utilities
   private async DBbatchGet(ids: readonly string[]) {
     const type = this.type;
-    const items = (await db.batchGet(
-      this.table,
-      ids.map((id) => ({ type, id }))
-    )) as DBType<Type>[];
+    const items = (await this.db.batchGet(ids.map((id) => ({ type, id })))) as
+      | DBType<Type>[];
 
-    return ids.map((id) => items.find((it) => it.id === id));
+    return ids.map((id) => items?.find((it) => it.id === id));
   }
   private async DBgetAll() {
-    return (await db.query(this.table, {
-      query: { type: this.type },
-      index: undefined,
-      include: undefined,
+    return (await this.db.query({
+      query: {
+        primaryKey: ['type', this.type],
+        sortKey: NO_SORT_KEY,
+      },
     })) as DBType<Type>[];
   }
   private async DBfind(key: string, value: unknown) {
-    return (await db.query(this.table, {
+    return (await this.db.query({
       index: `type-${key}`,
       query: {
-        type: this.type,
-        [key]: value,
+        primaryKey: ['type', this.type],
+        sortKey: [key, '=', value],
       },
-      include: undefined,
     })) as DBType<Type>[];
   }
 
@@ -225,8 +238,7 @@ abstract class Model<Type> {
     const items = items_.map((it) => schema(it));
     const ids = items.map((it) => it.id);
 
-    await db.batchWrite(this.table, items);
-    // return (await this.DBbatchGet(ids)) as DBType<Type>[];
+    await this.db.batchWrite(items);
     return items;
   }
 
@@ -235,13 +247,15 @@ abstract class Model<Type> {
     const keys = ids.map((id) => ({ type, id }));
     let out;
     if (output) {
-      out = (await this.DBbatchGet(ids)) as DBType<Type>[];
+      out = await this.DBbatchGet(ids);
     }
 
-    await db.batchWrite(this.table, keys, /* remove: */ true);
+    await this.db.batchWrite(keys, /* remove: */ true);
 
     return out;
   }
 }
 
 export default Model;
+
+type SKVals<T extends any[]> = T extends [any, any, ...infer K] ? K : never;
