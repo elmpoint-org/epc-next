@@ -11,7 +11,7 @@ import { useGraphQuery } from '@/query/query';
 import { useUser } from '@/app/_ctx/user/context';
 import { Popover, PopoverButton } from '@headlessui/react';
 import EventPopup from '../../_components/EventPopup';
-import { useMemo, useRef } from 'react';
+import { ReactNode, useMemo, useRef } from 'react';
 import { dateFormat, dateTS, dateTSObject } from '@epc/date-ts';
 import { IconCalendarShare, IconLoader2 } from '@tabler/icons-react';
 import { ActionIcon, Tooltip } from '@mantine/core';
@@ -53,22 +53,25 @@ export default function MyEventsList() {
 
           {/* EVENTS LISTS */}
 
-          {/* current */}
-          <div className="flex flex-col gap-4 sm:px-4">
-            <h3 className="t">Current</h3>
-            <EventsList query={query} filter="CURRENT" />
-          </div>
-
-          {/* upcoming */}
-          <div className="flex flex-col gap-4 sm:px-4">
-            <h3 className="t">Upcoming</h3>
-            <EventsList query={query} filter="UPCOMING" />
-          </div>
-
-          {/* past year */}
-          <div className="flex flex-col gap-4 sm:px-4">
-            <h3 className="t">Previous (This Year)</h3>
-            <EventsList query={query} filter="PAST_YEAR" />
+          <div className="grid grid-cols-[min-content_1fr_min-content] sm:px-4">
+            {/* current */}
+            <EventsList
+              query={query} //
+              filter="CURRENT"
+              header={<>Current</>}
+            />
+            {/* upcoming */}
+            <EventsList
+              query={query}
+              filter="UPCOMING"
+              header={<>Upcoming</>}
+            />
+            {/* past year */}
+            <EventsList
+              query={query}
+              filter="PAST_YEAR"
+              header={<>Previous (This Year)</>}
+            />
           </div>
         </div>
       </InvalidateProvider>
@@ -80,9 +83,11 @@ export type EventsListFilterType = 'UPCOMING' | 'CURRENT' | 'PAST_YEAR';
 function EventsList({
   query,
   filter,
+  header,
 }: {
-  query: UseQueryResult<ResultOf<typeof EVENTS_QUERY>>;
   filter: EventsListFilterType;
+  header?: ReactNode;
+  query: UseQueryResult<ResultOf<typeof EVENTS_QUERY>>;
 }) {
   const today = useMemo(() => dateTS(new Date()), []);
   const currentYear = useRef(dateTSObject(today).year());
@@ -104,10 +109,24 @@ function EventsList({
   );
 
   return (
-    <div>
+    <>
+      {!!header && (
+        <div className="col-span-full my-4 flex flex-row items-center">
+          {/* name */}
+          <h3>{header}</h3>
+
+          {/* loader */}
+          {query.isFetching && !query.isPending && (
+            <div className="ml-2 flex flex-row items-center justify-center">
+              <IconLoader2 className="animate-spin size-5 text-slate-400" />
+            </div>
+          )}
+        </div>
+      )}
+
       {/* events list */}
       <div
-        className="grid grid-cols-[min-content_1fr_min-content] divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent"
+        className="col-span-full grid grid-cols-subgrid divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent"
         data-n={(!query.isPending && !events?.length) || null}
       >
         {events?.map((event) => (
@@ -127,14 +146,7 @@ function EventsList({
           </div>
         )}
       </div>
-
-      {/* loader */}
-      {query.isFetching && !query.isPending && (
-        <div className="my-6 flex flex-row items-center justify-center">
-          <IconLoader2 className="animate-spin text-slate-400" />
-        </div>
-      )}
-    </div>
+    </>
   );
 }
 
