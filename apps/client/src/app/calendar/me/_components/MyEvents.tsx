@@ -32,7 +32,7 @@ const EVENTS_QUERY = graphql(
   [CALENDAR_EVENT_FRAGMENT],
 );
 
-export default function MyEventsList() {
+export default function MyEventsContainer() {
   const user = useUser();
   const query = useGraphQuery(EVENTS_QUERY, { authorId: user?.id ?? '' });
 
@@ -43,9 +43,8 @@ export default function MyEventsList() {
           {/* instructions */}
           <div className="my-4 flex flex-row gap-4">
             <p className="mt-0.5 flex-1">
-              Your current and upcoming{' '}
-              <ColorText>calendar reservations</ColorText> are listed below.
-              Click to view and edit reservation details.
+              Your <ColorText>calendar reservations</ColorText> for this season
+              are listed below. Click to view/edit reservation details.
             </p>
 
             <AddStayButton compactOnly />
@@ -58,8 +57,10 @@ export default function MyEventsList() {
             <EventsList
               query={query} //
               filter="CURRENT"
-              header={<>Current</>}
+              header={<>Now</>}
             />
+            <hr className="col-span-full mt-6 border-slate-200 first:hidden sm:-mx-4" />
+
             {/* upcoming */}
             <EventsList
               query={query}
@@ -70,7 +71,7 @@ export default function MyEventsList() {
             <EventsList
               query={query}
               filter="PAST_YEAR"
-              header={<>Previous (This Year)</>}
+              header={<>Previous stays this season</>}
             />
           </div>
         </div>
@@ -108,17 +109,19 @@ function EventsList({
     [query.data?.staysFromAuthor, today],
   );
 
+  if (filter === 'CURRENT' && !events?.length) return null;
+
   return (
     <>
       {!!header && (
-        <div className="col-span-full my-4 flex flex-row items-center">
+        <div className="col-span-full mb-4 mt-6 flex flex-row items-center first:mt-0 [&:nth-child(2)]:mt-0">
           {/* name */}
-          <h3>{header}</h3>
+          <h3 className="">{header}</h3>
 
           {/* loader */}
           {query.isFetching && !query.isPending && (
             <div className="ml-2 flex flex-row items-center justify-center">
-              <IconLoader2 className="animate-spin size-5 text-slate-400" />
+              <IconLoader2 className="size-4 animate-spin text-slate-400" />
             </div>
           )}
         </div>

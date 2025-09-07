@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
-import MyEventsList from './_components/MyEventsList';
+import MyEventsContainer from './_components/MyEvents';
 
-export const metadata: Metadata = { title: 'My Upcoming Stays' };
+export const metadata: Metadata = { title: 'My Stays' };
 
 export default function MyStaysPage() {
   return (
@@ -12,7 +12,7 @@ export default function MyStaysPage() {
           My Stays
         </h1>
         <div className="container flex-1 rounded-lg bg-dwhite">
-          <MyEventsList />
+          <MyEventsContainer />
         </div>
       </div>
     </>
