@@ -1,4 +1,4 @@
-import { IconLock } from '@tabler/icons-react';
+import { IconArrowRight, IconLock } from '@tabler/icons-react';
 
 import { homeLinks } from '@/data/homeLinksData';
 
@@ -48,6 +48,14 @@ export default async function HomePage() {
                 </A>{' '}
                 to see them.
               </div>
+            </div>
+
+            <div className="mx-2 -mt-4 flex flex-row items-center rounded-lg border border-emerald-600 bg-emerald-500/30 px-4 py-2 text-emerald-900">
+              <p className="flex-1">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae a
+                laudantium beatae.
+              </p>
+              <A href={''}>Action <IconArrowRight className='inline size-4 -mt-0.5'/></A>
             </div>
 
             {/* links section */}
