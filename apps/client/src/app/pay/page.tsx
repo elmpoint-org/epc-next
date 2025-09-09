@@ -33,7 +33,7 @@ export default function Page() {
 
               <p className="pb-2 text-base">Select payment type:</p>
               <div className="flex flex-row gap-4 rounded-sm">
-                <button className="flex flex-1 cursor-pointer flex-col rounded-md border border-slate-300 p-3 text-left text-slate-700 shadow-sm shadow-slate-600/10 transition hover:shadow-md">
+                <button className="flex flex-1 cursor-pointer flex-col rounded-md border border-slate-300 p-3.5 text-left text-slate-700 shadow-sm shadow-slate-600/10 transition hover:border-slate-400">
                   <div className="mb-2 flex flex-row items-center gap-2">
                     <IconHomeDollar
                       stroke={1.5}
@@ -43,7 +43,7 @@ export default function Page() {
                   </div>
                   <p className="t">Calculate and pay your daily head tax</p>
                 </button>
-                <button className="flex flex-1 cursor-pointer flex-col rounded-md border border-slate-300 p-3 text-left text-slate-700 shadow-sm shadow-slate-600/10 transition hover:shadow-md">
+                <button className="flex flex-1 cursor-pointer flex-col rounded-md border border-slate-300 p-3.5 text-left text-slate-700 shadow-sm shadow-slate-600/10 transition hover:border-slate-400">
                   <div className="mb-2 flex flex-row items-center gap-2">
                     <IconPigMoney
                       stroke={1.5}
@@ -53,7 +53,7 @@ export default function Page() {
                   </div>
                   <p className="t">Pay dues per share of ownership</p>
                 </button>
-                <button className="flex flex-1 cursor-pointer flex-col rounded-md border border-slate-300 p-3 text-left text-slate-700 shadow-sm shadow-slate-600/10 transition hover:shadow-md">
+                <button className="flex flex-1 cursor-pointer flex-col rounded-md border border-slate-300 p-3.5 text-left text-slate-700 shadow-sm shadow-slate-600/10 transition hover:border-slate-400">
                   <div className="mb-2 flex flex-row items-center gap-2">
                     <IconCodeVariablePlus
                       stroke={1.5}
