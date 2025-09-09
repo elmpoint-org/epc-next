@@ -59,7 +59,7 @@ export const navLinks: DeepNavLinks = [
   },
   {
     href: '/pay',
-    text: 'EPC Pay',
+    text: 'Payment Portal',
     icon: IconCreditCardFilled,
     scope: true,
   },

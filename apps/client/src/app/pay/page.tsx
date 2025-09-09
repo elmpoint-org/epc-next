@@ -7,7 +7,7 @@ import {
 } from '@tabler/icons-react';
 
 export const metadata: Metadata = {
-  title: 'EPC Pay',
+  title: 'Payment Portal',
 };
 
 export default function Page() {
@@ -15,7 +15,7 @@ export default function Page() {
     <>
       <div className="page-full-width flex flex-1 flex-col space-y-2">
         <h1 className="mb-6 flex flex-col items-center justify-center text-4xl">
-          EPC Pay
+          Payment Portal
         </h1>
         <div className="flex-1 rounded-lg bg-dwhite">
           <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
