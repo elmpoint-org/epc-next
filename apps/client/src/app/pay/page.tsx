@@ -7,6 +7,7 @@ import {
   IconPigMoney,
 } from '@tabler/icons-react';
 import { Button, Checkbox } from '@mantine/core';
+import LoginBoundary from '../_components/_base/LoginBoundary/LoginBoundary';
 
 export const metadata: Metadata = {
   title: 'Payment Portal',
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <>
+    <LoginBoundary>
       <div className="page-full-width flex flex-1 flex-col space-y-2">
         <h1 className="mb-6 flex flex-col items-center justify-center text-4xl">
           Payment Portal
@@ -126,6 +127,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </>
+    </LoginBoundary>
   );
 }
