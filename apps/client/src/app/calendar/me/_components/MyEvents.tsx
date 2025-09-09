@@ -11,13 +11,15 @@ import { useGraphQuery } from '@/query/query';
 import { useUser } from '@/app/_ctx/user/context';
 import { Popover, PopoverButton } from '@headlessui/react';
 import EventPopup from '../../_components/EventPopup';
-import { useMemo } from 'react';
+import { ReactNode, useMemo, useRef } from 'react';
 import { dateFormat, dateTS, dateTSObject } from '@epc/date-ts';
 import { IconCalendarShare, IconLoader2 } from '@tabler/icons-react';
 import { ActionIcon, Tooltip } from '@mantine/core';
 import Link from 'next/link';
 import ColorText from '@/app/_components/_base/ColorText';
 import AddStayButton from '../../_components/AddStayButton';
+import { UseQueryResult } from '@tanstack/react-query';
+import { ResultOf } from 'gql.tada';
 
 const EVENTS_QUERY = graphql(
   `
@@ -30,19 +32,9 @@ const EVENTS_QUERY = graphql(
   [CALENDAR_EVENT_FRAGMENT],
 );
 
-export default function MyEventsList() {
+export default function MyEventsContainer() {
   const user = useUser();
   const query = useGraphQuery(EVENTS_QUERY, { authorId: user?.id ?? '' });
-
-  const today = useMemo(() => dateTS(new Date()), []);
-
-  const events = useMemo(
-    () =>
-      query.data?.staysFromAuthor
-        .filter((ev) => ev.dateEnd >= today)
-        .sort((a, b) => a.dateStart - b.dateStart),
-    [query.data?.staysFromAuthor, today],
-  );
 
   return (
     <>
@@ -51,49 +43,112 @@ export default function MyEventsList() {
           {/* instructions */}
           <div className="my-4 flex flex-row gap-4">
             <p className="mt-0.5 flex-1">
-              Your current and upcoming{' '}
-              <ColorText>calendar reservations</ColorText> are listed below.
-              Click to view and edit reservation details.
+              Your <ColorText>calendar reservations</ColorText> for this season
+              are listed below. Click to view/edit reservation details.
             </p>
 
             <AddStayButton compactOnly />
           </div>
 
-          {/* events list */}
+          {/* EVENTS LISTS */}
 
-          <div>
-            {/* events list */}
-            <div
-              className="grid grid-cols-[min-content_1fr_min-content] divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent sm:mx-4"
-              data-n={(!query.isPending && !events?.length) || null}
-            >
-              {events?.map((event) => (
-                <EventButton key={event.id} event={event} />
-              ))}
+          <div className="grid grid-cols-[min-content_1fr_min-content] sm:px-4">
+            {/* current */}
+            <EventsList
+              query={query} //
+              filter="CURRENT"
+              header={<>Now</>}
+            />
+            <hr className="col-span-full mt-6 border-slate-200 first:hidden sm:-mx-4" />
 
-              {/* skeleton */}
-              {query.isPending &&
-                Array(3)
-                  .fill(0)
-                  .map((_, i) => <EventButton key={i} />)}
-
-              {/* no reservations message */}
-              {!query.isFetching && (
-                <div className="col-span-full hidden flex-col items-center text-sm italic text-slate-600 first:flex">
-                  none found
-                </div>
-              )}
-            </div>
-
-            {/* loader */}
-            {query.isFetching && !query.isPending && (
-              <div className="my-6 flex flex-row items-center justify-center">
-                <IconLoader2 className="animate-spin text-slate-400" />
-              </div>
-            )}
+            {/* upcoming */}
+            <EventsList
+              query={query}
+              filter="UPCOMING"
+              header={<>Upcoming</>}
+            />
+            {/* past year */}
+            <EventsList
+              query={query}
+              filter="PAST_YEAR"
+              header={<>Previous stays this season</>}
+            />
           </div>
         </div>
       </InvalidateProvider>
+    </>
+  );
+}
+
+export type EventsListFilterType = 'UPCOMING' | 'CURRENT' | 'PAST_YEAR';
+function EventsList({
+  query,
+  filter,
+  header,
+}: {
+  filter: EventsListFilterType;
+  header?: ReactNode;
+  query: UseQueryResult<ResultOf<typeof EVENTS_QUERY>>;
+}) {
+  const today = useMemo(() => dateTS(new Date()), []);
+  const currentYear = useRef(dateTSObject(today).year());
+  const events = useMemo(
+    () =>
+      query.data?.staysFromAuthor
+        .filter((ev) => {
+          if (filter === 'UPCOMING') return ev.dateStart > today;
+          if (filter === 'CURRENT')
+            return ev.dateStart <= today && ev.dateEnd >= today;
+          if (filter === 'PAST_YEAR')
+            return (
+              ev.dateEnd < today &&
+              dateTSObject(ev.dateStart).year() === currentYear.current
+            );
+        })
+        .sort((a, b) => a.dateStart - b.dateStart),
+    [query.data?.staysFromAuthor, today],
+  );
+
+  if (filter === 'CURRENT' && !events?.length) return null;
+
+  return (
+    <>
+      {!!header && (
+        <div className="col-span-full mb-4 mt-6 flex flex-row items-center first:mt-0 [&:nth-child(2)]:mt-0">
+          {/* name */}
+          <h3 className="">{header}</h3>
+
+          {/* loader */}
+          {query.isFetching && !query.isPending && (
+            <div className="ml-2 flex flex-row items-center justify-center">
+              <IconLoader2 className="size-4 animate-spin text-slate-400" />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* events list */}
+      <div
+        className="col-span-full grid grid-cols-subgrid divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent"
+        data-n={(!query.isPending && !events?.length) || null}
+      >
+        {events?.map((event) => (
+          <EventButton key={event.id} event={event} />
+        ))}
+
+        {/* skeleton */}
+        {query.isPending &&
+          Array(3)
+            .fill(0)
+            .map((_, i) => <EventButton key={i} />)}
+
+        {/* no reservations message */}
+        {!query.isFetching && (
+          <div className="col-span-full hidden flex-col items-center text-sm italic text-slate-600 first:flex">
+            none found
+          </div>
+        )}
+      </div>
     </>
   );
 }

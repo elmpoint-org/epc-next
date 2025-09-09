@@ -49,8 +49,8 @@ export const navLinks: DeepNavLinks = [
         exact: true,
       },
       {
-        href: '/calendar/upcoming',
-        text: 'My Upcoming Stays',
+        href: '/calendar/me',
+        text: 'My Stays',
         icon: IconCalendarUser,
         exact: true,
       },
