@@ -112,8 +112,10 @@ export default function Page() {
                           variant="subtle"
                           className="group w-full"
                         >
-                          Pay{' '}
-                          <IconChevronRight className="-mb-0.5 ml-0 inline size-4 transition-all group-hover:ml-0.5" />
+                          <span className="mx-0 transition-all group-hover:mx-0.5">
+                            Pay
+                          </span>{' '}
+                          <IconChevronRight className="-mb-0.5 inline size-4" />
                         </Button>
                       </td>
                     </tr>
