@@ -1,3 +1,5 @@
+@reference '../../globals.css';
+
 .css {
   /* PAGE PROSE STYLES */
 
@@ -38,7 +40,7 @@
         @apply mx-auto;
       }
       &[style*='text-align: right'] {
-        @apply ml-auto mr-0;
+        @apply mr-0 ml-auto;
       }
     }
 

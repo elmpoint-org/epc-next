@@ -1,12 +1,8 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "tailwindCSS.experimental.classRegex": [
-    ["clx\\(([^;]*);", "'([^']*)'"],
-    ["clx\\(([^;]*);", "\"([^\"]*)\""],
-    ["clx\\(([^;]*);", "\\`([^\\`]*)\\`"],
-    ["clmx\\(([^;]*);", "'([^']*)'"],
-    ["clmx\\(([^;]*);", "\"([^\"]*)\""],
-    ["clmx\\(([^;]*);", "\\`([^\\`]*)\\`"]
-  ]
+
+  "tailwindCSS.classFunctions": ["clx", "clmx"],
+  "tailwindCSS.classAttributes": ["className", "classNames"],
+  "tailwindCSS.includeLanguages": { "css": "css" }
 }
