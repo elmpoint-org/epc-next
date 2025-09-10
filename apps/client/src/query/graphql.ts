@@ -73,6 +73,6 @@ export type GraphAuthErrors = {
 export function getGQLError(e: unknown) {
   let out;
   if (e && typeof e === 'object' && 'response' in e)
-    out= (e.response as GraphQLResponse)?.errors;
+    out = (e.response as GraphQLResponse)?.errors;
   return out ?? null;
 }

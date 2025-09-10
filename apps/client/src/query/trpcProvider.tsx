@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Children } from '@/util/propTypes';
 import { useState } from 'react';

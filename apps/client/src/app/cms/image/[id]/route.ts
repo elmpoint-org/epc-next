@@ -3,12 +3,13 @@ import { graphAuthServer } from '@/query/graphql.server';
 import { err } from '@/util/routeErr';
 import { redirect } from 'next/navigation';
 
-export async function GET(_: unknown, props: { params: Promise<{ id: string }> }) {
+export async function GET(
+  _: unknown,
+  props: { params: Promise<{ id: string }> },
+) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const { data, errors } = await graphAuthServer(
     graphql(`

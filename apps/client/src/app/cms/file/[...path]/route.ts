@@ -9,9 +9,7 @@ import { err } from '@/util/routeErr';
 export async function GET(req: Request, props: PageArrayParams) {
   const params = await props.params;
 
-  const {
-    path: path_in
-  } = params;
+  const { path: path_in } = params;
 
   const path = path_in.join('/');
 

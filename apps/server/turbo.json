@@ -1,18 +1,12 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "extends": [
-    "//"
-  ],
+  "extends": ["//"],
   "tasks": {
     "gql:pregen": {
-      "outputs": [
-        "src/db/**/__types/**"
-      ]
+      "outputs": ["src/db/**/__types/**"]
     },
     "gql:gen": {
-      "outputs": [
-        "graphql-schema.d.ts"
-      ]
+      "outputs": ["graphql-schema.d.ts"]
     }
   }
 }

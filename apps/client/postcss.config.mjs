@@ -13,7 +13,6 @@ const config = {
         'mantine-breakpoint-xl': '1536px',
       },
     },
-
   },
 };
 

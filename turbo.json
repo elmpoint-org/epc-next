@@ -1,23 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "stream",
-  "globalPassThroughEnv": [
-    "AWS_ACCESS_KEY_ID",
-    "AWS_SECRET_ACCESS_KEY"
-  ],
+  "globalPassThroughEnv": ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"],
   "tasks": {
     "gql:pregen": {
-      "inputs": [
-        "apps/server/src/db/**"
-      ]
+      "inputs": ["apps/server/src/db/**"]
     },
     "gql:gen": {
-      "inputs": [
-        "apps/server/src/db/**"
-      ],
-      "dependsOn": [
-        "@epc/schema#gql:pregen"
-      ]
+      "inputs": ["apps/server/src/db/**"],
+      "dependsOn": ["@epc/schema#gql:pregen"]
     },
     "test": {},
     "build": {},
@@ -37,9 +28,7 @@
     "dev-client": {
       "cache": false,
       "persistent": true,
-      "with": [
-        "dev:gql"
-      ]
+      "with": ["dev:gql"]
     }
   }
 }
