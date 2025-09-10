@@ -1,3 +1,31 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+
+/* THEME */
+@theme {
+  --font-sans:
+    var(--font-default), ui-sans-serif, system-ui, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --color-dwhite: var(--color-slate-100);
+  --color-dblack: var(--color-slate-950);
+  --color-dgreen: var(--color-emerald-800);
+}
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-slate-200, currentcolor);
+  }
+}
+
+/* VARIANTS */
+
+/* tiptap */
+@custom-variant pm-selected &.ProseMirror-selectednode;
+@custom-variant pmg-selected &:global(.ProseMirror-selectednode);
+/* mantine */
+@custom-variant popover .mantine-Popover-dropdown:has(&);

@@ -1,10 +1,9 @@
 import { createTheme } from '@mantine/core';
-import { font } from '../../tailwind.config';
 
 import { colors } from './colors';
 
 export const theme = createTheme({
-  fontFamily: font.join(','),
+  fontFamily: 'var(--font-sans)',
 
   breakpoints: {
     xs: '640px',

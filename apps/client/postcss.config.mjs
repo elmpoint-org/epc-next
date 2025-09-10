@@ -1,7 +1,7 @@
 /** @type {import('postcss-load-config').Config} */
 const config = {
   plugins: {
-    tailwindcss: {},
+    '@tailwindcss/postcss': {},
 
     'postcss-preset-mantine': {},
     'postcss-simple-vars': {
@@ -14,7 +14,6 @@ const config = {
       },
     },
 
-    autoprefixer: {},
   },
 };
 

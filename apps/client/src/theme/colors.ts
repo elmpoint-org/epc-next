@@ -1,5 +1,5 @@
 import { MantineThemeOverride } from '@mantine/core';
-import { amber, emerald, red, slate } from 'tailwindcss/colors';
+import tw from 'tailwindcss/colors';
 
 export type NewColors =
   | 'black'
@@ -12,30 +12,30 @@ export type NewColors =
 export const colors: MantineThemeOverride = {
   colors: {
     // generic colors
-    emerald: twColors(emerald),
-    slate: twColors(slate),
+    emerald: twColors(tw.emerald),
+    slate: twColors(tw.slate),
 
     // status colors
-    red: twColors(red),
-    amber: twColors(amber),
+    red: twColors(tw.red),
+    amber: twColors(tw.amber),
 
     // open-colors gray mixed with tw slate
     gray: [
-      slate[50],
-      slate[100],
+      tw.slate[50],
+      tw.slate[100],
       '#eaeff5',
-      slate[200],
-      slate[300],
+      tw.slate[200],
+      tw.slate[300],
       '#9babc0',
       '#73839a',
-      slate[600],
-      slate[700],
-      slate[800],
+      tw.slate[600],
+      tw.slate[700],
+      tw.slate[800],
     ],
   },
   primaryColor: 'emerald',
-  white: slate[100],
-  black: slate[950],
+  white: tw.slate[100],
+  black: tw.slate[950],
 };
 
 function twColors(c: Record<string, string>, swap?: 'SWAP') {
