@@ -30,7 +30,7 @@
     "@epc/types": "workspace:*",
     "@graphql-typed-document-node/core": "catalog:",
     "@passwordlessdev/passwordless-nodejs": "^0.2.0",
-    "@react-email/components": "^0.0.25",
+    "@react-email/components": "^0.5.3",
     "@react-email/render": "^1.2.3",
     "@trpc/server": "catalog:",
     "axios": "^1.12.2",
@@ -81,7 +81,7 @@
     "esbuild": "^0.25.9",
     "nodemon": "^3.1.10",
     "react-email": "^4.2.11",
-    "tailwindcss": "catalog:",
+    "tailwindcss": "^3",
     "tsx": "^4.20.5",
     "typescript": "catalog:"
   }

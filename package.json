@@ -33,6 +33,7 @@
     },
     "onlyBuiltDependencies": [
       "@parcel/watcher",
+      "@tailwindcss/oxide",
       "aws-sdk",
       "esbuild",
       "sharp",

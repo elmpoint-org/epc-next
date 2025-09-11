@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 
-import { theme } from '@/util/tailwindVars';
 import { LayoutGroup } from 'framer-motion';
 
 import { useDatesArray } from '../_util/datesArray';
@@ -59,12 +58,7 @@ export default function Timeline(props: CalendarProps) {
               </div>
 
               {/* events grid */}
-              <div
-                className="z-40 flex flex-col"
-                style={
-                  { '--row-color': theme.colors.dwhite } as React.CSSProperties
-                }
-              >
+              <div className="z-40 flex flex-col [--row-color:var(--color-dwhite)]">
                 {/* show by room */}
                 {displayByRoom && (
                   <>

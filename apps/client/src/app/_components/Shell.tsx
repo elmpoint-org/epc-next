@@ -7,7 +7,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useWindowSize } from '@uidotdev/usehooks';
 
 import type { Children } from '@/util/propTypes';
-import { breakpoints } from '@/util/tailwindVars';
+import { useBreakpoints } from '@/util/tailwindVars';
 import { clmx } from '@/util/classConcat';
 
 import Navbar from './Navbar';
@@ -18,10 +18,11 @@ const NAV_WIDTH = 300;
 const Shell = ({ children }: Children) => {
   // breakpoint vars
   const { width: winWidth } = useWindowSize();
-  const isDesktop = useMemo(
-    () => winWidth !== null && winWidth >= breakpoints('lg'),
-    [winWidth],
-  );
+  const bp_lg = useBreakpoints('lg');
+  const isDesktop = useMemo(() => {
+    if (winWidth === null || bp_lg === null) return false;
+    return winWidth >= bp_lg;
+  }, [bp_lg, winWidth]);
 
   // nav state
 
@@ -65,7 +66,7 @@ const Shell = ({ children }: Children) => {
             isOpenDesktop && 'lg:invisible',
             isDesktop &&
               isOpenDesktop &&
-              'bg-transparent opacity-50 hover:visible hover:bg-slate-100 hover:opacity-100 focus:visible focus:opacity-100 peer-hover:visible',
+              'bg-transparent opacity-50 peer-hover:visible hover:visible hover:bg-slate-100 hover:opacity-100 focus:visible focus:opacity-100',
           )}
         />
 

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useWindowSize } from '@uidotdev/usehooks';
 
-import { breakpoints } from '@/util/tailwindVars';
+import { useBreakpoints } from '@/util/tailwindVars';
 import { QP } from '../_components/Calendar';
 import {
   CALENDAR_DEFAULT_VIEW,
@@ -16,11 +16,13 @@ export function useDisplayByRooms() {
 
   const Key: QP = 'rooms';
 
+  const bp_sm = useBreakpoints('sm');
   const state = useMemo(() => {
-    if (windowSize.width && windowSize.width < breakpoints('sm')) return false;
+    if (windowSize.width && bp_sm !== null && windowSize.width < bp_sm)
+      return false;
     const str = sq.get(Key);
     return str === 'true' || str === '1';
-  }, [sq, windowSize.width]);
+  }, [bp_sm, sq, windowSize.width]);
   function set(nv: boolean) {
     const query = new URLSearchParams(sq);
     query.set(Key, nv ? '1' : '0');
@@ -45,8 +47,9 @@ export function useCalendarView() {
 
   // responsive default
   const windowSize = useWindowSize();
+  const bp_sm = useBreakpoints('sm');
   const defaultView: ViewType =
-    (windowSize.width ?? 0) > breakpoints('sm')
+    (windowSize.width ?? 0) > (bp_sm ?? -1)
       ? CALENDAR_DEFAULT_VIEW
       : CALENDAR_DEFAULT_VIEW_MOBILE;
 

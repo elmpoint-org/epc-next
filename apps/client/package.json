@@ -26,7 +26,7 @@
     "@mantine/tiptap": "^7.17.8",
     "@passwordlessdev/passwordless-client": "^1.2.4",
     "@tabler/icons-react": "^3.34.1",
-    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/postcss": "^4.1.13",
     "@tanstack/react-query": "^5.87.4",
     "@tiptap/core": "^2.26.1",
     "@tiptap/extension-color": "^2.26.1",
@@ -86,7 +86,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
-    "tailwindcss": "catalog:",
+    "tailwindcss": "^4.1.13",
     "typescript": "catalog:"
   }
 }
