@@ -108,9 +108,9 @@ export class SimpleDynamo {
       TableName: this.TableName,
       KeyConditionExpression:
         `${N(primaryKey)} = ${V(primaryVal)}` + // primary key expression
-        !!operand // sort key expression...
+        (!!operand // sort key expression...
           ? ` AND ${N(sortKey)} ${operand} ${sortVals.map(V).join(' AND ')}`
-          : '',
+          : ''),
       ...expressionAttributes(),
     };
     if (index) params.IndexName = index;
