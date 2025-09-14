@@ -39,7 +39,6 @@
     "@tiptap/extension-text-align": "^3.4.2",
     "@tiptap/extension-text-style": "^3.4.2",
     "@tiptap/extension-typography": "^3.4.2",
-    "@tiptap/extension-underline": "^3.4.2",
     "@tiptap/extension-youtube": "^3.4.2",
     "@tiptap/extensions": "^3.4.2",
     "@tiptap/html": "^3.4.2",

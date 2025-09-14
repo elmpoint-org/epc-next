@@ -56,8 +56,10 @@ export default function TextEditor({
       Placeholder.configure({ placeholder: 'Start writing...' }),
       RegisterPageData(pageId),
     ],
-    content: parsedContent ?? undefined,
+    shouldRerenderOnTransaction: true,
     immediatelyRender: false,
+
+    content: parsedContent ?? undefined,
 
     onUpdate({ editor }) {
       debounce(() => updateForm({ content: JSON.stringify(editor.getJSON()) }));
