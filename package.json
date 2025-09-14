@@ -13,7 +13,7 @@
     "dev-email": "turbo dev:email",
     "dev:sst": "sst dev --stage=development --mode=mono"
   },
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.16.0",
   "pnpm": {
     "overrides": {
       "body-parser@<1.20.3": ">=1.20.3",
