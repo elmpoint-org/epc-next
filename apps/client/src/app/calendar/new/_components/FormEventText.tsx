@@ -47,7 +47,7 @@ const FormEventText = () => {
           onChange={handleTitleChange}
           className="flex-1"
         />
-        <div className="flex-flex-row flex h-[2.25rem] items-center">
+        <div className="flex-flex-row flex h-9 items-center">
           <Tooltip label="Return to auto-generated title">
             <ActionIcon
               disabled={isDefaultTitle}

@@ -41,8 +41,8 @@ const NavLink = (item: NavLinkProps) => {
         if (typeof href === 'undefined' && text === '') e.preventDefault();
       }}
       className={clmx(
-        'flex flex-row items-center gap-5 rounded-full bg-emerald-900/80 px-5 py-2.5 hover:bg-emerald-900 data-[here]:bg-emerald-950/80',
-        variant === 'LIGHT' && 'bg-dgreen hover:bg-emerald-700/50 ',
+        'flex flex-row items-center gap-5 rounded-full bg-emerald-900/80 px-5 py-2.5 hover:bg-emerald-900 data-here:bg-emerald-950/80',
+        variant === 'LIGHT' && 'bg-dgreen hover:bg-emerald-700/50',
         className,
       )}
       data-here={isHere || null}

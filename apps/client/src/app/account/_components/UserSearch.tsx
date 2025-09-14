@@ -132,7 +132,7 @@ export function UserSearchBox({
         {/* dropdown */}
         <Combobox.Dropdown
           classNames={{
-            dropdown: 'overflow-hidden rounded-md border-slate-300 shadow-sm',
+            dropdown: 'overflow-hidden rounded-md border-slate-300 shadow-xs',
           }}
         >
           <Combobox.Search
@@ -202,7 +202,7 @@ function UserSearchOption({
               <OptionImg src={item.avatarUrl ?? ''} />
             )}
 
-            <span className="[&_em]:font-semibold [&_em]:not-italic [&_em]:text-slate-700 group-data-[combobox-selected]:[&_em]:text-dwhite">
+            <span className="[&_em]:font-semibold [&_em]:text-slate-700 [&_em]:not-italic [&_em]:group-data-combobox-selected:text-dwhite">
               {/* user name */}
               {nameMatch ? (
                 <span

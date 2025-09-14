@@ -61,9 +61,9 @@ export function Credential(p: {
     <>
       <div
         className={clx(
-          'relative flex min-w-56 flex-shrink-0 flex-col rounded-lg bg-dwhite p-3 shadow-md',
+          'relative flex min-w-56 shrink-0 flex-col rounded-lg bg-dwhite p-3 shadow-md',
           // skeleton styles
-          'data-[l]:h-44 data-[l]:animate-pulse data-[l]:shadow-sm',
+          'data-l:h-44 data-l:animate-pulse data-l:shadow-xs',
         )}
         data-l={skeleton || null}
         style={
@@ -79,13 +79,13 @@ export function Credential(p: {
             <div className="border-b pb-1 font-bold">{c.nickname}</div>
             <div className="flex flex-col gap-2 py-1">
               <div className="flex flex-col">
-                <div className="text-xs uppercase text-slate-600">Created</div>
+                <div className="text-xs text-slate-600 uppercase">Created</div>
                 <div className="text-sm">
                   {new Date(c.createdAt || 0).toDateString()}
                 </div>
               </div>
               <div className="flex flex-col">
-                <div className="text-xs uppercase text-slate-600">
+                <div className="text-xs text-slate-600 uppercase">
                   Last logged in from
                 </div>
                 <div className="text-sm">{c.device}</div>

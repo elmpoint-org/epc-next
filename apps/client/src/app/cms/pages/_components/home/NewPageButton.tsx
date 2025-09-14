@@ -18,9 +18,11 @@ export default function NewPageButton() {
 
   function createPage() {
     loading(async () => {
-      const data = await oldGraphAuth(...NEW_CMS_PAGE_KEY(user?.id)).catch(() => {
-        notifications.show({ message: 'An error occurred.' });
-      });
+      const data = await oldGraphAuth(...NEW_CMS_PAGE_KEY(user?.id)).catch(
+        () => {
+          notifications.show({ message: 'An error occurred.' });
+        },
+      );
       if (!data?.cmsPageCreate) return;
 
       notifications.show({ message: 'Successfully created.' });

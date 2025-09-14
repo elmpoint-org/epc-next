@@ -16,7 +16,7 @@ const NavLinks = () => {
           <ScrollArea
             {...p}
             classNames={{
-              scrollbar: '!bg-transparent',
+              scrollbar: 'bg-transparent!',
             }}
           />
         )}

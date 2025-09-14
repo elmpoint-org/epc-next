@@ -15,7 +15,7 @@ export default function PageStats({ page }: { page: PagePropType }) {
       <div
         className={clx(
           'space-x-2 py-2 text-slate-500',
-          /* em */ '[&_em]:not-italic [&_em]:text-dblack',
+          /* em */ '[&_em]:text-dblack [&_em]:not-italic',
         )}
       >
         {(

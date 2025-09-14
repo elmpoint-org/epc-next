@@ -5,7 +5,11 @@ import { notifications } from '@mantine/notifications';
 
 import { graphAuth, graphql } from '@/query/graphql';
 
-import { ModalFrame, ModalFrameFooter, FileModalProps } from '@/app/_components/_base/ModalFrame';
+import {
+  ModalFrame,
+  ModalFrameFooter,
+  FileModalProps,
+} from '@/app/_components/_base/ModalFrame';
 import FocusOnRender from '@/app/_components/_base/FocusOnRender';
 
 export default function NewFolderModal(props: FileModalProps) {
@@ -43,7 +47,11 @@ export default function NewFolderModal(props: FileModalProps) {
 
   return (
     <>
-      <ModalFrame open={show} onClose={() => onHide()} title="Create New Folder">
+      <ModalFrame
+        open={show}
+        onClose={() => onHide()}
+        title="Create New Folder"
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();

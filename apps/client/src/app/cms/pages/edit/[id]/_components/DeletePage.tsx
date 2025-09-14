@@ -63,8 +63,8 @@ export default function DeletePage({ pageId }: EditFormProps) {
           loading={isLoading}
           color="red"
           className={clx(
-            'flex-shrink-0',
-            /* skeleton */ 'disabled:animate-pulse disabled:select-none disabled:bg-slate-200 disabled:text-transparent',
+            'shrink-0',
+            /* skeleton */ 'disabled:animate-pulse disabled:bg-slate-200 disabled:text-transparent disabled:select-none',
           )}
           disabled={isSkeleton}
         >
@@ -73,7 +73,7 @@ export default function DeletePage({ pageId }: EditFormProps) {
         <div
           className={clx(
             'text-sm text-slate-600',
-            /* skeleton */ 'data-[s]:animate-pulse data-[s]:rounded-full data-[s]:bg-slate-200 data-[s]:text-transparent',
+            /* skeleton */ 'data-s:animate-pulse data-s:rounded-full data-s:bg-slate-200 data-s:text-transparent',
           )}
           data-s={isSkeleton || null}
         >

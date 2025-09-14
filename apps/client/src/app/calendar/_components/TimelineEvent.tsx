@@ -87,7 +87,7 @@ export default function TimelineEvent({
         }}
       >
         {edgeOffset && !arrows.left && <div className="w-6" />}
-        <PopoverButton className="group flex-1 truncate bg-[--row-color] focus:outline-none">
+        <PopoverButton className="group flex-1 truncate bg-(--row-color) focus:outline-hidden">
           <div
             className={clmx(
               'flex flex-1 flex-row items-center justify-between truncate rounded-lg border ring-inset group-focus:ring-1',
@@ -102,7 +102,7 @@ export default function TimelineEvent({
             }}
           >
             {arrows.left ? (
-              <IconChevronLeft stroke={1} className="size-4 flex-shrink-0" />
+              <IconChevronLeft stroke={1} className="size-4 shrink-0" />
             ) : (
               <div />
             )}
@@ -116,7 +116,7 @@ export default function TimelineEvent({
               {resText ?? event.title}
             </div>
             {arrows.right ? (
-              <IconChevronRight stroke={1} className="size-4 flex-shrink-0" />
+              <IconChevronRight stroke={1} className="size-4 shrink-0" />
             ) : (
               <div />
             )}

@@ -52,7 +52,7 @@ export default function LogOutAll() {
           onClick={confirmLogout}
           loading={isLoading}
           color="red"
-          className="flex-shrink-0"
+          className="shrink-0"
         >
           Log out all of your devices
         </Button>

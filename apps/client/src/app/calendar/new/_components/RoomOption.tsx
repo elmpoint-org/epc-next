@@ -55,11 +55,11 @@ const RoomOption = ({
               {aliasTag}
               {/* room occupancy */}
               <div
-                className="text-nowrap text-slate-600 data-[hide]:hidden group-data-[combobox-selected]:text-dwhite"
+                className="text-nowrap text-slate-600 group-data-combobox-selected:text-dwhite data-hide:hidden"
                 data-hide={item.noCount || null}
               >
                 (
-                <span className="font-bold text-yellow-700  group-data-[combobox-selected]:!text-inherit group-data-[full]/b:text-red-600 group-data-[open]/b:text-emerald-700">
+                <span className="font-bold text-yellow-700 group-data-combobox-selected:text-inherit! group-data-full/b:text-red-600 group-data-open/b:text-emerald-700">
                   {available ?? '?'}
                 </span>
                 /{item.beds})
@@ -69,7 +69,7 @@ const RoomOption = ({
                 {item.forCouples && (
                   <Tooltip label="This room has a shareable bed." withArrow>
                     <IconFriends
-                      className="text-emerald-800 group-data-[combobox-selected]:text-inherit"
+                      className="text-emerald-800 group-data-combobox-selected:text-inherit"
                       size={20}
                       stroke={1.75}
                     />
@@ -99,7 +99,7 @@ function AliasTag({ isAlias, name }: { isAlias?: boolean; name?: string }) {
             <IconAlt
               size={20}
               stroke={1.75}
-              className="text-sky-700 group-data-[combobox-selected]:text-inherit"
+              className="text-sky-700 group-data-combobox-selected:text-inherit"
             />
           </Tooltip>
         </div>
@@ -115,7 +115,7 @@ export function CustomRoomOption({ children }: Children) {
         <div className="truncate">{children}</div>
         <Pill
           size="xs"
-          className="border border-sky-600 uppercase text-sky-600"
+          className="border border-sky-600 text-sky-600 uppercase"
         >
           custom
         </Pill>

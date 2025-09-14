@@ -72,7 +72,7 @@ export default function FloatingWindow({
             {/* frame */}
             <div
               className={clx(
-                'group fixed inset-2 z-[199] flex flex-row items-end sm:inset-6',
+                'group fixed inset-2 z-199 flex flex-row items-end sm:inset-6',
                 side === 'LEFT' && 'justify-start',
                 side === 'RIGHT' && 'justify-end',
               )}
@@ -81,7 +81,7 @@ export default function FloatingWindow({
               {/* panel */}
               <motion.div
                 layout
-                className="flex h-full flex-col justify-end group-data-[m]:!w-96"
+                className="flex h-full flex-col justify-end group-data-m:w-96!"
                 style={{
                   width: width ?? '48rem',
                 }}
@@ -90,12 +90,12 @@ export default function FloatingWindow({
                   transition
                   className={clx(
                     'flex max-h-full w-full flex-col overflow-hidden rounded-xl border border-slate-300 bg-dwhite shadow-xl',
-                    /* transitions */ 'translate-y-0 scale-100 transition duration-200 data-[closed]:translate-y-12 data-[closed]:opacity-0',
+                    /* transitions */ 'translate-y-0 scale-100 transition duration-200 data-closed:translate-y-12 data-closed:opacity-0',
                   )}
                 >
                   {/* HEADER */}
                   <div
-                    className="group flex flex-row items-center justify-between border-b border-slate-300 p-2 group-data-[m]:border-none"
+                    className="group flex flex-row items-center justify-between border-b border-slate-300 p-2 group-data-m:border-none"
                     onClick={() => {
                       if (minimized) setMinimized(false);
                     }}
@@ -106,7 +106,7 @@ export default function FloatingWindow({
                       size="sm"
                       variant="subtle"
                       color="slate"
-                      className="invisible group-data-[m]:invisible md:visible"
+                      className="invisible group-data-m:invisible md:visible"
                       onClick={() => setSide()}
                     >
                       {side === 'RIGHT' && <IconChevronLeftPipe />}
@@ -120,7 +120,7 @@ export default function FloatingWindow({
                         <div
                           className={clx(
                             'flex items-center justify-center',
-                            /* transition */ 'translate-x-0 transition data-[closed]:-translate-x-4 data-[closed]:opacity-0',
+                            /* transition */ 'translate-x-0 transition data-closed:-translate-x-4 data-closed:opacity-0',
                           )}
                         >
                           <IconLoader2
@@ -131,7 +131,7 @@ export default function FloatingWindow({
                       </Transition>
 
                       {/* PANEL NAME */}
-                      <div className="select-none text-sm">{title}</div>
+                      <div className="text-sm select-none">{title}</div>
                     </div>
 
                     <div className="flex flex-row items-center gap-1">
@@ -162,11 +162,11 @@ export default function FloatingWindow({
                   {/* BODY */}
                   <ScrollArea
                     classNames={{
-                      root: 'flex-1 transition-all group-data-[m]:max-h-0',
+                      root: 'flex-1 transition-all group-data-m:max-h-0',
                       scrollbar: 'm-1',
                     }}
                   >
-                    <div className="flex h-full w-full flex-col @container">
+                    <div className="@container flex h-full w-full flex-col">
                       {children}
                     </div>
                   </ScrollArea>

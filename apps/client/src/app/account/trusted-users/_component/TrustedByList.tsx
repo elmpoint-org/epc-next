@@ -31,7 +31,7 @@ export default function TrustedByList(props: TrustedUserProps) {
 
   return (
     <>
-      <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
+      <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-xs">
         {/* title */}
         <div className="flex flex-row items-center justify-between">
           <h3 className="px-2 text-lg">You’re trusted by</h3>
@@ -86,7 +86,7 @@ export default function TrustedByList(props: TrustedUserProps) {
                 .fill(0)
                 .map((_, i) => <TUSkeleton key={i} i={i} />)}
 
-            <div className="mx-4 hidden italic text-slate-600 first:flex">
+            <div className="mx-4 hidden text-slate-600 italic first:flex">
               none found
             </div>
           </div>

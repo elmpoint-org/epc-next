@@ -87,7 +87,7 @@ function WeekGrid({ eventsByWeek }: { eventsByWeek: WeekOfEvents[] | null }) {
               <div
                 key={d.date}
                 className={clmx(
-                  'border-slate-200 bg-dwhite print:border-b print:border-r',
+                  'border-slate-200 bg-dwhite print:border-r print:border-b',
                   !d.inMonth && 'bg-dwhite/80',
                 )}
               />

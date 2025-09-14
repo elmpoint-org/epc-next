@@ -161,7 +161,7 @@ export default function TextEditor({
         </RichTextEditor>
 
         {isSkeleton && (
-          <div className="absolute inset-[-1px] z-50 bg-dwhite">
+          <div className="absolute -inset-px z-50 bg-dwhite">
             <div className="absolute inset-0 animate-pulse rounded-lg bg-slate-200"></div>
           </div>
         )}

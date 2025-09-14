@@ -8,7 +8,7 @@
   }
 
   & blockquote {
-    @apply *:not-italic before:*:content-none after:*:content-none;
+    @apply *:not-italic *:before:content-none *:after:content-none;
   }
 
   & code {
@@ -16,7 +16,7 @@
   }
 
   & pre {
-    @apply !bg-slate-200;
+    @apply bg-slate-200!;
   }
 
   & hr {

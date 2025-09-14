@@ -14,7 +14,7 @@ const TitleBlock = (p: {
 
   return (
     <>
-      <div className="mb-2 mt-6 flex flex-col gap-3 px-0 first:mt-0">
+      <div className="mt-6 mb-2 flex flex-col gap-3 px-0 first:mt-0">
         <button
           onClick={(e) => {
             e.preventDefault();

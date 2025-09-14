@@ -132,8 +132,8 @@ export default function CreateAccountForm({
             }
             classNames={{
               wrapper: 'group',
-              input: 'data-[disabled]:text-dblack',
-              section: 'data-[position=right]:group-data-[disabled]:w-auto',
+              input: 'data-disabled:text-dblack',
+              section: 'group-data-disabled:data-[position=right]:w-auto',
             }}
           />
 

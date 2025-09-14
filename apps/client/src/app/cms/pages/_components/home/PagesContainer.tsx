@@ -38,7 +38,7 @@ export default function PagesContainer() {
 
   return (
     <>
-      <div className="mx-auto flex max-w-screen-xl flex-col gap-6 p-6">
+      <div className="mx-auto flex max-w-(--breakpoint-xl) flex-col gap-6 p-6">
         <SkeletonProvider ready={!pagesQuery.isPending}>
           <div className="relative">
             <div className="flex flex-row items-center justify-between">

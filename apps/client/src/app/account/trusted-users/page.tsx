@@ -17,7 +17,7 @@ export default function AccountFamilyPage() {
             Trusted Users
           </h1>
           <div className="container flex-1 rounded-lg bg-dwhite">
-            <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
+            <div className="mx-auto flex max-w-(--breakpoint-lg) flex-col gap-4 p-6">
               {/* leader text */}
               <p className="my-4">
                 <span>Your </span>

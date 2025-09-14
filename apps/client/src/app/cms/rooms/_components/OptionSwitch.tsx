@@ -8,7 +8,7 @@ export default function OptionSwitch({ ...props }: SwitchProps) {
         classNames={{
           input: 'peer',
           track:
-            '[.peer:not(:checked)~&]:border-slate-300 [.peer:not(:checked)~&]:bg-slate-300',
+            'not-peer-checked:border-slate-300 not-peer-checked:bg-slate-300',
           thumb: 'border-0',
           body: 'items-center',
         }}

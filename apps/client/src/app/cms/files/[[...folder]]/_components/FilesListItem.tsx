@@ -40,7 +40,7 @@ export default function FilesListItem({
         data-s={isSelected || null}
         className="group py-1"
       >
-        <div className="flex flex-row justify-between rounded-md border border-transparent bg-dwhite px-4 py-2 transition-all group-hover:border-dgreen/50 group-data-[s]:border-dgreen group-data-[s]:bg-emerald-600/20">
+        <div className="flex flex-row justify-between rounded-md border border-transparent bg-dwhite px-4 py-2 transition-all group-hover:border-dgreen/50 group-data-s:border-dgreen group-data-s:bg-emerald-600/20">
           {/* left section */}
           <div className="flex flex-row items-center gap-4 truncate">
             {/* checkbox */}
@@ -54,7 +54,7 @@ export default function FilesListItem({
             />
 
             {/* file/folder name link */}
-            <div className="flex flex-row gap-2 truncate group-data-[s]:font-bold group-data-[s]:text-dgreen">
+            <div className="flex flex-row gap-2 truncate group-data-s:font-bold group-data-s:text-dgreen">
               {/* file type icon */}
               <FileIcon icon={isFolder ? IconFolderFilled : IconFileFilled} />
 
@@ -122,7 +122,7 @@ function FileIcon({
       <div className="flex items-center justify-center">
         <Icon
           className={clmx(
-            'size-5 text-slate-400 group-data-[s]:text-dgreen',
+            'size-5 text-slate-400 group-data-s:text-dgreen',
             className,
           )}
         />

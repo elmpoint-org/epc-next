@@ -17,7 +17,7 @@ export default function NotificationsPage() {
           </h1>
 
           <div className="container flex-1 rounded-lg bg-dwhite">
-            <div className="mx-auto max-w-screen-lg p-6">
+            <div className="mx-auto max-w-(--breakpoint-lg) p-6">
               <NotifWrapper />
             </div>
           </div>

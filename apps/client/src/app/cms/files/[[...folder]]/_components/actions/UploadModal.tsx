@@ -3,7 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
-import { ModalFrame, ModalFrameFooter, FileModalProps } from '@/app/_components/_base/ModalFrame';
+import {
+  ModalFrame,
+  ModalFrameFooter,
+  FileModalProps,
+} from '@/app/_components/_base/ModalFrame';
 import { useReverseCbTrigger } from '@/util/reverseCb';
 
 import UploadFile from './UploadFile';
@@ -105,7 +109,7 @@ export default function UploadModal({
                   />
                 ))}
 
-                <div className="hidden px-2 py-1 italic text-slate-500 first:block">
+                <div className="hidden px-2 py-1 text-slate-500 italic first:block">
                   no files yet.
                 </div>
               </div>
@@ -122,7 +126,7 @@ export default function UploadModal({
             />
             <label
               htmlFor="dropzone"
-              className="my-2 flex h-36 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-slate-600/20 bg-slate-200 hover:border-slate-600 peer-focus:border-slate-600 data-[d]:border-slate-700 data-[d]:bg-slate-300"
+              className="my-2 flex h-36 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-slate-600/20 bg-slate-200 peer-focus:border-slate-600 hover:border-slate-600 data-d:border-slate-700 data-d:bg-slate-300"
               data-d={isOnTop || null}
               onDrop={(e) => {
                 e.preventDefault();

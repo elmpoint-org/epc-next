@@ -26,7 +26,7 @@ export default function CardButton({
     <>
       <button
         className={clmx(
-          'group relative flex flex-col items-center justify-center rounded-md border border-transparent bg-emerald-500/10 p-5 text-emerald-700 transition focus:outline-emerald-600 data-[l]:cursor-default hover:data-[nl]:border-emerald-500',
+          'group relative flex flex-col items-center justify-center rounded-md border border-transparent bg-emerald-500/10 p-5 text-emerald-700 transition focus:outline-emerald-600 data-l:cursor-default hover:data-nl:border-emerald-500',
           className,
         )}
         disabled={loading}
@@ -38,7 +38,7 @@ export default function CardButton({
         <div
           className={clx(
             'flex translate-y-0 flex-col items-center gap-2 transition',
-            /* transition */ 'group-data-[l]:-translate-y-8 group-data-[l]:opacity-0',
+            /* transition */ 'group-data-l:-translate-y-8 group-data-l:opacity-0',
           )}
         >
           <div className="-m-2 rounded-full p-2 transition ease-in-out group-hover:scale-110 group-hover:bg-white/30">
@@ -54,7 +54,7 @@ export default function CardButton({
           <div
             className={clx(
               'absolute inset-0 flex flex-col items-center justify-center',
-              /* transition */ 'translate-y-0 transition data-[closed]:translate-y-8 data-[closed]:opacity-0',
+              /* transition */ 'translate-y-0 transition data-closed:translate-y-8 data-closed:opacity-0',
             )}
           >
             <div className="animate-spin">

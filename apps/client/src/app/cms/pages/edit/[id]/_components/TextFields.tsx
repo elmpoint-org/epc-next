@@ -115,8 +115,8 @@ export default function TextFields({
           }
           classNames={{
             wrapper: 'group',
-            input: 'data-[disabled]:!text-dblack',
-            section: 'data-[position=right]:group-data-[disabled]:w-auto',
+            input: 'data-disabled:text-dblack!',
+            section: 'group-data-disabled:data-[position=right]:w-auto',
           }}
         >
           {/* link prefix */}
@@ -126,7 +126,7 @@ export default function TextFields({
               className="p-0 text-slate-500"
               classNames={{
                 root: 'bg-transparent',
-                label: '-mb-px -mr-2',
+                label: '-mr-2 -mb-px',
               }}
             >
               <span className="hidden sm:inline">elmpoint.xyz</span>

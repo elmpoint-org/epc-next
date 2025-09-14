@@ -13,7 +13,7 @@ export default function RoomsPage() {
           Rooms & Cabins
         </h1>
         <div className="container flex-1 rounded-lg bg-dwhite">
-          <div className="mx-auto flex max-w-[32rem] flex-col gap-4 p-4 sm:p-6 md:max-w-none">
+          <div className="mx-auto flex max-w-lg flex-col gap-4 p-4 sm:p-6 md:max-w-none">
             <CabinsList />
           </div>
         </div>

@@ -28,8 +28,8 @@ export const DropdownItems = forwardRef<
       ref={ref}
       transition
       className={clmx(
-        'absolute right-0 z-10 mt-2 flex w-56 flex-col divide-y divide-slate-200 rounded-md bg-slate-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
-        /* transition */ 'origin-top-right transition data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in',
+        'absolute right-0 z-10 mt-2 flex w-56 flex-col divide-y divide-slate-200 rounded-md bg-slate-50 shadow-lg ring-1 ring-black/5 focus:outline-hidden',
+        /* transition */ 'origin-top-right transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in',
 
         className,
       )}
@@ -49,7 +49,7 @@ export function DropdownOption({
     <MenuItem>
       <button
         className={clmx(
-          'group flex w-full items-center px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-200 data-[focus]:text-slate-900',
+          'group flex w-full items-center px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-200 data-focus:text-slate-900',
           className,
         )}
         {...props}

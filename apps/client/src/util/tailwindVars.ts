@@ -10,7 +10,7 @@ export const BREAKPOINT_MAP = {
 export type Breakpoint = keyof typeof BREAKPOINT_MAP;
 
 export function useBreakpoints(breakpoint: Breakpoint) {
-  const breakpoints = useMemo(() => {
+  const breakpoints = /* useMemo */(() => {
     if (typeof window === 'undefined') return null;
 
     // get css variable
@@ -30,7 +30,7 @@ export function useBreakpoints(breakpoint: Breakpoint) {
     // Fallback: extract numeric value (assume px)
     const match = value.match(/[\d.]+/);
     return match ? parseFloat(match[0]) : null;
-  }, [breakpoint]);
+  }/* , [breakpoint] */);
 
-  return breakpoints;
+  return breakpoints();
 }

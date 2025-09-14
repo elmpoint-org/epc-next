@@ -68,7 +68,7 @@ export default function NewPasskey({ onClose }: { onClose?: () => void }) {
 
   return (
     <>
-      <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
+      <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-xs">
         <div className="flex flex-row items-center justify-between">
           <h3 className="text-lg">Add a passkey</h3>
           <CloseButton onClick={onClose} />

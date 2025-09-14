@@ -34,7 +34,7 @@ export default function NavLinkDropdown(item: NavDropdownType) {
   return (
     <>
       <div
-        className="rounded-3xl bg-emerald-900/80 transition-all hover:bg-emerald-900 data-[o]:rounded-2xl"
+        className="rounded-3xl bg-emerald-900/80 transition-all hover:bg-emerald-900 data-o:rounded-2xl"
         data-o={isOpen || null}
       >
         {/* parent button */}
@@ -60,7 +60,7 @@ export default function NavLinkDropdown(item: NavDropdownType) {
               },
               <>
                 <div className="rounded-full p-0.5 text-white/35 transition group-hover:bg-emerald-800/50 group-hover:text-slate-300">
-                  <div className="size-5 ">
+                  <div className="size-5">
                     {isOpen && <IconChevronDown {...iconProps} />}
                     {!isOpen && <IconChevronLeft {...iconProps} />}
                   </div>
@@ -69,8 +69,8 @@ export default function NavLinkDropdown(item: NavDropdownType) {
             )}
 
             {/* link text */}
-            <div className="flex-1 group-hover/b:[.peer:not(:hover)~&]:[--bg:0.7]">
-              <span className="-mx-1.5 -my-0.5 block max-w-fit rounded-full bg-emerald-800/[var(--bg,0)] px-1.5 py-0.5 leading-none transition">
+            <div className="flex-1 not-peer-hover:group-hover/b:[--bg:0.7]">
+              <span className="-mx-1.5 -my-0.5 block max-w-fit rounded-full bg-emerald-800/(--bg,0) px-1.5 py-0.5 leading-none transition">
                 {text}
               </span>
             </div>

@@ -138,7 +138,7 @@ export default function NotifPanel({
           handleSave();
         }}
       >
-        <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
+        <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-xs">
           {/* title */}
           <div className="flex flex-row items-center justify-between gap-2 px-2">
             <h3 className="text-lg">{title}</h3>
@@ -202,13 +202,13 @@ function OptionSwitch({
       label={children ?? props.label}
       color={isLoading ? 'white' : 'emerald'}
       disabled={isLoading}
-      className="![--label-offset-start:1rem]"
+      className="[--label-offset-start:1rem]!"
       classNames={{
         input: 'peer',
         track: clx(
-          'relative [.peer:not(:checked)~&]:border-slate-300 [.peer:not(:checked)~&]:bg-slate-300',
+          'relative not-peer-checked:border-slate-300 not-peer-checked:bg-slate-300',
           isLoading &&
-            'animate-pulse !border-slate-200 after:absolute after:inset-0 after:z-10 after:bg-slate-200',
+            'animate-pulse border-slate-200! after:absolute after:inset-0 after:z-10 after:bg-slate-200',
         ),
         thumb: 'border-0',
         body: 'items-center',
@@ -236,7 +236,7 @@ function SaveReset({
           <ActionIcon
             aria-label="reset to saved"
             variant="subtle"
-            className="data-[disabled]:invisible"
+            className="data-disabled:invisible"
             disabled={status !== 'UNSAVED'}
             onClick={onRevert}
           >

@@ -39,7 +39,7 @@ export default function MyEventsContainer() {
   return (
     <>
       <InvalidateProvider cb={() => query.refetch()}>
-        <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
+        <div className="mx-auto flex max-w-(--breakpoint-lg) flex-col gap-4 p-6">
           {/* instructions */}
           <div className="my-4 flex flex-row gap-4">
             <p className="mt-0.5 flex-1">
@@ -114,7 +114,7 @@ function EventsList({
   return (
     <>
       {!!header && (
-        <div className="col-span-full mb-4 mt-6 flex flex-row items-center first:mt-0 [&:nth-child(2)]:mt-0">
+        <div className="col-span-full mt-6 mb-4 flex flex-row items-center first:mt-0 nth-2:mt-0">
           {/* name */}
           <h3 className="">{header}</h3>
 
@@ -129,7 +129,7 @@ function EventsList({
 
       {/* events list */}
       <div
-        className="col-span-full grid grid-cols-subgrid divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-[n]:border-transparent"
+        className="col-span-full grid grid-cols-subgrid divide-y divide-slate-200 overflow-hidden rounded-lg border border-slate-200 text-sm/6 data-n:border-transparent"
         data-n={(!query.isPending && !events?.length) || null}
       >
         {events?.map((event) => (
@@ -144,7 +144,7 @@ function EventsList({
 
         {/* no reservations message */}
         {!query.isFetching && (
-          <div className="col-span-full hidden flex-col items-center text-sm italic text-slate-600 first:flex">
+          <div className="col-span-full hidden flex-col items-center text-sm text-slate-600 italic first:flex">
             none found
           </div>
         )}
@@ -171,15 +171,15 @@ function EventButton({ event }: { event?: EventType }) {
   return (
     <Popover className="col-span-full grid grid-cols-subgrid">
       <PopoverButton
-        className="col-span-full flex grid-cols-subgrid flex-row items-center gap-2 px-8 py-4 hover:bg-slate-200/25 focus:bg-slate-200/50 focus:outline-none sm:grid"
+        className="col-span-full flex grid-cols-subgrid flex-row items-center gap-2 px-8 py-4 hover:bg-slate-200/25 focus:bg-slate-200/50 focus:outline-hidden sm:grid"
         disabled={!event}
       >
         <div
-          className="col-span-2 flex flex-1 grid-cols-subgrid flex-col gap-2 truncate text-left data-[s]:py-0.5 sm:grid sm:items-center sm:gap-12"
+          className="col-span-2 flex flex-1 grid-cols-subgrid flex-col gap-2 truncate text-left data-s:py-0.5 sm:grid sm:items-center sm:gap-12"
           data-s={!event || null}
         >
           {/* dates */}
-          <div className="flex flex-row items-center gap-2 text-nowrap text-xs text-slate-600 sm:text-sm">
+          <div className="flex flex-row items-center gap-2 text-xs text-nowrap text-slate-600 sm:text-sm">
             {event ? (
               <>
                 <div>{formattedDates?.[0]}</div>
@@ -188,7 +188,7 @@ function EventButton({ event }: { event?: EventType }) {
               </>
             ) : (
               // skeleton
-              <div className=" h-3 w-40 animate-pulse rounded-full bg-slate-200 sm:h-4" />
+              <div className="h-3 w-40 animate-pulse rounded-full bg-slate-200 sm:h-4" />
             )}
           </div>
 

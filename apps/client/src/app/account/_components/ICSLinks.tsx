@@ -67,7 +67,7 @@ export default function ICSLinks() {
 
   return (
     <>
-      <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
+      <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-xs">
         <div className="flex flex-row items-center justify-between">
           <h3 className="text-lg">Calendar Integrations</h3>
 
@@ -120,7 +120,7 @@ export default function ICSLinks() {
               ))}
 
           {/* no items */}
-          <div className="hidden text-sm italic text-slate-600 first:block">
+          <div className="hidden text-sm text-slate-600 italic first:block">
             none found
           </div>
         </div>

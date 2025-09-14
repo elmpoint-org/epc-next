@@ -7,11 +7,6 @@ import Providers, { ProvidersHead } from './_components/Providers';
 import Shell from './_components/Shell';
 import { UserProvider } from './_ctx/user/provider';
 
-import '@mantine/core/styles.css';
-import '@mantine/dates/styles.css';
-import '@mantine/notifications/styles.css';
-import '@mantine/tiptap/styles.css';
-
 import './globals.css';
 
 const defaultFont = IBM_Plex_Sans({

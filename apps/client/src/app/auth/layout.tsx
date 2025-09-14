@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: Children) {
         <Backdrop />
 
         {/* content */}
-        <div className="container z-10 mx-auto flex flex-1 flex-col items-center justify-center">
+        <div className="z-10 container mx-auto flex flex-1 flex-col items-center justify-center">
           {/* modal box */}
           <div className="flex w-full max-w-sm flex-col gap-4 rounded-xl border border-dblack/30 bg-slate-200 p-6 shadow-2xl">
             {/* logo panel */}

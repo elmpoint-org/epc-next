@@ -71,11 +71,11 @@ const Shell = ({ children }: Children) => {
         />
 
         <AppShell.Main
-          className="flex flex-col bg-slate-200 p-4 pt-12 max-lg:!ml-0 data-[cd]:lg:!ml-0"
+          className="flex flex-col bg-slate-200 p-4 pt-12 max-lg:ml-0! lg:data-cd:ml-0!"
           style={{ marginLeft: NAV_WIDTH }}
           data-cd={!isOpenDesktop || null}
         >
-          <div className="container mx-auto flex flex-1 flex-col has-[.page-full-width]:mx-0 has-[.page-full-width]:max-w-[initial] print:!max-w-none">
+          <div className="container mx-auto flex flex-1 flex-col has-[.page-full-width]:mx-0 has-[.page-full-width]:max-w-[initial] print:max-w-none!">
             {children}
           </div>
         </AppShell.Main>

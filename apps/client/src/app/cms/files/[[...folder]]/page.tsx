@@ -9,9 +9,7 @@ export const metadata: Metadata = {
 export default async function FilesPage(props: PageArrayOptParams) {
   const params = await props.params;
 
-  const {
-    folder: folder_in
-  } = params;
+  const { folder: folder_in } = params;
 
   const folder =
     '/' + (folder_in?.map((f) => decodeURIComponent(f)).join('/') ?? '');
@@ -22,7 +20,7 @@ export default async function FilesPage(props: PageArrayOptParams) {
         File Manager
       </h1>
       <div className="container flex-1 rounded-lg bg-dwhite">
-        <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-3 sm:p-6">
+        <div className="mx-auto flex max-w-(--breakpoint-lg) flex-col gap-4 p-3 sm:p-6">
           <FileManager folder={folder} />
 
           <hr />

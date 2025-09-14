@@ -40,7 +40,7 @@ export default function Timeline(props: CalendarProps) {
             <div className="relative flex min-h-96 flex-col">
               {/* divider lines */}
               <div
-                className="absolute inset-0 -mx-1 grid divide-x divide-slate-300 group-data-[d]/tm:ml-1"
+                className="absolute inset-0 -mx-1 grid divide-x divide-slate-300 group-data-d/tm:ml-1"
                 style={{ gridTemplateColumns, left: sidebarWidth }}
               >
                 {dates.map((_, i) => (

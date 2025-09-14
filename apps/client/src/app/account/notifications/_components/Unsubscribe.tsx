@@ -57,7 +57,7 @@ export default function Unsubscribe(props: NotifsProps) {
           size="compact-sm"
           color="slate"
           variant="light"
-          className="flex-shrink-0"
+          className="shrink-0"
           disabled={wasUnsubbed || isPending}
         >
           Unsubscribe{wasUnsubbed && 'd'}

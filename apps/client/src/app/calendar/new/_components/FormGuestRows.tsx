@@ -91,7 +91,7 @@ const FormGuestRows = () => {
             className="relative flex flex-col items-stretch gap-7 rounded-xl border border-slate-300 p-4 pt-10 @xl:flex-row @xl:items-end @xl:gap-3 @xl:border-0 @xl:px-0 @xl:py-4"
           >
             {/* number */}
-            <div className="absolute bottom-4 left-5 w-[2ch] select-none p-0.5 text-left text-sm text-slate-500 @xl:static @xl:p-0 @xl:py-2.5 @xl:text-right">
+            <div className="absolute bottom-4 left-5 w-[2ch] p-0.5 text-left text-sm text-slate-500 select-none @xl:static @xl:p-0 @xl:py-2.5 @xl:text-right">
               {i + 1}
             </div>
             {/* guest name */}
@@ -136,7 +136,7 @@ const FormGuestRows = () => {
         {/* add room button */}
         <div className="flex flex-row items-center py-2 @xl:py-0">
           <div className="flex flex-1 flex-row items-center gap-3">
-            <div className="w-[2ch] select-none text-right text-sm text-slate-500 @xl:static">
+            <div className="w-[2ch] text-right text-sm text-slate-500 select-none @xl:static">
               +
             </div>
             <Button
@@ -172,7 +172,7 @@ function EventRoomsTableLink() {
       href={`/calendar?view=TIMELINE&rooms=1&days=${params?.days}&date=${params?.start}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="mr-2 hidden cursor-pointer text-xs italic text-slate-500 hover:text-slate-700 hover:underline data-[h]:hidden sm:block"
+      className="mr-2 hidden cursor-pointer text-xs text-slate-500 italic hover:text-slate-700 hover:underline data-h:hidden sm:block"
       data-h={params === null || null}
     >
       View these dates in Rooms Table &nbsp;&#x2197;

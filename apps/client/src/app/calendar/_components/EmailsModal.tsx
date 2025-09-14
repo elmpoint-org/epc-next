@@ -103,7 +103,7 @@ function EmailsModalForm({
     <>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4">
-          <div className="prose prose-sm prose-slate my-2 max-w-none !leading-tight">
+          <div className="my-2 prose prose-sm max-w-none leading-tight! prose-slate">
             <p>
               Emails are shown below for all users with reservations in the
               current timeframe.
@@ -135,7 +135,7 @@ function EmailsModalForm({
               </div>
             ))}
 
-            <div className="-mb-2 hidden text-center text-sm italic text-slate-500 first:block">
+            <div className="-mb-2 hidden text-center text-sm text-slate-500 italic first:block">
               none found
             </div>
           </div>
@@ -172,7 +172,7 @@ export default function EmailsModal(props: EmailsModalFormProps) {
     <>
       <div className="flex flex-row justify-end">
         <button
-          className="-mt-2 mr-1 text-right text-xs italic text-slate-600 hover:underline focus:text-dblack focus:underline focus:outline-none"
+          className="-mt-2 mr-1 text-right text-xs text-slate-600 italic hover:underline focus:text-dblack focus:underline focus:outline-hidden"
           onClick={() => setIsOpen(true)}
         >
           <IconMailFast

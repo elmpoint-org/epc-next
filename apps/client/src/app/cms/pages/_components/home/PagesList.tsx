@@ -109,10 +109,10 @@ export default function PagesList({
                       key={page.id}
                       className={clx(
                         'even:bg-slate-200/50',
-                        'first:*:rounded-l-md last:*:rounded-r-md',
+                        '*:first:rounded-l-md *:last:rounded-r-md',
                       )}
                     >
-                      <Table.Td className="select-none text-slate-500">
+                      <Table.Td className="text-slate-500 select-none">
                         {i + 1}
                       </Table.Td>
                       <Table.Td className="max-w-[28ch] truncate whitespace-nowrap">
@@ -138,13 +138,13 @@ export default function PagesList({
                       <Table.Td>
                         <BooleanStatus
                           value={page.publish}
-                          className="text-slate-400 data-[true]:text-dblack"
+                          className="text-slate-400 data-true:text-dblack"
                         />
                       </Table.Td>
                       <Table.Td>
                         <BooleanStatus
                           value={page.secure}
-                          className="text-slate-400 data-[true]:text-dblack"
+                          className="text-slate-400 data-true:text-dblack"
                         />
                       </Table.Td>
                     </Table.Tr>
@@ -167,7 +167,7 @@ export default function PagesList({
 
             {/* empty state */}
             <Table.Tr className="hidden first:block">
-              <Table.Td className="whitespace-nowrap p-6 italic">
+              <Table.Td className="p-6 whitespace-nowrap italic">
                 none found
               </Table.Td>
             </Table.Tr>

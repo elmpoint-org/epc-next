@@ -58,7 +58,7 @@ function Breadcrumb({
           e.preventDefault();
           onClick?.();
         }}
-        className="font-normal flex-shrink-0"
+        className="shrink-0 font-normal"
       >
         {children}
       </A>

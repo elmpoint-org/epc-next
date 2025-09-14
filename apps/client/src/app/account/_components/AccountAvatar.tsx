@@ -62,13 +62,13 @@ export default function AccountAvatar() {
         }}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative -m-2 rounded-full border border-slate-500 border-opacity-0 p-2 text-slate-500 hover:border-opacity-100"
+        className="group relative -m-2 rounded-full border border-transparent p-2 text-slate-500 hover:border-slate-500"
       >
         <div
           className="size-36 rounded-full bg-slate-300 bg-cover bg-center"
           style={{ backgroundImage: `url(${user?.avatarUrl})` }}
         />
-        <IconEdit className="invisible absolute right-0 top-0 size-6 p-1 group-hover:visible" />
+        <IconEdit className="invisible absolute top-0 right-0 size-6 p-1 group-hover:visible" />
       </a>
     </>
   );

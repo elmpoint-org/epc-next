@@ -49,7 +49,7 @@ export default function InviteUser() {
 
   return (
     <>
-      <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
+      <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-xs">
         <div className="flex flex-row items-center justify-between">
           <h3 className="text-lg">Invite another user</h3>
         </div>

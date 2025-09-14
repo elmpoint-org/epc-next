@@ -1,10 +1,7 @@
 'use client';
 
 import { ActionIcon, Collapse, ScrollArea } from '@mantine/core';
-import {
-  IconChevronDown,
-  IconPlus,
-} from '@tabler/icons-react';
+import { IconChevronDown, IconPlus } from '@tabler/icons-react';
 
 import { useUserData } from '../_ctx/userData';
 
@@ -35,7 +32,7 @@ export default function Credentials() {
               scrollHideDelay={200}
               offsetScrollbars="x"
               classNames={{
-                scrollbar: '!bg-transparent',
+                scrollbar: 'bg-transparent!',
               }}
             >
               <div className="flex flex-row gap-2 p-2">
@@ -48,7 +45,7 @@ export default function Credentials() {
                     </>
                   ) : (
                     <>
-                      <div className="p-4 text-sm italic text-slate-500">
+                      <div className="p-4 text-sm text-slate-500 italic">
                         no passkeys found.
                       </div>
                     </>

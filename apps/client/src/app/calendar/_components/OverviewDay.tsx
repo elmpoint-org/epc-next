@@ -115,7 +115,7 @@ export default function OverviewDay({
               scrollbarSize="0.75rem"
               classNames={{
                 root: '-mr-4 flex-1',
-                scrollbar: 'mr-0.5 !bg-transparent',
+                scrollbar: 'mr-0.5 bg-transparent!',
                 viewport: 'pr-4',
               }}
             >
@@ -143,7 +143,7 @@ export default function OverviewDay({
 
               {/* no events message */}
               {selectedEvents && !selectedEvents.length && (
-                <div className="text-center italic text-slate-600">
+                <div className="text-center text-slate-600 italic">
                   no stays
                 </div>
               )}

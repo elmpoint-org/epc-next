@@ -109,7 +109,7 @@ const AccountDetails = () => {
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-sm">
+        <div className="relative flex flex-col gap-2 rounded-md border border-slate-200 p-4 shadow-xs">
           {/* title */}
           <div className="flex flex-row items-center justify-between">
             <h3 className="text-lg">Edit your profile</h3>
@@ -117,7 +117,7 @@ const AccountDetails = () => {
               <ActionIcon
                 variant="subtle"
                 disabled={!form.isDirty()}
-                className="data-[disabled]:invisible"
+                className="data-disabled:invisible"
                 onClick={() => form.reset()}
               >
                 <IconRestore className="h-5" />
@@ -237,7 +237,7 @@ const AccountDetails = () => {
           {/* copy ID */}
           {initialUser && (
             <div
-              className="absolute bottom-4 right-4 flex flex-row data-[left]:left-4"
+              className="absolute right-4 bottom-4 flex flex-row data-left:left-4"
               data-left={!initialUser.scope?.length || null}
             >
               <CopyID id={initialUser.id} />

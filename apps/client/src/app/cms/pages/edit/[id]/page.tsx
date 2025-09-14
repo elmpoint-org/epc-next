@@ -15,9 +15,7 @@ export const metadata: Metadata = {
 export default async function EditPagePage(props: PageParams) {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const data = await oldGraphAuthServer(
     graphql(`
@@ -38,7 +36,7 @@ export default async function EditPagePage(props: PageParams) {
         Edit page
       </h1>
       <div className="container flex-1 rounded-lg bg-dwhite">
-        <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
+        <div className="mx-auto flex max-w-(--breakpoint-lg) flex-col gap-4 p-6">
           <PageEditForm id={id} />
         </div>
       </div>

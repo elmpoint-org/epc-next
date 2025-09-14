@@ -8,7 +8,7 @@ export default function Page() {
         <div className="container flex-1 rounded-lg bg-dwhite">
           <h2 className="p-6 text-center text-2xl">Subheading</h2>
 
-          <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
+          <div className="mx-auto flex max-w-(--breakpoint-lg) flex-col gap-4 p-6">
             <p className="">content</p>
           </div>
         </div>

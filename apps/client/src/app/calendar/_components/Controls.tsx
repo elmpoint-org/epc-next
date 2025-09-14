@@ -196,7 +196,7 @@ export default function Controls(props: CalendarProps) {
               <div className="flex flex-row items-center gap-1">
                 <input
                   type="text"
-                  className="w-10 rounded-lg border border-transparent bg-transparent p-1 text-right hover:bg-slate-200 focus:border-slate-400 focus:bg-slate-200 focus:outline-none"
+                  className="w-10 rounded-lg border border-transparent bg-transparent p-1 text-right hover:bg-slate-200 focus:border-slate-400 focus:bg-slate-200 focus:outline-hidden"
                   placeholder={'' + daysWithDefault}
                   value={days ?? ''}
                   onChange={({ currentTarget: { value: v } }) => {
@@ -215,7 +215,7 @@ export default function Controls(props: CalendarProps) {
 
           {/* rooms controls */}
           <div
-            className="flex flex-row items-center gap-2 data-[h]:hidden"
+            className="flex flex-row items-center gap-2 data-h:hidden"
             data-h={view !== 'TIMELINE' || null}
           >
             <Transition show={displayByRoom}>
@@ -259,7 +259,7 @@ export default function Controls(props: CalendarProps) {
                 aria-label="toggle rooms table"
                 variant={displayByRoom ? 'filled' : 'subtle'}
                 color={displayByRoom ? 'emerald' : 'slate'}
-                className="data-[on]:ml-1"
+                className="data-on:ml-1"
                 loading={isRoomLoading}
                 data-on={displayByRoom || null}
                 onClick={() => updateByRoom(!displayByRoom)}
@@ -283,7 +283,7 @@ export default function Controls(props: CalendarProps) {
               View
             </Button>
 
-            <DropdownItems className="z-[999]">
+            <DropdownItems className="z-999">
               <div className="py-1">
                 <DropdownOption
                   icon={IconCalendarWeek}
@@ -341,7 +341,7 @@ export default function Controls(props: CalendarProps) {
 function Loader({ show }: { show: boolean }) {
   return (
     <Transition show={show}>
-      <div className="flex translate-x-0 items-center justify-center transition duration-150 data-[closed]:opacity-0">
+      <div className="flex translate-x-0 items-center justify-center transition duration-150 data-closed:opacity-0">
         <IconLoader2 className="animate-spin text-slate-500" />
       </div>
     </Transition>
@@ -356,7 +356,7 @@ function TableOption({
   React.ComponentPropsWithoutRef<'button'>) {
   return (
     <TransitionChild>
-      <div className="mr-0 flex flex-col items-center transition-all duration-300 data-[closed]:-mr-9 data-[closed]:opacity-0">
+      <div className="mr-0 flex flex-col items-center transition-all duration-300 data-closed:-mr-9 data-closed:opacity-0">
         <Tooltip label={label}>
           <ActionIcon
             aria-label={label}

@@ -52,9 +52,7 @@ const getPage = cache(async (slug: string) => {
 export default async function CmsPage(props: PageArrayParams) {
   const params = await props.params;
 
-  const {
-    slug
-  } = params;
+  const { slug } = params;
 
   // attempt to find page
   const { page, error } = await getPage(slug.join('/'));
@@ -90,7 +88,7 @@ export default async function CmsPage(props: PageArrayParams) {
       {/* edit link */}
       {canEdit && (
         <div
-          className="absolute right-0 top-0 p-2 data-[d]:right-7 print:hidden"
+          className="absolute top-0 right-0 p-2 data-d:right-7 print:hidden"
           data-d={!page.publish || null}
         >
           <A href={`/cms/pages/edit/${page.id}`}>
@@ -101,7 +99,7 @@ export default async function CmsPage(props: PageArrayParams) {
 
       {/* draft banner */}
       {!page.publish && (
-        <div className="fixed inset-y-0 right-0 flex rotate-180 flex-row justify-center bg-amber-600/80 p-1 text-sm uppercase text-dwhite [writing-mode:vertical-lr]">
+        <div className="fixed inset-y-0 right-0 flex rotate-180 flex-row justify-center bg-amber-600/80 p-1 text-sm text-dwhite uppercase [writing-mode:vertical-lr]">
           <div className="">Draft Page</div>
         </div>
       )}
@@ -112,9 +110,7 @@ export default async function CmsPage(props: PageArrayParams) {
 export async function generateMetadata(props: PageArrayParams) {
   const params = await props.params;
 
-  const {
-    slug
-  } = params;
+  const { slug } = params;
 
   const { page: data } = await getPage(slug.join('/'));
   const t = data?.title;

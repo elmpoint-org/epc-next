@@ -127,7 +127,7 @@ export default function CabinsList() {
         {cabins && (
           <div className="flex break-inside-avoid flex-col gap-2">
             <CardButton
-              className="min-h-36 flex-1 rounded-sm rounded-t-lg"
+              className="min-h-36 flex-1 rounded-xs rounded-t-lg"
               icon={IconHomePlus}
               onClick={newCabin}
               loading={isLoadingNC}
@@ -135,7 +135,7 @@ export default function CabinsList() {
               Add a cabin
             </CardButton>
             <CardButton
-              className="min-h-36 flex-1 rounded-sm rounded-b-lg"
+              className="min-h-36 flex-1 rounded-xs rounded-b-lg"
               icon={IconDoor}
               onClick={newRootRoom}
               loading={isLoadingNR}
@@ -152,7 +152,7 @@ export default function CabinsList() {
             .map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse break-inside-avoid rounded-md bg-slate-200 shadow-sm"
+                className="animate-pulse break-inside-avoid rounded-md bg-slate-200 shadow-xs"
                 style={{
                   height: `calc(20rem + ${i % 2 ? '' : '-'}${64 + i * 4}px)`,
                 }}

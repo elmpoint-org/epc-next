@@ -8,7 +8,7 @@ export default function PageOptions({ form, updateForm }: EditFormProps) {
   return (
     <>
       <div
-        className="group relative flex flex-col gap-4 rounded-[4px] border border-slate-300 p-3 px-4 data-[s]:border-transparent md:flex-row md:items-center md:gap-7"
+        className="group relative flex flex-col gap-4 rounded-[4px] border border-slate-300 p-3 px-4 data-s:border-transparent md:flex-row md:items-center md:gap-7"
         data-s={isSkeleton || null}
       >
         <p className="text-xs uppercase">options:</p>
@@ -29,7 +29,7 @@ export default function PageOptions({ form, updateForm }: EditFormProps) {
             classNames={{
               input: 'peer',
               track:
-                '[.peer:not(:checked)~&]:border-slate-300 [.peer:not(:checked)~&]:bg-slate-300',
+                'not-peer-checked:border-slate-300 not-peer-checked:bg-slate-300',
               thumb: 'border-0',
               body: 'items-center',
             }}

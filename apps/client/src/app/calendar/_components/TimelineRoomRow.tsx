@@ -69,7 +69,7 @@ export default function TimelineRoomRow({
       >
         {/* title section */}
         <div className="flex flex-row gap-2" style={{ width }}>
-          <div className="flex-1 border-t border-dashed border-slate-300/60 p-2 *:h-[1.875rem] group-first:!border-transparent group-data-[c]:border-solid group-data-[c]:border-slate-300">
+          <div className="flex-1 border-t border-dashed border-slate-300/60 p-2 *:h-7.5 group-first:border-transparent! group-data-c:border-solid group-data-c:border-slate-300">
             {isCabin ? (
               // CABIN TITLE
               <div
@@ -100,7 +100,7 @@ export default function TimelineRoomRow({
                 data-hb={!isRootRoom || null} // hover bg
               >
                 <div
-                  className="mr-4 flex w-8 flex-row items-center data-[r]:hidden"
+                  className="mr-4 flex w-8 flex-row items-center data-r:hidden"
                   data-r={!isCabin || null}
                 />
                 <div className="flex flex-1 flex-row items-center gap-2">
@@ -108,7 +108,7 @@ export default function TimelineRoomRow({
                   <span>
                     {cr?.name !== ANY_ROOM ? (
                       (cr?.name ?? (
-                        <span className="text-sm !font-normal">
+                        <span className="text-sm font-normal!">
                           No room data
                         </span>
                       ))
@@ -122,11 +122,11 @@ export default function TimelineRoomRow({
           </div>
 
           {/* right divider */}
-          <div className="flex-shrink-0 border-r border-slate-400" />
+          <div className="shrink-0 border-r border-slate-400" />
         </div>
 
         {/* events */}
-        <div className="flex flex-1 flex-row border-t border-dashed border-slate-300/60 py-2 group-first:!border-transparent group-data-[c]:border-solid group-data-[c]:border-slate-300 group-data-[r]:bg-slate-200/25">
+        <div className="flex flex-1 flex-row border-t border-dashed border-slate-300/60 py-2 group-first:border-transparent! group-data-c:border-solid group-data-c:border-slate-300 group-data-r:bg-slate-200/25">
           {/* show events in room */}
           {!isCabin && (
             <TimelineEventsGrid
@@ -145,7 +145,7 @@ export default function TimelineRoomRow({
           {isCabin && isOpen && (
             <div className="relative flex-1">
               <div
-                className="absolute inset-0 -inset-y-2 flex select-none flex-row items-center gap-8 overflow-hidden bg-dwhite/80 px-4 text-sm text-slate-400 md:gap-24 xl:gap-48 xl:px-12"
+                className="absolute inset-0 -inset-y-2 flex flex-row items-center gap-8 overflow-hidden bg-dwhite/80 px-4 text-sm text-slate-400 select-none md:gap-24 xl:gap-48 xl:px-12"
                 style={{ marginLeft: `${namesOffset}px` }}
               >
                 {Array(12)
@@ -155,7 +155,7 @@ export default function TimelineRoomRow({
                       layout
                       animate={{ opacity: 1 }}
                       key={i}
-                      className="-mx-1 whitespace-nowrap px-1 opacity-0"
+                      className="-mx-1 px-1 whitespace-nowrap opacity-0"
                     >
                       {cr.name}
                     </motion.div>

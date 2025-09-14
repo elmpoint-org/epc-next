@@ -16,7 +16,7 @@ export default function LinkBlock({ name, url, description, flags }: HomeLink) {
       data-h={flags.highlight || null}
       className={clx(
         'group flex h-full flex-col gap-2 rounded-lg border border-slate-300 p-5 hover:border-slate-800 hover:bg-black/5',
-        /* highlight */ 'from-emerald-700 to-emerald-800 data-[h]:border-transparent data-[h]:bg-gradient-to-b hover:data-[h]:to-emerald-900',
+        /* highlight */ 'from-emerald-700 to-emerald-800 data-h:border-transparent data-h:bg-linear-to-b hover:data-h:to-emerald-900',
       )}
     >
       {/* link name */}
@@ -25,7 +25,7 @@ export default function LinkBlock({ name, url, description, flags }: HomeLink) {
           <div
             className={clx(
               'text-lg capitalize',
-              /* highlight */ 'group-data-[h]:text-slate-200',
+              /* highlight */ 'group-data-h:text-slate-200',
             )}
           >
             {name}
@@ -35,7 +35,7 @@ export default function LinkBlock({ name, url, description, flags }: HomeLink) {
             <div
               className={clx(
                 'text-slate-600',
-                /* highlight */ 'group-data-[h]:text-slate-300',
+                /* highlight */ 'group-data-h:text-slate-300',
               )}
             >
               <IconLock size={20} stroke={1.5} />
@@ -46,7 +46,7 @@ export default function LinkBlock({ name, url, description, flags }: HomeLink) {
             <div
               className={clx(
                 'text-slate-600',
-                /* highlight */ 'group-data-[h]:text-slate-300',
+                /* highlight */ 'group-data-h:text-slate-300',
               )}
             >
               <IconExternalLink size={20} stroke={1.5} />
@@ -57,7 +57,7 @@ export default function LinkBlock({ name, url, description, flags }: HomeLink) {
         <div
           className={clx(
             'text-slate-500 group-hover:text-dblack',
-            /* highlight */ 'group-data-[h]:text-slate-300 group-hover:group-data-[h]:text-slate-100',
+            /* highlight */ 'group-data-h:text-slate-300 group-data-h:group-hover:text-slate-100',
           )}
         >
           <IconChevronRight stroke={1} />
@@ -68,7 +68,7 @@ export default function LinkBlock({ name, url, description, flags }: HomeLink) {
       <div
         className={clx(
           'line-clamp-4 text-sm text-slate-600',
-          /* highlight */ 'group-data-[h]:text-slate-200',
+          /* highlight */ 'group-data-h:text-slate-200',
         )}
       >
         {description}

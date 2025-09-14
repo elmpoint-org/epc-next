@@ -24,7 +24,7 @@ export function EventBanner({
         gridColumn: `${loc.start} / ${loc.end}`,
       }}
     >
-      <PopoverButton className="group flex-1 truncate bg-[--row-color] focus:outline-none">
+      <PopoverButton className="group flex-1 truncate bg-(--row-color) focus:outline-hidden">
         <div
           className={clmx(
             'flex flex-1 flex-row items-center justify-between truncate rounded-lg',
@@ -32,14 +32,14 @@ export function EventBanner({
           )}
         >
           {arrows.left ? (
-            <IconChevronLeft stroke={1} className="size-4 flex-shrink-0" />
+            <IconChevronLeft stroke={1} className="size-4 shrink-0" />
           ) : (
             <div />
           )}
           {/* event title */}
           <div className="truncate p-0.5 text-xs md:px-2">{event.title}</div>
           {arrows.right ? (
-            <IconChevronRight stroke={1} className="size-4 flex-shrink-0" />
+            <IconChevronRight stroke={1} className="size-4 shrink-0" />
           ) : (
             <div />
           )}

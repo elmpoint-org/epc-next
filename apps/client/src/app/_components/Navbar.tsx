@@ -31,7 +31,7 @@ const Navbar = ({
       <AppShell.Navbar className="peer max-w-xs space-y-2 border-0 border-transparent bg-dgreen p-2 text-dwhite shadow-xl print:hidden">
         <AppShell.Section className="relative flex flex-row items-center p-4">
           <button
-            className="group z-50 -m-4 p-4 data-[off]:invisible lg:invisible"
+            className="group z-50 -m-4 p-4 data-off:invisible lg:invisible"
             data-off={!isOpen || null}
             onClick={onClose}
           >
@@ -39,7 +39,7 @@ const Navbar = ({
               <IconX />
             </div>
           </button>
-          <div className="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center gap-4">
+          <div className="absolute top-0 left-0 flex h-full w-full flex-row items-center justify-center gap-4">
             <Logo className="h-5 fill-dwhite" />
           </div>
         </AppShell.Section>
@@ -48,7 +48,7 @@ const Navbar = ({
       </AppShell.Navbar>
       {isOpen && (
         <div
-          className="fixed inset-0 z-[100] bg-slate-950/40 lg:hidden"
+          className="fixed inset-0 z-100 bg-slate-950/40 lg:hidden"
           onClick={onClose}
         />
       )}

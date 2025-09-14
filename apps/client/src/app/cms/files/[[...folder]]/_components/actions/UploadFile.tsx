@@ -137,7 +137,7 @@ function StatusIcon({
       <div className="flex items-center justify-center">
         <Icon
           size={16}
-          className={clmx('flex-shrink-0 text-slate-500/80', className)}
+          className={clmx('shrink-0 text-slate-500/80', className)}
         />
       </div>
     </>

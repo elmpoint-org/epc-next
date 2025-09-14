@@ -77,13 +77,13 @@ export default function EventPopup({
           padding: '0.5rem',
         }}
         className={clx(
-          'z-[199] flex w-[25rem] flex-col !overflow-hidden rounded-xl border border-slate-300 bg-dwhite shadow-2xl',
-          /* transition */ 'translate-y-0 transition data-[closed]:-translate-y-2 data-[closed]:opacity-0',
+          'z-199 flex w-100 flex-col overflow-hidden! rounded-xl border border-slate-300 bg-dwhite shadow-2xl',
+          /* transition */ 'translate-y-0 transition data-closed:-translate-y-2 data-closed:opacity-0',
         )}
       >
         {/* popup header bar */}
         <div className="flex flex-row items-center justify-between border-b border-slate-300 bg-dwhite p-2">
-          <div className="select-none px-2 text-sm">Event details</div>
+          <div className="px-2 text-sm select-none">Event details</div>
           <div className="flex flex-row items-center gap-2">
             {/* edit button */}
             <button
@@ -150,7 +150,7 @@ export default function EventPopup({
                   <HoverCardDropdown
                     classNames={{
                       dropdown:
-                        'select-none border-none bg-slate-900 px-[10px] py-[5px] text-sm text-dwhite',
+                        'border-none bg-slate-900 px-[10px] py-[5px] text-sm text-dwhite select-none',
                     }}
                   >
                     <div>Created by {event.author.name}</div>
@@ -242,7 +242,7 @@ export default function EventPopup({
                               >
                                 <RoomSwatch
                                   cabinOrRoomId={rcId}
-                                  className="mb-px mr-1.5 inline-block"
+                                  className="mr-1.5 mb-px inline-block"
                                 />
                                 {r.room?.cabin && (
                                   <>
@@ -271,7 +271,7 @@ export default function EventPopup({
               {event.importId && (
                 <>
                   <div />
-                  <div className="-my-2 text-xs italic text-slate-600">
+                  <div className="-my-2 text-xs text-slate-600 italic">
                     Calcium Import ID {event.importId}
                   </div>
                 </>

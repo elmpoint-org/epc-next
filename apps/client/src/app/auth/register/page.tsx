@@ -18,7 +18,7 @@ export default async function RegisterPage(props: SearchParams) {
           Create your account
         </p>
 
-        <div className="prose px-2.5 marker:prose-li:text-slate-400">
+        <div className="prose px-2.5 prose-li:marker:text-slate-400">
           <p>
             <b>EPC web accounts are invite-only,</b> to protect the privacy of
             our members.

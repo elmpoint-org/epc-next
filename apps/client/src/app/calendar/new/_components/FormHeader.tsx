@@ -27,7 +27,7 @@ export default function FormHeader() {
       {updateId && (
         <div className="mb-2 flex flex-row">
           <div className="flex-1 text-xl">
-            <span className="select-none text-slate-400">Edit: </span>
+            <span className="text-slate-400 select-none">Edit: </span>
             <span>{eventText.title}</span>
           </div>
 

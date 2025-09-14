@@ -63,8 +63,8 @@ export default function OverviewCalendar({
                 onDoubleClick={() => updatePeriod(d.date)}
                 data-nm={!d.inMonth || null}
                 className={clmx(
-                  'group flex h-12 flex-col items-stretch gap-2 bg-dwhite p-4 focus:outline-none sm:h-24',
-                  /* out of month */ 'data-[nm]:bg-dwhite/80',
+                  'group flex h-12 flex-col items-stretch gap-2 bg-dwhite p-4 focus:outline-hidden sm:h-24',
+                  /* out of month */ 'data-nm:bg-dwhite/80',
                 )}
               >
                 {/* day number */}
@@ -85,8 +85,8 @@ export default function OverviewCalendar({
                   {/* event count */}
                   <span
                     className={clx(
-                      'text-nowrap text-right text-sm text-slate-400/90 sm:m-0 sm:-mr-2 sm:-mt-1 xl:mr-0',
-                      /* mobile */ '-mr-1.5 mt-2',
+                      'text-right text-sm text-nowrap text-slate-400/90 sm:m-0 sm:-mt-1 sm:-mr-2 xl:mr-0',
+                      /* mobile */ 'mt-2 -mr-1.5',
                     )}
                   >
                     {/* <IconCalendarFilled className="-mt-0.5 mr-0.5 hidden size-3.5 xl:inline" /> */}
@@ -117,7 +117,7 @@ function OverviewSwatch({ event }: { event: EventType }) {
       <RoomSwatch
         cabinOrRoomId={colorId}
         withDefault
-        className="saturate-75 size-1 sm:size-2"
+        className="size-1 saturate-75 sm:size-2"
       />
 
       {/* plus sign if it can ever be easily implemented... */}

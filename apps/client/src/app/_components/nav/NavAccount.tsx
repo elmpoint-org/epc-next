@@ -58,7 +58,7 @@ function NavAccountButton({
 
   return (
     <button
-      className="relative flex w-full flex-row items-center gap-3 overflow-hidden rounded-lg bg-emerald-700/80 px-4 py-3 hover:bg-emerald-700 data-[nu]:px-6"
+      className="relative flex w-full flex-row items-center gap-3 overflow-hidden rounded-lg bg-emerald-700/80 px-4 py-3 hover:bg-emerald-700 data-nu:px-6"
       data-nu={!user || null}
       {...props}
     >

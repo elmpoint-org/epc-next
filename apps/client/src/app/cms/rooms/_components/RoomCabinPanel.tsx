@@ -251,8 +251,8 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
       >
         <div
           className={clx(
-            'relative flex h-full max-w-[32rem] flex-col gap-2 rounded-md border border-slate-300 bg-dwhite p-6 shadow-sm',
-            /* new ring */ 'ring-transparent ring-offset-2 transition data-[r]:ring-4 data-[r]:ring-emerald-600',
+            'relative flex h-full max-w-lg flex-col gap-2 rounded-md border border-slate-300 bg-dwhite p-6 shadow-xs',
+            /* new ring */ 'ring-transparent transition data-r:ring-4 data-r:ring-emerald-600 data-r:ring-offset-2',
           )}
           data-r={newRing || null}
         >
@@ -272,7 +272,7 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
                 </HoverCardTarget>
                 <HoverCardDropdown
                   classNames={{
-                    dropdown: 'rounded-lg border border-slate-300 shadow-sm',
+                    dropdown: 'rounded-lg border border-slate-300 shadow-xs',
                     arrow: 'border border-slate-300',
                   }}
                 >
@@ -301,7 +301,7 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
                 <ActionIcon
                   aria-label="reset to saved"
                   variant="subtle"
-                  className="data-[disabled]:invisible"
+                  className="data-disabled:invisible"
                   disabled={state !== 'UNSAVED'}
                   onClick={() => updateForm(serverObject)}
                 >
@@ -441,8 +441,8 @@ export default function RoomCabinPanel<RC extends CMSCabin | CMSRoom>({
                             }}
                             transition
                             className={clx(
-                              'z-[199] flex min-w-[20rem] flex-col !overflow-hidden rounded-md shadow-lg sm:min-w-[24rem]',
-                              /* transition */ 'translate-y-0 transition data-[closed]:-translate-y-2 data-[closed]:opacity-0',
+                              'z-199 flex min-w-[20rem] flex-col overflow-hidden! rounded-md shadow-lg sm:min-w-[24rem]',
+                              /* transition */ 'translate-y-0 transition data-closed:-translate-y-2 data-closed:opacity-0',
                             )}
                           >
                             <ScrollArea

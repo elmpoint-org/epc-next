@@ -170,11 +170,11 @@ export function SampleMonth() {
     <div className="lg:flex lg:h-full lg:flex-col">
       {/* controls */}
       <header className="flex items-center justify-between border-b border-slate-200 px-6 py-4 lg:flex-none">
-        <h1 className="text-base font-semibold leading-6 text-slate-900">
+        <h1 className="text-base leading-6 font-semibold text-slate-900">
           <time dateTime="2022-01">January 2022</time>
         </h1>
         <div className="flex items-center">
-          <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
+          <div className="relative flex items-center rounded-md bg-white shadow-xs md:items-stretch">
             <button
               type="button"
               className="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-slate-300 pr-1 text-slate-400 hover:text-slate-500 focus:relative md:w-9 md:pr-0 md:hover:bg-slate-50"
@@ -201,7 +201,7 @@ export function SampleMonth() {
             <Menu as="div" className="relative">
               <MenuButton
                 type="button"
-                className="flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50"
+                className="flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-xs ring-1 ring-slate-300 ring-inset hover:bg-slate-50"
               >
                 Month view
                 <IconChevronDown
@@ -212,13 +212,13 @@ export function SampleMonth() {
 
               <MenuItems
                 transition
-                className="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                className="ring-opacity-5 absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-hidden data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
                 <div className="py-1">
                   <MenuItem>
                     <a
                       href="#"
-                      className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                      className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                     >
                       Day view
                     </a>
@@ -226,7 +226,7 @@ export function SampleMonth() {
                   <MenuItem>
                     <a
                       href="#"
-                      className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                      className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                     >
                       Week view
                     </a>
@@ -234,7 +234,7 @@ export function SampleMonth() {
                   <MenuItem>
                     <a
                       href="#"
-                      className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                      className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                     >
                       Month view
                     </a>
@@ -242,7 +242,7 @@ export function SampleMonth() {
                   <MenuItem>
                     <a
                       href="#"
-                      className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                      className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                     >
                       Year view
                     </a>
@@ -253,7 +253,7 @@ export function SampleMonth() {
             <div className="ml-6 h-6 w-px bg-slate-300" />
             <button
               type="button"
-              className="ml-6 rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              className="ml-6 rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 focus-visible:outline-solid"
             >
               Add event
             </button>
@@ -266,13 +266,13 @@ export function SampleMonth() {
 
             <MenuItems
               transition
-              className="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-slate-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+              className="ring-opacity-5 absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-slate-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-hidden data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
             >
               <div className="py-1">
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Create event
                   </a>
@@ -282,7 +282,7 @@ export function SampleMonth() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Go to today
                   </a>
@@ -292,7 +292,7 @@ export function SampleMonth() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Day view
                   </a>
@@ -300,7 +300,7 @@ export function SampleMonth() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Week view
                   </a>
@@ -308,7 +308,7 @@ export function SampleMonth() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Month view
                   </a>
@@ -316,7 +316,7 @@ export function SampleMonth() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Year view
                   </a>
@@ -328,9 +328,9 @@ export function SampleMonth() {
       </header>
 
       {/* calendar */}
-      <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+      <div className="ring-opacity-5 shadow ring-1 ring-black lg:flex lg:flex-auto lg:flex-col">
         {/* days header */}
-        <div className="grid grid-cols-7 gap-px border-b border-slate-300 bg-slate-200 text-center text-xs font-semibold leading-6 text-slate-700 lg:flex-none">
+        <div className="grid grid-cols-7 gap-px border-b border-slate-300 bg-slate-200 text-center text-xs leading-6 font-semibold text-slate-700 lg:flex-none">
           <div className="bg-white py-2">
             M<span className="sr-only sm:not-sr-only">on</span>
           </div>
@@ -459,7 +459,7 @@ export function SampleMonth() {
       {/* selected day's events */}
       {selectedDay?.events.length ? (
         <div className="px-4 py-10 sm:px-6 lg:hidden">
-          <ol className="divide-y divide-slate-100 overflow-hidden rounded-lg bg-white text-sm shadow ring-1 ring-black ring-opacity-5">
+          <ol className="ring-opacity-5 divide-y divide-slate-100 overflow-hidden rounded-lg bg-white text-sm shadow-sm ring-1 ring-black">
             {selectedDay.events.map((event) => (
               <li
                 key={event.id}
@@ -480,7 +480,7 @@ export function SampleMonth() {
                 </div>
                 <a
                   href={event.href}
-                  className="ml-6 flex-none self-center rounded-md bg-white px-3 py-2 font-semibold text-slate-900 opacity-0 shadow-sm ring-1 ring-inset ring-slate-300 hover:ring-slate-400 focus:opacity-100 group-hover:opacity-100"
+                  className="ml-6 flex-none self-center rounded-md bg-white px-3 py-2 font-semibold text-slate-900 opacity-0 shadow-xs ring-1 ring-slate-300 ring-inset group-hover:opacity-100 hover:ring-slate-400 focus:opacity-100"
                 >
                   Edit<span className="sr-only">, {event.name}</span>
                 </a>
@@ -522,11 +522,11 @@ export function SampleWeek() {
   return (
     <div className="flex h-full flex-col">
       <header className="flex flex-none items-center justify-between border-b border-slate-200 px-6 py-4">
-        <h1 className="text-base font-semibold leading-6 text-slate-900">
+        <h1 className="text-base leading-6 font-semibold text-slate-900">
           <time dateTime="2022-01">January 2022</time>
         </h1>
         <div className="flex items-center">
-          <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
+          <div className="relative flex items-center rounded-md bg-white shadow-xs md:items-stretch">
             <button
               type="button"
               className="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-slate-300 pr-1 text-slate-400 hover:text-slate-500 focus:relative md:w-9 md:pr-0 md:hover:bg-slate-50"
@@ -553,7 +553,7 @@ export function SampleWeek() {
             <Menu as="div" className="relative">
               <MenuButton
                 type="button"
-                className="flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50"
+                className="flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-xs ring-1 ring-slate-300 ring-inset hover:bg-slate-50"
               >
                 Week view
                 <IconChevronDown
@@ -564,13 +564,13 @@ export function SampleWeek() {
 
               <MenuItems
                 transition
-                className="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                className="ring-opacity-5 absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-hidden data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
                 <div className="py-1">
                   <MenuItem>
                     <a
                       href="#"
-                      className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                      className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                     >
                       Day view
                     </a>
@@ -578,7 +578,7 @@ export function SampleWeek() {
                   <MenuItem>
                     <a
                       href="#"
-                      className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                      className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                     >
                       Week view
                     </a>
@@ -586,7 +586,7 @@ export function SampleWeek() {
                   <MenuItem>
                     <a
                       href="#"
-                      className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                      className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                     >
                       Month view
                     </a>
@@ -594,7 +594,7 @@ export function SampleWeek() {
                   <MenuItem>
                     <a
                       href="#"
-                      className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                      className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                     >
                       Year view
                     </a>
@@ -605,7 +605,7 @@ export function SampleWeek() {
             <div className="ml-6 h-6 w-px bg-slate-300" />
             <button
               type="button"
-              className="ml-6 rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              className="ml-6 rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 focus-visible:outline-solid"
             >
               Add event
             </button>
@@ -618,13 +618,13 @@ export function SampleWeek() {
 
             <MenuItems
               transition
-              className="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-slate-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+              className="ring-opacity-5 absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-slate-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black focus:outline-hidden data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
             >
               <div className="py-1">
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Create event
                   </a>
@@ -634,7 +634,7 @@ export function SampleWeek() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Go to today
                   </a>
@@ -644,7 +644,7 @@ export function SampleWeek() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Day view
                   </a>
@@ -652,7 +652,7 @@ export function SampleWeek() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Week view
                   </a>
@@ -660,7 +660,7 @@ export function SampleWeek() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Month view
                   </a>
@@ -668,7 +668,7 @@ export function SampleWeek() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-slate-700 data-[focus]:bg-slate-100 data-[focus]:text-slate-900"
+                    className="block px-4 py-2 text-sm text-slate-700 data-focus:bg-slate-100 data-focus:text-slate-900"
                   >
                     Year view
                   </a>
@@ -688,13 +688,13 @@ export function SampleWeek() {
         >
           <div
             ref={containerNav}
-            className="sticky top-0 z-30 flex-none bg-white shadow ring-1 ring-black ring-opacity-5 sm:pr-8"
+            className="ring-opacity-5 sticky top-0 z-30 flex-none bg-white shadow-sm ring-1 ring-black sm:pr-8"
           >
             {/* small screen headers */}
             <div className="grid grid-cols-7 text-sm leading-6 text-slate-500 sm:hidden">
               <button
                 type="button"
-                className="flex flex-col items-center pb-3 pt-2"
+                className="flex flex-col items-center pt-2 pb-3"
               >
                 M{' '}
                 <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-slate-900">
@@ -703,7 +703,7 @@ export function SampleWeek() {
               </button>
               <button
                 type="button"
-                className="flex flex-col items-center pb-3 pt-2"
+                className="flex flex-col items-center pt-2 pb-3"
               >
                 T{' '}
                 <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-slate-900">
@@ -712,7 +712,7 @@ export function SampleWeek() {
               </button>
               <button
                 type="button"
-                className="flex flex-col items-center pb-3 pt-2"
+                className="flex flex-col items-center pt-2 pb-3"
               >
                 W{' '}
                 <span className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 font-semibold text-white">
@@ -721,7 +721,7 @@ export function SampleWeek() {
               </button>
               <button
                 type="button"
-                className="flex flex-col items-center pb-3 pt-2"
+                className="flex flex-col items-center pt-2 pb-3"
               >
                 T{' '}
                 <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-slate-900">
@@ -730,7 +730,7 @@ export function SampleWeek() {
               </button>
               <button
                 type="button"
-                className="flex flex-col items-center pb-3 pt-2"
+                className="flex flex-col items-center pt-2 pb-3"
               >
                 F{' '}
                 <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-slate-900">
@@ -739,7 +739,7 @@ export function SampleWeek() {
               </button>
               <button
                 type="button"
-                className="flex flex-col items-center pb-3 pt-2"
+                className="flex flex-col items-center pt-2 pb-3"
               >
                 S{' '}
                 <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-slate-900">
@@ -748,7 +748,7 @@ export function SampleWeek() {
               </button>
               <button
                 type="button"
-                className="flex flex-col items-center pb-3 pt-2"
+                className="flex flex-col items-center pt-2 pb-3"
               >
                 S{' '}
                 <span className="mt-1 flex h-8 w-8 items-center justify-center font-semibold text-slate-900">
@@ -828,145 +828,145 @@ export function SampleWeek() {
               >
                 <div ref={containerOffset} className="row-end-1 h-7"></div>
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     12AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     1AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     2AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     3AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     4AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     5AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     6AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     7AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     8AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     9AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     10AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     11AM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     12PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     1PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     2PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     3PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     4PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     5PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     6PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     7PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     8PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     9PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     10PM
                   </div>
                 </div>
                 <div />
                 <div>
-                  <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
+                  <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs leading-5 text-slate-400">
                     11PM
                   </div>
                 </div>
@@ -993,7 +993,7 @@ export function SampleWeek() {
                 }}
               >
                 <li
-                  className={clx('relative mt-px flex ', `sm:col-start-${5}`)}
+                  className={clx('relative mt-px flex', `sm:col-start-${5}`)}
                   style={{ gridRow: '74 / span 12' }}
                 >
                   <a

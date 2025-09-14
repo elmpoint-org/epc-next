@@ -24,14 +24,14 @@ export function ModalFrame({
       {/* backdrop */}
       <DialogBackdrop
         transition
-        className="fixed inset-0 z-[200] bg-black/50 transition duration-300 ease-out data-[closed]:opacity-0"
+        className="fixed inset-0 z-200 bg-black/50 transition duration-300 ease-out data-closed:opacity-0"
       />
 
-      <div className="fixed inset-0 z-[200] flex flex-col items-center overflow-y-auto p-4 pt-8 sm:pt-12">
+      <div className="fixed inset-0 z-200 flex flex-col items-center overflow-y-auto p-4 pt-8 sm:pt-12">
         {/* panel */}
         <DialogPanel
           transition
-          className="panel flex w-full max-w-md translate-y-0 flex-col gap-4 rounded-xl bg-dwhite p-6 shadow-xl transition duration-150 ease-out data-[closed]:-translate-y-8 data-[closed]:opacity-0"
+          className="panel flex w-full max-w-md translate-y-0 flex-col gap-4 rounded-xl bg-dwhite p-6 shadow-xl transition duration-150 ease-out data-closed:-translate-y-8 data-closed:opacity-0"
         >
           {/* header */}
           <div className="flex flex-row items-center gap-2 border-b border-slate-300 pb-4">

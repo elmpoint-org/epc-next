@@ -9,7 +9,7 @@ export default function ColorText({
     <>
       <b
         className={clmx(
-          'bg-gradient-to-br from-emerald-500 to-emerald-900 bg-clip-text text-transparent',
+          'bg-linear-to-br from-emerald-500 to-emerald-900 bg-clip-text text-transparent',
           className,
         )}
         {...props}

@@ -52,7 +52,7 @@ export default function FilesList({
           )}
 
           {/* no files message */}
-          <div className="hidden px-4 py-2 text-sm italic text-slate-600 first:block">
+          <div className="hidden px-4 py-2 text-sm text-slate-600 italic first:block">
             no files
           </div>
         </div>

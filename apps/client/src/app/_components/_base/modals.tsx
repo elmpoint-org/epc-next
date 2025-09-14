@@ -45,7 +45,7 @@ export function confirmModal(p: ModalProps) {
       },
       confirmProps: { color: p.color, ...p.confirmProps } as any,
       classNames: {
-        root: clx('focus:[&_button]:outline-black'),
+        root: clx('[&_button]:focus:outline-black'),
         content: clx('rounded-xl p-2'),
       },
       onConfirm: () => resolve(true),

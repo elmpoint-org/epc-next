@@ -1,6 +1,22 @@
-@import 'tailwindcss';
+@layer theme, base, mantine, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@import '@mantine/core/styles.css' layer(mantine);
+@import '@mantine/dates/styles.css' layer(mantine);
+@import '@mantine/notifications/styles.css' layer(mantine);
+@import '@mantine/tiptap/styles.css' layer(mantine);
 
 @plugin '@tailwindcss/typography';
+
+/* VARIANTS */
+
+/* tiptap */
+@custom-variant pm-selected (&.ProseMirror-selectednode);
+@custom-variant pmg-selected (&:global(.ProseMirror-selectednode));
+/* mantine */
+@custom-variant popover (.mantine-Popover-dropdown:has(&));
 
 /* THEME */
 @theme inline {
@@ -20,12 +36,9 @@
   ::file-selector-button {
     border-color: var(--color-slate-200, currentcolor);
   }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
 }
-
-/* VARIANTS */
-
-/* tiptap */
-@custom-variant pm-selected &.ProseMirror-selectednode;
-@custom-variant pmg-selected &:global(.ProseMirror-selectednode);
-/* mantine */
-@custom-variant popover .mantine-Popover-dropdown:has(&);

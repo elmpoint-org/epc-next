@@ -40,7 +40,7 @@ export default function Agenda({ ...props }: AgendaProps) {
 
   return (
     <>
-      <div className="mx-auto my-4 flex w-full max-w-screen-lg flex-col gap-4 py-2 peer-hover/d:bg-red-500">
+      <div className="mx-auto my-4 flex w-full max-w-(--breakpoint-lg) flex-col gap-4 py-2 peer-hover/d:bg-red-500">
         {eventsByDay?.map((d, i) => {
           const isParent =
             d.noChanges &&
@@ -60,7 +60,7 @@ export default function Agenda({ ...props }: AgendaProps) {
           return (
             <div
               key={d.date}
-              className="flex flex-col gap-2 data-[h]:hidden"
+              className="flex flex-col gap-2 data-h:hidden"
               data-h={hide || null}
             >
               {/* title bar */}
@@ -109,7 +109,7 @@ export default function Agenda({ ...props }: AgendaProps) {
 }
 
 const subtleBtnStyles = clx(
-  '-mx-2 -my-0.5 rounded-md px-2 py-0.5 text-left focus:bg-slate-200 focus:outline-none hover:enabled:bg-slate-200/50',
+  '-mx-2 -my-0.5 rounded-md px-2 py-0.5 text-left focus:bg-slate-200 focus:outline-hidden hover:enabled:bg-slate-200/50',
 );
 
 // -------------------------------------
@@ -158,7 +158,7 @@ function UnchangedEvents({
       {/* unchanged events */}
       {events.map((event) => (
         <Transition key={event.id} show={isOpen}>
-          <div className="col-span-full mt-0 grid grid-cols-subgrid duration-200 data-[closed]:-mt-8 data-[closed]:opacity-0">
+          <div className="col-span-full mt-0 grid grid-cols-subgrid duration-200 data-closed:-mt-8 data-closed:opacity-0">
             <StatusIcon status="STAYING" />
             <AgendaEvent event={event} status="STAYING" />
           </div>

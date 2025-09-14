@@ -10,7 +10,7 @@ export default function TextboxSkeleton() {
           classNames={{
             label: 'h-4 w-24 rounded-full bg-slate-200',
             input:
-              'data-[disabled]:cursor-auto data-[disabled]:rounded-lg data-[disabled]:border-transparent data-[disabled]:bg-slate-200',
+              'data-disabled:cursor-auto data-disabled:rounded-lg data-disabled:border-transparent data-disabled:bg-slate-200',
           }}
         />
       </div>

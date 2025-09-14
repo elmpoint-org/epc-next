@@ -36,7 +36,7 @@ const RoomNumBox = () => {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between pb-4 pt-8">
+      <div className="flex flex-row items-center justify-between pt-8 pb-4">
         <NumberInput
           label="Rooms"
           value={guests.length}

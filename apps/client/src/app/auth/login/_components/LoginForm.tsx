@@ -180,7 +180,7 @@ export default function LoginForm() {
 
           <Button
             type="submit"
-            className="w-full data-[highlight]:my-1"
+            className="w-full data-highlight:my-1"
             data-highlight={!showPasskey || null}
             variant={showPasskey ? 'subtle' : 'filled'}
           >
