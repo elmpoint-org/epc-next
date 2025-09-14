@@ -163,7 +163,9 @@ export const stayDelete = h<M.MutationResolvers['stayDelete']>(
 export const stayDeleteMultiple = h<M.MutationResolvers['stayDeleteMultiple']>(
   scoped('ADMIN'),
   async ({ sources, args: { ids } }) => {
-    return sources.stay.deleteMultiple(ids, /* output = */ true);
+    const items = await sources.stay.deleteMultiple(ids, /* output = */ true);
+    if (typeof items === 'undefined') throw err('RETRIEVAL_FAILED');
+    return items.map((it) => it ?? null);
   }
 );
 
