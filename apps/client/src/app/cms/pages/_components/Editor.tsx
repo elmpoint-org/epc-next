@@ -6,7 +6,7 @@ import { AnyExtension, useEditor } from '@tiptap/react';
 import { STATIC_EXTENSIONS } from '../../_tiptap/staticExtensions';
 import { FileHandler } from '../../_tiptap/fileHandler/fileHandler';
 import { RegisterPageData } from '../../_tiptap/pageData/pageData';
-import Placeholder from '@tiptap/extension-placeholder';
+import { Placeholder } from '@tiptap/extensions';
 
 import { clx } from '@/util/classConcat';
 import { isDev } from '@/util/dev';

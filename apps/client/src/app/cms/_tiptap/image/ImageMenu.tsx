@@ -1,7 +1,6 @@
-'use client';
-
 import { useState } from 'react';
-import { BubbleMenu, Editor } from '@tiptap/react';
+import { Editor } from '@tiptap/react';
+import { BubbleMenu } from '@tiptap/react/menus';
 
 import { Slider } from '@mantine/core';
 
@@ -10,7 +9,7 @@ import { ImageTypeAtts, ImageTypeName } from './image';
 export default function ImageMenu({ editor }: { editor: Editor }) {
   const [value, setValue] = useState(100);
   const [isChanging, setIsChanging] = useState(false);
-  const fullValue = isChanging ? value : getStoredWidth() ?? 100;
+  const fullValue = isChanging ? value : (getStoredWidth() ?? 100);
 
   function getStoredWidth() {
     const w = parseInt(getImageAttributes(editor).percent);
