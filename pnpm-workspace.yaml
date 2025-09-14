@@ -17,6 +17,6 @@ catalog:
   graphql-modules: ^2.4.0
   react: ^19.1.1
   react-dom: ^19.1.1
-  sst: ^3.17.12
+  sst: ^3.17.13
   tailwindcss: ^3.4.17
   typescript: ^5.9.2
