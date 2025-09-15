@@ -6,7 +6,7 @@ import {
 } from '##/email/templates/notif_stay_reminder.js';
 import { Inside } from '##/ics/functions.js';
 import { catchTF } from '##/util/catchTF.js';
-import { dateTS, dateTSObject } from '@epc/date-ts';
+import { dateTS, dateTSObject, unixNow } from '@epc/date-ts';
 import { NOTIF_DEFAULT_VALUES } from '@epc/gql-consts/notifs';
 import { ResultOf } from '@graphql-typed-document-node/core';
 
@@ -42,28 +42,27 @@ export async function runEventReminders() {
   const events = await getEvents();
   if (!events?.length) return;
 
-  // only get events with authors and reminders that have not already been sent out
-  let eventsFiltered = events.filter(
-    (ev): ev is typeof ev & { author: NonNullable<typeof ev.author> } =>
-      !!ev.author && ev.reminderSent !== true
-  );
+  // filter down to events eligible for notification
+  const eventsFiltered: Inside<typeof events>[] = [];
+  for (const ev of events) {
+    // skip events missing author or reminder already sent
+    if (!ev.author || ev.reminderSent === true) continue;
 
-  // filter based on author notification preferences
-  const authorNotifMap = new Map(
-    eventsFiltered
-      .map((ev) => ev.author)
-      .filter(Boolean)
-      .map((author) => [author.id, author?.notifs])
-  );
-  eventsFiltered = eventsFiltered.filter((ev) => {
-    const n = authorNotifMap.get(ev.author.id);
-    if (n?.UNSUBSCRIBED) return false;
-    return n?.calendarStayReminder ?? NOTIF_DEFAULT_VALUES.calendarStayReminder;
-  });
+    // check notif settings
+    const notifs = ev.author.notifs;
+    if (notifs?.UNSUBSCRIBED) continue;
+    if (
+      notifs?.calendarStayReminder ??
+      NOTIF_DEFAULT_VALUES.calendarStayReminder
+    ) {
+      eventsFiltered.push(ev);
+    }
+  }
 
   // send emails
   const resps = await Promise.all(
     eventsFiltered.map(async (event) => {
+      if (!event.author) return false;
       const success = await emailNotifStayReminder(event.author.email, {
         event,
       });
@@ -88,7 +87,7 @@ export async function runEventReminders() {
  * get all events occurring 1 week from now
  */
 async function getEvents() {
-  const today = dateTS(Date.now() / 1000);
+  const today = dateTS(unixNow());
   const checkDate = dateTSObject(today).add(1, 'week').unix();
 
   const { data, errors } = await graph(STAY_REMINDER_QUERY, {
@@ -100,5 +99,5 @@ async function getEvents() {
     return;
   }
 
-  return data.stays;
+  return data.stays.filter((ev) => ev.dateStart === checkDate);
 }

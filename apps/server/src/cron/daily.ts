@@ -1,5 +1,5 @@
 import { runEventReminders } from './src/reminders';
 
-export function handler() {
-  runEventReminders();
+export async function handler() {
+  await runEventReminders();
 }
