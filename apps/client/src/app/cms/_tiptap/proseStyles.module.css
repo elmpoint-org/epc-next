@@ -13,6 +13,10 @@
     @apply -m-0 rounded-md bg-slate-200 p-0 before:content-none after:content-none;
   }
 
+  & span[style] > strong {
+    @apply text-inherit;
+  }
+
   & pre {
     @apply !bg-slate-200;
   }

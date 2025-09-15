@@ -4,6 +4,12 @@ export type PageDataStorage = {
   id: string;
 };
 
+declare module '@tiptap/core' {
+  interface Storage {
+    pageData: PageDataStorage;
+  }
+}
+
 export const RegisterPageData = (pageId: string) =>
   Extension.create<{}, PageDataStorage>({
     name: 'pageData',
@@ -13,6 +19,6 @@ export const RegisterPageData = (pageId: string) =>
   });
 
 export function getPageData(editor: Editor) {
-  const pd = editor.storage.pageData as PageDataStorage;
+  const pd = editor.storage.pageData;
   return pd;
 }

@@ -1,6 +1,10 @@
 import ImageRoot from '@tiptap/extension-image';
 
-import { mergeAttributes } from '@tiptap/core';
+import {
+  type Command,
+  mergeAttributes,
+  type NodeViewRendererProps,
+} from '@tiptap/core';
 import {
   getTypedAtt,
   type TextAlignEnum,
@@ -11,19 +15,20 @@ const DEFAULT_IMAGE_WIDTH = 1000;
 
 // TYPE DEFINITIONS
 export const ImageTypeName = 'imageBlock';
+type ImageBlockCommands<ReturnType> = {
+  setImageBlockAt: (
+    pos: number,
+    atts: {
+      src: string;
+      imgWidth: number;
+      imgHeight: number;
+    },
+  ) => ReturnType;
+  setImageBlockWidth: (percent: number) => ReturnType;
+};
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    imageBlock: {
-      setImageBlockAt: (
-        pos: number,
-        atts: {
-          src: string;
-          imgWidth: number;
-          imgHeight: number;
-        },
-      ) => ReturnType;
-      setImageBlockWidth: (percent: number) => ReturnType;
-    };
+    imageBlock: ImageBlockCommands<ReturnType>;
   }
 }
 export type ImageTypeAtts = {
@@ -72,7 +77,7 @@ export const Image = ImageRoot.extend({
     };
   },
 
-  renderHTML({ node, HTMLAttributes }) {
+  renderHTML({ node, HTMLAttributes }: NodeViewRendererProps) {
     // calculate width
     const atts = node.attrs as Atts;
     let percent = parseInt(atts.percent);
@@ -114,7 +119,7 @@ export const Image = ImageRoot.extend({
           commands.updateAttributes(ImageTypeName, {
             percent: '' + percent,
           } as Partial<Atts>),
-    };
+    } satisfies ImageBlockCommands<Command>;
   },
 }).configure({
   //
