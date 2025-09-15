@@ -185,8 +185,8 @@ export const userCreateCredential = h<
   M.MutationResolvers['userCreateCredential']
 >(async ({ sources, userId }) => {
   if (!userId) throw scopeError();
-
   const user = await sources.user.get(userId);
+  if (!user) throw err('USER_NOT_FOUND'); // this should never happen...
 
   const opts = new RegisterOptions();
   opts.userId = user.id;

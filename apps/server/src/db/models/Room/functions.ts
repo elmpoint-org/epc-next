@@ -8,9 +8,13 @@ import {
   loggedIn,
 } from '##/db/lib/utilities.js';
 import { ResolverContext } from '##/db/graph.js';
-import { dateTSCheck, queryStaysByDate, validateDates } from '../Stay/functions';
+import {
+  dateTSCheck,
+  queryStaysByDate,
+  validateDates,
+} from '../Stay/functions';
 
-const { scoped, scopeDiff } = getTypedScopeFunctions<ResolverContext>();
+const { scoped } = getTypedScopeFunctions<ResolverContext>();
 
 export const getRooms = h<M.QueryResolvers['rooms']>(
   loggedIn(),

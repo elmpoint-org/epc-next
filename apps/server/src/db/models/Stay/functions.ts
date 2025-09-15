@@ -1,4 +1,4 @@
-import { DBPartial, DBType, InitialType, QueryOp } from '##/db/lib/Model.js';
+import { DBPartial, DBType, InitialType } from '##/db/lib/Model.js';
 import type { StayModule as M } from './__types/module-types';
 
 import {
@@ -73,12 +73,7 @@ export const getStayMostRecentTimestamp = h<
   const REQ_LIMIT = 25;
 
   // get {number} of items updated after the specified time
-  const found = await sources.stay.query(
-    'tupdated',
-    QueryOp.GT,
-    after,
-    REQ_LIMIT
-  );
+  const found = await sources.stay.query('tupdated', '>', after, REQ_LIMIT);
 
   // if none, assume provided TS is current
   if (!found.length) return after;
@@ -168,7 +163,9 @@ export const stayDelete = h<M.MutationResolvers['stayDelete']>(
 export const stayDeleteMultiple = h<M.MutationResolvers['stayDeleteMultiple']>(
   scoped('ADMIN'),
   async ({ sources, args: { ids } }) => {
-    return sources.stay.deleteMultiple(ids, /* output = */ true);
+    const items = await sources.stay.deleteMultiple(ids, /* output = */ true);
+    if (typeof items === 'undefined') throw err('RETRIEVAL_FAILED');
+    return items.map((it) => it ?? null);
   }
 );
 
@@ -239,7 +236,7 @@ export async function queryStaysByDate(
   // query for all stays that end during or after the specified range (within reason)
   const all_stays = await sources.stay.query(
     'dateEnd',
-    !deepSearch ? QueryOp.BETWEEN : QueryOp.GTE,
+    !deepSearch ? 'BETWEEN' : '>=',
     start,
     !deepSearch ? end + DAYS_AFTER_SEC : undefined
   );
