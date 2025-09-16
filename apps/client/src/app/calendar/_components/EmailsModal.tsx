@@ -85,7 +85,7 @@ function EmailsModalForm({
       const text = authorsList
         .map((a, i) => {
           if (!selectedAuthors.get(a.id)) return '';
-          return (!!i ? ',\n' : '') + makeEmailText(a);
+          return (!!i ? '\n' : '') + makeEmailText(a);
         })
         .join('');
       navigator.clipboard.writeText(text);
