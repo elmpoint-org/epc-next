@@ -106,7 +106,7 @@ function EventsList({
             );
         })
         .sort((a, b) => a.dateStart - b.dateStart),
-    [query.data?.staysFromAuthor, today],
+    [filter, query.data?.staysFromAuthor, today],
   );
 
   if (filter === 'CURRENT' && !events?.length) return null;

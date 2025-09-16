@@ -21,6 +21,7 @@ const NavLink = (item: NavLinkProps) => {
     exact,
     className,
     dontMatch,
+    scope: _,
     ...props
   } = item;
 
