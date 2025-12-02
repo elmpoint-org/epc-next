@@ -1,19 +1,12 @@
-import {
-  ModalFrame,
-  ModalFrameFooter,
-} from '@/app/_components/_base/ModalFrame';
-import { clx } from '@/util/classConcat';
-import { Button } from '@mantine/core';
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useFormCtx } from '../state/formCtx';
 import { CUSTOM_ROOM_ID } from '@epc/types/cabins';
+import { confirmModal } from '@/app/_components/_base/modals';
+import { EventIssue } from '../../_util/eventChecks';
 
-export default function ConflictsModal() {
+export function useConflictsModal() {
   const { guests } = useFormCtx();
-
-  const [isOpen, setIsOpen] = useState(false);
-
   const aa = useMemo(() => {
     for (const {
       room: { room },
@@ -24,58 +17,78 @@ export default function ConflictsModal() {
     }
   }, [guests]);
 
-  return (
-    <>
-      <button onClick={() => setIsOpen(true)}>click me</button>
+  const runConflictsModal = useCallback((issues: EventIssue.Generic[]) => {
+    console.log('ISSUES:', issues);
+    return confirmModal({
+      title: (
+        <>
+          <IconAlertTriangle
+            className="mx-2 -mt-1 inline size-5 text-amber-600"
+            stroke={2}
+          />{' '}
+          Review these possible issues
+        </>
+      ),
+      children: (
+        <>
+          <div className="mb-4 border-b border-slate-200" />
 
-      <ModalFrame
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        title={
-          <>
-            <IconAlertTriangle
-              className="mx-2 -mt-1 inline size-5 text-amber-600"
-              stroke={2}
-            />{' '}
-            Review possible issues
-          </>
-        }
-        className={clx('[&_.panel]:max-w-3xl')}
-      >
-        <form onSubmit={(e) => e.preventDefault()}>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 px-4">
             <div className="prose prose-sm prose-slate my-2 max-w-none !leading-tight">
+              <p>Please double check the list of concerns below.</p>
               <p>
-                We noticed some potential conflicts with other reservations.
-              </p>
-              <p>
-                You can go back and edit, or if everything looks good to you,
-                click “Confirm and save” below.
+                If everything looks good to you, click the “Confirm and save”
+                button. Otherwise, you can go back and make changes.
               </p>
             </div>
 
-            <div className="t"></div>
-
-            <ModalFrameFooter>
-              <div className="flex flex-row justify-end gap-2">
-                <Button
-                  color="slate"
-                  variant="light"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsOpen(false);
-                  }}
+            <div className="flex flex-col gap-4">
+              {issues.map((issue, i) => (
+                <div
+                  key={i}
+                  className="rounded-md border border-slate-300 bg-slate-200 p-2 text-sm"
                 >
-                  Go back
-                </Button>
-                <Button type="submit" data-autofocus>
-                  Confirm and save
-                </Button>
-              </div>
-            </ModalFrameFooter>
+                  <div className="flex flex-row items-center gap-2">
+                    <span className="text-xs font-bold uppercase">
+                      {issue.kind.replace(/_/g, ' ')}
+                    </span>
+                    <span className="t">
+                      {'cabin' in issue && <>{issue.cabin.name}</>}
+                      {'room' in issue && (
+                        <>
+                          {issue.room.cabin ? (
+                            <>{issue.room.cabin.name} - </>
+                          ) : null}
+                          {issue.room.name} (
+                          {issue.reservations.map((c) => c.name).join(', ')})
+                        </>
+                      )}
+
+                      {issue.kind === 'LONG_DATE_RANGE' && (
+                        <>{issue.diff} days</>
+                      )}
+
+                      {issue.kind === 'UNFINISHED_RES' && (
+                        <>{issue.reservation.name}</>
+                      )}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </form>
-      </ModalFrame>
-    </>
-  );
+          <div className="mt-4 border-b border-slate-200" />
+        </>
+      ),
+      buttons: {
+        cancel: 'Go back',
+        confirm: 'Confirm and save',
+      },
+      color: 'emerald',
+      width: 40 * 16,
+      focusOnConfirm: true,
+    });
+  }, []);
+
+  return runConflictsModal;
 }

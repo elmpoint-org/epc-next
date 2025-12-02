@@ -15,7 +15,6 @@ import FormGuestRows from './FormGuestRows';
 import FormEventText from './FormEventText';
 import FormSubmit from './FormSubmit';
 import FormHeader from './FormHeader';
-import ConflictsModal from './ConflictsModal';
 
 export const MAX_ROOMS = 20;
 
@@ -84,8 +83,6 @@ const NewEventForm = ({
                 >
                   Submit
                 </Button>
-
-                <ConflictsModal />
               </div>
             </div>
           </form>

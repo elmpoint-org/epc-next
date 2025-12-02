@@ -13,6 +13,7 @@ import {
   queryStaysByDate,
   validateDates,
 } from '../Stay/functions';
+import { D1 } from '@epc/date-ts';
 
 const { scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -145,8 +146,6 @@ export const getRoomAvailableBeds = h<M.RoomResolvers['availableBeds']>(
     let maxOccupants = 0;
     do {
       if (!reservations.length) break;
-
-      const D1 = 3600 * 24; // 1 day in seconds
 
       // day-by-day
       for (let t = start; t < end; t += D1) {
