@@ -16,6 +16,8 @@ import { D1, TStoDate, dateTS } from '@epc/date-ts';
 import { CUSTOM_ROOM_ID } from '@epc/types/cabins';
 import { prettyError, prettyErrorPlaceholder } from '@/util/prettyErrors';
 import { dayStyles } from '../../_util/dayStyles';
+import { useEventChecks } from '../../_util/eventChecks';
+import { useConflictsModal } from './ConflictsModal';
 
 export const UPDATE_STAY_QUERY = graphql(`
   mutation StayUpdate(
@@ -61,7 +63,7 @@ export const CREATE_STAY_QUERY = graphql(`
   }
 `);
 
-type StayObject = SharedValues<
+export type StayObject = SharedValues<
   VariablesOf<typeof CREATE_STAY_QUERY>,
   VariablesOf<typeof UPDATE_STAY_QUERY>
 >;
@@ -78,6 +80,9 @@ export function useFormActions() {
   const closeDialog = useCloseFloatingWindow();
   const [, loading] = usePassedTransition();
 
+  const runEventChecks = useEventChecks();
+  const showConflictsModal = useConflictsModal();
+
   // FUNCTIONS
 
   // submit
@@ -89,8 +94,17 @@ export function useFormActions() {
         const stay = getStayObject();
         if (!stay) return;
 
-        let resp: Awaited<ReturnType<typeof graphAuth>>;
+        // event checks...
+        const issues = await runEventChecks(stay);
+        if (issues === null) return err('EVENT_VALIDATION_FAILURE');
+        if (issues.length) {
+          const confirmed = await showConflictsModal(issues);
+          if (!confirmed) return;
+        }
 
+        // run update
+
+        let resp: Awaited<ReturnType<typeof graphAuth>>;
         if (!updateId)
           resp = await graphAuth(CREATE_STAY_QUERY, {
             ...stay,
@@ -110,7 +124,7 @@ export function useFormActions() {
       });
     },
     // prettier-ignore
-    [closeDialog, getStayObject, invalidate, loading, updateId, user],
+    [closeDialog, getStayObject, invalidate, loading, runEventChecks, showConflictsModal, updateId, user],
   );
 
   // duplicate

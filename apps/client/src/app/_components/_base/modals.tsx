@@ -20,6 +20,10 @@ export type ModalProps = {
   focusOnConfirm?: boolean;
   /** add direct mantine props to the confirm button */
   confirmProps?: MantineConfirmModalProps['confirmProps'];
+  /** modal width */
+  width?: MantineConfirmModalProps['size'];
+  /** shrink window padding on mobile */
+  responsivePadding?: boolean;
 };
 
 export function confirmModal(p: ModalProps) {
@@ -43,10 +47,12 @@ export function confirmModal(p: ModalProps) {
         confirm: p.buttons?.confirm ?? 'Confirm',
         cancel: p.buttons?.cancel ?? 'Cancel',
       },
+      size: p.width,
       confirmProps: { color: p.color, ...p.confirmProps } as any,
       classNames: {
         root: clx('focus:[&_button]:outline-black'),
         content: clx('rounded-xl p-2'),
+        inner: p.responsivePadding ? clx('p-2 sm:p-9') : undefined,
       },
       onConfirm: () => resolve(true),
       onCancel: () => resolve(false),

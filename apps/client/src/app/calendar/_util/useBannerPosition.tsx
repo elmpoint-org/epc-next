@@ -9,7 +9,7 @@ import { EventPlaceholder } from '../_components/TimelineEvent';
 export type UseBannerPositionProps = Pick<CalendarProps, 'dates' | 'days'>;
 export function useBannerPosition(
   props: UseBannerPositionProps,
-  event: EventType,
+  event: Pick<EventType, 'dateStart' | 'dateEnd'>,
   placeholder?: EventPlaceholder,
 ) {
   const { dates: dateLimits, days } = props;

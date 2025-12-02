@@ -50,6 +50,7 @@ export const CALENDAR_EVENT_FRAGMENT = graphql(`
     reservations {
       name
       room {
+        __typename
         ... on Room {
           id
           name

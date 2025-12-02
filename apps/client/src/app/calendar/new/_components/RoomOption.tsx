@@ -6,6 +6,7 @@ import { IconAlt, IconCheck, IconFriends } from '@tabler/icons-react';
 import { useFormCtx, type Cabin, type Room } from '../state/formCtx';
 import { ANY_ROOM } from '@epc/types/cabins';
 import { Children } from '@/util/propTypes';
+import { useLocalOccupants } from '../../_util/localOccupants';
 
 const RoomOption = ({
   item,
@@ -14,17 +15,15 @@ const RoomOption = ({
   item: Room | Cabin;
   active: boolean;
 }) => {
-  const { guests } = useFormCtx();
-
   // calculate occupancy to include other selected rooms
-  const localOccupants = useMemo(
-    () => guests.filter(({ room: { room } }) => room?.id === item.id).length,
-    [guests, item],
-  );
-  let available: number | null = null;
-  if ('beds' in item && item.availableBeds !== null) {
-    available = item.availableBeds - localOccupants;
-  }
+  const localOccupants = useLocalOccupants();
+  const available = useMemo(() => {
+    let available: number | null = null;
+    if ('beds' in item && item.availableBeds !== null) {
+      available = item.availableBeds - (localOccupants.get(item.id) ?? 0);
+    }
+    return available;
+  }, [item, localOccupants]);
 
   const aliasTag = <AliasTag isAlias={!!item.useAlias} name={item.name} />;
 
