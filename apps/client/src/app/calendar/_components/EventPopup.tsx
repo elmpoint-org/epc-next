@@ -1,4 +1,4 @@
-import { Fragment, lazy, useMemo, useTransition } from 'react';
+import { Fragment, lazy, useMemo } from 'react';
 import Image from 'next/image';
 
 import { CloseButton, PopoverPanel, type Popover } from '@headlessui/react';
@@ -30,6 +30,7 @@ import { getCabinColorObject } from '../_util/cabinColors';
 import RoomSwatch from './RoomSwatch';
 import { useUser } from '@/app/_ctx/user/context';
 import { scopeCheck } from '@/util/scopeCheck';
+import { useLoading } from '@/util/useLoading';
 const EventEditWindow = lazy(() => import('./EventEditWindow'));
 
 /**
@@ -46,7 +47,7 @@ export default function EventPopup({
 }) {
   // stay editor setup
   const { prop: triggerEditStay, trigger: runEditStay } = useReverseCbTrigger();
-  const transition = useTransition();
+  const transition = useLoading();
   const [isLoading] = transition;
 
   const user = useUser();

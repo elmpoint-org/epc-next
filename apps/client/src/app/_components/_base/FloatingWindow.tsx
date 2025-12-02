@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Dialog, DialogPanel, Transition } from '@headlessui/react';
 import { ActionIcon, ScrollArea } from '@mantine/core';
@@ -24,6 +24,7 @@ import {
 import { clx } from '@/util/classConcat';
 import { TransitionProvider } from '@/app/_ctx/transition';
 import { createCallbackCtx } from '@/app/_ctx/callback';
+import { useLoading } from '@/util/useLoading';
 
 const { Provider: CloseProvider, useHook: useCloseFloatingWindow } =
   createCallbackCtx();
@@ -61,7 +62,7 @@ export default function FloatingWindow({
     });
   }, [isOpen]);
 
-  const transition = useTransition();
+  const transition = useLoading();
   const [isLoading] = transition;
 
   return (
