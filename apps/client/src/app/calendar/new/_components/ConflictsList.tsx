@@ -6,8 +6,13 @@ import { D1, dateDiff, dateFormat } from '@epc/date-ts';
 import { useBannerPosition } from '../../_util/useBannerPosition';
 import { EventType } from '../../_components/Calendar';
 import { StayObject } from './FormActions';
+import { Tooltip } from '@mantine/core';
 
-export default function ConflictsList({ issues }: { issues: EventIssue.Generic[] }) {
+export default function ConflictsList({
+  issues,
+}: {
+  issues: EventIssue.Generic[];
+}) {
   return (
     <ol className="flex flex-col">
       {issues.map((issue, i) => (
@@ -43,7 +48,7 @@ export default function ConflictsList({ issues }: { issues: EventIssue.Generic[]
                 <b>
                   {issue.room.beds} bed{issue.room.beds !== 1 && 's'}
                 </b>
-                . See conflicting reservations below (hover for full title):
+                . See conflicting reservations below (hover for event name):
               </p>
               <div className="my-2">
                 {dateDiff(issue.stay.dateEnd, issue.stay.dateStart) < 30 ? (
@@ -71,7 +76,7 @@ export default function ConflictsList({ issues }: { issues: EventIssue.Generic[]
             >
               <p>
                 You’ll be sharing this room with others for at least one night.
-                See matching reservations below (hover for full title):
+                See matching reservations below (hover for event name):
               </p>
               <div className="my-2">
                 {dateDiff(issue.stay.dateEnd, issue.stay.dateStart) < 30 ? (
@@ -231,7 +236,7 @@ function ConflictsView({
             issue={issue}
             event={stay}
             className="cursor-default border border-dashed border-dgreen bg-emerald-600/50 text-emerald-950 backdrop-blur-sm"
-            title={stay.title}
+            tooltip={stay.title}
           >
             {res.name}
           </ConflictItem>
@@ -245,7 +250,7 @@ function ConflictsView({
                   key={'' + j + k}
                   issue={issue}
                   event={event}
-                  title={event.title}
+                  tooltip={event.title}
                   className="cursor-default"
                 >
                   {r.name}
@@ -263,10 +268,12 @@ function ConflictItem({
   event,
   className,
   children,
+  tooltip,
   ...props
 }: {
   issue: EventIssue.Map['ROOM_CONFLICT' | 'ROOM_SHARING'];
   event: EventType | StayObject;
+  tooltip: ReactNode;
 } & ComponentPropsWithoutRef<'div'>) {
   const { arrows, loc } = useBannerPosition(
     {
@@ -277,17 +284,22 @@ function ConflictItem({
   );
 
   return (
-    <div
-      {...props}
-      className={clmx('flex truncate rounded-md bg-slate-300 px-1', className)}
-      style={{
-        gridColumn: `${loc.start} / ${loc.end}`,
-      }}
-    >
-      {arrows.left && <>&lt;</>}
-      <div className="flex-1 truncate text-center">{children}</div>
-      {arrows.right && <>&gt;</>}
-    </div>
+    <Tooltip label={tooltip}>
+      <div
+        {...props}
+        className={clmx(
+          'flex flex-row items-center truncate rounded-md bg-slate-300 px-1',
+          className,
+        )}
+        style={{
+          gridColumn: `${loc.start} / ${loc.end}`,
+        }}
+      >
+        {arrows.left && <span className="-mt-px leading-none">&lt;</span>}
+        <div className="flex-1 truncate text-center">{children}</div>
+        {arrows.right && <span className="-mt-px leading-none">&gt;</span>}
+      </div>
+    </Tooltip>
   );
 }
 

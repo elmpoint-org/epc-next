@@ -97,8 +97,10 @@ export function useFormActions() {
         // event checks...
         const issues = await runEventChecks(stay);
         if (issues === null) return err('EVENT_VALIDATION_FAILURE');
-        const confirmed = await showConflictsModal(issues);
-        if (!confirmed) return;
+        if (issues.length) {
+          const confirmed = await showConflictsModal(issues);
+          if (!confirmed) return;
+        }
 
         // run update
 
