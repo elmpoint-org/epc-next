@@ -1,22 +1,10 @@
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { useCallback, useMemo } from 'react';
-import { useFormCtx } from '../state/formCtx';
-import { CUSTOM_ROOM_ID } from '@epc/types/cabins';
+import { useCallback } from 'react';
 import { confirmModal } from '@/app/_components/_base/modals';
 import { EventIssue } from '../../_util/eventChecks';
+import ConflictsList from './ConflictsList';
 
 export function useConflictsModal() {
-  const { guests } = useFormCtx();
-  const aa = useMemo(() => {
-    for (const {
-      room: { room },
-    } of guests) {
-      if (!room || room.id === CUSTOM_ROOM_ID) continue;
-
-      // if(room.availableBeds < room.)
-    }
-  }, [guests]);
-
   const runConflictsModal = useCallback((issues: EventIssue.Generic[]) => {
     console.log('ISSUES:', issues);
     return confirmModal({
@@ -33,49 +21,17 @@ export function useConflictsModal() {
         <>
           <div className="mb-4 border-b border-slate-200" />
 
-          <div className="flex flex-col gap-4 px-4">
+          <div className="flex flex-col gap-4 sm:px-4">
             <div className="prose prose-sm prose-slate my-2 max-w-none !leading-tight">
-              <p>Please double check the list of concerns below.</p>
+              <p>These issues were found which might affect your stay.</p>
               <p>
-                If everything looks good to you, click the “Confirm and save”
-                button. Otherwise, you can go back and make changes.
+                If all of these are as you intended, click the “Confirm and save”
+                button at the bottom. Otherwise, you can go back and make
+                changes now.
               </p>
             </div>
 
-            <div className="flex flex-col gap-4">
-              {issues.map((issue, i) => (
-                <div
-                  key={i}
-                  className="rounded-md border border-slate-300 bg-slate-200 p-2 text-sm"
-                >
-                  <div className="flex flex-row items-center gap-2">
-                    <span className="text-xs font-bold uppercase">
-                      {issue.kind.replace(/_/g, ' ')}
-                    </span>
-                    <span className="t">
-                      {'cabin' in issue && <>{issue.cabin.name}</>}
-                      {'room' in issue && (
-                        <>
-                          {issue.room.cabin ? (
-                            <>{issue.room.cabin.name} - </>
-                          ) : null}
-                          {issue.room.name} (
-                          {issue.reservations.map((c) => c.name).join(', ')})
-                        </>
-                      )}
-
-                      {issue.kind === 'LONG_DATE_RANGE' && (
-                        <>{issue.diff} days</>
-                      )}
-
-                      {issue.kind === 'UNFINISHED_RES' && (
-                        <>{issue.reservation.name}</>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ConflictsList issues={issues} />
           </div>
           <div className="mt-4 border-b border-slate-200" />
         </>
@@ -86,6 +42,7 @@ export function useConflictsModal() {
       },
       color: 'emerald',
       width: 40 * 16,
+      responsivePadding: true,
       focusOnConfirm: true,
     });
   }, []);

@@ -12,6 +12,7 @@ export namespace EventIssue {
     /** room is full or overfull */
     ROOM_CONFLICT: {
       room: Room;
+      stay: StayObject;
       reservations: GuestEntry[];
       events: EventType[];
     };
@@ -19,6 +20,7 @@ export namespace EventIssue {
     /** room will be shared with someone else */
     ROOM_SHARING: {
       room: Room;
+      stay: StayObject;
       reservations: GuestEntry[];
       events: EventType[];
     };
@@ -42,9 +44,9 @@ export namespace EventIssue {
       reservations: GuestEntry[];
     };
 
-    /** when a row is not fully populated */
+    /** collect rows which are not fully populated */
     UNFINISHED_RES: {
-      reservation: GuestEntry;
+      reservations: GuestEntry[];
     };
   }
 
@@ -56,7 +58,7 @@ export namespace EventIssue {
 }
 
 /** how long is a suspiciously long stay */
-const LONG_STAY_LENGTH_DAYS = 90;
+export const LONG_STAY_LENGTH_DAYS = 90;
 /** cabins where a reservation should always prompt a coordinator check */
 const MANAGED_CABINS = [
   'bf802b84-2813-4438-b2da-f997c138a14a', // house
@@ -77,7 +79,10 @@ export function useEventChecks() {
 
       // get all events
       const { data, errors } = await graphAuth(EVENTS_QUERY, {
-        start: stay.dateStart + D1,
+        start:
+          dateDiff(stay.dateEnd, stay.dateStart) < LONG_STAY_LENGTH_DAYS
+            ? stay.dateStart + D1
+            : stay.dateEnd,
         end: stay.dateEnd,
       });
       if (errors || !data?.stays) return null;
@@ -89,13 +94,16 @@ export function useEventChecks() {
           return conflictMap.get(roomId)!;
 
         const evts = allStays.filter((event) => {
+          console.log(event.title);
+
           if (event.id === updateId) return false;
           for (const r of event.reservations) {
-            if (r.room?.__typename !== 'Room' || r.room.id !== roomId) continue;
-            return true;
+            if (r.room?.__typename === 'Room' && r.room.id === roomId)
+              return true;
           }
           return false;
         });
+        console.log('EVTS', evts);
         conflictMap.set(roomId, evts);
         return evts;
       }
@@ -131,7 +139,7 @@ export function useEventChecks() {
             const issue = findOrCreateIssue(
               'ROOM_CONFLICT',
               (it) => it.room.id === room.id,
-              { room, reservations: [], events: findConflicts(room.id) },
+              { room, stay, reservations: [], events: findConflicts(room.id) },
             );
             issue.reservations.push(res);
           } else if (room.availableBeds < room.beds) {
@@ -139,7 +147,7 @@ export function useEventChecks() {
             const issue = findOrCreateIssue(
               'ROOM_SHARING',
               (it) => it.room.id === room.id,
-              { room, reservations: [], events: findConflicts(room.id) },
+              { room, stay, reservations: [], events: findConflicts(room.id) },
             );
             issue.reservations.push(res);
           }
@@ -160,10 +168,10 @@ export function useEventChecks() {
 
         // UNFINISHED_RES
         if (room === null) {
-          issues.push({
-            kind: 'UNFINISHED_RES',
-            reservation: res,
+          const issue = findOrCreateIssue('UNFINISHED_RES', undefined, {
+            reservations: [],
           });
+          issue.reservations.push(res);
         }
       }
 

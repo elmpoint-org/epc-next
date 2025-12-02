@@ -22,6 +22,8 @@ export type ModalProps = {
   confirmProps?: MantineConfirmModalProps['confirmProps'];
   /** modal width */
   width?: MantineConfirmModalProps['size'];
+  /** shrink window padding on mobile */
+  responsivePadding?: boolean;
 };
 
 export function confirmModal(p: ModalProps) {
@@ -50,6 +52,7 @@ export function confirmModal(p: ModalProps) {
       classNames: {
         root: clx('focus:[&_button]:outline-black'),
         content: clx('rounded-xl p-2'),
+        inner: p.responsivePadding ? clx('p-2 sm:p-9') : undefined,
       },
       onConfirm: () => resolve(true),
       onCancel: () => resolve(false),
