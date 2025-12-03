@@ -19,7 +19,7 @@ export default function ConflictsList({
         <li key={i} className="group">
           {/* long reservation  */}
           {issue.kind === 'LONG_DATE_RANGE' && (
-            <IssueFrame i={i} title={<>Long reservation</>}>
+            <IssueFrame i={i} title={<>Unusually long reservation</>}>
               <p>
                 This reservation is <b>{issue.diff}</b> days long (
                 {dateFormat(issue.dateStart, 'MMM. D, YYYY')} to{' '}
@@ -92,17 +92,14 @@ export default function ConflictsList({
           {issue.kind === 'MANAGED_CABIN' && (
             <IssueFrame
               i={i}
-              title={<>Cabin Coordinator contact required</>}
+              title={<>Contact cabin coordinator</>}
               secondary={<>{issue.cabin.name}</>}
             >
               <div className="flex flex-col gap-2">
                 <p>
-                  You have placed{' '}
-                  <b>
-                    {issue.reservations.length} reservation
-                    {issue.reservations.length !== 1 && 's'}
-                  </b>{' '}
-                  in <b>{issue.cabin.name}</b>.
+                  You placed {issue.reservations.length} reservation
+                  {issue.reservations.length !== 1 && 's'} in{' '}
+                  <b>{issue.cabin.name}</b>.
                 </p>
                 <p>
                   {issue.cabin.name} bookings are overseen by the cabin
@@ -236,7 +233,6 @@ function ConflictsView({
             issue={issue}
             event={stay}
             className="cursor-default border border-dashed border-dgreen bg-emerald-600/50 text-emerald-950 backdrop-blur-sm"
-            tooltip={stay.title}
           >
             {res.name}
           </ConflictItem>
@@ -273,7 +269,7 @@ function ConflictItem({
 }: {
   issue: EventIssue.Map['ROOM_CONFLICT' | 'ROOM_SHARING'];
   event: EventType | StayObject;
-  tooltip: ReactNode;
+  tooltip?: ReactNode;
 } & ComponentPropsWithoutRef<'div'>) {
   const { arrows, loc } = useBannerPosition(
     {
@@ -284,7 +280,7 @@ function ConflictItem({
   );
 
   return (
-    <Tooltip label={tooltip}>
+    <Tooltip label={tooltip} hidden={!tooltip}>
       <div
         {...props}
         className={clmx(
