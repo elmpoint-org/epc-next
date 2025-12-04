@@ -7,6 +7,7 @@ import { useBannerPosition } from '../../_util/useBannerPosition';
 import { EventType } from '../../_components/Calendar';
 import { StayObject } from './FormActions';
 import { Tooltip } from '@mantine/core';
+import A from '@/app/_components/_base/A';
 
 export default function ConflictsList({
   issues,
@@ -102,8 +103,15 @@ export default function ConflictsList({
                   <b>{issue.cabin.name}</b>.
                 </p>
                 <p>
-                  {issue.cabin.name} bookings are overseen by the cabin
-                  coordinator, TODO_COORD_NAME.{' '}
+                  {issue.cabin.name} bookings are overseen by the{' '}
+                  <A
+                    href="/pages/help/calendar/cabin-coordinators"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    cabin coordinator ↗
+                  </A>
+                  .<br />
                   <b>Contact them directly to confirm availability.</b>
                 </p>
 
