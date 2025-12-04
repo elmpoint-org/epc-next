@@ -76,13 +76,16 @@ export function useEventChecks() {
     async (stay: StayObject) => {
       const issues: EventIssue.Generic[] = [];
       const { findOrCreateIssue } = issueRefGetter(issues);
+      const stayLen = dateDiff(stay.dateEnd, stay.dateStart);
+
+      // TODO we shouldn't fetch full events UNLESS we know there is an issue from availablebeds data.
+      // TODO issue *types* -- color code by importance
+      //  ->  use caution icon in place of number instead?? and info symbol for low priority items? maybe a third "non urgent warning" (ie unfinished rows)?
 
       // get all events
       const { data, errors } = await graphAuth(EVENTS_QUERY, {
         start:
-          dateDiff(stay.dateEnd, stay.dateStart) < LONG_STAY_LENGTH_DAYS
-            ? stay.dateStart + D1
-            : stay.dateEnd,
+          stayLen < LONG_STAY_LENGTH_DAYS ? stay.dateStart + D1 : stay.dateEnd,
         end: stay.dateEnd,
       });
       if (errors || !data?.stays) return null;
@@ -94,8 +97,6 @@ export function useEventChecks() {
           return conflictMap.get(roomId)!;
 
         const evts = allStays.filter((event) => {
-          console.log(event.title);
-
           if (event.id === updateId) return false;
           for (const r of event.reservations) {
             if (r.room?.__typename === 'Room' && r.room.id === roomId)
@@ -103,13 +104,11 @@ export function useEventChecks() {
           }
           return false;
         });
-        console.log('EVTS', evts);
         conflictMap.set(roomId, evts);
         return evts;
       }
 
       // dates check
-      const stayLen = dateDiff(stay.dateEnd, stay.dateStart);
       if (stayLen > LONG_STAY_LENGTH_DAYS)
         issues.push({
           kind: 'LONG_DATE_RANGE',
@@ -121,8 +120,6 @@ export function useEventChecks() {
       // run through reservations
       for (const res of guests) {
         const { room, cabin } = res.room;
-
-        console.log(res);
 
         // ROOM_CONFLICT & ROOM_SHARING
         if (room !== null && !room.noCount) {

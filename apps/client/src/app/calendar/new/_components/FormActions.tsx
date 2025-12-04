@@ -16,7 +16,7 @@ import { D1, TStoDate, dateTS } from '@epc/date-ts';
 import { CUSTOM_ROOM_ID } from '@epc/types/cabins';
 import { prettyError, prettyErrorPlaceholder } from '@/util/prettyErrors';
 import { dayStyles } from '../../_util/dayStyles';
-import { useEventChecks } from '../../_util/eventChecks';
+import { EventIssue, useEventChecks } from '../../_util/eventChecks';
 import { useConflictsModal } from './ConflictsModal';
 
 export const UPDATE_STAY_QUERY = graphql(`
@@ -87,23 +87,26 @@ export function useFormActions() {
 
   // submit
   const handleSubmit = useCallback(
-    () => {
+    async () => {
+      if (!user) return err('MISSING_LOGIN_INFO');
+
+      const stay = getStayObject();
+      if (!stay) return;
+
+      // event checks...
+      let issues: EventIssue.Generic[] | undefined;
+      await loading?.(async () => {
+        const eventChecks = await runEventChecks(stay);
+        if (eventChecks === null) return err('EVENT_VALIDATION_FAILURE');
+        issues = eventChecks;
+      });
+      if (issues?.length) {
+        const confirmed = await showConflictsModal(issues);
+        if (!confirmed) return;
+      }
+
+      // run update
       loading?.(async () => {
-        if (!user) return err('MISSING_LOGIN_INFO');
-
-        const stay = getStayObject();
-        if (!stay) return;
-
-        // event checks...
-        const issues = await runEventChecks(stay);
-        if (issues === null) return err('EVENT_VALIDATION_FAILURE');
-        if (issues.length) {
-          const confirmed = await showConflictsModal(issues);
-          if (!confirmed) return;
-        }
-
-        // run update
-
         let resp: Awaited<ReturnType<typeof graphAuth>>;
         if (!updateId)
           resp = await graphAuth(CREATE_STAY_QUERY, {
