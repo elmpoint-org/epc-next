@@ -1,7 +1,7 @@
 import { Children } from '@/util/propTypes';
 import { EventIssue } from '../../_util/eventChecks';
 import { ComponentPropsWithoutRef, ReactNode, useMemo } from 'react';
-import { clmx } from '@/util/classConcat';
+import { clmx, clx } from '@/util/classConcat';
 import { D1, dateDiff, dateFormat } from '@epc/date-ts';
 import { useBannerPosition } from '../../_util/useBannerPosition';
 import { EventType } from '../../_components/Calendar';
@@ -240,9 +240,14 @@ function ConflictsView({
             key={j}
             issue={issue}
             event={stay}
-            className="cursor-default border border-dashed border-dgreen bg-emerald-600/50 text-emerald-950 backdrop-blur-sm"
+            className={clx(
+              'cursor-default border border-dashed backdrop-blur-sm',
+              issue.kind === 'ROOM_CONFLICT'
+                ? 'border-amber-800 bg-amber-600/50 text-amber-950'
+                : 'border-emerald-800 bg-emerald-600/50 text-emerald-950',
+            )}
           >
-            {res.name}
+            {res.name || <em>(no name)</em>}
           </ConflictItem>
         ))}
         {events.map((event, j) =>
@@ -257,7 +262,7 @@ function ConflictsView({
                   tooltip={event.title}
                   className="cursor-default"
                 >
-                  {r.name}
+                  {r.name || <em>(no name)</em>}
                 </ConflictItem>
               ),
           ),
