@@ -20,6 +20,8 @@ import StayTokenModule from './StayToken/module';
 import StayTokenSource from './StayToken/source';
 import UserCooldownModule from './UserCooldown/module';
 import UserCooldownSource from './UserCooldown/source';
+import CMSContentModule from './CMSContent/module';
+import { CMSBannerSource } from './CMSContent/source';
 
 // DEFINE SCHEMA
 
@@ -31,6 +33,7 @@ export const modules: Module[] = [
   CMSPageModule,
   CMSImageModule,
   CMSFileModule,
+  CMSContentModule,
   RoomModule,
   CabinModule,
   StayModule,
@@ -44,6 +47,9 @@ export const sources = () => ({
   cms: {
     page: new CMSPageSource(),
     image: new CMSImageSource(),
+    content: {
+      banner: new CMSBannerSource(),
+    },
   },
   room: new RoomSource(),
   cabin: new CabinSource(),
