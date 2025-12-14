@@ -20,7 +20,7 @@ const config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: font,
+        sans: 'var(--font-default), ui-sans-serif, system-ui, sans-serif',
       },
       colors: {
         dwhite: colors.slate[100],
