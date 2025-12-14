@@ -11,6 +11,12 @@ export const client = new sst.aws.Nextjs('Client', {
         dns: false,
         cert: SecretMap.SecretDomainARN.value,
       }
+    : $app.stage === 'next'
+    ? {
+        name: `next.elmpoint.xyz`,
+        dns: false,
+        cert: SecretMap.SecretDomainARN.value,
+      }
     : undefined,
   environment: environment(),
 });

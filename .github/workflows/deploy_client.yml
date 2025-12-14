@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - '*'
+    branches:
+      - main
 jobs:
   deploy:
     env:
@@ -21,7 +23,7 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install
 
-        # deploy
+      # deploy
       - name: deploy
         run: |
-          pnpm push --stage=production
+          pnpm push --stage=${{ github.ref_type == 'tag' && 'production' || 'next' }}

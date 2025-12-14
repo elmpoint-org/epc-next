@@ -5,6 +5,7 @@ node_modules
 .sst
 
 .env
+ENV_DANGER_*.ts
 
 .turbo
 

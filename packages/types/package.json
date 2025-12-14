@@ -4,9 +4,13 @@
   "scripts": {},
   "exports": {
     "./cabins": "./src/cabins.ts",
-    "./s3": "./src/s3.ts"
+    "./s3": "./src/s3.ts",
+    "./urls": "./src/urls.ts"
   },
   "dependencies": {
     "@epc/mime": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:"
   }
 }
