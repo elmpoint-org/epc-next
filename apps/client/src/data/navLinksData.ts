@@ -8,6 +8,7 @@ import {
   IconCalendarUser,
   IconClick,
   IconDoor,
+  IconFlag,
   IconFolders,
   IconHelp,
   IconHome2,
@@ -79,6 +80,7 @@ export const navLinks: DeepNavLinks = [
       { href: '/cms/pages', text: 'Pages', icon: IconNotebook },
       { href: '/cms/files', text: 'File Manager', icon: IconFolders },
       { href: '/cms/rooms', text: 'Rooms & Cabins', icon: IconDoor },
+      { href: '/cms/banners', text: 'Homepage Alerts', icon: IconFlag },
     ],
   },
 ];

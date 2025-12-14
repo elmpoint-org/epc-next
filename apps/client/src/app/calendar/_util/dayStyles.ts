@@ -5,3 +5,6 @@ export const dayStyles = clx(
   /* today */ 'border-solid data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border data-[today]:[&:not([data-in-range])]:[&:not([data-selected])]:border-slate-800/50',
   /* disabled */ 'data-[disabled]:rounded-none data-[disabled]:bg-slate-300 data-[disabled]:text-slate-600 data-[disabled]:opacity-30',
 );
+export const datePickerBorder = {
+  levelsGroup: clx('popover:border-slate-300 popover:shadow-sm'),
+};

@@ -1,14 +1,14 @@
+import Link from 'next/link';
 import { IconLock } from '@tabler/icons-react';
-
-import { homeLinks } from '@/data/homeLinksData';
 
 import A from './_components/_base/A';
 import LogoPanel from './_components/_base/LogoPanel';
 import LinkBlock from './_components/home/LinkBlock';
-
+import { HomeBannerList } from './_components/home/HomeBannerWrapper';
 import AgendaToday from './_components/home/AgendaToday';
+
 import { getUser } from './_ctx/user/provider';
-import Link from 'next/link';
+import { homeLinks } from '@/data/homeLinksData';
 
 export default async function HomePage() {
   const links = homeLinks; // TODO should be db
@@ -49,6 +49,8 @@ export default async function HomePage() {
                 to see them.
               </div>
             </div>
+
+            <HomeBannerList />
 
             {/* links section */}
             <div className="grid auto-rows-fr grid-cols-1 gap-2.5 p-2.5 sm:grid-cols-2 lg:grid-cols-3">
