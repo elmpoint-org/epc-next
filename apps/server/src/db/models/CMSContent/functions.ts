@@ -1,10 +1,10 @@
 import { ResolverContext } from '##/db/graph.js';
 import {
+  err,
   getTypedScopeFunctions,
   handle as h,
-  loggedIn,
 } from '##/db/lib/utilities.js';
-import { dateTS, unixNow } from '@epc/date-ts';
+import { D1, unixNow } from '@epc/date-ts';
 import { CmsContentModule as M } from './__types/module-types';
 import { DBCMSBanner } from './source';
 
@@ -22,7 +22,7 @@ export const getCmsBannersNow = h<M.QueryResolvers['cmsBannersNow']>(
     return banners.filter((b) => {
       const now = unixNow();
       if (typeof b.date_start === 'number' && now < b.date_start) return false;
-      if (typeof b.date_end === 'number' && now > b.date_end) return false;
+      if (typeof b.date_end === 'number' && now > b.date_end + D1) return false;
       return true;
     });
   }
@@ -38,6 +38,9 @@ export const cmsBannerCreate = h<M.MutationResolvers['cmsBannerCreate']>(
 export const cmsBannerUpdate = h<M.MutationResolvers['cmsBannerUpdate']>(
   scoped('ADMIN', 'EDIT'),
   async ({ sources, args: { id, ...updates } }) => {
+    const item = await sources.cms.content.banner.get(id);
+    if (!item) throw err('NOT_FOUND');
+
     return sources.cms.content.banner.update(id, updates);
   }
 );

@@ -36,6 +36,7 @@ export default gql`
     yellow
     blue
     purple
+    gray
   }
 
   # ------------------------------------

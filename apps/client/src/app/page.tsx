@@ -4,7 +4,7 @@ import { IconLock } from '@tabler/icons-react';
 import A from './_components/_base/A';
 import LogoPanel from './_components/_base/LogoPanel';
 import LinkBlock from './_components/home/LinkBlock';
-import { HomeBannerList } from './_components/home/HomeBanner';
+import { HomeBannerList } from './_components/home/HomeBannerWrapper';
 import AgendaToday from './_components/home/AgendaToday';
 
 import { getUser } from './_ctx/user/provider';
