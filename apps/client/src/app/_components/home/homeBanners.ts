@@ -46,6 +46,9 @@ export const HOME_BANNER_FRAGMENT = graphql(`
     color
     date_start
     date_end
+    timestamp {
+      created
+    }
   }
 `);
 export const HOME_BANNERS_NOW_QUERY = graphql(

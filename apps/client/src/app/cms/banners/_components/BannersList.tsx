@@ -36,6 +36,7 @@ import {
   useCallback,
   useMemo,
   useState,
+  useTransition,
 } from 'react';
 import fdeq from 'fast-deep-equal';
 import { useLoading } from '@/util/useLoading';
@@ -57,7 +58,25 @@ export default function BannersList() {
     ),
   );
   const banners = useMemo(
-    () => query.data?.cmsBanners,
+    () =>
+      query.data?.cmsBanners.sort((a, b) => {
+        return (
+          // Empty text goes first
+          (a.text.length > 0 ? 1 : 0) - (b.text.length > 0 ? 1 : 0) ||
+          // Current items second
+          (isCurrent(b) ? 1 : 0) - (isCurrent(a) ? 1 : 0) ||
+          // Break ties by most recent date_created
+          (b.timestamp.created ?? 0) - (a.timestamp.created ?? 0)
+        );
+
+        function isCurrent(banner: HomeBannerType) {
+          const now = dateTS(unixNow());
+          const afterStart =
+            banner.date_start === null || banner.date_start <= now;
+          const beforeEnd = banner.date_end === null || banner.date_end >= now;
+          return afterStart && beforeEnd;
+        }
+      }),
     [query.data?.cmsBanners],
   );
 
@@ -71,11 +90,11 @@ export default function BannersList() {
         {/* instructions */}
         <div className="my-4 flex flex-row gap-4">
           <p className="mt-0.5 flex-1">
-            Homepage alerts are for displaying{' '}
-            <ColorText>highly-visible messages</ColorText> on the website home
-            page. Click on one to edit it. All fields are optional except for
-            the body text. Banners will be deleted on their End Date, if
-            specified.
+            <ColorText>Homepage alerts</ColorText> let you place highly-visible
+            messages on the website home page.
+            <br />
+            <em>Click an alert below to edit it</em>. All fields are optional
+            except for the body text.
           </p>
 
           <CreateBannerButton refetch={refetch} />
@@ -131,7 +150,7 @@ function BannerEditor({
 
   const [isOpen, setIsOpen] = useState(!initialValue.text.length);
 
-  const [isLoading, loading] = useLoading();
+  const [isLoading, loading] = useTransition();
   const state = useMemo<'SAVED' | 'UNSAVED' | 'LOADING'>(() => {
     if (isLoading) return 'LOADING';
     if (!fdeq(banner, initialValue)) return 'UNSAVED';
