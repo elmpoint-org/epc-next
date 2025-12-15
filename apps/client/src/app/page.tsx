@@ -50,6 +50,7 @@ export default async function HomePage() {
               </div>
             </div>
 
+            {/* banners */}
             <HomeBannerList />
 
             {/* links section */}

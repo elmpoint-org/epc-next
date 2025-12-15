@@ -43,6 +43,7 @@ import { useLoading } from '@/util/useLoading';
 import { notifications } from '@mantine/notifications';
 import { prettyErrorPlaceholder } from '@/util/prettyErrors';
 import { confirmModal } from '@/app/_components/_base/modals';
+import { sortBanners } from './sortedBanners';
 
 export default function BannersList() {
   const query = useGraphQuery(
@@ -58,25 +59,7 @@ export default function BannersList() {
     ),
   );
   const banners = useMemo(
-    () =>
-      query.data?.cmsBanners.sort((a, b) => {
-        return (
-          // Empty text goes first
-          (a.text.length > 0 ? 1 : 0) - (b.text.length > 0 ? 1 : 0) ||
-          // Current items second
-          (isCurrent(b) ? 1 : 0) - (isCurrent(a) ? 1 : 0) ||
-          // Break ties by most recent date_created
-          (b.timestamp.created ?? 0) - (a.timestamp.created ?? 0)
-        );
-
-        function isCurrent(banner: HomeBannerType) {
-          const now = dateTS(unixNow());
-          const afterStart =
-            banner.date_start === null || banner.date_start <= now;
-          const beforeEnd = banner.date_end === null || banner.date_end >= now;
-          return afterStart && beforeEnd;
-        }
-      }),
+    () => query.data?.cmsBanners.sort(sortBanners()),
     [query.data?.cmsBanners],
   );
 
