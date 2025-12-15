@@ -4,11 +4,14 @@ import { HOME_BANNERS_NOW_QUERY } from './homeBanners';
 import Link from 'next/link';
 import { getUser } from '@/app/_ctx/user/provider';
 import { scopeCheck } from '@/util/scopeCheck';
+import { sortBanners } from '@/app/cms/banners/_components/sortedBanners';
 
 export async function HomeBannerList() {
   const { data, errors } = await graphAuthServer(HOME_BANNERS_NOW_QUERY);
   if (errors || !data?.cmsBannersNow) return null;
-  const items = data.cmsBannersNow.filter((c) => !!c.text.length);
+  const items = data.cmsBannersNow
+    .filter((c) => !!c.text.length)
+    .sort(sortBanners());
 
   return (
     <div className="relative mx-2 -mt-4 flex flex-col gap-2">
