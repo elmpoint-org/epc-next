@@ -7,7 +7,7 @@ export const client = new sst.aws.Nextjs('Client', {
   warm: isProd() ? 1 : 0,
   domain: isProd()
     ? {
-        name: `www.elmpoint.xyz`,
+        name: `www.elmpoint.org`,
         dns: false,
         cert: SecretMap.SecretDomainARN.value,
       }

@@ -129,7 +129,7 @@ export default function TextFields({
                 label: '-mb-px -mr-2',
               }}
             >
-              <span className="hidden sm:inline">elmpoint.xyz</span>
+              <span className="hidden sm:inline">elmpoint.org</span>
               /pages/
             </Pill>
             {/* slug input */}

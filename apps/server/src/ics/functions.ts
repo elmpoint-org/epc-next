@@ -156,7 +156,7 @@ ${roomText(r.room!)}
   )
   .join('')}
 
-https://www.elmpoint.xyz/calendar?date=${stay.dateStart}&view=AGENDA
+https://www.elmpoint.org/calendar?date=${stay.dateStart}&view=AGENDA
 `;
 }
 

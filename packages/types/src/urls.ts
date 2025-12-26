@@ -2,7 +2,7 @@ const stage = process.env.NEXT_PUBLIC_STAGE;
 
 export const SITE_DOMAIN_MAP = {
   development: 'http://localhost:3001',
-  production: 'https://www.elmpoint.xyz',
+  production: 'https://www.elmpoint.org',
   next: 'https://next.elmpoint.xyz',
 } satisfies Record<string, string>;
 
