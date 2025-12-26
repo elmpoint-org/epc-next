@@ -4,7 +4,7 @@ export const SecretMap = {
   SecretResendAPIKey: new sst.Secret('SecretResendAPIKey'),
   SecretUserAuthSecret: new sst.Secret('SecretUserAuthSecret'),
   SecretDomainARN: new sst.Secret('SecretDomainARN'),
-  SecretDomainARNxyz: new sst.Secret('SecretDomainARxyz'),
+  SecretDomainARNxyz: new sst.Secret('SecretDomainARNxyz'),
 };
 
 export const secrets = Object.values(SecretMap);
