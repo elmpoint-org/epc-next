@@ -4,14 +4,14 @@ This repository contains the codebase for the updated Elm Point website. The mos
 
 ## Links
 
-- The [beta site](https://one.elmpoint.xyz/) can be found here.
+- The [site](https://www.elmpoint.org/) can be found here.
 - See the [Overall Progress board](https://github.com/orgs/elmpoint-org/projects/3?pane=info) for most recent project status.
 - See the [Issue Tracker](https://github.com/elmpoint-org/epc-next/issues?q=sort%3Aupdated-desc+) for the highest technical detail and most up-to-date progress (and to submit bugs).
 - General discussion, feature suggestions, or open-ended questions can be added to the [discussions board](https://github.com/elmpoint-org/epc-next/discussions).
 
 ## Contributing
 
-Website editors can most easily make contributions through the website CMS (Content Management System). If you have website editing permissions, head to [elmpoint.org/cms](https://one.elmpoint.xyz/cms/pages) to get started.
+Website editors can most easily make contributions through the website CMS (Content Management System). If you have website editing permissions, head to [elmpoint.org/cms](https://www.elmpoint.org/cms/pages) to get started.
 
 To edit anything else not found in the CMS editor, **you'll need a free Github account**. Editing simple text or hard-coded items such as the sidebar links can be easily done [on this Github site](#editing-website-data-online). More complex operations may require [running the code locally](#running-the-code-locally).
 
@@ -80,7 +80,7 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
 
 ### Using the API
 
-The server API is accessible through a GraphQL endpoint, which is easiest to explore using the [Apollo Editor](https://studio.apollographql.com/sandbox/explorer?endpoint=https%3A%2F%2Fapi.elmpoint.xyz%2Fone%2Fgql) (or any other introspection viewer.)
+The server API is accessible through a GraphQL endpoint, which is easiest to explore using the [Apollo Editor](https://studio.apollographql.com/sandbox/explorer?endpoint=https%3A%2F%2Fapi.elmpoint.org%2Fgql) (or any other introspection viewer.)
 
 The endpoint above allows you to explore the available commands and documentation as is, but in order to run commands you'll need to add your authentication token like so:
 ![connection settings](https://github.com/user-attachments/assets/71717eb9-8285-4752-87e7-6754b4c2ca0f)

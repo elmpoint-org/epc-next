@@ -36,7 +36,7 @@ export default async function FilesPage(props: PageArrayOptParams) {
               <summary className="font-bold">Made a mistake?</summary>
               <p className="pt-2">
                 If you accidentally delete or overwrite a crucial file, email{' '}
-                <b>backups@elmpoint.xyz</b> as soon as possible. We keep backups
+                <b>backups@elmpoint.org</b> as soon as possible. We keep backups
                 and can usually manually restore lost files or data as long as
                 you contact us within 14 days.
               </p>

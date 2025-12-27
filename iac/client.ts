@@ -13,7 +13,7 @@ export const client = new sst.aws.Nextjs('Client', {
       }
     : $app.stage === 'next'
     ? {
-        name: `next.elmpoint.xyz`,
+        name: `next.elmpoint.org`,
         dns: false,
         cert: SecretMap.SecretDomainARNxyz.value,
       }

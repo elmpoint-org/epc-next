@@ -27,6 +27,10 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "SecretDomainARNxyz": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "SecretPasswordlessSecret": {
       "type": "sst.sst.Secret"
       "value": string

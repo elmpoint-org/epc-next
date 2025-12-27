@@ -1,6 +1,5 @@
 export enum Senders {
-  DEFAULT = 'Elm Point <noreply@elmpoint.xyz>',
-  AUTH = 'Elm Point <authentication@elmpoint.xyz>',
+  AUTH = 'Elm Point <auth@auth.elmpoint.org>',
 }
 
 export const BrevoSenders = {
