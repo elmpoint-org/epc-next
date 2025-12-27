@@ -15,7 +15,7 @@ export const client = new sst.aws.Nextjs('Client', {
     ? {
         name: `next.elmpoint.org`,
         dns: false,
-        cert: SecretMap.SecretDomainARNxyz.value,
+        cert: SecretMap.SecretDomainARN.value,
       }
     : undefined,
   environment: environment(),
