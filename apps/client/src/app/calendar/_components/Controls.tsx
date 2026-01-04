@@ -1,4 +1,4 @@
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 
 import { MenuButton, Transition, TransitionChild } from '@headlessui/react';
 import {
@@ -28,12 +28,11 @@ import {
   IconTable,
 } from '@tabler/icons-react';
 
-import { CalendarProps } from './Calendar';
+import { CalendarProps, QP } from './Calendar';
 import { dayStyles } from '../_util/dayStyles';
 import { dateFormat } from '@epc/date-ts';
 import { clamp } from '@/util/math';
 import { useDefaultDays } from '../_util/defaultDays';
-import { useReverseCbTrigger } from '@/util/reverseCb';
 import { useCalendarControls } from '../_util/controls';
 import {
   useCalendarView,
@@ -50,6 +49,8 @@ import {
   DropdownOption,
 } from '@/app/_components/_base/Dropdown';
 import AddStayButton from './AddStayButton';
+import { useSearchParams } from 'next/navigation';
+import { notifications } from '@mantine/notifications';
 
 export default function Controls(props: CalendarProps) {
   const {
@@ -334,6 +335,8 @@ export default function Controls(props: CalendarProps) {
           <AddStayButton {...props} />
         </div>
       </div>
+
+      <ShowSmallScreenWarning />
     </>
   );
 }
@@ -370,4 +373,41 @@ function TableOption({
       </div>
     </TransitionChild>
   );
+}
+
+function ShowSmallScreenWarning() {
+  const [isOn] = useDisplayByRooms();
+  const [view] = useCalendarView();
+
+  const sp = useSearchParams();
+  const Key: QP = 'rooms';
+
+  const shouldBeOn = useMemo(() => {
+    const str = sp.get(Key);
+    return view === 'TIMELINE' && (str === 'true' || str === '1');
+  }, [sp, view]);
+
+  useEffect(() => {
+    let notif: string | null = null;
+    if (shouldBeOn && !isOn) {
+      notif = notifications.show({
+        color: 'amber',
+        autoClose: false,
+        message: (
+          <>
+            Your screen is not wide enough to show the rooms table. Try turning
+            your phone sideways or switch to a larger display.
+          </>
+        ),
+      });
+    } else {
+      if (notif !== null) notifications.hide(notif);
+    }
+
+    return () => {
+      if (notif !== null) notifications.hide(notif);
+    };
+  }, [isOn, shouldBeOn]);
+
+  return null;
 }
