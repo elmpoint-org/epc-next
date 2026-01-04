@@ -20,7 +20,6 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.883.0",
     "@aws-sdk/client-s3": "^3.884.0",
-    "@aws-sdk/client-sesv2": "^3.883.0",
     "@aws-sdk/lib-dynamodb": "^3.883.0",
     "@aws-sdk/s3-request-presigner": "^3.884.0",
     "@envelop/graphql-modules": "^6.0.0",
@@ -51,15 +50,8 @@
     "qs": "^6.14.1",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "rehype-stringify": "^10.0.1",
-    "remark-breaks": "^4.0.0",
-    "remark-gfm": "^4.0.1",
-    "remark-parse": "^11.0.0",
-    "remark-rehype": "^11.1.2",
     "resend": "^4.8.0",
     "serverless-http": "^3.2.0",
-    "textversionjs": "^1.1.3",
-    "unified": "^11.0.5",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -75,7 +67,6 @@
     "@types/qs": "^6.14.0",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "@types/textversionjs": "^1.1.4",
     "chokidar": "^4.0.3",
     "dotenv": "^16.6.1",
     "esbuild": "^0.25.9",
