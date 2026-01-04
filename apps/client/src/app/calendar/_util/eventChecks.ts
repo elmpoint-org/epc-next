@@ -82,10 +82,14 @@ export function useEventChecks() {
       // TODO issue *types* -- color code by importance
       //  ->  use caution icon in place of number instead?? and info symbol for low priority items? maybe a third "non urgent warning" (ie unfinished rows)?
 
+      console.log('len', stayLen);
+
       // get all events
       const { data, errors } = await graphAuth(EVENTS_QUERY, {
         start:
-          stayLen < LONG_STAY_LENGTH_DAYS ? stay.dateStart + D1 : stay.dateEnd,
+          stayLen > 0 && stayLen < LONG_STAY_LENGTH_DAYS
+            ? stay.dateStart + D1
+            : stay.dateEnd,
         end: stay.dateEnd,
       });
       if (errors || !data?.stays) return null;

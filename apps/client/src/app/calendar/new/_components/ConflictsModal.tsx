@@ -41,11 +41,12 @@ export function useConflictsModal() {
           <div className="flex flex-col gap-4 sm:px-4">
             <div className="prose prose-sm prose-slate my-2 max-w-none !leading-tight">
               <p>
-                We found <b>{issues.length} issues</b> which might affect your stay.
+                We found <b>{issues.length} issues</b> which might affect your
+                stay.
               </p>
               <p>
-                If all of these are as you intended, click the “Confirm and
-                save” button at the bottom. Otherwise, you can go back and make
+                If all of these are as you intended, click the “Save anyway”
+                button at the bottom. Otherwise, you can go back and make
                 changes now.
               </p>
             </div>
@@ -57,7 +58,7 @@ export function useConflictsModal() {
       ),
       buttons: {
         cancel: 'Go back',
-        confirm: 'Confirm and save',
+        confirm: 'Save anyway',
       },
       color: 'emerald',
       width: 40 * 16,
