@@ -1,32 +1,45 @@
 'use client';
 
-import { ActionIcon, Collapse, ScrollArea } from '@mantine/core';
-import {
-  IconChevronDown,
-  IconPlus,
-} from '@tabler/icons-react';
+import { ActionIcon, Collapse, ScrollArea, Tooltip } from '@mantine/core';
+import { IconChevronDown, IconPlus } from '@tabler/icons-react';
 
 import { useUserData } from '../_ctx/userData';
 
 import { Credential } from './Credential';
 import NewPasskey from './NewPasskey';
 import { useDisclosure } from '@mantine/hooks';
+import { useRef } from 'react';
 
 export default function Credentials() {
   const user = useUserData();
 
-  const [isOpen, { toggle, close }] = useDisclosure(false);
+  const [isOpen, { open, toggle, close }] = useDisclosure(false);
+
+  const scrollRef = useRef<HTMLHeadingElement>(null);
 
   return (
     <>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 rounded-md bg-slate-200 p-4">
           <div className="flex flex-row items-center justify-between">
-            <h3 className="text-lg">Your passkeys</h3>
+            <h3 className="text-lg" ref={scrollRef}>
+              Your passkeys
+            </h3>
 
-            <ActionIcon color="slate" variant="subtle" onClick={toggle}>
-              {isOpen ? <IconChevronDown /> : <IconPlus />}
-            </ActionIcon>
+            <Tooltip label="Create passkey">
+              <ActionIcon
+                aria-label="Create passkey"
+                color="slate"
+                variant="subtle"
+                onClick={() => {
+                  if (!isOpen)
+                    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+                  toggle();
+                }}
+              >
+                {isOpen ? <IconChevronDown /> : <IconPlus />}
+              </ActionIcon>
+            </Tooltip>
           </div>
 
           <div className="-mb-2">
@@ -47,11 +60,21 @@ export default function Credentials() {
                       ))}
                     </>
                   ) : (
-                    <>
-                      <div className="p-4 text-sm italic text-slate-500">
-                        no passkeys found.
-                      </div>
-                    </>
+                    <div className="p-4 text-sm italic text-slate-500">
+                      <span>No passkeys yet. </span>
+                      <button
+                        onClick={() => {
+                          scrollRef.current?.scrollIntoView({
+                            behavior: 'smooth',
+                          });
+                          open();
+                        }}
+                        className="font-semibold text-slate-700 underline hover:text-dblack"
+                      >
+                        Click to create a passkey
+                      </button>
+                      .
+                    </div>
                   )
                 ) : (
                   <>

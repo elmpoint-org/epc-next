@@ -16,6 +16,7 @@ export const USE_USER_DATA = [
           lastUsedAt
           country
           device
+          aaGuid
           nickname
         }
         timestamp {
