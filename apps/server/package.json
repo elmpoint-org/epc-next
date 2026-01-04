@@ -48,7 +48,7 @@
     "ical.js": "^2.2.1",
     "jose": "^5.10.0",
     "mime": "^4.0.7",
-    "qs": "^6.14.0",
+    "qs": "^6.14.1",
     "react": "catalog:",
     "react-dom": "catalog:",
     "rehype-stringify": "^10.0.1",
