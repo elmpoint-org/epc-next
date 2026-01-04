@@ -20,7 +20,7 @@ export default function AccountPage() {
           <div className="container flex-1 rounded-lg bg-dwhite">
             <AccountTitle />
 
-            <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-6">
+            <div className="mx-auto flex max-w-screen-lg flex-col gap-4 p-4 sm:p-6">
               <AccountDetails />
               <hr className="t" />
               <Credentials />

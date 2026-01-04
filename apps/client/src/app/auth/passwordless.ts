@@ -27,7 +27,8 @@ export type TokenResponseType = Awaited<PromiseResult<TokenResponse>>;
 export const pkeyErrorMap = prettyError({
   __DEFAULT: 'Something went wrong. Try again.',
 
-  unknown: 'Your device had an error. Try reloading the page.',
+  unknown:
+    'Your device returned an error or cancelled early. If you’re not sure what happened, try reloading the page.',
   unknown_credential: `That passkey wasn't found in your account. If it's outdated, you should delete it.`,
   magic_link_email_quota_exceeded: `We're having trouble sending email links right now. Please use a passkey or try again in a few minutes.`,
 });

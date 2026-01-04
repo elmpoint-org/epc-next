@@ -69,6 +69,7 @@ export default gql`
     country: String
     device: String
     nickname: String
+    aaGuid: String
   }
 
   "a user's notification settings"

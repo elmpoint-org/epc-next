@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
+import fdeq from 'fast-deep-equal';
 
 import { AppShell } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
@@ -17,14 +18,17 @@ const Navbar = ({
 }) => {
   // close navbar on path change
   const path = usePathname();
+  const sp = useSearchParams();
   const [lastPath, setLastPath] = useState(path);
+  const [lastSP, setLastSP] = useState(sp);
   useEffect(() => {
-    if (path !== lastPath) {
+    if (path !== lastPath || !fdeq(sp, lastSP)) {
       onClose();
       setLastPath(path);
+      setLastSP(sp);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
+  }, [path, sp]);
 
   return (
     <>
