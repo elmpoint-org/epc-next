@@ -22,6 +22,7 @@ import { AxiosError } from 'axios';
 import { prepEmail } from '##/util/textTransform.js';
 import { createHash } from 'node:crypto';
 import { DBType } from '##/db/lib/Model.js';
+import { unixNow } from '@epc/date-ts';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -226,6 +227,18 @@ export const userDeleteCredential = h<
   // return deleted credential
   return parseCredential(c);
 });
+
+export const userLogLogin = h<M.MutationResolvers['userLogLogin']>(
+  scoped('__SECURE'),
+  async ({ sources, args: { id } }) => {
+    const user = await sources.user.get(id);
+    if (!user) throw err('USER_NOT_FOUND');
+
+    sources.user.update(id, { lastLogin: unixNow() });
+
+    return true;
+  },
+);
 
 export const getUserCredentials = h<M.UserResolvers['credentials']>(
   async ({ parent: { id }, scope, userId }) => {

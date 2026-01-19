@@ -28,7 +28,19 @@ export const verifyPasskey = t.procedure
       throw unauth(e);
     });
 
-    return { token: jwt } as { token: string };
+    // record the login time
+    try {
+      await graph(
+        graphql(`
+          mutation UserLogLogin($id: ID!) {
+            userLogLogin(id: $id)
+          }
+        `),
+        { id: credential.userId },
+      );
+    } catch (_) {}
+
+    return { token: jwt } as const;
   });
 
 export const sendMagicLink = t.procedure
@@ -48,7 +60,7 @@ export const sendMagicLink = t.procedure
           }
         }
       `),
-      { email }
+      { email },
     );
     if (errors || !data?.userFromEmail)
       throw err('BAD_REQUEST', 'USER_NOT_FOUND');
@@ -83,6 +95,6 @@ export const sendMagicLink = t.procedure
         updates: {
           nextLoginEmail: unixNow() + COOLDOWN_TIMES['nextLoginEmail'],
         },
-      }
+      },
     );
   });

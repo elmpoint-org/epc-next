@@ -29,6 +29,9 @@ export default gql`
     "cooldown/quota data for user (ADMIN|userId scope)"
     cooldowns: UserCooldown
 
+    "last time the user logged in"
+    lastLogin: Int
+
     # __ AUTH DATA __
     "scope defines a user's permissions."
     scope: [UserScopeProp!]
@@ -192,5 +195,12 @@ export default gql`
     delete a passkey credential from your own user. all users may only do this for themselves.
     """
     userDeleteCredential(id: ID!): UserCredential
+
+    """
+    **SCOPE: internal only**
+
+    log a login for a user.
+    """
+    userLogLogin(id: ID!): Boolean
   }
 `;
