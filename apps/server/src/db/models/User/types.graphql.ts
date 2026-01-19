@@ -20,11 +20,17 @@ export default gql`
     "users who trust this user"
     trustedBy: [User]
 
+    "which user invited this user to the site. original users will have no value."
+    invitedBy: User
+
     "the user's notification settings"
     notifs: UserNotifSettings
 
     "cooldown/quota data for user (ADMIN|userId scope)"
     cooldowns: UserCooldown
+
+    "last time the user logged in"
+    lastLogin: Int
 
     # __ AUTH DATA __
     "scope defines a user's permissions."
@@ -135,6 +141,7 @@ export default gql`
       email: String!
       scope: [UserScopeProp!]
       trustedUserIds: [String!]
+      invitedById: String
     ): User
 
     """
@@ -188,5 +195,12 @@ export default gql`
     delete a passkey credential from your own user. all users may only do this for themselves.
     """
     userDeleteCredential(id: ID!): UserCredential
+
+    """
+    **SCOPE: internal only**
+
+    log a login for a user.
+    """
+    userLogLogin(id: ID!): Boolean
   }
 `;

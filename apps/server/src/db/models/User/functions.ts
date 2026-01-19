@@ -22,6 +22,7 @@ import { AxiosError } from 'axios';
 import { prepEmail } from '##/util/textTransform.js';
 import { createHash } from 'node:crypto';
 import { DBType } from '##/db/lib/Model.js';
+import { unixNow } from '@epc/date-ts';
 
 const { scopeDiff, scoped } = getTypedScopeFunctions<ResolverContext>();
 
@@ -71,7 +72,7 @@ export const getUserSECURE = h<M.QueryResolvers['userSECURE']>(
 
 export const userCreate = h<M.MutationResolvers['userCreate']>(
   scoped('ADMIN'),
-  async ({ sources, args: newUser, scope }) => {
+  async ({ sources, args: newUser, scope, userId }) => {
     const nu = newUser as DBUser;
     nu.email = prepEmail(nu.email);
 
@@ -86,6 +87,9 @@ export const userCreate = h<M.MutationResolvers['userCreate']>(
         if (!(await sources.user.get(id))) throw err('INVALID_TRUSTED_USER');
       }
     }
+
+    // set invitedUser to current user if none
+    if (!newUser.invitedById) nu.invitedById = userId ?? undefined;
 
     const secret = await generateKey();
     nu.secret = secret;
@@ -224,6 +228,18 @@ export const userDeleteCredential = h<
   return parseCredential(c);
 });
 
+export const userLogLogin = h<M.MutationResolvers['userLogLogin']>(
+  scoped('__SECURE'),
+  async ({ sources, args: { id } }) => {
+    const user = await sources.user.get(id);
+    if (!user) throw err('USER_NOT_FOUND');
+
+    sources.user.update(id, { lastLogin: unixNow() });
+
+    return true;
+  },
+);
+
 export const getUserCredentials = h<M.UserResolvers['credentials']>(
   async ({ parent: { id }, scope, userId }) => {
     if (!scopeDiff(scope, 'ADMIN') && userId !== id) throw scopeError();
@@ -272,6 +288,15 @@ export const getUserCooldowns = h<M.UserResolvers['cooldowns']>(
   async ({ sources, parent: { id }, scope, userId: authUserId }) => {
     if (!scopeDiff(scope, 'ADMIN') && id !== authUserId) throw scopeError();
     return (await sources.userCooldown.findBy('userId', id))?.[0];
+  }
+);
+
+export const getUserInvitedBy = h<M.UserResolvers['invitedBy']>(
+  async ({ sources, parent }) => {
+    const { invitedById } = parent as DBType<DBUser>;
+    if (!invitedById) return null;
+
+    return sources.user.get(invitedById);
   }
 );
 
