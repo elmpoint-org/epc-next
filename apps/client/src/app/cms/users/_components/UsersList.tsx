@@ -172,6 +172,9 @@ function PreUsersList() {
       query PreUsers {
         preUsers {
           email
+          timestamp {
+            created
+          }
         }
       }
     `),
@@ -181,6 +184,22 @@ function PreUsersList() {
     if (!preusers) return null;
     return preusers.sort(alphabetical((it) => it.email));
   }, [query.data?.preUsers]);
+
+  const cutoff_date = 1767225600;
+  const preusergroups = useMemo(
+    () =>
+      !preusers
+        ? null
+        : {
+            BEFORE_LAUNCH: preusers.filter(
+              ({ timestamp: { created } }) => created < cutoff_date,
+            ),
+            AFTER_LAUNCH: preusers.filter(
+              ({ timestamp: { created } }) => created >= cutoff_date,
+            ),
+          },
+    [preusers],
+  );
 
   return (
     <div className="flex flex-col gap-4">
@@ -193,14 +212,27 @@ function PreUsersList() {
         ) : null}
       </h3>
 
-      <div className="flex flex-col gap-1 text-xs">
+      <div className="flex flex-col gap-1">
         {/* user list */}
-        {preusers?.map(({ email }) => (
-          <code key={email} className="">
+        {!!preusergroups?.AFTER_LAUNCH.length && (
+          <div className="text-sm uppercase">new invitees:</div>
+        )}
+        {preusergroups?.AFTER_LAUNCH?.map(({ email }) => (
+          <code key={email} className="text-xs">
             {email}
           </code>
         ))}
 
+        <div className="mt-1 first:mt-0" />
+
+        {!!preusergroups?.BEFORE_LAUNCH.length && (
+          <div className="text-sm uppercase">original invites:</div>
+        )}
+        {preusergroups?.BEFORE_LAUNCH?.map(({ email }) => (
+          <code key={email} className="text-xs">
+            {email}
+          </code>
+        ))}
         {/* loader */}
         {query.isFetching && (
           <div className="max-w-8">
