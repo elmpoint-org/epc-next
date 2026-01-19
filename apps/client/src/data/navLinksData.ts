@@ -21,6 +21,7 @@ import {
   IconNotebook,
   IconTable,
   IconUserCog,
+  IconUsers,
   IconUsersGroup,
 } from '@tabler/icons-react';
 
@@ -79,6 +80,7 @@ export const navLinks: DeepNavLinks = [
     links: [
       { href: '/cms/pages', text: 'Pages', icon: IconNotebook },
       { href: '/cms/files', text: 'File Manager', icon: IconFolders },
+      { href: '/cms/users', text: 'Users', icon: IconUsers },
       { href: '/cms/rooms', text: 'Rooms & Cabins', icon: IconDoor },
       { href: '/cms/banners', text: 'Homepage Alerts', icon: IconFlag },
     ],
