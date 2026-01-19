@@ -25,7 +25,7 @@ export const checkReferral = t.procedure
           }
         }
       `),
-      { email }
+      { email },
     );
     if (errors || !data?.preUserFromEmail)
       throw err('BAD_REQUEST', 'NEEDS_REFERRAL');
@@ -63,7 +63,7 @@ export const checkReferral = t.procedure
           nextRegistrationEmail:
             unixNow() + COOLDOWN_TIMES['nextRegistrationEmail'],
         },
-      }
+      },
     );
   });
 
@@ -84,7 +84,7 @@ export const verifyToken = t.procedure
           }
         }
       `),
-      { id }
+      { id },
     );
     if (errors || !data?.preUser) throw err('BAD_REQUEST', 'USER_NOT_FOUND');
 
@@ -104,7 +104,7 @@ export const createUser = t.procedure
         email: z.string(),
       }),
       token: z.string(),
-    })
+    }),
   )
   .mutation(async ({ input: { user, token } }) => {
     // authenticate
@@ -117,10 +117,13 @@ export const createUser = t.procedure
           preUser(id: $preUserId) {
             id
             scope
+            invitedBy {
+              id
+            }
           }
         }
       `),
-      { preUserId }
+      { preUserId },
     );
     if (e0 || !d0?.preUser) throw err('BAD_REQUEST', 'REFERRAL_NOT_FOUND');
 
@@ -132,23 +135,29 @@ export const createUser = t.procedure
           $name: String!
           $firstName: String!
           $scope: [UserScopeProp!]
+          $invitedById: String
         ) {
           userCreate(
             email: $email
             name: $name
             firstName: $firstName
             scope: $scope
+            invitedById: $invitedById
           ) {
             id
           }
         }
       `),
-      { ...user, scope: d0.preUser.scope }
+      {
+        ...user,
+        invitedById: d0.preUser.invitedBy?.id,
+        scope: d0.preUser.scope,
+      },
     );
     if (e1 || !d1?.userCreate)
       throw err(
         'BAD_REQUEST',
-        (e1?.[0]?.extensions?.code as string) ?? 'FAILED_TO_CREATE_USER'
+        (e1?.[0]?.extensions?.code as string) ?? 'FAILED_TO_CREATE_USER',
       );
     const userId = d1.userCreate.id;
 
@@ -161,7 +170,7 @@ export const createUser = t.procedure
           }
         }
       `),
-      { preUserId }
+      { preUserId },
     );
     if (e2 || !d2?.preUserDelete)
       throw err('INTERNAL_SERVER_ERROR', 'FAILED_TO_DELETE', e2);

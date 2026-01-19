@@ -10,6 +10,9 @@ export default gql`
     name: String
     scope: [UserScopeProp!]
 
+    "which user invited this user"
+    invitedBy: User
+
     "cooldown/quota data for user (ADMIN scope)"
     cooldowns: UserCooldown
 

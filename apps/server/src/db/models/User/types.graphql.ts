@@ -20,6 +20,9 @@ export default gql`
     "users who trust this user"
     trustedBy: [User]
 
+    "which user invited this user to the site. original users will have no value."
+    invitedBy: User
+
     "the user's notification settings"
     notifs: UserNotifSettings
 
@@ -135,6 +138,7 @@ export default gql`
       email: String!
       scope: [UserScopeProp!]
       trustedUserIds: [String!]
+      invitedById: String
     ): User
 
     """

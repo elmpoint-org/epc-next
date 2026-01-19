@@ -27,6 +27,7 @@ const resolvers: UserModule.Resolvers = {
     trustedUsers: f.getUserTrustedUsers,
     trustedBy: f.getUserTrustedBy,
     cooldowns: f.getUserCooldowns,
+    invitedBy: f.getUserInvitedBy,
 
     timestamp,
   },

@@ -2,7 +2,7 @@ import { PreUser } from '##/db/__types/graphql-types.js';
 import Model from '##/db/lib/Model.js';
 
 export type DBPreUser = PreUser & {
-  //
+  invitedById?: string;
 };
 
 class PreUserSource extends Model<DBPreUser> {

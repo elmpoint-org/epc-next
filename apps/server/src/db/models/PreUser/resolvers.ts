@@ -17,6 +17,7 @@ const resolvers: PreUserModule.Resolvers = {
   },
   PreUser: {
     cooldowns: f.getPreUserCooldowns,
+    invitedBy: f.getPreUserInvitedBy,
 
     timestamp,
   },

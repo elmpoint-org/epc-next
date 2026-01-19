@@ -4,7 +4,7 @@ import {
   QueryResolvers,
 } from '##/db/__types/graphql-types.js';
 import { ResolverContext } from '##/db/graph.js';
-import { InitialType } from '##/db/lib/Model.js';
+import { DBType, InitialType } from '##/db/lib/Model.js';
 import {
   err,
   getTypedScopeFunctions,
@@ -49,7 +49,7 @@ export const preUserCreate = h<MutationResolvers['preUserCreate']>(
     const u = await sources.user.findBy('email', newPreUser.email);
     if (u.length) throw err('USER_ALREADY_EXISTS');
 
-    return sources.preUser.create(newPreUser);
+    return sources.preUser.create({ ...newPreUser, invitedById: userId });
   }
 );
 
@@ -104,5 +104,14 @@ export const getPreUserCooldowns = h<PreUserResolvers['cooldowns']>(
   scoped('ADMIN'),
   async ({ sources, parent: { id } }) => {
     return (await sources.userCooldown.findBy('userId', id))?.[0];
+  }
+);
+
+export const getPreUserInvitedBy = h<PreUserResolvers['invitedBy']>(
+  async ({ sources, parent }) => {
+    const { invitedById } = parent as DBType<DBPreUser>;
+    if (!invitedById) return null;
+
+    return sources.user.get(invitedById);
   }
 );
