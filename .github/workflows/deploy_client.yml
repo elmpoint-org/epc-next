@@ -16,6 +16,9 @@ jobs:
       # prepare codebase
       - uses: actions/checkout@v4
 
+      - name: sst path setup
+        run: echo "$HOME/.config/sst/bin" >> $GITHUB_PATH
+
       # install libraries
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
