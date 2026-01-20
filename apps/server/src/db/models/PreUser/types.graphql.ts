@@ -21,21 +21,21 @@ export default gql`
 
   type Query {
     """
-    **SCOPE: admin**
+    **SCOPE: admin | edit**
 
     get all pre-registered users.
     """
     preUsers: [PreUser!]
 
     """
-    **SCOPE: admin**
+    **SCOPE: admin | edit**
 
     get specific preuser
     """
     preUser(id: ID!): PreUser
 
     """
-    **SCOPE: admin**
+    **SCOPE: admin | edit**
 
     get preuser by their email address
     """

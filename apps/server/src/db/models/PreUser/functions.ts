@@ -17,21 +17,21 @@ import { DBPreUser } from './source';
 const { scoped } = getTypedScopeFunctions<ResolverContext>();
 
 export const getPreUsers = h<QueryResolvers['preUsers']>(
-  scoped('ADMIN'),
+  scoped('ADMIN', 'EDIT'),
   ({ sources }) => {
     return sources.preUser.getAll();
   }
 );
 
 export const getPreUser = h<QueryResolvers['preUser']>(
-  scoped('ADMIN'),
+  scoped('ADMIN', 'EDIT'),
   ({ sources, args: { id } }) => {
     return sources.preUser.get(id);
   }
 );
 
 export const getPreUserFromEmail = h<QueryResolvers['preUserFromEmail']>(
-  scoped('ADMIN'),
+  scoped('ADMIN', 'EDIT'),
   async ({ sources, args: { email } }) => {
     const u = await sources.preUser.findBy('email', prepEmail(email));
     return u[0] ?? null;
