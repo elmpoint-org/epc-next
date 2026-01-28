@@ -16,6 +16,8 @@ import { useDebounceWithStatus } from '@/util/debounce';
 import type { EditFormProps } from '../edit/[id]/_components/PageEditForm';
 
 import ImageMenu from '../../_tiptap/image/ImageMenu';
+import { IconStar } from '@tabler/icons-react';
+import { TestNode } from '../../_tiptap/testNodeExt';
 
 const UPDATE_DEBOUNCE_MS = 450;
 
@@ -51,6 +53,7 @@ export default function TextEditor({
   const editor = useEditor({
     extensions: [
       ...STATIC_EXTENSIONS,
+      TestNode,
       Link as AnyExtension,
       FileHandler,
       Placeholder.configure({ placeholder: 'Start writing...' }),
@@ -148,6 +151,18 @@ export default function TextEditor({
               <RichTextEditor.AlignCenter />
               <RichTextEditor.AlignRight />
               <RichTextEditor.AlignJustify />
+            </RichTextEditor.ControlsGroup>
+
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Control
+                onClick={() =>
+                  editor?.commands.insertTestNode(editor.state.selection.anchor)
+                }
+                aria-label="custom node"
+                title="custom node"
+              >
+                <IconStar stroke={1.5} size={16} />
+              </RichTextEditor.Control>
             </RichTextEditor.ControlsGroup>
           </RichTextEditor.Toolbar>
 
