@@ -7,6 +7,7 @@ import { useFormCtx, type Cabin, type Room } from '../state/formCtx';
 import { ANY_ROOM } from '@epc/types/cabins';
 import { Children } from '@/util/propTypes';
 import { useLocalOccupants } from '../../_util/localOccupants';
+import { IconDoubleBed } from '../_svg/IconDoubleBed';
 
 const RoomOption = ({
   item,
@@ -66,11 +67,11 @@ const RoomOption = ({
               {/* room tag icons */}
               <div className="t">
                 {item.forCouples && (
-                  <Tooltip label="This room has a shareable bed." withArrow>
-                    <IconFriends
+                  <Tooltip label="Has double bed or larger" withArrow>
+                    <IconDoubleBed
                       className="text-emerald-800 group-data-[combobox-selected]:text-inherit"
-                      size={20}
-                      stroke={1.75}
+                      size={18}
+                      stroke={1.8}
                     />
                   </Tooltip>
                 )}
