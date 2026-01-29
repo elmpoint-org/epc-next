@@ -131,10 +131,10 @@ export default function OccupancyHelp() {
                 />
               </div>
               <span className="t">
-                <b>Shareable beds.</b>
+                <b>Double bed or larger.</b>
                 <br />
-                This room has a double, queen, or king bed which can fit two
-                people.
+                This room has a double, queen, or king bed which can comfortably
+                fit two people.
               </span>
 
               <div className="col-span-full h-4" />
