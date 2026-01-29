@@ -15,6 +15,7 @@ import LoginBoundaryRedirect from '@/app/_components/_base/LoginBoundary/LoginBo
 import PageRender from './_components/PageRender';
 import PageStats from './_components/PageStats';
 import PageError from '@/app/_components/_base/PageError';
+import { Metadata } from 'next';
 
 const GET_PAGE_FROM_SLUG = graphql(`
   query CmsPageFromSlug($slug: String!) {
@@ -52,9 +53,7 @@ const getPage = cache(async (slug: string) => {
 export default async function CmsPage(props: PageArrayParams) {
   const params = await props.params;
 
-  const {
-    slug
-  } = params;
+  const { slug } = params;
 
   // attempt to find page
   const { page, error } = await getPage(slug.join('/'));
@@ -109,12 +108,11 @@ export default async function CmsPage(props: PageArrayParams) {
   );
 }
 
-export async function generateMetadata(props: PageArrayParams) {
+export async function generateMetadata(
+  props: PageArrayParams,
+): Promise<Metadata> {
   const params = await props.params;
-
-  const {
-    slug
-  } = params;
+  const { slug } = params;
 
   const { page: data } = await getPage(slug.join('/'));
   const t = data?.title;

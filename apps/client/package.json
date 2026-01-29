@@ -79,7 +79,7 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^8.57.1",
     "eslint-config-next": "15.4.7",
-    "graphql-modules": "^2.4.0",
+    "graphql-modules": "catalog:",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",

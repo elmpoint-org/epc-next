@@ -11,7 +11,8 @@
     "dev": "turbo dev:sst dev:gql",
     "dev-client": "turbo dev-client",
     "dev-email": "turbo dev:email",
-    "dev:sst": "sst dev --stage=development --mode=mono"
+    "dev:sst": "sst dev --stage=development --mode=mono",
+    "dev:unlock": "sst unlock --stage=development"
   },
   "packageManager": "pnpm@10.13.1",
   "pnpm": {
@@ -44,7 +45,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.149",
-    "turbo": "^2.7.2",
+    "turbo": "^2.7.6",
     "typescript": "catalog:"
   }
 }
