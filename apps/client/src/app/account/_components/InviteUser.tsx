@@ -1,17 +1,26 @@
 'use client';
 
-import { FormEvent, useState, useTransition } from 'react';
+import { FormEvent, useMemo, useState, useTransition } from 'react';
 
 import { Button, CloseButton, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 
-import { oldGraphAuth, oldGraphError, graphql } from '@/query/graphql';
+import {
+  oldGraphAuth,
+  oldGraphError,
+  graphql,
+  graphAuth,
+} from '@/query/graphql';
 
 import LoadingBlurFrame from '@/app/_components/_base/LoadingBlurFrame';
+import A from '@/app/_components/_base/A';
+import { prettyErrorPlaceholder } from '@/util/prettyErrors';
 
 export default function InviteUser() {
   const [email, setEmail] = useState('');
   const [isLoading, loading] = useTransition();
+  const [finalEmailLink, setFinalEmailLink] = useState<string | null>(null);
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email.length)
@@ -21,7 +30,7 @@ export default function InviteUser() {
       });
 
     loading(async () => {
-      const r = await oldGraphAuth(
+      const { data, errors } = await graphAuth(
         graphql(`
           mutation PreUserCreate($email: String!) {
             preUserCreate(email: $email) {
@@ -30,20 +39,27 @@ export default function InviteUser() {
           }
         `),
         { email },
-      ).catch((err) => {
+      );
+      if (errors || !data?.preUserCreate) {
         notifications.show({
           color: 'red',
-          message: 'Error: ' + (oldGraphError((err as any).response) ?? ''),
+          message: prettyErrorPlaceholder(errors?.[0]?.code),
         });
-        // TODO what error map applies here
-        return false;
-      });
-      if (!r) return;
+        return;
+      }
 
       // handle success
+      setFinalEmailLink(
+        new URL(
+          `/auth/register?${new URLSearchParams(
+            Object.entries({
+              email: email.trim().toLowerCase(),
+            }),
+          ).toString()}`,
+          window.location.href,
+        ).toString(),
+      );
       setEmail('');
-      notifications.show({ message: 'Success!' });
-      // TODO needs more instruction
     });
   }
 
@@ -82,6 +98,33 @@ export default function InviteUser() {
             </Button>
           </div>
         </form>
+
+        {/* SUCCESS MESSAGE */}
+        {finalEmailLink && (
+          <div className="mt-2 space-y-2 px-2 text-sm text-slate-600 sm:px-4">
+            <p>
+              <b>Success!</b> Now direct them to{' '}
+              <A
+                href="/pages/help/account/register"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                this help page
+              </A>
+              , or send them this direct link to create their account:
+            </p>
+
+            <p>
+              <A
+                target="_blank"
+                rel="noopener noreferrer"
+                href={finalEmailLink}
+              >
+                {finalEmailLink}
+              </A>
+            </p>
+          </div>
+        )}
 
         {isLoading && <LoadingBlurFrame />}
       </div>
