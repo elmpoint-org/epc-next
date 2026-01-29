@@ -16,10 +16,11 @@ import { cmsErrorMap } from '../../../../_util/cmsErrors';
 import { SkeletonProvider } from '@/app/_ctx/skeleton/context';
 import TextFields from './TextFields';
 import PageOptions from './PageOptions';
-import TextEditor from '../../../_components/Editor';
 import ViewPageLink from '../../../_components/ViewPageLink';
 import SaveRow, { SaveState } from './SaveRow';
 import DeletePage from './DeletePage';
+import dynamic from 'next/dynamic';
+import EditorWrapper from '../../../_components/EditorWrapper';
 
 export const GET_CMS_PAGE = graphql(`
   query CmsPage($id: ID!) {
@@ -154,7 +155,8 @@ export default function PageEditForm({ id }: { id: string }) {
           <PageOptions {...formProps} />
 
           {/* page content */}
-          <TextEditor {...formProps} onTyping={setIsTyping} />
+          {/* <TextEditor {...formProps} onTyping={setIsTyping} /> */}
+          <EditorWrapper {...formProps} />
 
           <div className="flex flex-row justify-end">
             <SaveRow onClick={save} state={saveState} />

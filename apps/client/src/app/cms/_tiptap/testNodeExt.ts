@@ -1,8 +1,5 @@
 import { mergeAttributes, Node } from '@tiptap/core';
 import { AddAttributes, getTypedAtt } from '../_util/extensionUtils';
-import { ReactNodeViewRenderer } from '@tiptap/react';
-
-import TestNodeComponent from './TestNode';
 
 export const TestNodeTypeName = 'testNode';
 declare module '@tiptap/core' {
@@ -45,10 +42,12 @@ export const TestNode = Node.create({
     return [{ tag: `div[${DATA_NAME}]` }];
   },
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(HTMLAttributes, { [DATA_NAME]: '' })];
-  },
-
-  addNodeView() {
-    return ReactNodeViewRenderer(TestNodeComponent);
+    return [
+      'div',
+      mergeAttributes(HTMLAttributes, {
+        [DATA_NAME]: '',
+        style: `height: calc(${48} * 0.25rem)`,
+      }),
+    ];
   },
 });

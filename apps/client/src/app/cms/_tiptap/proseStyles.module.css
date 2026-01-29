@@ -54,4 +54,8 @@
   & *[contenteditable='true'] div[data-youtube-video] {
     @apply after:absolute after:inset-0 after:bg-transparent;
   }
+
+  & div[data-node-testnode] {
+    @apply relative min-h-8 animate-pulse rounded-lg bg-slate-200;
+  }
 }

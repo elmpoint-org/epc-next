@@ -5,13 +5,15 @@ import Link from '@tiptap/extension-link';
 import { clx } from '@/util/classConcat';
 import { proseStyles } from '@/app/cms/_tiptap/proseStyles';
 import type { PagePropType } from '../page';
+import { TestNode } from '@/app/cms/_tiptap/testNodeExt';
+import DynRender from './DynRender';
 
 export default function PageRender({ page }: { page: PagePropType }) {
   let body;
   try {
     if (!page.content) return '';
     const c = JSON.parse(page.content);
-    body = generateHTML(c, [...STATIC_EXTENSIONS, Link]);
+    body = generateHTML(c, [...STATIC_EXTENSIONS, Link, TestNode]);
   } catch (_) {
     return (
       <div className="text-center text-sm italic text-red-800">
@@ -26,6 +28,7 @@ export default function PageRender({ page }: { page: PagePropType }) {
         <div className="mx-auto mt-4 flex max-w-screen-lg flex-col gap-4 p-6">
           <div className={clx(proseStyles)}>
             <div className="t" dangerouslySetInnerHTML={{ __html: body }} />
+            <DynRender content={page.content} />
           </div>
         </div>
       </div>
