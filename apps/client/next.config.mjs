@@ -8,6 +8,11 @@ const nextConfig = {
         port: '',
         pathname: '/avatar/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'epc-one.s3.us-east-1.amazonaws.com',
+        pathname: '/**',
+      },
     ],
   },
 

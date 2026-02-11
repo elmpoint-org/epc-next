@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
-import { Image, Modal, SimpleGrid, Loader, Alert } from '@mantine/core';
+import { useCallback, useMemo, useState } from 'react';
+import NextImage from 'next/image';
+import { Image, Modal, Alert } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPhoto } from '@tabler/icons-react';
 
@@ -8,6 +9,10 @@ import { useGraphQuery } from '@/query/query';
 import { IMAGE_TYPES } from '@epc/types/s3';
 import mime from 'mime/lite';
 import { MimeType } from '@epc/mime';
+import {
+  GlobalKeyboardHandler,
+  useGlobalKeyboardShortcuts,
+} from '@/app/_ctx/globalKeyboard';
 
 export function PhotoGallery({ folder }: { folder: string }) {
   // images query
@@ -17,6 +22,7 @@ export function PhotoGallery({ folder }: { folder: string }) {
         cmsFiles(root: $root, recursive: $recursive) {
           files {
             path
+            presignedURL
           }
         }
       }
@@ -34,13 +40,29 @@ export function PhotoGallery({ folder }: { folder: string }) {
 
   // modal state
   const [opened, { open, close }] = useDisclosure(false);
-  const [selectedImg, setSelectedImg] = useState<string | null>(null);
-  const handleImageClick = (path: string) => {
-    setSelectedImg(path);
+  const [selectedImg, setSelectedImg] = useState<number | null>(null);
+  const handleImageClick = (index: number) => {
+    setSelectedImg(index);
     open();
   };
 
-  const getUrl = (path: string) => `/cms/file/${path}`;
+  const handleShortcut = useCallback<GlobalKeyboardHandler>(
+    (e, { withModifiers }) => {
+      if (selectedImg === null) return;
+      switch (e.code) {
+        case 'ArrowLeft':
+          if (withModifiers) break;
+          setSelectedImg((v) => (v! + images.length - 1) % images.length);
+          break;
+        case 'ArrowRight':
+          if (withModifiers) break;
+          setSelectedImg((v) => (v! + images.length + 1) % images.length);
+          break;
+      }
+    },
+    [images.length, selectedImg],
+  );
+  useGlobalKeyboardShortcuts(handleShortcut);
 
   if (!folder) {
     return (
@@ -53,7 +75,7 @@ export function PhotoGallery({ folder }: { folder: string }) {
 
   return (
     <>
-      <div className="relative min-h-[100px]">
+      <div className="relative">
         {!query.isPending && !images.length && (
           <Alert color="gray" variant="light">
             No images found
@@ -61,17 +83,19 @@ export function PhotoGallery({ folder }: { folder: string }) {
         )}
 
         {/* image grid */}
-        <div className="flex flex-row flex-wrap justify-center gap-2 *:max-w-56">
-          {images.map((file) => (
+        <div className="grid grid-cols-3 gap-0.5">
+          {images.map((file, ind) => (
             <button
               key={file.path}
-              className="relative flex aspect-square cursor-pointer flex-col justify-center overflow-hidden rounded-md transition-opacity hover:opacity-80"
-              onClick={() => handleImageClick(file.path)}
+              className="relative aspect-square cursor-pointer overflow-hidden transition-opacity hover:opacity-80"
+              onClick={() => handleImageClick(ind)}
             >
               <Image
-                src={getUrl(file.path)}
+                component={NextImage}
+                fill={true}
+                src={file.presignedURL}
                 alt=""
-                className="h-full w-full object-cover"
+                className="!my-0 !size-full !rounded-none !object-cover"
                 loading="lazy"
               />
             </button>
@@ -81,7 +105,7 @@ export function PhotoGallery({ folder }: { folder: string }) {
             Array.from({ length: 12 }).map((_, i) => (
               <div
                 key={i}
-                className="aspect-[4/3] w-full animate-pulse rounded-md bg-slate-200"
+                className="aspect-square w-full animate-pulse rounded-md bg-slate-200"
               />
             ))}
         </div>
@@ -95,15 +119,21 @@ export function PhotoGallery({ folder }: { folder: string }) {
         centered
         withCloseButton={false}
         padding={0}
-        styles={{ body: { backgroundColor: 'black' } }}
+        classNames={{
+          content: 'relative',
+          body: 'bg-black',
+        }}
       >
-        {selectedImg && (
-          <div className="flex items-center justify-center" onClick={close}>
-            <Image
-              src={getUrl(selectedImg)}
-              alt="Full size"
-              fit="contain"
-              className="max-h-[85vh] w-auto"
+        {selectedImg !== null && (
+          <div
+            className="flex flex-col items-center justify-center"
+            onClick={close}
+          >
+            <NextImage
+              fill={true}
+              src={images[selectedImg].presignedURL ?? '#'}
+              alt="image"
+              className="!static max-h-[85vh] !w-auto !object-contain"
             />
           </div>
         )}

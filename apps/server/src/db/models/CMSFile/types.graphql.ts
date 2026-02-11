@@ -9,6 +9,9 @@ export default gql`
     lastModified: Int
     "number of bytes in file"
     size: Int
+
+    "get a presigned URL for this file. only request if needed."
+    presignedURL: String
   }
 
   # ---------------------------
