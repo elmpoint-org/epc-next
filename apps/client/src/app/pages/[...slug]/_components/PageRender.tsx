@@ -9,25 +9,11 @@ import { TestNode } from '@/app/cms/_tiptap/testNodeExt';
 import DynRender from './DynRender';
 
 export default function PageRender({ page }: { page: PagePropType }) {
-  let body;
-  try {
-    if (!page.content) return '';
-    const c = JSON.parse(page.content);
-    body = generateHTML(c, [...STATIC_EXTENSIONS, Link, TestNode]);
-  } catch (_) {
-    return (
-      <div className="text-center text-sm italic text-red-800">
-        An error occurred.
-      </div>
-    );
-  }
-
   return (
     <>
       <div className="container flex-1 rounded-lg bg-dwhite">
         <div className="mx-auto mt-4 flex max-w-screen-lg flex-col gap-4 p-6">
           <div className={clx(proseStyles)}>
-            <div className="t" dangerouslySetInnerHTML={{ __html: body }} />
             <DynRender content={page.content} />
           </div>
         </div>

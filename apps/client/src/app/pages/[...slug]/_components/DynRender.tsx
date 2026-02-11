@@ -12,20 +12,26 @@ import NextLink from 'next/link';
 import LinkWrap from './LinkWrap';
 import A from '@/app/_components/_base/A';
 import { ReactNode, useMemo } from 'react';
+import {
+  PhotoGallery,
+  PhotoGalleryTypeName,
+} from '@/app/cms/_tiptap/photoGallery/photoGalleryExt';
+import PhotoGalleryNodeComponent from '@/app/cms/_tiptap/photoGallery/PhotoGalleryNode';
 
 export default function DynRender({ content }: { content: string | null }) {
   const rn = useMemo(
     () =>
       renderToReactElement({
-        extensions: [...STATIC_EXTENSIONS, Link, TestNode],
+        extensions: [...STATIC_EXTENSIONS, Link, TestNodeDynamic, PhotoGallery],
         content: JSON.parse(content ?? ''),
         options: {
           markMapping: {
             link: LinkWrap as any,
           },
           nodeMapping: {
-            [TestNodeTypeName]: TestNodeStable as any,
-          },
+            [TestNodeTypeName]: TestNodeStable,
+            [PhotoGalleryTypeName]: PhotoGalleryNodeComponent,
+          } as any,
         },
       }),
     [content],
@@ -33,7 +39,6 @@ export default function DynRender({ content }: { content: string | null }) {
 
   return (
     <div className="">
-      <div className="">dynrender</div>
       <div className="">{rn}</div>
     </div>
   );
