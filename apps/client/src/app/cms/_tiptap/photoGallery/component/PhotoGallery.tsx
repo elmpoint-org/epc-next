@@ -9,8 +9,6 @@ import { IMAGE_TYPES } from '@epc/types/s3';
 import mime from 'mime/lite';
 import { MimeType } from '@epc/mime';
 
-const ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-
 export function PhotoGallery({ folder }: { folder: string }) {
   // images query
   const query = useGraphQuery(
@@ -56,34 +54,37 @@ export function PhotoGallery({ folder }: { folder: string }) {
   return (
     <>
       <div className="relative min-h-[100px]">
-        {query.isPending && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50">
-            <Loader size="sm" />
-          </div>
-        )}
-
         {!query.isPending && !images.length && (
           <Alert color="gray" variant="light">
-            No images found in <b>{folder}</b>
+            No images found
           </Alert>
         )}
 
-        <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} spacing="xs">
+        {/* image grid */}
+        <div className="flex flex-row flex-wrap justify-center gap-2 *:max-w-56">
           {images.map((file) => (
-            <div
+            <button
               key={file.path}
-              className="aspect-square cursor-pointer overflow-hidden rounded-md transition-opacity hover:opacity-80"
+              className="relative flex aspect-square cursor-pointer flex-col justify-center overflow-hidden rounded-md transition-opacity hover:opacity-80"
               onClick={() => handleImageClick(file.path)}
             >
               <Image
                 src={getUrl(file.path)}
-                alt={file.path}
+                alt=""
                 className="h-full w-full object-cover"
                 loading="lazy"
               />
-            </div>
+            </button>
           ))}
-        </SimpleGrid>
+
+          {query.isPending &&
+            Array.from({ length: 12 }).map((_, i) => (
+              <div
+                key={i}
+                className="aspect-[4/3] w-full animate-pulse rounded-md bg-slate-200"
+              />
+            ))}
+        </div>
       </div>
 
       {/* Lightbox Modal */}
@@ -97,7 +98,7 @@ export function PhotoGallery({ folder }: { folder: string }) {
         styles={{ body: { backgroundColor: 'black' } }}
       >
         {selectedImg && (
-          <div className="flex items-center justify-center p-2" onClick={close}>
+          <div className="flex items-center justify-center" onClick={close}>
             <Image
               src={getUrl(selectedImg)}
               alt="Full size"
