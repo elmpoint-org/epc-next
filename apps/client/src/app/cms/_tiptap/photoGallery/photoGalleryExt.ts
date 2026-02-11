@@ -14,7 +14,7 @@ declare module '@tiptap/core' {
 }
 
 export type PhotoGalleryAtts = {
-  folderPath: string;
+  folder: string;
 };
 type Atts = PhotoGalleryAtts;
 const att = getTypedAtt<Atts>();
@@ -25,12 +25,13 @@ export const PhotoGallery = Node.create({
   name: PhotoGalleryTypeName,
   group: 'block',
   atom: true,
+  draggable: true,
 
   addAttributes(): AddAttributes<Atts> {
     return {
-      folderPath: att({
-        att: 'folderPath',
-        data: 'data-folder-path',
+      folder: att({
+        att: 'folder',
+        data: 'data-folder',
         default: '',
       }),
     };

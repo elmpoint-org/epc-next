@@ -5,22 +5,14 @@ import { IconPhoto } from '@tabler/icons-react';
 
 import { graphql } from '@/query/graphql';
 import { useGraphQuery } from '@/query/query';
+import { IMAGE_TYPES } from '@epc/types/s3';
+import mime from 'mime/lite';
+import { MimeType } from '@epc/mime';
 
 const ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 
-export function PhotoGallery({ folderPath }: { folderPath: string }) {
-  // 1. Prepare path (logic borrowed from FileManager.tsx)
-  const rootPath = useMemo(() => {
-    let f = folderPath.trim();
-    if (!f) return '';
-    // Ensure trailing slash for folder query
-    if (f.at(-1) !== '/') f = f + '/';
-    // Remove leading slash for API consistency if needed (checking FileManager logic)
-    if (f.at(0) === '/') f = f.slice(1);
-    return f;
-  }, [folderPath]);
-
-  // 2. Data Fetching
+export function PhotoGallery({ folder }: { folder: string }) {
+  // images query
   const query = useGraphQuery(
     graphql(`
       query GalleryFiles($root: String, $recursive: Boolean) {
@@ -31,34 +23,28 @@ export function PhotoGallery({ folderPath }: { folderPath: string }) {
         }
       }
     `),
-    { root: rootPath, recursive: false },
-    {
-      enabled: !!rootPath && rootPath.length > 1,
-    },
+    { root: folder, recursive: false },
+    { enabled: !!folder && folder.length > 1 },
   );
 
-  // 3. Filter for Images
   const images = useMemo(() => {
     if (!query.data?.cmsFiles?.files) return [];
-    return query.data.cmsFiles.files.filter((f) => {
-      const ext = f.path.split('.').pop()?.toLowerCase();
-      return ext && ALLOWED_EXTS.includes(ext);
-    });
+    return query.data.cmsFiles.files.filter((f) =>
+      IMAGE_TYPES.includes(mime.getType(f.path) as MimeType),
+    );
   }, [query.data?.cmsFiles?.files]);
 
-  // 4. Lightbox State
+  // modal state
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
-
   const handleImageClick = (path: string) => {
     setSelectedImg(path);
     open();
   };
 
-  // 5. Helper to get URL (Assuming standard CMS file route pattern)
   const getUrl = (path: string) => `/cms/file/${path}`;
 
-  if (!folderPath) {
+  if (!folder) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg bg-slate-100 p-8 text-slate-400">
         <IconPhoto size={48} className="mb-2 opacity-50" />
@@ -78,7 +64,7 @@ export function PhotoGallery({ folderPath }: { folderPath: string }) {
 
         {!query.isPending && !images.length && (
           <Alert color="gray" variant="light">
-            No images found in <b>{rootPath}</b>
+            No images found in <b>{folder}</b>
           </Alert>
         )}
 
