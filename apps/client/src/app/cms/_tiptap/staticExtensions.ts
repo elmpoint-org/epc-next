@@ -9,6 +9,7 @@ import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Youtube from '@tiptap/extension-youtube';
 import { Image } from './image/image';
+import { PhotoGallery } from './photoGallery/photoGalleryExt';
 
 export const STATIC_EXTENSIONS: Extensions = [
   StarterKit.configure({ link: false }),
@@ -26,4 +27,5 @@ export const STATIC_EXTENSIONS: Extensions = [
   TextAlign.configure({
     types: ['heading', 'paragraph', Image.name, Youtube.name],
   }),
+  PhotoGallery,
 ];

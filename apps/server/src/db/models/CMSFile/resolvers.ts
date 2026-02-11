@@ -13,6 +13,9 @@ const resolvers: CmsFileModule.Resolvers = {
     cmsFileMove: f.cmsFileMove,
     cmsFileDelete: f.cmsFileDelete,
   },
+  CMSFile: {
+    presignedURL: f.getCmsFilePresignedURL,
+  },
 };
 
 export default resolvers;

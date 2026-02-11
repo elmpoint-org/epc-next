@@ -145,3 +145,9 @@ export const cmsFileDelete = h<M.MutationResolvers['cmsFileDelete']>(
     return true;
   }
 );
+
+export const getCmsFilePresignedURL = h<M.CMSFileResolvers['presignedURL']>(
+  async ({ parent: { path } }) => {
+    return s3.getSignedUrl({ bucket: BUCKET, path });
+  },
+);
