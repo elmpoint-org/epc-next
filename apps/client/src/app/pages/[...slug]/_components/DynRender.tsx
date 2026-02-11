@@ -28,7 +28,7 @@ export default function DynRender({ content }: { content: string | null }) {
           },
         },
       }),
-    [],
+    [content],
   );
 
   return (
