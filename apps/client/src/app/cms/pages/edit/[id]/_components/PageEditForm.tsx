@@ -19,7 +19,6 @@ import PageOptions from './PageOptions';
 import ViewPageLink from '../../../_components/ViewPageLink';
 import SaveRow, { SaveState } from './SaveRow';
 import DeletePage from './DeletePage';
-import dynamic from 'next/dynamic';
 import EditorWrapper from '../../../_components/EditorWrapper';
 
 export const GET_CMS_PAGE = graphql(`

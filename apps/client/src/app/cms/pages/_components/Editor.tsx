@@ -16,7 +16,6 @@ import type { EditFormProps } from '../edit/[id]/_components/PageEditForm';
 
 import ImageMenu from '../../_tiptap/image/ImageMenu';
 import { IconStar } from '@tabler/icons-react';
-import { TestNodeDynamic } from '../../_tiptap/testNodeExtDynamic';
 import { PhotoGallery } from '../../_tiptap/photoGallery/photoGalleryExt';
 
 const UPDATE_DEBOUNCE_MS = 450;
@@ -53,7 +52,6 @@ export default function TextEditor({
   const editor = useEditor({
     extensions: [
       ...STATIC_EXTENSIONS,
-      TestNodeDynamic,
       PhotoGallery,
       Link as AnyExtension,
       FileHandler,
@@ -152,15 +150,6 @@ export default function TextEditor({
           </RichTextEditor.ControlsGroup>
 
           <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Control
-              onClick={() =>
-                editor?.commands.insertTestNode(editor.state.selection.anchor)
-              }
-              aria-label="custom node"
-              title="custom node"
-            >
-              <IconStar stroke={1.5} size={16} />
-            </RichTextEditor.Control>
             <RichTextEditor.Control
               onClick={() =>
                 editor?.commands.insertPhotoGallery(editor.state.selection.anchor)

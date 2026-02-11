@@ -1,11 +1,6 @@
-import { generateHTML } from '@tiptap/html';
-import { STATIC_EXTENSIONS } from '@/app/cms/_tiptap/staticExtensions';
-import Link from '@tiptap/extension-link';
-
 import { clx } from '@/util/classConcat';
 import { proseStyles } from '@/app/cms/_tiptap/proseStyles';
 import type { PagePropType } from '../page';
-import { TestNode } from '@/app/cms/_tiptap/testNodeExt';
 import DynRender from './DynRender';
 
 export default function PageRender({ page }: { page: PagePropType }) {
