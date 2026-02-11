@@ -15,7 +15,8 @@ import { useDebounceWithStatus } from '@/util/debounce';
 import type { EditFormProps } from '../edit/[id]/_components/PageEditForm';
 
 import ImageMenu from '../../_tiptap/image/ImageMenu';
-import { IconStar } from '@tabler/icons-react';
+import { IconPhoto, IconStar } from '@tabler/icons-react';
+import { Menu } from '@mantine/core';
 
 const UPDATE_DEBOUNCE_MS = 450;
 
@@ -148,17 +149,33 @@ export default function TextEditor({
           </RichTextEditor.ControlsGroup>
 
           <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Control
-              onClick={() =>
-                editor?.commands.insertPhotoGallery(
-                  editor.state.selection.anchor,
-                )
-              }
-              aria-label="custom node"
-              title="custom node"
-            >
-              <IconStar stroke={1.5} size={16} />
-            </RichTextEditor.Control>
+            <Menu position='bottom-start'>
+              <Menu.Target>
+                <RichTextEditor.Control
+                  aria-label="Add Dynamic Component"
+                  title="Add Dynamic Component"
+                >
+                  <IconStar stroke={1.5} size={16} />
+                </RichTextEditor.Control>
+              </Menu.Target>
+
+              <Menu.Dropdown className="border-slate-300 shadow-sm">
+                <Menu.Label>Dynamic Components</Menu.Label>
+                <Menu.Item
+                  className="hover:bg-slate-200"
+                  leftSection={<IconPhoto className="size-4" stroke={1.5} />}
+                  onClick={() =>
+                    editor?.commands.insertPhotoGallery(
+                      editor.state.selection.anchor,
+                    )
+                  }
+                >
+                  Add Photo Gallery
+                </Menu.Item>
+                <Menu.Divider className="border-slate-300" />
+                <Menu.Label className="italic">More to come soon!</Menu.Label>
+              </Menu.Dropdown>
+            </Menu>
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
 

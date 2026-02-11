@@ -133,7 +133,7 @@ export function PhotoGallery({ folder }: { folder: string }) {
               fill={true}
               src={images[selectedImg].presignedURL ?? '#'}
               alt="image"
-              className="!static max-h-[85vh] !w-auto !object-contain"
+              className="!static max-h-[85vh] !w-auto bg-slate-200 !object-contain"
             />
           </div>
         )}
