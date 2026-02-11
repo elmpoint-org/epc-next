@@ -6,20 +6,9 @@ import { IconPhoto } from '@tabler/icons-react';
 import { graphql } from '@/query/graphql';
 import { useGraphQuery } from '@/query/query';
 
-// Reusing the query structure from FileManager.tsx
-const GET_GALLERY_FILES = graphql(`
-  query GalleryFiles($root: String, $recursive: Boolean) {
-    cmsFiles(root: $root, recursive: $recursive) {
-      files {
-        path
-      }
-    }
-  }
-`);
-
 const ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 
-export function PhotoGalleryStable({ folderPath }: { folderPath: string }) {
+export function PhotoGallery({ folderPath }: { folderPath: string }) {
   // 1. Prepare path (logic borrowed from FileManager.tsx)
   const rootPath = useMemo(() => {
     let f = folderPath.trim();
@@ -33,7 +22,15 @@ export function PhotoGalleryStable({ folderPath }: { folderPath: string }) {
 
   // 2. Data Fetching
   const query = useGraphQuery(
-    GET_GALLERY_FILES,
+    graphql(`
+      query GalleryFiles($root: String, $recursive: Boolean) {
+        cmsFiles(root: $root, recursive: $recursive) {
+          files {
+            path
+          }
+        }
+      }
+    `),
     { root: rootPath, recursive: false },
     {
       enabled: !!rootPath && rootPath.length > 1,

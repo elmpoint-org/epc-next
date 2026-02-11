@@ -6,17 +6,14 @@ import { renderToReactElement } from '@tiptap/static-renderer/pm/react';
 
 import LinkWrap from './LinkWrap';
 import { useMemo } from 'react';
-import {
-  PhotoGallery,
-  PhotoGalleryTypeName,
-} from '@/app/cms/_tiptap/photoGallery/photoGalleryExt';
+import { PhotoGalleryTypeName } from '@/app/cms/_tiptap/photoGallery/photoGalleryExt';
 import PhotoGalleryNodeComponent from '@/app/cms/_tiptap/photoGallery/PhotoGalleryNode';
 
 export default function DynRender({ content }: { content: string | null }) {
-  const rn = useMemo(
+  const page = useMemo(
     () =>
       renderToReactElement({
-        extensions: [...STATIC_EXTENSIONS, Link, PhotoGallery],
+        extensions: [...STATIC_EXTENSIONS, Link],
         content: JSON.parse(content ?? ''),
         options: {
           markMapping: {
@@ -32,7 +29,8 @@ export default function DynRender({ content }: { content: string | null }) {
 
   return (
     <div className="">
-      <div className="">{rn}</div>
+      {/* page content */}
+      {page}
     </div>
   );
 }

@@ -16,7 +16,6 @@ import type { EditFormProps } from '../edit/[id]/_components/PageEditForm';
 
 import ImageMenu from '../../_tiptap/image/ImageMenu';
 import { IconStar } from '@tabler/icons-react';
-import { PhotoGallery } from '../../_tiptap/photoGallery/photoGalleryExt';
 
 const UPDATE_DEBOUNCE_MS = 450;
 
@@ -52,7 +51,6 @@ export default function TextEditor({
   const editor = useEditor({
     extensions: [
       ...STATIC_EXTENSIONS,
-      PhotoGallery,
       Link as AnyExtension,
       FileHandler,
       Placeholder.configure({ placeholder: 'Start writing...' }),
@@ -152,7 +150,9 @@ export default function TextEditor({
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Control
               onClick={() =>
-                editor?.commands.insertPhotoGallery(editor.state.selection.anchor)
+                editor?.commands.insertPhotoGallery(
+                  editor.state.selection.anchor,
+                )
               }
               aria-label="custom node"
               title="custom node"

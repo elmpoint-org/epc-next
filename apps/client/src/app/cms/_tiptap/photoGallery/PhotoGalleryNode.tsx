@@ -4,7 +4,7 @@ import { ActionIcon, TextInput } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 
 import type { PhotoGalleryAtts } from './photoGalleryExt';
-import { PhotoGalleryStable } from './PhotoGalleryStable';
+import { PhotoGallery } from './component/PhotoGallery';
 
 export default function PhotoGalleryNodeComponent(
   props: ReactNodeViewProps<HTMLDivElement>,
@@ -47,10 +47,10 @@ export default function PhotoGalleryNodeComponent(
           </div>
 
           {/* The Actual Display */}
-          <PhotoGalleryStable folderPath={attrs.folderPath} />
+          <PhotoGallery folderPath={attrs.folderPath} />
         </div>
       ) : (
-        <PhotoGalleryStable folderPath={attrs.folderPath} />
+        <PhotoGallery folderPath={attrs.folderPath} />
       )}
     </NodeViewWrapper>
   );
