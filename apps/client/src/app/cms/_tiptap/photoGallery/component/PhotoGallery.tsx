@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import { useCallback, useMemo, useState } from 'react';
-import NextImage from 'next/image';
-import { Image, Modal, Alert } from '@mantine/core';
+import { Image, Alert } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconPhoto } from '@tabler/icons-react';
 
@@ -13,6 +13,7 @@ import {
   GlobalKeyboardHandler,
   useGlobalKeyboardShortcuts,
 } from '@/app/_ctx/globalKeyboard';
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 
 export function PhotoGallery({ folder }: { folder: string }) {
   // images query
@@ -91,8 +92,6 @@ export function PhotoGallery({ folder }: { folder: string }) {
               onClick={() => handleImageClick(ind)}
             >
               <Image
-                component={NextImage}
-                fill={true}
                 src={file.presignedURL}
                 alt=""
                 className="!my-0 !size-full !rounded-none !object-cover"
@@ -112,32 +111,25 @@ export function PhotoGallery({ folder }: { folder: string }) {
       </div>
 
       {/* Lightbox Modal */}
-      <Modal
-        opened={opened}
-        onClose={close}
-        size="xl"
-        centered
-        withCloseButton={false}
-        padding={0}
-        classNames={{
-          content: 'relative',
-          body: 'bg-black',
-        }}
-      >
-        {selectedImg !== null && (
-          <div
-            className="flex flex-col items-center justify-center"
-            onClick={close}
-          >
-            <NextImage
-              fill={true}
-              src={images[selectedImg].presignedURL ?? '#'}
-              alt="image"
-              className="!static max-h-[85vh] !w-auto bg-slate-200 !object-contain"
-            />
-          </div>
-        )}
-      </Modal>
+      <Dialog open={opened} onClose={close} className="relative z-[200]">
+        <DialogBackdrop className="fixed inset-0 bg-black/60" />
+        <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+          <DialogPanel className="bg-black">
+            {selectedImg !== null && (
+              <div
+                className="flex flex-col items-center justify-center"
+                onClick={close}
+              >
+                <img
+                  src={images[selectedImg].presignedURL ?? '#'}
+                  alt="image"
+                  className="!static max-h-[85dvh] !w-auto rounded-sm bg-slate-200 !object-contain"
+                />
+              </div>
+            )}
+          </DialogPanel>
+        </div>
+      </Dialog>
     </>
   );
 }

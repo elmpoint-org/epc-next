@@ -149,7 +149,7 @@ export default function TextEditor({
           </RichTextEditor.ControlsGroup>
 
           <RichTextEditor.ControlsGroup>
-            <Menu position='bottom-start'>
+            <Menu position="bottom-start">
               <Menu.Target>
                 <RichTextEditor.Control
                   aria-label="Add Dynamic Component"
@@ -160,7 +160,7 @@ export default function TextEditor({
               </Menu.Target>
 
               <Menu.Dropdown className="border-slate-300 shadow-sm">
-                <Menu.Label>Dynamic Components</Menu.Label>
+                <Menu.Label>Add Dynamic Component</Menu.Label>
                 <Menu.Item
                   className="hover:bg-slate-200"
                   leftSection={<IconPhoto className="size-4" stroke={1.5} />}
@@ -170,7 +170,7 @@ export default function TextEditor({
                     )
                   }
                 >
-                  Add Photo Gallery
+                  Photo Gallery
                 </Menu.Item>
                 <Menu.Divider className="border-slate-300" />
                 <Menu.Label className="italic">More to come soon!</Menu.Label>
