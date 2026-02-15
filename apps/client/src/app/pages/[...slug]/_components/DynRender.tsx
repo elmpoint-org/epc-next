@@ -10,9 +10,9 @@ import { PhotoGalleryTypeName } from '@/app/cms/_tiptap/photoGallery/photoGaller
 import PhotoGalleryNodeComponent from '@/app/cms/_tiptap/photoGallery/PhotoGalleryNode';
 
 export default function DynRender({ content }: { content: string | null }) {
-  const page = useMemo(
-    () =>
-      renderToReactElement({
+  const page = useMemo(() => {
+    try {
+      return renderToReactElement({
         extensions: [...STATIC_EXTENSIONS, Link],
         content: JSON.parse(content ?? ''),
         options: {
@@ -23,14 +23,21 @@ export default function DynRender({ content }: { content: string | null }) {
             [PhotoGalleryTypeName]: PhotoGalleryNodeComponent,
           } as any,
         },
-      }),
-    [content],
-  );
+      });
+    } catch (_) {
+      return null;
+    }
+  }, [content]);
 
   return (
     <div className="">
       {/* page content */}
-      {page}
+      {page || (
+        // error state
+        <div className="text-center text-sm italic text-red-800">
+          An error occurred.
+        </div>
+      )}
     </div>
   );
 }

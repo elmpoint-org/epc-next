@@ -82,7 +82,9 @@ export default function PhotoGalleryNodeComponent(
               <div className="text-center text-sm">
                 {attrs.folder.length ? (
                   <>
-                    Photos found in <b>/{attrs.folder}</b> will be shown here.
+                    Photos uploaded to{' '}
+                    <A href={`/cms/files/${attrs.folder}`}>/{attrs.folder}</A>{' '}
+                    will be shown here.
                   </>
                 ) : (
                   <span className="italic text-slate-400">
