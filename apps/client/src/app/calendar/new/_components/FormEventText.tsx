@@ -42,7 +42,7 @@ const FormEventText = () => {
       <div className="flex flex-row items-end gap-2">
         <TextInput
           label="Calendar Event Name"
-          description="This is how your stay will appear to people checking the calendar."
+          description="Edit how your stay will appear to people checking the calendar."
           value={eventText.title}
           onChange={handleTitleChange}
           className="flex-1"
