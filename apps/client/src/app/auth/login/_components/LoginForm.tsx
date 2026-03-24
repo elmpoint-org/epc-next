@@ -105,11 +105,10 @@ export default function LoginForm() {
   // handle form submit with `use passkey` button
   const handlePasskey: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    if (!pkey.current) return;
-
     // run passkey flow
     loading(async () => {
-      const t = await pkey.current!.signinWithDiscoverable();
+      if (!pkey.current) return;
+      const t = await pkey.current.signinWithDiscoverable();
       handlePasskeyLogin(t);
     });
   };
