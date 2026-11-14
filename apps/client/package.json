@@ -6,7 +6,7 @@
     "start": "next start",
     "test": "tsc --noEmit",
     "dev": "next dev -p 3001",
-    "dev-client": "sst shell --stage=development -- pnpm dev",
+    "dev-client": "NEXT_PUBLIC_USE_PUBLIC_API=1 NEXT_PUBLIC_IS_DEV=true pnpm dev",
     "gql:gen": "gql.tada generate-output"
   },
   "dependencies": {

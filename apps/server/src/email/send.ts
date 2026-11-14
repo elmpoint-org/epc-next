@@ -9,7 +9,7 @@ import { Resource } from 'sst';
 import { catchTF } from '##/util/catchTF.js';
 import { BrevoSender } from './senders';
 
-const resend = new Resend(Resource.SecretResendAPIKey.value);
+const getResend = () => new Resend(Resource.SecretResendAPIKey.value);
 
 export async function send(
   { ...props }: { from: Senders; brevoFrom?: BrevoSender } & CreateEmailOptions,
@@ -17,7 +17,7 @@ export async function send(
 ) {
   if (isDev) return localSend(props.react, props.subject);
 
-  const { error } = await resend.emails.send({
+  const { error } = await getResend().emails.send({
     ...props,
     text: props.text ?? (await render(el(props.react), { plainText: true })),
   });
