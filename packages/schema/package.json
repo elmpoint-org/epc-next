@@ -2,7 +2,7 @@
   "name": "@epc/schema",
   "private": true,
   "scripts": {
-    "gql:pregen": "sst shell --stage=development tsx --print-logs generate.ts",
+    "gql:pregen": "tsx generate.ts",
     "dev:gql": "chokidar '../../apps/server/src/db/models/**/*' -c 'pnpm gql:pregen'"
   },
   "dependencies": {

@@ -11,7 +11,7 @@ import type { ResolverContext } from '##/db/graph.js';
 import { generateKey } from '##/util/generate.js';
 import { DBUser } from './source';
 import {
-  passwordless,
+  getPasswordless,
   passwordlessDeleteCredential,
 } from '##/auth/passkeys.js';
 import {
@@ -195,7 +195,7 @@ export const userCreateCredential = h<
   const opts = new RegisterOptions();
   opts.userId = user.id;
   opts.username = user.email;
-  const { token } = await passwordless.createRegisterToken(opts).catch((e) => {
+  const { token } = await getPasswordless().createRegisterToken(opts).catch((e) => {
     throw err('SERVER_ERROR', undefined, e);
   });
 
@@ -208,7 +208,7 @@ export const userDeleteCredential = h<
   if (!userId) throw scopeError();
 
   // list user credentials
-  const cs = await passwordless.listCredentials(userId).catch(() => {});
+  const cs = await getPasswordless().listCredentials(userId).catch(() => {});
   if (!cs?.length) throw err('NO_CREDENTIALS_FOUND');
 
   // attempt to find the requested credential
@@ -244,7 +244,7 @@ export const getUserCredentials = h<M.UserResolvers['credentials']>(
   async ({ parent: { id }, scope, userId }) => {
     if (!scopeDiff(scope, 'ADMIN') && userId !== id) throw scopeError();
 
-    return (await passwordless.listCredentials(id)).map(parseCredential);
+    return (await getPasswordless().listCredentials(id)).map(parseCredential);
   }
 );
 

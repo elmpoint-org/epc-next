@@ -21,7 +21,7 @@ If you have a simple change to make to the website, the easiest way to contribut
 
 For example, let's say you found a typo in a help message on the site.
 
-1. Use the search function above to look for a snippet of the text you'd like to update. What you're looking for will be in the `/client/src/` directory.
+1. Use the search function above to look for a snippet of the text you'd like to update. What you're looking for will be in the `apps/client/src/` directory.
 1. Click the pencil in the top right to edit the document online. Make your changes.
 1. Click the green **Commit changes...** button.
    - In the popup screen, write a quick explanation of what you changed.
@@ -37,45 +37,16 @@ For more complex changes, or if you'd like to create your own feature, you'll ne
     - [Node.js](https://nodejs.org/) - The most recent LTS version will probably work.
     - [PNPM](https://pnpm.io) - This is the package manager that manages project dependencies.
     - (recommended) [Visual Studio Code](https://code.visualstudio.com/) - VSCode settings and extensions come with the project to get you running fastest.
-1.  **Add AWS Credentials.** In order to run build tests, SST uses an AWS account to manage a few assets in development. You'll need an AWS Account for this, but no created assets will surpass the standard AWS free tier.
-
-    1. Create an [AWS account](https://aws.amazon.com/) if you don't already have one.
-
-    1. Create an IAM user ([tutorial](https://guide.sst.dev/chapters/create-an-iam-user.html)) with administrator access.
-
-    1. Register the IAM user in your environment.
-
-       Create a new file called `.env` in the root project folder.
-
-       Fill in the file with one of the two formats below based on your preference:
-
-       ```sh
-       # if you only use this AWS account for this project...
-       AWS_ACCESS_KEY_ID=abc123
-       AWS_SECRET_ACCESS_KEY=abc123
-
-       # -- OR --
-
-       # if you have already regstered an AWS profile on your machine...
-       AWS_PROFILE=your-profile-name-here
-       ```
 
 1.  **Install project dependencies.** Run the following command in the root project folder to install the required dependencies:
     ```
     pnpm install
     ```
-1.  **Configure to use the public API.** Running the full Elm Point server locally requires substantially more setup and comfort with AWS, none of which is currently automated. It is much easier to instead use the public server API while you're working.
-
-    To enable this, add the following line to your `.env` file from earlier:
-
-    ```
-    NEXT_PUBLIC_USE_PUBLIC_API=1
-    ```
-
 1.  **Run the development server.** Open a terminal in the root project directory, and run:
     ```
     pnpm dev-client
     ```
+    This runs the client against the public Elm Point API, so no AWS account is needed. Running the full Elm Point server locally requires substantially more setup and comfort with AWS, none of which is currently automated.
 1.  **Head to the development URL.** Your terminal should tell you where to go, but it's probably `http://localhost:3001/`.
 
 ### Using the API

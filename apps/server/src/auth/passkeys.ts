@@ -7,11 +7,12 @@ import qs from 'qs';
 import { Resource } from 'sst';
 
 export const PASSWORDLESS_API = 'https://v4.passwordless.dev';
-export const PASSWORDLESS_SECRET = Resource.SecretPasswordlessSecret.value;
-
-export const passwordless = new PasswordlessClient(PASSWORDLESS_SECRET!, {
-  baseUrl: PASSWORDLESS_API,
-});
+// lazily load env here to allow unauth imports
+const getPasswordlessSecret = () => Resource.SecretPasswordlessSecret.value;
+export const getPasswordless = () =>
+  new PasswordlessClient(getPasswordlessSecret(), {
+    baseUrl: PASSWORDLESS_API,
+  });
 
 export async function passwordlessSendMagicLink(p: {
   email: string;
@@ -35,7 +36,7 @@ export async function passwordlessSendMagicLink(p: {
     .post(
       PASSWORDLESS_API + '/signin/generate-token',
       { userId: params.userId, timeToLive: EMAIL_LOGIN_EXPIRE },
-      { headers: { ApiSecret: PASSWORDLESS_SECRET } }
+      { headers: { ApiSecret: getPasswordlessSecret() } },
     )
     .catch((e) => ({ data: console.log(new Error(e)) }));
   if (!data?.token) throw new Error();
@@ -50,7 +51,7 @@ export async function passwordlessSendMagicLink(p: {
 
   // use passwordless as a fallback sender
   await axios.post(PASSWORDLESS_API + '/magic-links/send', params, {
-    headers: { ApiSecret: PASSWORDLESS_SECRET },
+    headers: { ApiSecret: getPasswordlessSecret() },
   });
 }
 
@@ -58,5 +59,5 @@ export const passwordlessDeleteCredential = (credentialId: string) =>
   axios.post(
     PASSWORDLESS_API + '/credentials/delete',
     { credentialId },
-    { headers: { ApiSecret: PASSWORDLESS_SECRET } }
+    { headers: { ApiSecret: getPasswordlessSecret() } },
   );

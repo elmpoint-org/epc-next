@@ -3,7 +3,7 @@ import { err, t } from '../trpc';
 
 import { graph } from '##/db/graph.js';
 import { graphql } from '##/db/lib/utilities.js';
-import { passwordless, passwordlessSendMagicLink } from '##/auth/passkeys.js';
+import { getPasswordless, passwordlessSendMagicLink } from '##/auth/passkeys.js';
 import { signToken } from '##/auth/sign.js';
 import { unixNow } from '@epc/date-ts';
 
@@ -18,7 +18,7 @@ function unauth(error?: any) {
 export const verifyPasskey = t.procedure
   .input(z.object({ token: z.string() }))
   .mutation(async ({ input: { token } }) => {
-    const credential = await passwordless.verifyToken(token).catch((e) => {
+    const credential = await getPasswordless().verifyToken(token).catch((e) => {
       throw err('INTERNAL_SERVER_ERROR', 'SERVER_ERROR', e);
     });
 
