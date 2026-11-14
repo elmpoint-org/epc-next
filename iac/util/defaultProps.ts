@@ -19,5 +19,6 @@ export function defaultProps() {
       },
     ],
     environment: environment(),
+    runtime: 'nodejs24.x',
   } satisfies Partial<sst.aws.FunctionArgs>;
 }

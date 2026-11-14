@@ -8,7 +8,7 @@ catalog:
   '@trpc/client': ^11.8.1
   '@trpc/react-query': ^11.8.1
   '@trpc/server': ^11.8.1
-  '@types/node': ^20.19.13
+  '@types/node': ^24.19.2
   '@types/react': ^19.1.12
   '@types/react-dom': ^19.1.9
   dayjs: ^1.11.23
@@ -17,9 +17,9 @@ catalog:
   graphql-modules: ^2.4.1
   react: ^19.1.1
   react-dom: ^19.1.1
-  sst: ^3.17.25
+  sst: ^4.17.2
   tailwindcss: ^3.4.17
-  typescript: ^5.9.2
+  typescript: ^5.9.3
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
