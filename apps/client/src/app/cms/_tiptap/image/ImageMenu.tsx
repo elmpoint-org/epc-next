@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Editor } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
 
@@ -10,6 +10,7 @@ export default function ImageMenu({ editor }: { editor: Editor }) {
   const [value, setValue] = useState(100);
   const [isChanging, setIsChanging] = useState(false);
   const fullValue = isChanging ? value : (getStoredWidth() ?? 100);
+  const shouldShow = useCallback(() => editor.isActive(ImageTypeName), [editor]);
 
   function getStoredWidth() {
     const w = parseInt(getImageAttributes(editor).percent);
@@ -32,7 +33,7 @@ export default function ImageMenu({ editor }: { editor: Editor }) {
     <>
       <BubbleMenu
         editor={editor}
-        shouldShow={() => editor.isActive(ImageTypeName)}
+        shouldShow={shouldShow}
       >
         <div className="flex max-w-full flex-row items-center gap-2 rounded-lg border border-black/5 bg-dwhite px-3 py-2 shadow-sm">
           <Slider
