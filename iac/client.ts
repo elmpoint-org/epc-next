@@ -4,9 +4,7 @@ import { isProd } from './util/isProd';
 
 export const client = new sst.aws.Nextjs('Client', {
   path: 'apps/client',
-  // OpenNext 3.9.14 only reads this flag when it has a value.
-  buildCommand:
-    'npx --yes @opennextjs/aws@3.9.14 build --dangerously-use-unsupported-next-version true',
+  openNextVersion: '4.1.16',
   warm: isProd() ? 1 : 0,
   domain: isProd()
     ? {
