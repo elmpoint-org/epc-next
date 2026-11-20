@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const validate = <T>(inp: unknown, schema: z.ZodSchema<T>) => {
+export const validate = <T>(inp: unknown, schema: z.ZodType<T>) => {
   let out;
   try {
     out = { data: schema.parse(inp) };

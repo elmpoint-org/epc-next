@@ -22,7 +22,7 @@
     "@aws-sdk/client-s3": "^3.1169.0",
     "@aws-sdk/lib-dynamodb": "^3.1169.0",
     "@aws-sdk/s3-request-presigner": "^3.1169.0",
-    "@envelop/graphql-modules": "^6.0.0",
+    "@envelop/graphql-modules": "^9.2.1",
     "@epc/date-ts": "workspace:*",
     "@epc/gql-consts": "workspace:*",
     "@epc/mime": "workspace:*",
@@ -52,7 +52,7 @@
     "react-dom": "catalog:",
     "resend": "^4.8.0",
     "serverless-http": "^3.2.0",
-    "zod": "^3.25.76"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "catalog:",
