@@ -1,12 +1,13 @@
+import { parse } from 'graphql';
 import { createModule } from 'graphql-modules';
 
-import typeDefs from './types.graphql';
+import sdl from './types.graphql';
 import resolvers from './resolvers';
 
 const UserCooldownModule = createModule({
   id: 'UserCooldown',
   dirname: __dirname,
-  typeDefs,
+  typeDefs: parse(sdl),
   resolvers,
 });
 

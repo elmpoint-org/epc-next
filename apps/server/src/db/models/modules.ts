@@ -1,3 +1,5 @@
+/// <reference path="../declarations.d.ts" />
+
 import type { Module } from 'graphql-modules';
 
 import BaseModule from './_base/module';
