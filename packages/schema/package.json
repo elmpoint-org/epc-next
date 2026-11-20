@@ -2,7 +2,7 @@
   "name": "@epc/schema",
   "private": true,
   "scripts": {
-    "gql:pregen": "tsx generate.ts",
+    "gql:pregen": "NODE_OPTIONS='--import ./register-graphql.mjs' tsx generate.ts",
     "dev:gql": "chokidar '../../apps/server/src/db/models/**/*' -c 'pnpm gql:pregen'"
   },
   "dependencies": {

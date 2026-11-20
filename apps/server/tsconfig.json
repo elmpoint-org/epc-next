@@ -8,6 +8,7 @@
     "skipLibCheck": true,
     "maxNodeModuleJsDepth": 1,
     "moduleResolution": "Bundler",
+    "types": ["node"],
     "jsx": "react-jsx",
     "paths": {
       "graphql-modules": ["./node_modules/graphql-modules/index.d.ts"]

@@ -12,3 +12,4 @@ ENV_DANGER_*.ts
 
 schema.graphql
 graphql-schema.d.ts
+*.tsbuildinfo

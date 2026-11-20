@@ -6,7 +6,7 @@
     "gql:pregen": "graphql-codegen -c ./src/db/codegen.ts",
     "dev:gql": "pnpm gql:pregen --watch",
     "dev:email": "sst shell --stage=development -- email dev --dir \"src/email/templates\" --port 3008",
-    "test": "tsc --noEmit"
+    "test": "tsc --noEmit && gql.tada check"
   },
   "imports": {
     "##/*": "./src/*",
@@ -42,7 +42,6 @@
     "graphql": "catalog:",
     "graphql-http": "^1.23.1",
     "graphql-modules": "catalog:",
-    "graphql-tag": "^2.12.6",
     "graphql-yoga": "^5.15.2",
     "ical.js": "^2.2.1",
     "jose": "^5.10.0",
@@ -64,6 +63,7 @@
     "@parcel/watcher": "^2.5.1",
     "@types/cors": "^2.8.19",
     "@types/express": "^4.17.23",
+    "@types/node": "catalog:",
     "@types/qs": "^6.14.0",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
