@@ -93,6 +93,7 @@ function EventsList({
   const today = useMemo(() => dateTS(new Date()), []);
   const currentYear = useRef(dateTSObject(today).year());
   const events = useMemo(
+    // eslint-disable-next-line react-hooks/refs
     () =>
       query.data?.staysFromAuthor
         .filter((ev) => {

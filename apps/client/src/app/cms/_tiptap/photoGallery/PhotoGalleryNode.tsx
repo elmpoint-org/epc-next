@@ -12,6 +12,8 @@ import A from '@/app/_components/_base/A';
 export default function PhotoGalleryNodeComponent(
   props: ReactNodeViewProps<HTMLDivElement>,
 ) {
+  // forwarded separately so props isn't treated as a ref during render
+  const { ref: nodeRef } = props;
   const attrs = props.node.attrs as PhotoGalleryAtts;
 
   const [textValue, setTextValue] = useState(
@@ -51,7 +53,7 @@ export default function PhotoGalleryNodeComponent(
     <NodeViewWrapper>
       {props.editor?.isEditable ? (
         // WITH EDITOR
-        <div ref={props.ref} data-drag-handle className="relative">
+        <div ref={nodeRef} data-drag-handle className="relative">
           <div
             className={clx(
               'not-prose overflow-hidden rounded-md border border-slate-300 p-2 hover:border-slate-400',

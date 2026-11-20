@@ -43,11 +43,15 @@ export default function FloatingWindow({
   width?: string;
 } & Children) {
   const [isOpen, { open, close }] = useDisclosure();
-  useReverseCb(triggerOpen, open);
 
   // panel state
   const [side, setSide] = useToggle(['RIGHT', 'LEFT'] as const);
   const [minimized, setMinimized] = useState(false);
+
+  useReverseCb(triggerOpen, () => {
+    setMinimized(false);
+    open();
+  });
 
   function safeClose() {
     if (!minimized) return setMinimized(true);
@@ -55,7 +59,6 @@ export default function FloatingWindow({
   }
   useEffect(() => {
     if (!isOpen) return;
-    setMinimized(false);
     setTimeout(() => {
       document.documentElement.style.overflow = 'unset';
       document.documentElement.style.padding = '0';

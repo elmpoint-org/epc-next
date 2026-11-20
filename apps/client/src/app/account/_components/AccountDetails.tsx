@@ -3,8 +3,8 @@
 import { Fragment, useEffect, useTransition } from 'react';
 
 import { ActionIcon, Button, TextInput } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
-import { IconEdit, IconRestore } from '@tabler/icons-react';
+import { useForm } from '@mantine/form';
+import { IconRestore } from '@tabler/icons-react';
 
 import { invalidateUserData, useUserData } from '../_ctx/userData';
 import { useUser } from '@/app/_ctx/user/context';
@@ -12,7 +12,6 @@ import { oldGraphAuth, oldGraphError, graphql } from '@/query/graphql';
 import { notifications } from '@mantine/notifications';
 import { invalidateUser } from '@/app/_ctx/user/actions';
 import fdeq from 'fast-deep-equal';
-import { z } from 'zod';
 import CopyID from '@/app/_components/_base/CopyID';
 import AccountAvatar from './AccountAvatar';
 
@@ -28,16 +27,8 @@ const AccountDetails = () => {
   const form = useForm({
     mode: 'controlled',
     initialValues: formInit,
-    validate: zodResolver(
-      z.object(
-        Object.keys(formInit).reduce(
-          (o, k) => ({
-            ...o,
-            [k]: z.string().min(1, { message: 'Field cannot be blank.' }),
-          }),
-          {},
-        ),
-      ),
+    validate: Object.fromEntries(
+      Object.keys(formInit).map((k) => [k, textFormatError] as const),
     ),
     transformValues: (v) => ({
       name: v.name.trim(),
@@ -249,3 +240,7 @@ const AccountDetails = () => {
   );
 };
 export default AccountDetails;
+
+function textFormatError(v: string) {
+  return v.trim() ? null : 'Field cannot be blank.';
+}

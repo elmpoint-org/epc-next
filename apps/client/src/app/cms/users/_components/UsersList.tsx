@@ -34,6 +34,7 @@ export default function UsersList() {
   const [sortKey, setSortKey] = useState<SortKey>('name');
   const [ascending, setAscending] = useState(true);
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const users = useMemo(() => {
     if (!query.data?.users) return null;
 

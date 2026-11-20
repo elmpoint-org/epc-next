@@ -1,4 +1,4 @@
-import { Fragment, lazy, useMemo, useState } from 'react';
+import { Fragment, lazy, useEffect, useMemo, useState } from 'react';
 
 import { ActionIcon } from '@mantine/core';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
@@ -22,17 +22,17 @@ export default function TimelineRoomRow({
 } & CalendarProps) {
   const { roomCollapse } = props;
   const [localOpen, setLocalOpen] = useState(false);
-  const isOpen = useMemo(() => {
-    if (roomCollapse.state === 'OPEN') {
-      setLocalOpen(true);
-      return true;
-    }
-    if (roomCollapse.state === 'CLOSED') {
-      setLocalOpen(false);
-      return false;
-    }
-    return localOpen;
-  }, [localOpen, roomCollapse.state]);
+
+  // remember the global expand/collapse so a later switch to mixed keeps each row's last value
+  useEffect(() => {
+    if (roomCollapse.state === 'MIXED') return;
+    setLocalOpen(roomCollapse.state === 'OPEN');
+  }, [roomCollapse.state]);
+
+  const isOpen =
+    roomCollapse.state === 'MIXED'
+      ? localOpen
+      : roomCollapse.state === 'OPEN';
   function open() {
     roomCollapse.set('MIXED');
     setLocalOpen(true);
@@ -50,6 +50,7 @@ export default function TimelineRoomRow({
   const isRootRoom = cr && 'beds' in cr && cr.cabin === null;
 
   // offset for collapsed cabins
+  // eslint-disable-next-line react-hooks/purity
   const namesOffset = useMemo(() => Math.random() * 32, []);
 
   return (

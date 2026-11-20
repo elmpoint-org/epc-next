@@ -20,5 +20,8 @@ export function defaultProps() {
     ],
     environment: environment(),
     runtime: 'nodejs24.x',
+    nodejs: {
+      loader: { '.graphql': 'text' },
+    },
   } satisfies Partial<sst.aws.FunctionArgs>;
 }

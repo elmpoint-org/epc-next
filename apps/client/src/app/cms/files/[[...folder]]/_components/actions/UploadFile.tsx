@@ -57,6 +57,7 @@ export default function UploadFile({
     }
 
     const { url } = data.cmsFileUpload;
+    // eslint-disable-next-line react-hooks/immutability
     runUpload(url);
   });
 

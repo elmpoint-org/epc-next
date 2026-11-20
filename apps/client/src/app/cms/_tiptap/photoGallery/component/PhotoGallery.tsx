@@ -32,6 +32,7 @@ export function PhotoGallery({ folder }: { folder: string }) {
     { enabled: !!folder && folder.length > 1 },
   );
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const images = useMemo(() => {
     if (!query.data?.cmsFiles?.files) return [];
     return query.data.cmsFiles.files.filter((f) =>

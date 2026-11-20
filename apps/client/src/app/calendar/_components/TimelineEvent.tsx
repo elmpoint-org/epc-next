@@ -40,6 +40,7 @@ export default function TimelineEvent({
   const css = useEventColorObject(event, theme);
 
   // override button text
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const resText = useMemo(() => {
     if (placeholder?.combined)
       return (
