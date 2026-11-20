@@ -23,6 +23,8 @@ export default function PagesList({
   unused?: boolean;
 }) {
   const isSkeleton = useSkeleton();
+  // captured on mount, so stale pages update on remount
+  const [now] = useState(() => Date.now() / 1000);
 
   // list sorting
   type SortBy = 'UPDATED' | 'CREATED' | 'SLUG' | 'TITLE';
@@ -90,15 +92,14 @@ export default function PagesList({
           <Table.Tbody>
             {/* table data */}
             {!isSkeleton &&
-              pages?.length &&
+              !!pages?.length &&
               pages
                 .filter((it) => {
                   if (!unused) return it?.slug?.length;
                   return (
                     it &&
                     !it.slug?.length &&
-                    Date.now().valueOf() / 1000 - it.timestamp.updated >
-                      STALE_PAGE_SECONDS
+                    now - it.timestamp.updated > STALE_PAGE_SECONDS
                   );
                 })
                 .sort(sorter)

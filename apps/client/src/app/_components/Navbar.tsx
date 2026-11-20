@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import fdeq from 'fast-deep-equal';
 
@@ -19,13 +19,13 @@ const Navbar = ({
   // close navbar on path change
   const path = usePathname();
   const sp = useSearchParams();
-  const [lastPath, setLastPath] = useState(path);
-  const [lastSP, setLastSP] = useState(sp);
+  const lastPath = useRef(path);
+  const lastSP = useRef(sp);
   useEffect(() => {
-    if (path !== lastPath || !fdeq(sp, lastSP)) {
+    if (path !== lastPath.current || !fdeq(sp, lastSP.current)) {
       onClose();
-      setLastPath(path);
-      setLastSP(sp);
+      lastPath.current = path;
+      lastSP.current = sp;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path, sp]);

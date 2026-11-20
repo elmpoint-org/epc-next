@@ -10,7 +10,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { dayStyles } from '../_util/dayStyles';
@@ -203,7 +202,7 @@ function DateRangePicker({
   showDate?: number;
   onChange?: (nv: DatesRange) => void;
 }) {
-  const initialDates = useRef(dates);
+  const [initialDates] = useState(dates);
   const [dateShown, setDateShown] = useState<Date | undefined>(
     showDate ? TStoDate(showDate) : undefined,
   );
@@ -216,8 +215,8 @@ function DateRangePicker({
       placeholder="Click to choose dates"
       value={dates}
       onChange={onChange}
-      minDate={initialDates.current[0] ?? undefined}
-      maxDate={initialDates.current[1] ?? undefined}
+      minDate={initialDates[0] ?? undefined}
+      maxDate={initialDates[1] ?? undefined}
       date={dateShown}
       onDateChange={setDateShown}
       firstDayOfWeek={0}

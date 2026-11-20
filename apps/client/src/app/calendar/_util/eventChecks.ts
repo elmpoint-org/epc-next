@@ -127,13 +127,13 @@ export function useEventChecks() {
 
         // ROOM_CONFLICT & ROOM_SHARING
         if (room !== null && !room.noCount) {
-          if (room.availableBeds === null)
-            room.availableBeds =
-              allRooms.find((it) => it.id === room.id)?.availableBeds ??
-              room.beds;
+          // the room may have been selected before the date range was set
+          const availableBeds =
+            room.availableBeds ??
+            allRooms.find((it) => it.id === room.id)?.availableBeds ??
+            room.beds;
 
-          const available =
-            room.availableBeds - (localOccupants.get(room.id) ?? 0);
+          const available = availableBeds - (localOccupants.get(room.id) ?? 0);
 
           if (available < 0) {
             // room is overfull
@@ -143,7 +143,7 @@ export function useEventChecks() {
               { room, stay, reservations: [], events: findConflicts(room.id) },
             );
             issue.reservations.push(res);
-          } else if (room.availableBeds < room.beds) {
+          } else if (availableBeds < room.beds) {
             // room is shared
             const issue = findOrCreateIssue(
               'ROOM_SHARING',
