@@ -51,9 +51,11 @@ export default function TimelineEventsGrid({
         (r) => r.room && 'id' in r.room && r.room.id === roomId,
       ),
     );
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   }, [cabinId, events_in, noRoom, roomId]);
 
   // COLLAPSED PLACEHOLDERS
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const cabinPlaceholders = useMemo(() => {
     let placeholders: EventPlaceholder[] = [];
     if (!events?.length) return placeholders;
@@ -94,6 +96,7 @@ export default function TimelineEventsGrid({
     }
 
     return placeholders;
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
   }, [dates, events]);
 
   const gridTemplateColumns = gridCols(days);

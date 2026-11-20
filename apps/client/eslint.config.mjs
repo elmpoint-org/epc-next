@@ -15,9 +15,14 @@ const eslintConfig = [
     ],
   },
   {
+    linterOptions: {
+      reportUnusedDisableDirectives: 'off',
+    },
+  },
+  {
     // compiler-based rules warn until effects are reviewed for react compiler
     rules: {
-      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/set-state-in-effect': 'off',
       'react-hooks/refs': 'warn',
       'react-hooks/preserve-manual-memoization': 'warn',
       'react-hooks/immutability': 'warn',

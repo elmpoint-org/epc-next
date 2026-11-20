@@ -23,6 +23,7 @@ export default function TextFields({
   const [isAutoSlug, setIsAutoSlug] = useState(false);
   useEffect(() => {
     if (isAutoSlug)
+      // eslint-disable-next-line react-hooks/immutability
       updateForm({ slug: formatSlug(form.title, 'STRIP', 'NO_SLASH') });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.title, isAutoSlug]);

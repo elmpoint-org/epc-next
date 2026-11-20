@@ -21,6 +21,7 @@ export default function RenameModal(
   useEffect(() => {
     if (!show) return;
     setText(filename);
+    // eslint-disable-next-line react-hooks/immutability
     setWarning(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);

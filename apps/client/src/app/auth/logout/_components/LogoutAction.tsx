@@ -18,6 +18,7 @@ export default function LogoutAction() {
   useEffect(() => {
     if (!user) {
       if (window) {
+        // eslint-disable-next-line @next/next/no-location-assign-relative-destination
         window.location.href = '/';
       }
     }

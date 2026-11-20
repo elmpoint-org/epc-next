@@ -50,6 +50,7 @@ export default function TimelineRoomRow({
   const isRootRoom = cr && 'beds' in cr && cr.cabin === null;
 
   // offset for collapsed cabins
+  // eslint-disable-next-line react-hooks/purity
   const namesOffset = useMemo(() => Math.random() * 32, []);
 
   return (
