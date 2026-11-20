@@ -19,7 +19,9 @@
         "@epc/schema#gql:pregen"
       ]
     },
-    "test": {},
+    "test": {
+      "dependsOn": ["gql:gen"]
+    },
     "build": {},
     "dev:gql": {
       "cache": false,
