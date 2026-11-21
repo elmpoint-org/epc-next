@@ -3,6 +3,7 @@ import {
   err,
   getTypedScopeFunctions,
   handle as h,
+  loggedIn,
 } from '##/db/lib/utilities.js';
 import { D1, unixNow } from '@epc/date-ts';
 import { CmsContentModule as M } from './__types/module-types';
@@ -63,6 +64,7 @@ export const cmsBannerDeleteMultiple = h<
 });
 
 export const getCmsBannerAuthor = h<M.CMSBannerResolvers['author']>(
+  loggedIn(),
   async ({ sources, parent }) => {
     const { authorId } = parent as DBCMSBanner;
     return sources.user.get(authorId);

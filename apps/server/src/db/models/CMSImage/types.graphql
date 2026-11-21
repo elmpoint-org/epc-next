@@ -17,7 +17,7 @@ type CMSImage {
   confirmed: Boolean!
 
   # relational
-  "the user who uploaded this image."
+  "the user who uploaded this image. requires login."
   author: User
   "the page this image is displayed on."
   page: CMSPage
@@ -63,12 +63,14 @@ type Mutation {
   begin an image upload. pass the file name (containing a valid file extension) to get a presigned upload url.
   """
   cmsImageUpload(fileName: String!, pageId: String!): CMSImageUploadOutput!
+
   """
   **SCOPE: ADMIN | EDIT**
 
   confirm image upload. once the image was successfully uploaded, run this to "save" the image.
   """
   cmsImageConfirm(id: ID!): CMSImage!
+
   """
   **SCOPE: ADMIN | EDIT**
 
@@ -81,6 +83,7 @@ type Mutation {
     pageId: String
     public: Boolean
   ): CMSImage!
+
   """
   **SCOPE: ADMIN | EDIT**
 

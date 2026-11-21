@@ -22,9 +22,15 @@ export const getStayTokens = h<M.QueryResolvers['stayTokens']>(
 
 export const getStayToken = h<M.QueryResolvers['stayToken']>(
   loggedIn(),
-  async ({ sources, args: { id } }) => {
-    return sources.stayToken.get(id);
-  }
+  async ({ sources, args: { id }, scope, userId }) => {
+    const stayToken = await sources.stayToken.get(id);
+    if (!stayToken) return null;
+
+    if (stayToken.userId !== userId && !scopeDiff(scope, 'ADMIN'))
+      throw scopeError();
+
+    return stayToken;
+  },
 );
 
 export const getStayTokensFromUser = h<M.QueryResolvers['stayTokensFromUser']>(
@@ -71,8 +77,11 @@ export const stayTokenDelete = h<M.MutationResolvers['stayTokenDelete']>(
 );
 
 export const getStayTokenUser = h<M.StayTokenResolvers['user']>(
-  async ({ sources, parent }) => {
+  async ({ sources, parent, scope, userId: authUserId }) => {
     const { userId } = parent as DBStayToken;
+    if (userId !== authUserId && !scopeDiff(scope, 'ADMIN'))
+      throw scopeError();
+
     return sources.user.get(userId);
   }
 );

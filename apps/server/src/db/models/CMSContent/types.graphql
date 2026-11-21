@@ -8,7 +8,7 @@ type CMSBanner {
   "(optional) banner's color"
   color: CMSBannerColor
 
-  "user who created the banner"
+  "user who created the banner. requires login."
   author: User
 
   "(optional) date TS when to start showing the banner"

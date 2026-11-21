@@ -2,7 +2,7 @@ type StayToken {
   id: ID!
   "validation token"
   token: String!
-  "user who created the token"
+  "user who created the token (ADMIN|userId scope)"
   user: User
 
   timestamp: TS!
@@ -19,7 +19,7 @@ type Query {
   stayTokens: [StayToken!]!
 
   """
-  **SCOPE: userId**
+  **SCOPE: ADMIN | userId==tokenUser**
 
   get stay token by its ID.
   """

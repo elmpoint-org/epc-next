@@ -3,6 +3,7 @@ import {
   err,
   getTypedScopeFunctions,
   handle as h,
+  loggedIn,
   scopeError,
 } from '##/db/lib/utilities.js';
 import { DBType } from '##/db/lib/Model.js';
@@ -21,6 +22,7 @@ export const getCmsPages = h<M.QueryResolvers['cmsPages']>(
 );
 
 export const getCmsPage = h<M.QueryResolvers['cmsPage']>(
+  loggedIn(),
   async ({ sources, args: { id } }) => {
     return sources.cms.page.get(id);
   }
@@ -112,8 +114,9 @@ export const cmsPageDelete = h<M.MutationResolvers['cmsPageDelete']>(
 );
 
 export const getCmsPageContent = h<M.CMSPageResolvers['content']>(
-  async ({ parent: { secure, content }, userId }) => {
+  async ({ parent: { secure, publish, content }, userId, scope }) => {
     if (secure && !userId) throw scopeError();
+    if (!publish && !scopeDiff(scope, 'ADMIN', 'EDIT')) throw scopeError();
     return content!;
   }
 );

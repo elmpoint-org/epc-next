@@ -7,7 +7,7 @@ type CMSPage {
   slug: String
   "page title"
   title: String!
-  "the page's content in prosemirror JSON format"
+  "the page's content in prosemirror JSON format. secure pages require login; unpublished pages require ADMIN|EDIT scope."
   content: String
   "does this page require users to login"
   secure: Boolean!
@@ -76,7 +76,7 @@ type Mutation {
   """
   **SCOPE: ADMIN | EDIT**
 
-  delete a page. for non-admins, a user can only delete a page if they have contributed to it.
+  delete a page.
   """
   cmsPageDelete(id: ID!): CMSPage!
 }
