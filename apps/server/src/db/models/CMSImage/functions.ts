@@ -2,6 +2,7 @@ import {
   err,
   getTypedScopeFunctions,
   handle as h,
+  loggedIn,
   scopeError,
 } from '##/db/lib/utilities.js';
 import type { ResolverContext } from '##/db/graph.js';
@@ -32,7 +33,7 @@ export const getCmsImage = h<M.QueryResolvers['cmsImage']>(
     // find whether page requires user auth
     let isPublic = false;
     const page = await sources.cms.page.get(img.pageId);
-    if (page && !page.secure) isPublic = true;
+    if (page && !page.secure && page.publish) isPublic = true;
 
     // verify user auth if needed
     if (!(isPublic || userId)) throw scopeError();
@@ -210,6 +211,7 @@ export const cmsImageDeleteUnconfirmed = h<
 });
 
 export const getCmsImageAuthor = h<M.CMSImageResolvers['author']>(
+  loggedIn(),
   async ({ sources, parent }) => {
     const { authorId } = parent as DBType<DBCmsImage>;
 

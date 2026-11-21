@@ -1,18 +1,12 @@
 {
   "$schema": "https://v2-7-6.turborepo.dev/schema.json",
-  "extends": [
-    "//"
-  ],
+  "extends": ["//"],
   "tasks": {
     "gql:gen": {
-      "outputs": [
-        "graphql-schema.d.ts"
-      ]
+      "outputs": ["graphql-schema.d.ts"]
     },
     "build": {
-      "outputs": [
-        ".next/**"
-      ]
+      "outputs": [".next/**"]
     }
   }
 }

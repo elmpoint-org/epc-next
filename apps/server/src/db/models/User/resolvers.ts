@@ -27,10 +27,16 @@ const resolvers: UserModule.Resolvers = {
     scope: f.getUserScope,
     trustedUsers: f.getUserTrustedUsers,
     trustedBy: f.getUserTrustedBy,
+    trustsYou: f.getUserTrustsYou,
     cooldowns: f.getUserCooldowns,
     invitedBy: f.getUserInvitedBy,
 
     timestamp,
+  },
+  UserPublicFacing: {
+    // `User` resolvers are safe to reuse here--
+    // the runtime parent is always a full user record
+    avatarUrl: f.getUserAvatarUrl as any,
   },
 };
 

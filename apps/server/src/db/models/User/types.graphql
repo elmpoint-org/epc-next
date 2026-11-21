@@ -12,10 +12,12 @@ type User {
   "gravatar avatar URL"
   avatarUrl: String
 
-  "users whom this user trusts"
+  "users whom this user trusts (ADMIN|userId scope)"
   trustedUsers: [User]
-  "users who trust this user"
+  "users who trust this user (ADMIN|userId scope)"
   trustedBy: [User]
+  "whether this user trusts the currently logged-in user"
+  trustsYou: Boolean!
 
   "which user invited this user to the site. original users will have no value."
   invitedBy: User
@@ -37,6 +39,22 @@ type User {
   "create/update history for this entry"
   timestamp: TS!
 }
+
+"""
+a public-safe subset of User, for user data on unauthenticated paths.
+its fields must remain a subset of User's fields (checked in module.ts).
+"""
+type UserPublicFacing {
+  "unique id (UUIDv4)"
+  id: ID!
+  "the user's full name"
+  name: String
+  "the user's first name"
+  firstName: String
+  "gravatar avatar URL"
+  avatarUrl: String
+}
+
 "this type can only be accessed on the server. it is for retrieving secure authentication data."
 type UserSECURE {
   user: User!

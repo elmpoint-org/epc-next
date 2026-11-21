@@ -41,9 +41,7 @@ export const CALENDAR_EVENT_FRAGMENT = graphql(`
       name
       email
       avatarUrl
-      trustedUsers {
-        id
-      }
+      trustsYou
     }
     dateStart
     dateEnd

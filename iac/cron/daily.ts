@@ -9,7 +9,7 @@ const handler: sst.aws.FunctionArgs = {
 };
 
 if (isProd()) {
-  new sst.aws.Cron('CronDaily', {
+  new sst.aws.CronV2('CronDaily', {
     schedule: 'cron(0 4 * * ? *)',
     function: handler,
   });

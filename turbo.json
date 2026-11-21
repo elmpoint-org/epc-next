@@ -1,23 +1,22 @@
 {
   "$schema": "https://v2-7-6.turborepo.dev/schema.json",
   "ui": "stream",
-  "globalPassThroughEnv": [
-    "AWS_ACCESS_KEY_ID",
-    "AWS_SECRET_ACCESS_KEY"
-  ],
+  "globalPassThroughEnv": ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"],
   "tasks": {
     "gql:pregen": {
       "inputs": [
-        "apps/server/src/db/**"
-      ]
+        "$TURBO_ROOT$/apps/server/src/db/**",
+        "!$TURBO_ROOT$/apps/server/src/db/**/__types"
+      ],
+      "outputs": ["src/db/**/__types/**"]
     },
     "gql:gen": {
       "inputs": [
-        "apps/server/src/db/**"
+        "$TURBO_ROOT$/apps/server/src/db/**",
+        "!$TURBO_ROOT$/apps/server/src/db/**/__types"
       ],
-      "dependsOn": [
-        "@epc/schema#gql:pregen"
-      ]
+      "outputs": ["graphql-schema.d.ts"],
+      "dependsOn": ["@epc/schema#gql:pregen"]
     },
     "test": {
       "dependsOn": ["gql:gen"]
@@ -39,9 +38,7 @@
     "dev-client": {
       "cache": false,
       "persistent": true,
-      "with": [
-        "dev:gql"
-      ]
+      "with": ["dev:gql"]
     }
   }
 }
