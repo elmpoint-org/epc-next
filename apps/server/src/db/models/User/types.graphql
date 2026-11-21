@@ -37,6 +37,22 @@ type User {
   "create/update history for this entry"
   timestamp: TS!
 }
+
+"""
+a public-safe subset of User, for user data on unauthenticated paths.
+its fields must remain a subset of User's fields (checked in module.ts).
+"""
+type UserPublicFacing {
+  "unique id (UUIDv4)"
+  id: ID!
+  "the user's full name"
+  name: String
+  "the user's first name"
+  firstName: String
+  "gravatar avatar URL"
+  avatarUrl: String
+}
+
 "this type can only be accessed on the server. it is for retrieving secure authentication data."
 type UserSECURE {
   user: User!

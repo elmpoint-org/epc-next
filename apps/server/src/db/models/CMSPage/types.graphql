@@ -13,8 +13,8 @@ type CMSPage {
   secure: Boolean!
   "can this page be seen by users"
   publish: Boolean!
-  "list of users who contributed to this page"
-  contributors: [User]!
+  "list of users who contributed to this page (public-safe user data)"
+  contributors: [UserPublicFacing]!
 
   timestamp: TS!
 }

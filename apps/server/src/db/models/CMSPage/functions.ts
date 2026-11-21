@@ -129,8 +129,8 @@ export const getCmsPageContributors = h<M.CMSPageResolvers['contributors']>(
 
     // get users by their IDs
     const u = (await sources.user.getMultiple(contributorIds)).filter(
-      (c) => !!c
-    ) as DBType<DBUser>[];
+      (c): c is DBType<DBUser> => !!c
+    ) as Omit<DBType<DBUser>, '__typename'>[];
 
     return u;
   }
