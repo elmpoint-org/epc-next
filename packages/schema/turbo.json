@@ -1,16 +1,14 @@
 {
   "$schema": "https://v2-7-6.turborepo.dev/schema.json",
-  "extends": [
-    "//"
-  ],
+  "extends": ["//"],
   "tasks": {
     "gql:pregen": {
       "inputs": [
-        "$TURBO_ROOT$/apps/server/src/db/**"
+        "$TURBO_ROOT$/apps/server/src/db/**",
+        "!$TURBO_ROOT$/apps/server/src/db/**/__types"
       ],
-      "outputs": [
-        "$TURBO_ROOT$/schema.graphql"
-      ]
+      "outputs": ["$TURBO_ROOT$/schema.graphql"],
+      "dependsOn": ["@epc/server#gql:pregen"]
     }
   }
 }
