@@ -61,12 +61,11 @@ export default function EventPopup({
     if (user && user.id === event.author?.id) return true;
 
     // is trusted user?
-    if (user && event.author?.trustedUsers?.some((it) => it?.id === user.id))
-      return true;
+    if (user && event.author?.trustsYou) return true;
 
     // not trusted.
     return false;
-  }, [event.author?.id, event.author?.trustedUsers, user]);
+  }, [event.author?.id, event.author?.trustsYou, user]);
 
   return (
     <>

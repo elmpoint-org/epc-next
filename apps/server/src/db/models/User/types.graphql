@@ -12,10 +12,12 @@ type User {
   "gravatar avatar URL"
   avatarUrl: String
 
-  "users whom this user trusts"
+  "users whom this user trusts (ADMIN|userId scope)"
   trustedUsers: [User]
-  "users who trust this user"
+  "users who trust this user (ADMIN|userId scope)"
   trustedBy: [User]
+  "whether this user trusts the currently logged-in user"
+  trustsYou: Boolean!
 
   "which user invited this user to the site. original users will have no value."
   invitedBy: User

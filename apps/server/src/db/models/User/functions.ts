@@ -268,8 +268,9 @@ export const getUserScope = h<M.UserResolvers['scope']>(
 );
 
 export const getUserTrustedUsers = h<M.UserResolvers['trustedUsers']>(
-  async ({ sources, parent }) => {
+  async ({ sources, parent, scope, userId }) => {
     const user = parent as DBType<DBUser>;
+    if (!scopeDiff(scope, 'ADMIN') && userId !== user.id) throw scopeError();
 
     return (await sources.user.getMultiple(user.trustedUserIds ?? [])).filter(
       (it): it is DBType<DBUser> => it !== undefined
@@ -278,9 +279,17 @@ export const getUserTrustedUsers = h<M.UserResolvers['trustedUsers']>(
 );
 
 export const getUserTrustedBy = h<M.UserResolvers['trustedBy']>(
-  async ({ sources, parent: { id } }) => {
+  async ({ sources, parent: { id }, scope, userId }) => {
+    if (!scopeDiff(scope, 'ADMIN') && userId !== id) throw scopeError();
     const users = await sources.user.getAll();
     return users.filter((user) => user.trustedUserIds?.includes(id));
+  }
+);
+
+export const getUserTrustsYou = h<M.UserResolvers['trustsYou']>(
+  ({ parent, userId }) => {
+    const { trustedUserIds } = parent as DBType<DBUser>;
+    return !!userId && !!trustedUserIds?.includes(userId);
   }
 );
 
